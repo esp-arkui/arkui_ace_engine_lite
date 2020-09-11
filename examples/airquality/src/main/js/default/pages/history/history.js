@@ -16,15 +16,15 @@ import router from '@system.router'
 
 export default {
     data: {
-        historicalData:"historicalData",
-        datasets:["CO","PM2.5","NO2","NO","PM10","SO2"]
+        historicalData: 'historicalData',
+        datasets: ['CO', 'PM2.5', 'NO2', 'NO', 'PM10', 'SO2']
     },
-    onInit(){
+    onInit() {
         this.historicalData = this.$t(this.historicalData);
     },
-    backDetail(){
+    backDetail() {
         router.replace({
-            uri:'pages/detail/detail'
+            uri: 'pages/detail/detail'
         });
     }
 }
