@@ -15,16 +15,16 @@
 import router from '@system.router'
 
 export default {
-    data:{
-        location:"HangZhou",
-        udpateStatus:"15:13",
-        dataSource:"tianqi.com",
-        updated:'Updated',
-        dataSourceName:'Data Source',
-        selectedIndex:0,
-        airData:['100', '90', '120', '50', '150', '40', '25']
+    data: {
+        location: "HangZhou",
+        udpateStatus: "15:13",
+        dataSource: "tianqi.com",
+        updated: 'Updated',
+        dataSourceName: 'Data Source',
+        selectedIndex: 0,
+        airData: ['100', '90', '120', '50', '150', '40', '25']
     },
-    onInit(){
+    onInit() {
         this.location = this.$t(this.location);
         this.updated = this.$t("updated");
         this.dataSourceName = this.$t("dataSourceName");
@@ -32,15 +32,17 @@ export default {
         this.monitoringStation = this.$t("monitoringStation");
         this.selectedIndex = this.selectedCityIndex;
     },
-    openHistroy(){
+    openHistroy() {
         router.replace({
-            uri:'pages/history/history'
+            uri: 'pages/history/history'
         });
     },
-    backMain(){
+    backMain() {
         router.replace({
-            uri:'pages/index/index',
-            params:{selectedCityIndex:this.selectedIndex}
+            uri: 'pages/index/index',
+            params: {
+                selectedCityIndex: this.selectedIndex
+            }
         });
     }
 }
