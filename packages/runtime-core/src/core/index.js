@@ -39,21 +39,25 @@ export function ViewModel(options) {
 
   const vm = (this._vm = this);
 
-  if (Object.prototype.toString.call(options) === '[object Object]') {
-    Object.keys(options).forEach(key => {
-      const value = options[key];
-      if (key === 'render') {
-        vm.$render = value;
-      } else if (key === 'data') {
-        initState(vm, value);
-      } else if (key === 'styleSheet') {
-        initStyleSheet(value);
-      } else if (typeof value === 'function') {
-        vm[key] = value.bind(vm);
-      } else {
-        // do nothing
+  if(typeof options === "object" && typeof options !== "null"){
+    Object.entries(options).forEach(([key, value])=>{
+      switch(key){
+        case "render":
+          vm.$render = value;
+          break;
+        case "data":
+          initState(vm, value);
+          break;
+        case "styleSheet":
+          initStyleSheet(value);
+          break;
+        case "function":
+          vm[key] = value.bind(vm);
+          break;
+        default:
+          // do nothing
       }
-    });
+    })
   }
 
   stopTracing();
