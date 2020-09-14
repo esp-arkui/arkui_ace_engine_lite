@@ -12,9 +12,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {backPage, routePage} from "../../../../common/js/general";
+import { backPage, routePage } from "../../../../common/js/general";
 export default {
     ...backPage("pages/component/index/baseIndex/index"),
-    changeBar: routePage("pages/component/chart/barChart/index/index").changePage,
-    changeLine: routePage("pages/component/chart/lineChart/index/index").changePage
-}
+    changeBar: routePage("pages/component/chart/barChart/index/index")
+        .changePage,
+    changeLine: routePage("pages/component/chart/lineChart/index/index")
+        .changePage
+};

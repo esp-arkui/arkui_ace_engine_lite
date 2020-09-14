@@ -12,14 +12,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {goPage,routePage} from "../../../../../common/js/general";
+import { goPage, routePage } from "../../../../../common/js/general";
 import { changeStatus, changeIf } from "../../../../../common/js/input";
 export default {
     data: {
         show: true,
         status: true,
-        ifStatus:true,
-        listData:[true, false]
+        ifStatus: true,
+        listData: [true, false]
     },
     ...goPage("pages/component/input/checkbox/index/index"),
     changeEvent(e) {
@@ -30,4 +30,4 @@ export default {
     },
     changeShow: changeStatus,
     changeIf: changeIf
-}
+};

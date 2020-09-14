@@ -12,8 +12,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {goPage,routePage} from "../../../../../common/js/general";
-import {changeStatus, changeStatusIf, changeDisplay} from "../../../../../common/js/progress"
+import { goPage, routePage } from "../../../../../common/js/general";
+import {
+    changeStatus,
+    changeStatusIf,
+    changeDisplay
+} from "../../../../../common/js/progress";
 export default {
     data: {
         showStatus: true,
@@ -36,4 +40,4 @@ export default {
     },
     changeStatusIf: changeStatusIf,
     changeDisplay: changeDisplay
-}
+};

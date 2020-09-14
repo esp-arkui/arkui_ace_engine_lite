@@ -12,11 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 .text {
-  width: 280px;
-  height: 50px;
-  margin-top: 10px;
-  margin-left: 10px;
-  font-size: 30;
+    width: 280px;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 30;
 }

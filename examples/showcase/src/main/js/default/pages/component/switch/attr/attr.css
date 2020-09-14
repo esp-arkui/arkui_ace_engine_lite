@@ -13,14 +13,14 @@
  * limitations under the License.
  */
 .separatorContainerStyle {
-  width: 454px;
-  height: 4px;
-  background-color: #8b8b7a;
+    width: 454px;
+    height: 4px;
+    background-color: #8b8b7a;
 }
 
 .switchStyle {
-  width:64px;
-  height:64px;
-  left:80px;
-  top:60px;
+    width: 64px;
+    height: 64px;
+    left: 80px;
+    top: 60px;
 }

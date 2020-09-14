@@ -13,33 +13,33 @@
  * limitations under the License.
  */
 .list {
-  left: 0px;
-  top: 0px;
-  width: 454px;
-  height: 454px;
+    left: 0px;
+    top: 0px;
+    width: 454px;
+    height: 454px;
 }
 
 .separatorContainerStyle {
-  width: 454px;
-  height: 4px;
-  background-color: #8b8b7a;
+    width: 454px;
+    height: 4px;
+    background-color: #8b8b7a;
 }
 
 .item-title {
-  left: 0px;
-  top: 0px;
-  width: 400px;
-  height: 70px;
+    left: 0px;
+    top: 0px;
+    width: 400px;
+    height: 70px;
 }
 
 .input-item {
-  width: 400px;
-  height: 100px;
+    width: 400px;
+    height: 100px;
 }
 
 .input-button {
-  margin-left: 120px;
-  margin-top: 10px;
-  width: 200px;
-  height: 50px;
+    margin-left: 120px;
+    margin-top: 10px;
+    width: 200px;
+    height: 50px;
 }

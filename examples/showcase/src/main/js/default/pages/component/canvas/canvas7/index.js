@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import {backPage, routePage} from "../../../../common/js/general";
+import { backPage, routePage } from "../../../../common/js/general";
 export default {
     data: {
         text1: "上面绿块为canvas",
@@ -21,4 +21,4 @@ export default {
         text3: "右外=10，下外=20"
     },
     ...backPage("pages/component/canvas/indexCommonStyle/index")
-}
+};

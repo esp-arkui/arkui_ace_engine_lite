@@ -13,145 +13,145 @@
  * limitations under the License.
  */
 .list {
-  left: 0px;
-  top: 0px;
-  width: 454px;
-  height: 454px;
+    left: 0px;
+    top: 0px;
+    width: 454px;
+    height: 454px;
 }
 
 .item-title {
-  width: 454px;
-  height: 80px;
+    width: 454px;
+    height: 80px;
 }
 
 .separatorContainerStyle {
-  width: 454px;
-  height: 4px;
-  background-color: #8b8b7a;
+    width: 454px;
+    height: 4px;
+    background-color: #8b8b7a;
 }
 
 .item-two {
-  width: 450px;
-  height: 150px;
+    width: 450px;
+    height: 150px;
 }
 
 .two-div {
-  width: 450px;
-  height: 150px;
-  left: 0px;
-  top: 0px;
+    width: 450px;
+    height: 150px;
+    left: 0px;
+    top: 0px;
 }
 
 .two-left-div {
-  width: 220px;
-  height: 150px;
-  left: 0px;
-  top: 0px;
-  flex-direction: column;
+    width: 220px;
+    height: 150px;
+    left: 0px;
+    top: 0px;
+    flex-direction: column;
 }
 
 .two-right-div {
-  width: 230px;
-  height: 150px;
-  top: 40px;
-  left: 0px;
+    width: 230px;
+    height: 150px;
+    top: 40px;
+    left: 0px;
 }
 
 .item-three {
-  width: 450px;
-  height: 200px;
+    width: 450px;
+    height: 200px;
 }
 
 .three-div {
-  width: 450px;
-  height: 200px;
-  left: 0px;
-  top: 0px;
+    width: 450px;
+    height: 200px;
+    left: 0px;
+    top: 0px;
 }
 
 .three-left-div {
-  width: 220px;
-  height: 200px;
-  left: 0px;
-  top: 0px;
-  flex-direction: column;
+    width: 220px;
+    height: 200px;
+    left: 0px;
+    top: 0px;
+    flex-direction: column;
 }
 
 .three-right-div {
-  width: 230px;
-  height: 190px;
-  top: 40px;
-  left: 0px;
+    width: 230px;
+    height: 190px;
+    top: 40px;
+    left: 0px;
 }
 
 .slider {
-  margin-left: 20px;
-  margin-top: 20px;
-  width: 100px;
-  height: 20px;
+    margin-left: 20px;
+    margin-top: 20px;
+    width: 100px;
+    height: 20px;
 }
 
 .general-stack {
-  width: 200px;
-  height: 170px;
-  top: 0px;
-  left: 0px;
-  background-color: springgreen;
+    width: 200px;
+    height: 170px;
+    top: 0px;
+    left: 0px;
+    background-color: springgreen;
 }
 
 .general-item {
-  left: 50px;
-  background-color: red;
-  top: 50px;
-  width: 100px;
-  height: 100px;
+    left: 50px;
+    background-color: red;
+    top: 50px;
+    width: 100px;
+    height: 100px;
 }
 
 .margin-show {
-  margin: 20px;
-  height: 10px;
-  width: 100px;
+    margin: 20px;
+    height: 10px;
+    width: 100px;
 }
 
 .border-show {
-  border-width: 5px;
-  border-radius: 5px;
-  border-color: #0000ff;
-  padding: 10px;
-  width: 100px;
-  height: 32px;
-  margin-left: 20px;
-  background-color: red;
+    border-width: 5px;
+    border-radius: 5px;
+    border-color: #0000ff;
+    padding: 10px;
+    width: 100px;
+    height: 32px;
+    margin-left: 20px;
+    background-color: red;
 }
 
 .special-style {
-  margin-top: 10px;
-  margin-left: 20px;
-  width: 100px;
-  height: 20px;
-  color: red;
-  selected-color: springgreen;
-  block-color: blue;
+    margin-top: 10px;
+    margin-left: 20px;
+    width: 100px;
+    height: 20px;
+    color: red;
+    selected-color: springgreen;
+    block-color: blue;
 }
 
 .text {
-  width: 200px;
-  height: 50px;
-  margin-top: 10px;
-  margin-left: 10px;
-  font-size:30px;
+    width: 200px;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 30px;
 }
 
 .item-types {
-  width: 454px;
-  height: 80px;
+    width: 454px;
+    height: 80px;
 }
 
 .whole-text {
-  margin-top:10px;
-  margin-left:150px;
-  width:200px;
-  height:60px;
-  font-size:30px;
-  color: red;
+    margin-top: 10px;
+    margin-left: 150px;
+    width: 200px;
+    height: 60px;
+    font-size: 30px;
+    color: red;
 }

@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {backPage, routePage} from "../../../../common/js/general";
+import { backPage, routePage } from "../../../../common/js/general";
 export default {
     data: {
         clickValue: "点击文字改变",
@@ -21,20 +21,20 @@ export default {
         checkedValue: false
     },
     ...backPage("pages/component/switch/index/index"),
-    click: function () {
+    click: function() {
         this.clickValue = "点击已经触发";
     },
-    longpress: function () {
+    longpress: function() {
         this.longpressValue = "长按已经触发";
     },
-    swipeEvent: function (e) {
+    swipeEvent: function(e) {
         this.swipeValue = "swipe方向：" + e.direction;
     },
-    change: function () {
+    change: function() {
         if (this.checkedValue == false) {
             this.checkedValue = true;
         } else {
             this.checkedValue = false;
         }
     }
-}
+};

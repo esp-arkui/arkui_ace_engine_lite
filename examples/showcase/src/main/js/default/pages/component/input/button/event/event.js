@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {goPage, routePage} from "../../../../../common/js/general";
+import { goPage, routePage } from "../../../../../common/js/general";
 export default {
     data: {
         name: "点击触发"
@@ -27,4 +27,4 @@ export default {
         this.name = "swipe方向：" + e.direction;
     },
     ...goPage("pages/component/input/button/index/index")
-}
+};

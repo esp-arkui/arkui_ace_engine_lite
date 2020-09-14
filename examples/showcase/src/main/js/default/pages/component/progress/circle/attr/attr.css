@@ -13,80 +13,80 @@
  * limitations under the License.
  */
 .list {
-  left: 85px;
-  top: 0px;
-  width: 280px;
-  height: 454px;
+    left: 85px;
+    top: 0px;
+    width: 280px;
+    height: 454px;
 }
 
 .item-title {
-  width: 454px;
-  height: 80px;
+    width: 454px;
+    height: 80px;
 }
 
 .separatorContainerStyle {
-  width: 454px;
-  height: 4px;
-  background-color: #8b8b7a;
+    width: 454px;
+    height: 4px;
+    background-color: #8b8b7a;
 }
 
 .item-types {
-  width: 454px;
-  height: 80px;
+    width: 454px;
+    height: 80px;
 }
 
 .whole-text {
-  margin-top:10px;
-  margin-left:70px;
-  width:200px;
-  height:60px;
-  font-size:30px;
-  color: red;
+    margin-top: 10px;
+    margin-left: 70px;
+    width: 200px;
+    height: 60px;
+    font-size: 30px;
+    color: red;
 }
 
 .item-attribute {
-  width: 454px;
-  height: 100px;
+    width: 454px;
+    height: 100px;
 }
 
 .attribute-div {
-  left: 0px;
-  top: 0px;
-  height: 100px;
-  width: 450px;
-  flex-direction: row;
+    left: 0px;
+    top: 0px;
+    height: 100px;
+    width: 450px;
+    flex-direction: row;
 }
 
 .text {
-  width: 140px;
-  height: 50px;
-  margin-top: 10px;
-  margin-left: 10px;
-  font-size:30px;
+    width: 140px;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 30px;
 }
 
 .circle {
-  width:100px;
-  height:100px;
-  center-x:50px;
-  center-y:50px;
-  radius:50px;
-  start-angle:0;
-  total-angle:360;
-  stroke-width: 6px;
-  background-color: #8B8B7A;
-  color: #ff0000
+    width: 100px;
+    height: 100px;
+    center-x: 50px;
+    center-y: 50px;
+    radius: 50px;
+    start-angle: 0;
+    total-angle: 360;
+    stroke-width: 6px;
+    background-color: #8b8b7a;
+    color: #ff0000;
 }
 
 .circle2 {
-  width:30px;
-  height:30px;
-  center-x:15px;
-  center-y:15px;
-  radius:15px;
-  start-angle:0;
-  total-angle:360;
-  stroke-width: 6px;
-  background-color: #8B8B7A;
-  color: #ff0000
+    width: 30px;
+    height: 30px;
+    center-x: 15px;
+    center-y: 15px;
+    radius: 15px;
+    start-angle: 0;
+    total-angle: 360;
+    stroke-width: 6px;
+    background-color: #8b8b7a;
+    color: #ff0000;
 }
