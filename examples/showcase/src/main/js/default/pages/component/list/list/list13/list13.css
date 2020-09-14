@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 .text {
-  width: 350px;
-  height: 50px;
-  margin-top: 10px;
-  margin-left: 10px;
-  font-size: 30;
+    width: 350px;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 30;
 }

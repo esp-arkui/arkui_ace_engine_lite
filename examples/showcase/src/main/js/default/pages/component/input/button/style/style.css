@@ -13,150 +13,149 @@
  * limitations under the License.
  */
 .list {
-  left: 0px;
-  top: 0px;
-  width: 454px;
-  height: 454px;
+    left: 0px;
+    top: 0px;
+    width: 454px;
+    height: 454px;
 }
 
 .text {
-  width: 200px;
-  height: 50px;
-  margin-top: 10px;
-  margin-left: 10px;
-  font-size:30px;
+    width: 200px;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 30px;
 }
 
 .item-title {
-  width: 454px;
-  height: 80px;
+    width: 454px;
+    height: 80px;
 }
 
 .separatorContainerStyle {
-  width: 454px;
-  height: 4px;
-  background-color: #8b8b7a;
+    width: 454px;
+    height: 4px;
+    background-color: #8b8b7a;
 }
 
 .item-types {
-  width: 454px;
-  height: 80px;
+    width: 454px;
+    height: 80px;
 }
 
 .whole-text {
-  margin-top:10px;
-  margin-left:150px;
-  width:200px;
-  height:60px;
-  font-size:30px;
-  color: red;
+    margin-top: 10px;
+    margin-left: 150px;
+    width: 200px;
+    height: 60px;
+    font-size: 30px;
+    color: red;
 }
 
 .item-three {
-  width: 450px;
-  height: 200px;
+    width: 450px;
+    height: 200px;
 }
 
 .three-div {
-  width: 450px;
-  height: 200px;
-  left: 0px;
-  top: 0px;
+    width: 450px;
+    height: 200px;
+    left: 0px;
+    top: 0px;
 }
 
 .three-left-div {
-  width: 220px;
-  height: 200px;
-  left: 0px;
-  top: 0px;
-  flex-direction: column;
+    width: 220px;
+    height: 200px;
+    left: 0px;
+    top: 0px;
+    flex-direction: column;
 }
 
 .item-two {
-  width: 450px;
-  height: 150px;
+    width: 450px;
+    height: 150px;
 }
 
 .two-left-div {
-  width: 220px;
-  height: 150px;
-  left: 0px;
-  top: 0px;
-  flex-direction: column;
+    width: 220px;
+    height: 150px;
+    left: 0px;
+    top: 0px;
+    flex-direction: column;
 }
 
 .two-div {
-  width: 450px;
-  height: 150px;
-  left: 0px;
-  top: 0px;
+    width: 450px;
+    height: 150px;
+    left: 0px;
+    top: 0px;
 }
 
 .general-stack {
-  top: 50px;
-  left: 2px;
-  width: 200px;
-  height: 150px;
-  background-color: springgreen;
+    top: 50px;
+    left: 2px;
+    width: 200px;
+    height: 150px;
+    background-color: springgreen;
 }
 
 .general-item {
-  top: 50px;
-  left: 50px;
-  width: 150px;
-  height: 50px;
-  background-color: red;
+    top: 50px;
+    left: 50px;
+    width: 150px;
+    height: 50px;
+    background-color: red;
 }
 
 .item-style {
-  width: 450px;
-  height: 250px;
+    width: 450px;
+    height: 250px;
 }
 
 .style-div {
-  width: 450px;
-  height: 250px;
-  top: 0px;
-  left: 0px;
+    width: 450px;
+    height: 250px;
+    top: 0px;
+    left: 0px;
 }
 
 .style-left-div {
-  width: 250px;
-  height: 250px;
-  left: 0px;
-  top: 0px;
-  flex-direction: column;
+    width: 250px;
+    height: 250px;
+    left: 0px;
+    top: 0px;
+    flex-direction: column;
 }
 
 .style-button {
-  width: 150px;
-  height: 50px;
-  font-size:38px;
-  color: red;
-  font-family: HYQiHei-65S;
+    width: 150px;
+    height: 50px;
+    font-size: 38px;
+    color: red;
+    font-family: HYQiHei-65S;
 }
 
-
-.backColorBtn{
-  width: 150px;
-  height:50px;
-  margin-left:100px;
-  margin-top: 10px;
-  background-color: aqua
+.backColorBtn {
+    width: 150px;
+    height: 50px;
+    margin-left: 100px;
+    margin-top: 10px;
+    background-color: aqua;
 }
 
-.backColorBtn:active{
-background-color: coral
+.backColorBtn:active {
+    background-color: coral;
 }
 
-.backImgBtn{
-  width: 150px;
-  height:50px;
-  margin-left:100px;
-  margin-top: 10px;
-  background-image: url(common/icon_small.png)
+.backImgBtn {
+    width: 150px;
+    height: 50px;
+    margin-left: 100px;
+    margin-top: 10px;
+    background-image: url(common/icon_small.png);
 }
 
-.backImgBtn:active{
-background-image: url(common/icon.png)
+.backImgBtn:active {
+    background-image: url(common/icon.png);
 }

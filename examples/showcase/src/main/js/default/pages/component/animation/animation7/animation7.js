@@ -16,4 +16,4 @@
 import { backPage } from "../../../../common/js/general";
 export default {
     ...backPage("pages/component/animation/index2/index")
-}
+};

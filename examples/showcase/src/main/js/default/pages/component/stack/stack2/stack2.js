@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {backPage, routePage} from "../../../../common/js/general";
+import { backPage, routePage } from "../../../../common/js/general";
 export default {
     data: {
         text1: "背景色绿色",
@@ -20,4 +20,4 @@ export default {
         text3: "top设置170"
     },
     ...backPage("pages/component/stack/indexStyle/index")
-}
+};

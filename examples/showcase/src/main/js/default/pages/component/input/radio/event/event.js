@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {goPage, routePage} from "../../../../../common/js/general";
+import { goPage, routePage } from "../../../../../common/js/general";
 export default {
     data: {
         name: "点击或长按",
@@ -21,7 +21,7 @@ export default {
     },
     ...goPage("pages/component/input/radio/index/index"),
     clickEvent() {
-        this.name = "点击事件触发"
+        this.name = "点击事件触发";
     },
     longpressEvent() {
         this.name = "长按事件触发";
@@ -32,4 +32,4 @@ export default {
     changeEvent(e) {
         this.checked = "change触发";
     }
-}
+};

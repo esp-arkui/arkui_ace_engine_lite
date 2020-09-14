@@ -13,105 +13,105 @@
  * limitations under the License.
  */
 .list {
-  left: 0px;
-  top: 0px;
-  width: 454px;
-  height: 454px;
+    left: 0px;
+    top: 0px;
+    width: 454px;
+    height: 454px;
 }
 
 .item-title {
-  width: 454px;
-  height: 80px;
+    width: 454px;
+    height: 80px;
 }
 
 .separatorContainerStyle {
-  width: 454px;
-  height: 4px;
-  background-color: #8b8b7a;
+    width: 454px;
+    height: 4px;
+    background-color: #8b8b7a;
 }
 
 .item-two {
-  width: 450px;
-  height: 150px;
+    width: 450px;
+    height: 150px;
 }
 
 .two-div {
-  width: 450px;
-  height: 150px;
-  left: 0px;
-  top: 0px;
+    width: 450px;
+    height: 150px;
+    left: 0px;
+    top: 0px;
 }
 
 .two-left-div {
-  width: 220px;
-  height: 150px;
-  left: 0px;
-  top: 0px;
-  flex-direction: column;
+    width: 220px;
+    height: 150px;
+    left: 0px;
+    top: 0px;
+    flex-direction: column;
 }
 
 .two-right-div {
-  width: 230px;
-  height: 150px;
-  top: 40px;
-  left: 0px;
+    width: 230px;
+    height: 150px;
+    top: 40px;
+    left: 0px;
 }
 
 .item-three {
-  width: 450px;
-  height: 200px;
+    width: 450px;
+    height: 200px;
 }
 
 .three-div {
-  width: 450px;
-  height: 200px;
-  left: 0px;
-  top: 0px;
+    width: 450px;
+    height: 200px;
+    left: 0px;
+    top: 0px;
 }
 
 .three-left-div {
-  width: 220px;
-  height: 200px;
-  left: 0px;
-  top: 0px;
-  flex-direction: column;
+    width: 220px;
+    height: 200px;
+    left: 0px;
+    top: 0px;
+    flex-direction: column;
 }
 
 .three-right-div {
-  width: 230px;
-  height: 190px;
-  top: 40px;
-  left: 0px;
+    width: 230px;
+    height: 190px;
+    top: 40px;
+    left: 0px;
 }
 
 .slider {
-  margin-left: 20px;
-  margin-top: 20px;
-  width: 100px;
-  height: 20px;
-  block-color: blue;
-  selected-color: #ff0000;
-  color: #00ff00;
+    margin-left: 20px;
+    margin-top: 20px;
+    width: 100px;
+    height: 20px;
+    block-color: blue;
+    selected-color: #ff0000;
+    color: #00ff00;
 }
 
 .text {
-  width: 200px;
-  height: 50px;
-  margin-top: 10px;
-  margin-left: 10px;
-  font-size:30px;
+    width: 200px;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 30px;
 }
 
 .item-types {
-  width: 454px;
-  height: 80px;
+    width: 454px;
+    height: 80px;
 }
 
 .whole-text {
-  margin-top:10px;
-  margin-left:150px;
-  width:200px;
-  height:60px;
-  font-size:30px;
-  color: red;
+    margin-top: 10px;
+    margin-left: 150px;
+    width: 200px;
+    height: 60px;
+    font-size: 30px;
+    color: red;
 }

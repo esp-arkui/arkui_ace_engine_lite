@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {backPage, routePage} from "../../../../../common/js/general";
+import { backPage, routePage } from "../../../../../common/js/general";
 var displayData = ["flex", "none"];
 export default {
     data: {
@@ -20,7 +20,7 @@ export default {
         status: true,
         displayValue: displayData[0]
     },
-    changeDisplay: function () {
+    changeDisplay: function() {
         if (this.status == true) {
             this.displayValue = displayData[1];
             this.status = false;
@@ -30,4 +30,4 @@ export default {
         }
     },
     ...backPage("pages/component/list/list-item/indexCommonStyle/index")
-}
+};

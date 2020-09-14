@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {goPage,routePage} from "../../../../common/js/general";
+import { goPage, routePage } from "../../../../common/js/general";
 export default {
     data: {
         text: "点击/长按/滑动"
@@ -27,4 +27,4 @@ export default {
     swipeEvent(e) {
         this.text = "swipe方向：" + e.direction;
     }
-}
+};

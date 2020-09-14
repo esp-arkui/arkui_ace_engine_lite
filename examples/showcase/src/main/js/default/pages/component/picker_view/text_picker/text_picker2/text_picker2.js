@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {backPage, routePage} from "../../../../../common/js/general";
+import { backPage, routePage } from "../../../../../common/js/general";
 export default {
     data: {
         text1: "背景色绿色",
@@ -21,4 +21,4 @@ export default {
         textContent: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
     },
     ...backPage("pages/component/picker_view/text_picker/indexStyle/index")
-}
+};

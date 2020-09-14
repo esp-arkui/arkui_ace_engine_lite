@@ -12,11 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// picker_view.js
-export const changeStatus = function () {
-  if (this.status == true) {
-    this.status = false;
-  } else {
-    this.status = true;
-  }
+export const changeStatus = function() {
+    if (this.status == true) {
+        this.status = false;
+    } else {
+        this.status = true;
+    }
 };

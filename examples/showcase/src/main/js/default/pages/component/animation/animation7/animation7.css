@@ -13,49 +13,49 @@
  * limitations under the License.
  */
 .stack {
-  left: 0px;
-  top: 0px;
-  width: 454px;
-  height: 454px;
+    left: 0px;
+    top: 0px;
+    width: 454px;
+    height: 454px;
 }
 
 .divBlock {
-  width: 200px;
-  height: 60px;
-  left:120px;
-  background-color: #ff0000;
+    width: 200px;
+    height: 60px;
+    left: 120px;
+    background-color: #ff0000;
 }
 
 .divAnimationStyle {
-  animation-duration: 3000ms;
-  animation-timing-function: linear;
-  animation-fill-mode: none;
-  animation-iteration-count:1;
+    animation-duration: 3000ms;
+    animation-timing-function: linear;
+    animation-fill-mode: none;
+    animation-iteration-count: 1;
 }
 
 @keyframes animationChange1 {
-  from {
-    transform: translateX(120px);
-  }
-  to {
-    transform: translateX(170px);
-  }
+    from {
+        transform: translateX(120px);
+    }
+    to {
+        transform: translateX(170px);
+    }
 }
 
 @keyframes animationChange2 {
-  from {
-    transform: translateY(180px);
-  }
-  to {
-    transform: translateY(230px);
-  }
+    from {
+        transform: translateY(180px);
+    }
+    to {
+        transform: translateY(230px);
+    }
 }
 
 @keyframes animationChange3 {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

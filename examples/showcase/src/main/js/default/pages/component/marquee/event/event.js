@@ -14,17 +14,17 @@
  */
 import { goPage, routePage } from "../../../../common/js/general";
 export default {
-  data: {
-    text: "点击/长按/滑动"
-  },
-  ...goPage("pages/component/marquee/index/index"),
-  clickEvent(e) {
-    this.text = "点击已触发";
-  },
-  longpressEvent() {
-    this.text = "长按已触发";
-  },
-  swipeEvent(e) {
-    this.text = "swipe方向：" + e.direction;
-  }
+    data: {
+        text: "点击/长按/滑动"
+    },
+    ...goPage("pages/component/marquee/index/index"),
+    clickEvent(e) {
+        this.text = "点击已触发";
+    },
+    longpressEvent() {
+        this.text = "长按已触发";
+    },
+    swipeEvent(e) {
+        this.text = "swipe方向：" + e.direction;
+    }
 };

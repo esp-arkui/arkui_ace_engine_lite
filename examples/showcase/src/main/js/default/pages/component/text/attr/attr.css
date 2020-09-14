@@ -13,64 +13,64 @@
  * limitations under the License.
  */
 .list {
-  left: 0px;
-  top: 0px;
-  width: 454px;
-  height: 454px;
+    left: 0px;
+    top: 0px;
+    width: 454px;
+    height: 454px;
 }
 
 .item-title {
-  left: 0px;
-  top: 0px;
-  width: 400px;
-  height: 70px;
+    left: 0px;
+    top: 0px;
+    width: 400px;
+    height: 70px;
 }
 
 .separatorContainerStyle {
-  width: 454px;
-  height: 4px;
-  background-color: #8b8b7a;
+    width: 454px;
+    height: 4px;
+    background-color: #8b8b7a;
 }
 
 .item-types {
-  width: 454px;
-  height: 80px;
+    width: 454px;
+    height: 80px;
 }
 
 .whole-text {
-  margin-top:10px;
-  margin-left:150px;
-  width:200px;
-  height:60px;
-  font-size:30px;
-  color: red;
+    margin-top: 10px;
+    margin-left: 150px;
+    width: 200px;
+    height: 60px;
+    font-size: 30px;
+    color: red;
 }
 
 .text {
-  width: 200px;
-  height: 50px;
-  margin-top: 10px;
-  margin-left: 10px;
-  font-size:30px;
+    width: 200px;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 30px;
 }
 
 .item-attribute {
-  width: 454px;
-  height: 100px;
+    width: 454px;
+    height: 100px;
 }
 
 .attribute-div {
-  left: 0px;
-  top: 0px;
-  height: 100px;
-  width: 250px;
-  flex-direction: row;
+    left: 0px;
+    top: 0px;
+    height: 100px;
+    width: 250px;
+    flex-direction: row;
 }
 
 .attribute-div-if-text {
-  left: 0px;
-  top: 0px;
-  height: 100px;
-  width: 200px;
-  flex-direction: column;
+    left: 0px;
+    top: 0px;
+    height: 100px;
+    width: 200px;
+    flex-direction: column;
 }
