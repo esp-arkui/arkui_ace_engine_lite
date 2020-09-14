@@ -73,7 +73,7 @@ def convert_bc():
             index = 1
             max_count = len(byte_code_buffer)
             for data in byte_code_buffer:
-                hex_string = '0x%02x' % data
+                hex_string = '0x%02x' % ord(data)
                 final_hex_string = hex_string
                 if index != max_count:
                     if index % 16 == 0:
