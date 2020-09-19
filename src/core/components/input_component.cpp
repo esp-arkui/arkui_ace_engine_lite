@@ -112,7 +112,7 @@ void InputComponent::ReleaseNativeViews()
         delete clickListener_;
         clickListener_ = nullptr;
     }
-    ACE_FREE(textValue_);
+    ACE_FREE(value_);
     ACE_FREE(fontFamily_);
     ACE_FREE(normalBackGroundImg_);
     ACE_FREE(pressedBackGroundImg_);
@@ -140,12 +140,9 @@ bool InputComponent::SetPrivateAttribute(uint16_t attrKeyId, jerry_value_t attrV
             }
             break;
         case K_VALUE:
-            if (button_ != nullptr) {
-                ACE_FREE(textValue_);
-                textValue_ = MallocStringOf(attrValue);
-                return true;
-            }
-            break;
+            ACE_FREE(value_);
+            value_ = MallocStringOf(attrValue);
+            return true;
         case K_NAME:
             if (radioButton_ != nullptr) {
                 char *name = MallocStringOf(attrValue);
@@ -444,9 +441,9 @@ bool InputComponent::HandleButtonBackGroundImg(const AppStyleItem &styleItem)
 void InputComponent::PostRender()
 {
     if (button_ != nullptr) {
-        if (textValue_ != nullptr && fontFamily_ != nullptr) {
+        if (value_ != nullptr && fontFamily_ != nullptr) {
             button_->SetFont(fontFamily_, fontSize_);
-            button_->SetText(textValue_);
+            button_->SetText(value_);
         }
         if (clickListener_ != nullptr) {
             button_->SetOnClickListener(clickListener_);
@@ -474,39 +471,40 @@ void InputComponent::DealEvent()
         return;
     }
     if (changeListener_ != nullptr) {
-            if (checkbox_ != nullptr) {
-                checkbox_->SetOnChangeListener(changeListener_);
-            } else {
-                changeListener_->SetView(radioButton_);
-                radioButton_->SetOnChangeListener(changeListener_);
-            }
+        changeListener_->SetValue(value_);
+        if (checkbox_ != nullptr) {
+            checkbox_->SetOnChangeListener(changeListener_);
+        } else {
+            changeListener_->SetView(radioButton_);
+            radioButton_->SetOnChangeListener(changeListener_);
+        }
+        if (clickListener_ == nullptr) {
+            // trigger changeEvent
+            clickListener_ = new ViewOnClickListener(UNDEFINED, K_CLICK);
             if (clickListener_ == nullptr) {
-                // trigger changeEvent
-                clickListener_ = new ViewOnClickListener(UNDEFINED, K_CLICK);
-                if (clickListener_ == nullptr) {
-                    HILOG_ERROR(HILOG_MODULE_ACE, "create click listener failed");
-                    return;
-                }
+                HILOG_ERROR(HILOG_MODULE_ACE, "create click listener failed");
+                return;
             }
         }
-        if (clickListener_ != nullptr) {
-            clickListener_->SetComponentListener(changeListener_);
-            if (checkbox_ != nullptr) {
-                checkbox_->SetOnClickListener(clickListener_);
-            } else {
-                radioButton_->SetOnClickListener(clickListener_);
-            }
+    }
+    if (clickListener_ != nullptr) {
+        clickListener_->SetComponentListener(changeListener_);
+        if (checkbox_ != nullptr) {
+            checkbox_->SetOnClickListener(clickListener_);
+        } else {
+            radioButton_->SetOnClickListener(clickListener_);
         }
-        if (normalBackGroundImg_ != nullptr || pressedBackGroundImg_ != nullptr) {
-            // make sure the normal and pressed image same in case user only set one of them
-            char *normalImg = (normalBackGroundImg_ == nullptr) ? pressedBackGroundImg_ : normalBackGroundImg_;
-            char *pressedImg = (pressedBackGroundImg_ == nullptr) ? normalBackGroundImg_ : pressedBackGroundImg_;
-            if (checkbox_ != nullptr) {
-                checkbox_->SetImages(pressedImg, normalImg);
-            } else {
-                radioButton_->SetImages(pressedImg, normalImg);
-            }
+    }
+    if (normalBackGroundImg_ != nullptr || pressedBackGroundImg_ != nullptr) {
+        // make sure the normal and pressed image same in case user only set one of them
+        char *normalImg = (normalBackGroundImg_ == nullptr) ? pressedBackGroundImg_ : normalBackGroundImg_;
+        char *pressedImg = (pressedBackGroundImg_ == nullptr) ? normalBackGroundImg_ : pressedBackGroundImg_;
+        if (checkbox_ != nullptr) {
+            checkbox_->SetImages(pressedImg, normalImg);
+        } else {
+            radioButton_->SetImages(pressedImg, normalImg);
         }
+    }
 }
 
 void InputComponent::PostUpdate(uint16_t attrKeyId, bool updateResult)
@@ -518,8 +516,8 @@ void InputComponent::PostUpdate(uint16_t attrKeyId, bool updateResult)
     if (button_ != nullptr) {
         switch (attrKeyId) {
             case K_VALUE:
-                if (textValue_ != nullptr) {
-                    button_->SetText(textValue_);
+                if (value_ != nullptr) {
+                    button_->SetText(value_);
                 }
                 break;
             case K_FONT_SIZE:
@@ -531,6 +529,10 @@ void InputComponent::PostUpdate(uint16_t attrKeyId, bool updateResult)
             default:
                 break;
         }
+    }
+    if ((checkbox_ != nullptr) || (radioButton_ != nullptr) && (changeListener_ != nullptr)
+            && (attrKeyId == K_VALUE)) {
+        changeListener_->SetValue(value_);
     }
 }
 } // namespace ACELite

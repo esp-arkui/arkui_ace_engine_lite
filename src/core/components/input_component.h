@@ -38,7 +38,7 @@ public:
           pressedBackGroundColorValue_(-1),
           normalBackGroundImg_(nullptr),
           pressedBackGroundImg_(nullptr),
-          textValue_(nullptr),
+          value_(nullptr),
           fontFamily_(nullptr),
           fontSize_(DEFAULT_FONT_SIZE)
     {
@@ -86,7 +86,7 @@ private:
     uint8_t pressedOpacityValue_;
     char *normalBackGroundImg_;
     char *pressedBackGroundImg_;
-    char *textValue_;
+    char *value_;
     char *fontFamily_;
     uint8_t fontSize_;
 };
