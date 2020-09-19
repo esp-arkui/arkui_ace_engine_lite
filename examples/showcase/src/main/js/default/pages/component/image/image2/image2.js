@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {backPage, eventCommon} from "../../../../common/js/general";
+import { backPage, eventCommon } from "../../../../common/js/general";
 export default {
     ...backPage("pages/component/image/indexEvent/index"),
     clickFunc: eventCommon().clickFunc,
@@ -23,4 +23,4 @@ export default {
         text2: eventCommon().text2,
         text1: eventCommon().text1
     }
-}
+};

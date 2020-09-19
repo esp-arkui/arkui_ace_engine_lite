@@ -14,17 +14,17 @@
  */
 
 .stack {
-  left: 0px;
-  top: 0px;
-  width: 454px;
-  height: 454px;
+    left: 0px;
+    top: 0px;
+    width: 454px;
+    height: 454px;
 }
 
 .text {
-  width: 400px;
-  height: 100px;
-  margin-top: 10px;
-  margin-left: 10px;
-  font-size: 30;
-  text-overflow: ellipsis;
+    width: 400px;
+    height: 100px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 30;
+    text-overflow: ellipsis;
 }

@@ -14,40 +14,36 @@
  */
 var router = require("@system.router");
 module.exports = {
-  data: {
-    listData: [
-      "a",
-      "b",
-      "c",
-      "d",
-      "e",
-      "f",
-      "g",
-      "h"
-    ]
-  },
-  backMain: function () {
+    data: {
+        listData: ["a", "b", "c", "d", "e", "f", "g", "h"]
+    },
+    backMain: function() {
         router.replace({ uri: "pages/index/index" });
-  },
-  backSuperior: function () {
-        router.replace({ uri: "pages/component/list/list/indexOperation/index" });
-  },
-  listClick() {
-    router.replace({ uri: "pages/component/list/list/list13/list13" });
-    console.log("list onclick is triggered");
-  },
-  scrollEnd(endState, endComponentIndex) {
-    console.log("list onscrollend is triggered, end component index=" + endComponentIndex);
-    console.log("list onscrollend is triggered, state=" + endState);
-  },
-  clickscrollTo() {
-    this.$refs.listObj.scrollTo({index:2});
-  },
-  onInit() {
-    console.log("on init called...");
-  },
-  onShow() {
-    this.$refs.listObj.scrollTo({index:3});
-    console.log("on Ready called...");
-  },
+    },
+    backSuperior: function() {
+        router.replace({
+            uri: "pages/component/list/list/indexOperation/index"
+        });
+    },
+    listClick() {
+        router.replace({ uri: "pages/component/list/list/list13/list13" });
+        console.log("list onclick is triggered");
+    },
+    scrollEnd(endState, endComponentIndex) {
+        console.log(
+            "list onscrollend is triggered, end component index=" +
+                endComponentIndex
+        );
+        console.log("list onscrollend is triggered, state=" + endState);
+    },
+    clickscrollTo() {
+        this.$refs.listObj.scrollTo({ index: 2 });
+    },
+    onInit() {
+        console.log("on init called...");
+    },
+    onShow() {
+        this.$refs.listObj.scrollTo({ index: 3 });
+        console.log("on Ready called...");
+    }
 };

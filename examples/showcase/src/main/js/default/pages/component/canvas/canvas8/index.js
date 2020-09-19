@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import {backPage, routePage} from "../../../../common/js/general";
+import { backPage, routePage } from "../../../../common/js/general";
 export default {
     data: {
         text1: "上面绿块为canvas",
@@ -22,12 +22,11 @@ export default {
         displayValue: "flex"
     },
     ...backPage("pages/component/canvas/indexCommonStyle/index"),
-    changeDisplay: function () {
+    changeDisplay: function() {
         if (this.displayValue === "flex") {
             this.displayValue = "none";
         } else {
             this.displayValue = "flex";
         }
     }
-
-}
+};

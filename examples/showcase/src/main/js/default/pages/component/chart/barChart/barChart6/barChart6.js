@@ -12,8 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {backPage, routePage} from "../../../../../common/js/general";
-import {dataCommon, changeStatus} from "../../../../../common/js/chart";
+import { backPage, routePage } from "../../../../../common/js/general";
+import { dataCommon, changeStatus } from "../../../../../common/js/chart";
 export default {
     ...backPage("pages/component/chart/barChart/indexAttr/index"),
     data: {
@@ -23,5 +23,5 @@ export default {
         datasets: dataCommon.datasets.barsets,
         options: dataCommon.options
     },
-    changeStatus: changeStatus,
-}
+    changeStatus: changeStatus
+};

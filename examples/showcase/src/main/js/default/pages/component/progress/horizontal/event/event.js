@@ -12,8 +12,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {goPage,routePage} from "../../../../../common/js/general";
-import {clickEvent, longpressEvent, swipeEvent} from "../../../../../common/js/progress";
+import { goPage, routePage } from "../../../../../common/js/general";
+import {
+    clickEvent,
+    longpressEvent,
+    swipeEvent
+} from "../../../../../common/js/progress";
 export default {
     data: {
         percent: 20,
@@ -23,4 +27,4 @@ export default {
     clickEvent: clickEvent,
     longpressEvent: longpressEvent,
     swipeEvent: swipeEvent
-}
+};

@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 .text {
-  width: 200px;
-  height: 100px;
-  margin-top: 10px;
-  margin-left: 10px;
-  font-size:30px;
-  text-overflow: ellipsis;
+    width: 200px;
+    height: 100px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 30px;
+    text-overflow: ellipsis;
 }

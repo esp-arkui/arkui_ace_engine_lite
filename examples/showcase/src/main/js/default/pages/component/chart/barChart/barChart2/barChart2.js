@@ -12,8 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {backPage, routePage} from "../../../../../common/js/general";
-import {dataCommon} from "../../../../../common/js/chart";
+import { backPage, routePage } from "../../../../../common/js/general";
+import { dataCommon } from "../../../../../common/js/chart";
 export default {
     ...backPage("pages/component/chart/barChart/indexStyle/index"),
     data: {
@@ -21,6 +21,6 @@ export default {
         text2: "left设置85",
         text3: "top设置170",
         datasets: dataCommon.datasets.barsets,
-        options: dataCommon.options,
+        options: dataCommon.options
     }
-}
+};

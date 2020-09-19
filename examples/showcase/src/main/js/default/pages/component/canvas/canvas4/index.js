@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import {backPage, routePage} from "../../../../common/js/general";
+import { backPage, routePage } from "../../../../common/js/general";
 export default {
     data: {
         text1: "上面绿块为canvas",
@@ -21,9 +21,9 @@ export default {
         text3: "left=85，top=120"
     },
     ...backPage("pages/component/canvas/indexCommonStyle/index"),
-    fillRect: function () {
+    fillRect: function() {
         var canvasRef = this.$refs.canvasObj;
         var ctx = canvasRef.getContext("2d");
-        ctx.fillRect(20,20,100,150);
+        ctx.fillRect(20, 20, 100, 150);
     }
-}
+};

@@ -13,16 +13,16 @@
  * limitations under the License.
  */
 export const changeStatus = function() {
-  if (this.status == true) {
-    this.status = false;
-  } else {
-    this.status = true;
-  }
+    if (this.status == true) {
+        this.status = false;
+    } else {
+        this.status = true;
+    }
 };
 export const changeIfStatus = function() {
-  if (this.ifstatus == true) {
-    this.ifstatus = false;
-  } else {
-    this.ifstatus = true;
-  }
+    if (this.ifstatus == true) {
+        this.ifstatus = false;
+    } else {
+        this.ifstatus = true;
+    }
 };

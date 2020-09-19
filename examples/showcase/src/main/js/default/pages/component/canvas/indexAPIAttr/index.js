@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import {backPage, routePage} from "../../../../common/js/general";
+import { backPage, routePage } from "../../../../common/js/general";
 export default {
     ...backPage("pages/component/canvas/indexAPI/index"),
-    fillStyleFunc: function () {
+    fillStyleFunc: function() {
         var canvasRef = this.$refs.canvas1;
         var ctx = canvasRef.getContext("2d");
 
@@ -33,25 +33,25 @@ export default {
 
         var getFillStyle3 = ctx.fillStyle; // setter后getter fillStyle
         console.info("getFillStyle3=" + getFillStyle3);
-        ctx.fillRect(20,20,100,150);
+        ctx.fillRect(20, 20, 100, 150);
     },
-    strokeStyleFunc: function () {
+    strokeStyleFunc: function() {
         var canvasRef = this.$refs.canvas2;
         var ctx = canvasRef.getContext("2d");
-        
+
         var getStrokeStyle1 = ctx.strokeStyle; // getter默认strokeStyle
         console.info("getStrokeStyle1=" + getStrokeStyle1);
         var getStrokeStyle2 = ctx.strokeStyle; // 再次getter默认strokeStyle
         console.info("getStrokeStyle2=" + getStrokeStyle2);
 
-        ctx.fillStyle = "#00ff00";  // 因为是画矩形框，所以填充设置无效
+        ctx.fillStyle = "#00ff00"; // 因为是画矩形框，所以填充设置无效
         ctx.strokeStyle = "#0000ff"; // setter
 
         var getStrokeStyle3 = ctx.strokeStyle; // setter之后getter strokeStyle
         console.info("getStrokeStyle3=" + getStrokeStyle3);
-        ctx.strokeRect(20,20,100,150);
+        ctx.strokeRect(20, 20, 100, 150);
     },
-    lineWidthFunc: function () {
+    lineWidthFunc: function() {
         var canvasRef = this.$refs.canvas3;
         var ctx = canvasRef.getContext("2d");
 
@@ -67,9 +67,9 @@ export default {
         var getLineWidth3 = ctx.lineWidth; // setter后getter lineWidth
         console.info("getLineWidth3=" + getLineWidth3);
 
-        ctx.strokeRect(20,20,100,150);
+        ctx.strokeRect(20, 20, 100, 150);
     },
-    fontFunc: function () {
+    fontFunc: function() {
         var canvasRef = this.$refs.canvas4;
         var ctx = canvasRef.getContext("2d");
 
@@ -87,7 +87,7 @@ export default {
 
         ctx.fillText("Hello ACE", 10, 50);
     },
-    textAlignFunc: function () {
+    textAlignFunc: function() {
         var canvasRef = this.$refs.canvas5;
         var ctx = canvasRef.getContext("2d");
 
@@ -109,4 +109,4 @@ export default {
         console.info("getTextAlign3=" + getTextAlign3);
     },
     jumpFunc: routePage("pages/component/canvas/indexAPIAttr/index").changePage
-}
+};
