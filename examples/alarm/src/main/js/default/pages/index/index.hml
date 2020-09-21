@@ -14,7 +14,7 @@
  * limitations under the License.
  */
  -->
-<div id="div1" class="container" style="left:0px; top:0px; border-radius:227px">
+<div id="div1" class="container" style="left: 0px; top: 0px; border-radius:227px">
     <list id="alarmList" style="height: 407px;" class="itemWidth">
         <list-item type="listitem" style="width: 376px; height:105px;">
             <div style="justify-content:center; height:105px;" class="itemWidth">
