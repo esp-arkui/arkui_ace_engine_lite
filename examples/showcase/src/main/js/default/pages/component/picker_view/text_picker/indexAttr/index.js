@@ -18,5 +18,5 @@ export default {
   changePage1: routePage("pages/component/picker_view/text_picker/text_picker6/text_picker6").changePage,
   changePage2: routePage("pages/component/picker_view/text_picker/text_picker5/text_picker5").changePage,
   change2If: routePage("pages/component/picker_view/text_picker/text_picker7/text_picker7").changePage,
-  change2For: routePage("pages/component/picker_view/text_picker/text_picker8/text_picker8").changePage,
+  change2For: routePage("pages/component/picker_view/text_picker/text_picker8/text_picker8").changePage
 };

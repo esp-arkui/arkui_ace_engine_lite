@@ -16,7 +16,7 @@ import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   data: {
     text1: "上面绿块为list",
-    text2: "背景距离已设置",
+    text2: "背景距离已设置"
   },
-  ...backPage("pages/component/list/list/indexCommonStyle/index"),
+  ...backPage("pages/component/list/list/indexCommonStyle/index")
 };

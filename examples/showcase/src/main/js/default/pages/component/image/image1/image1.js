@@ -14,5 +14,5 @@
  */
 import { backPage } from "../../../../common/js/general";
 export default {
-  ...backPage("pages/component/image/indexAttr/index"),
+  ...backPage("pages/component/image/indexAttr/index")
 };

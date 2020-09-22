@@ -16,5 +16,5 @@ import { backPage, routePage } from "../../../../common/js/general";
 export default {
   ...backPage("pages/component/index/containerIndex/index"),
   changePage1: routePage("pages/component/list/list/index/index").changePage,
-  changePage2: routePage("pages/component/list/list-item/index/index").changePage,
+  changePage2: routePage("pages/component/list/list-item/index/index").changePage
 };

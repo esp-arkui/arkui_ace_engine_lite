@@ -19,5 +19,5 @@ export default {
   changePage2: routePage("pages/component/list/list/list4/list4").changePage,
   changePage3: routePage("pages/component/list/list/list5/list5").changePage,
   changePage4: routePage("pages/component/list/list/list10/list10").changePage,
-  changePage5: routePage("pages/component/list/list/list11/list11").changePage,
+  changePage5: routePage("pages/component/list/list/list11/list11").changePage
 };

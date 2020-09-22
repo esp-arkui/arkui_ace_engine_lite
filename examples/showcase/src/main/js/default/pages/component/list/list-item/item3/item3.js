@@ -16,7 +16,7 @@ import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   data: {
     text1: "上面list有3个item",
-    text2: "item背景和宽高已设置",
+    text2: "item背景和宽高已设置"
   },
-  ...backPage("pages/component/list/list-item/indexCommonStyle/index"),
+  ...backPage("pages/component/list/list-item/indexCommonStyle/index")
 };

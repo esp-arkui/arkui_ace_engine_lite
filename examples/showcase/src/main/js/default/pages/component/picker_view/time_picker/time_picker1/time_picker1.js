@@ -16,11 +16,11 @@ import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   data: {
     time1: -1,
-    time2: -1,
+    time2: -1
   },
   ...backPage("pages/component/picker_view/time_picker/indexEvent/index"),
-  getTime: function (e1) {
+  getTime: function(e1) {
     this.time1 = e1.hour;
     this.time2 = e1.minute;
-  },
+  }
 };

@@ -21,6 +21,6 @@ export default {
     text2: "left设置85",
     text3: "top设置170",
     datasets: dataCommon.datasets.barsets,
-    options: dataCommon.options,
-  },
+    options: dataCommon.options
+  }
 };

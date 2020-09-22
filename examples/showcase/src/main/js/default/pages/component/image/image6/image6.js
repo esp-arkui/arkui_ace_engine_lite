@@ -18,8 +18,8 @@ export default {
   data: {
     text1: "点击按钮改变状态",
     status: true,
-    div01: "div01",
+    div01: "div01"
   },
   ...backPage("pages/component/image/indexAttr/index"),
-  changeStatus: changeStatus,
+  changeStatus: changeStatus
 };

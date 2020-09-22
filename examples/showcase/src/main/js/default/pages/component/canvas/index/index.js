@@ -19,5 +19,5 @@ export default {
   changePage1: routePage("pages/component/canvas/indexAttr/index").changePage,
   changePage2: routePage("pages/component/canvas/indexCommonStyle/index").changePage,
   changePage3: routePage("pages/component/canvas/indexEvent/index").changePage,
-  changePage4: routePage("pages/component/canvas/indexAPI/index").changePage,
+  changePage4: routePage("pages/component/canvas/indexAPI/index").changePage
 };

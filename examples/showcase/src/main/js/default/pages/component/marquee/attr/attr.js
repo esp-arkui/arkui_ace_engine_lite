@@ -18,9 +18,9 @@ export default {
   data: {
     status: true,
     ifstatus: true,
-    marqueefor: ["1.marquee测试for标签，abcdefg", "2.marquee测试for标签，abcdefg"],
+    marqueefor: ["1.marquee测试for标签，abcdefg", "2.marquee测试for标签，abcdefg"]
   },
   ...goPage("pages/component/marquee/index/index"),
   changeStatus: changeStatus,
-  changeIfStatus: changeIfStatus,
+  changeIfStatus: changeIfStatus
 };

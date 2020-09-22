@@ -18,7 +18,7 @@ export default {
   data: {
     text1: "上面绿块为canvas",
     text2: "左外=40，上外=15,",
-    text3: "右外=10，下外=20",
+    text3: "右外=10，下外=20"
   },
-  ...backPage("pages/component/canvas/indexCommonStyle/index"),
+  ...backPage("pages/component/canvas/indexCommonStyle/index")
 };

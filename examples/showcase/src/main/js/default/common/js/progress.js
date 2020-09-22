@@ -12,35 +12,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const changeStatusIf = function () {
+export const changeStatusIf = function() {
   if (this.ifStatus == true) {
     this.ifStatus = false;
   } else {
     this.ifStatus = true;
   }
 };
-export const changeDisplay = function () {
+export const changeDisplay = function() {
   if (this.display === "flex") {
     this.display = "none";
   } else {
     this.display = "flex";
   }
 };
-export const changeStatus = function () {
+export const changeStatus = function() {
   if (this.status == true) {
     this.status = false;
   } else {
     this.status = true;
   }
 };
-export const clickEvent = function () {
+export const clickEvent = function() {
   this.value = "点击已触发";
   this.percent = this.percent + 10;
 };
-export const longpressEvent = function () {
+export const longpressEvent = function() {
   this.value = "长按已触发";
   this.percent = this.percent + 20;
 };
-export const swipeEvent = function (e) {
+export const swipeEvent = function(e) {
   this.value = "swipe方向：" + e.direction;
 };

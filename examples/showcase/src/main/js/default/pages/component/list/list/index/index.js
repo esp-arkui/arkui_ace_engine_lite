@@ -19,5 +19,5 @@ export default {
   changePage2: routePage("pages/component/list/list/indexCommonStyle/index").changePage,
   changePage3: routePage("pages/component/list/list/indexSpecStyle/index").changePage,
   changePage4: routePage("pages/component/list/list/indexEvent/index").changePage,
-  changePage5: routePage("pages/component/list/list/indexOperation/index").changePage,
+  changePage5: routePage("pages/component/list/list/indexOperation/index").changePage
 };

@@ -15,7 +15,7 @@
 import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   data: {
-    textContent: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
+    textContent: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
   },
-  ...backPage("pages/component/picker_view/text_picker/indexAttr/index"),
+  ...backPage("pages/component/picker_view/text_picker/indexAttr/index")
 };

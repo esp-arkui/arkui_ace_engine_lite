@@ -15,7 +15,7 @@
 import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   data: {
-    text1: "list-item的border边框和padding内边距",
+    text1: "list-item的border边框和padding内边距"
   },
-  ...backPage("pages/component/list/list-item/indexCommonStyle/index"),
+  ...backPage("pages/component/list/list-item/indexCommonStyle/index")
 };

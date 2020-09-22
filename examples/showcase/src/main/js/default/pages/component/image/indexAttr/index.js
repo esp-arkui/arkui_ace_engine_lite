@@ -18,5 +18,5 @@ export default {
   changePage1: routePage("pages/component/image/image6/image6").changePage,
   changePage2: routePage("pages/component/image/image7/image7").changePage,
   changePage3: routePage("pages/component/image/image8/image8").changePage,
-  changePage4: routePage("pages/component/image/image1/image1").changePage,
+  changePage4: routePage("pages/component/image/image1/image1").changePage
 };

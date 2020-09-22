@@ -16,7 +16,7 @@ import { goPage, routePage } from "../../../../common/js/general";
 export default {
   data: {
     displayVal: "flex",
-    flag: true,
+    flag: true
   },
   changeDisplay() {
     if (this.flag) {
@@ -27,5 +27,5 @@ export default {
       this.flag = true;
     }
   },
-  ...goPage("pages/component/marquee/index/index"),
+  ...goPage("pages/component/marquee/index/index")
 };

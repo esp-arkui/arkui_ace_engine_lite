@@ -19,14 +19,14 @@ export default {
     text1: "上面绿块为canvas",
     text2: "点击按钮切换display",
     text3: "支持flex/none",
-    displayValue: "flex",
+    displayValue: "flex"
   },
   ...backPage("pages/component/canvas/indexCommonStyle/index"),
-  changeDisplay: function () {
+  changeDisplay: function() {
     if (this.displayValue === "flex") {
       this.displayValue = "none";
     } else {
       this.displayValue = "flex";
     }
-  },
+  }
 };

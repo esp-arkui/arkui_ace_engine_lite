@@ -20,7 +20,7 @@ export default {
     datasets: dataCommon.datasets.barsets,
     options: dataCommon.options,
     status: true,
-    text1: "显示状态改变",
+    text1: "显示状态改变"
   },
-  changeStatus: changeStatus,
+  changeStatus: changeStatus
 };

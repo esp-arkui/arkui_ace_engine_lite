@@ -19,6 +19,6 @@ export default {
   changeStatus: changeStatus,
   data: {
     text1: "点击按钮改变状态",
-    status: true,
-  },
+    status: true
+  }
 };

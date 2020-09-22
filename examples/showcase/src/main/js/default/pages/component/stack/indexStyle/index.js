@@ -17,5 +17,5 @@ export default {
   ...backPage("pages/component/stack/index/index"),
   changePage1: routePage("pages/component/stack/stack2/stack2").changePage,
   changePage2: routePage("pages/component/stack/stack3/stack3").changePage,
-  changePage3: routePage("pages/component/stack/stack4/stack4").changePage,
+  changePage3: routePage("pages/component/stack/stack4/stack4").changePage
 };

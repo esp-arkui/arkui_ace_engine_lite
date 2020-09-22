@@ -18,12 +18,12 @@ export default {
   data: {
     text1: "背景色绿色",
     text2: "left设置85",
-    text3: "top设置170",
+    text3: "top设置170"
   },
-  clickFunc: function () {
+  clickFunc: function() {
     this.text1 = "点击事件已触发";
   },
-  longpressFunc: function () {
+  longpressFunc: function() {
     this.text2 = "长按事件已触发";
-  },
+  }
 };

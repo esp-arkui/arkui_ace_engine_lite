@@ -18,13 +18,13 @@ export default {
   data: {
     text1: "点击按钮改变状态",
     status: true,
-    div01: "div01",
+    div01: "div01"
   },
-  changeStatus: function () {
+  changeStatus: function() {
     if (this.status == true) {
       this.status = false;
     } else {
       this.status = true;
     }
-  },
+  }
 };

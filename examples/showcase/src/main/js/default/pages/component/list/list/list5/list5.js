@@ -15,7 +15,7 @@
 import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   data: {
-    text1: "内边距和边框",
+    text1: "内边距和边框"
   },
-  ...backPage("pages/component/list/list/indexCommonStyle/index"),
+  ...backPage("pages/component/list/list/indexCommonStyle/index")
 };

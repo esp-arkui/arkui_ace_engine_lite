@@ -17,20 +17,20 @@ export default {
   data: {
     show: "false",
     name: "show",
-    status: true,
+    status: true
   },
   ...goPage("pages/component/input/radio/index/index"),
-  changeShow: function () {
+  changeShow: function() {
     this.status = !this.status;
   },
-  showName: function (e) {
+  showName: function(e) {
     this.name = e.name;
   },
-  changeChecked: function (e) {
+  changeChecked: function(e) {
     if (e.checked) {
       this.show = "true";
     } else {
       this.show = "false";
     }
-  },
+  }
 };

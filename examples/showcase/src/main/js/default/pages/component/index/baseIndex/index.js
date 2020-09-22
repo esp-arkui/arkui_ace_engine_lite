@@ -20,5 +20,5 @@ export default {
   changeText: routePage("pages/component/text/index/index").changePage,
   changeMarquee: routePage("pages/component/marquee/index/index").changePage,
   changeChart: routePage("pages/component/chart/index/index").changePage,
-  changeCanvas: routePage("pages/component/canvas/index/index").changePage,
+  changeCanvas: routePage("pages/component/canvas/index/index").changePage
 };

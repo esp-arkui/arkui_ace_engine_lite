@@ -15,10 +15,10 @@
 import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   data: {
-    text1: "scrollend未触发",
+    text1: "scrollend未触发"
   },
   ...backPage("pages/component/list/list/indexEvent/index"),
-  scrollendFunc: function () {
+  scrollendFunc: function() {
     this.text1 = "scrollend已触发";
-  },
+  }
 };

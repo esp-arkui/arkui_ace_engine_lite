@@ -20,5 +20,5 @@ export default {
   changePage2: routePage("pages/component/canvas/canvas5/index").changePage,
   changePage3: routePage("pages/component/canvas/canvas6/index").changePage,
   changePage4: routePage("pages/component/canvas/canvas7/index").changePage,
-  changePage5: routePage("pages/component/canvas/canvas8/index").changePage,
+  changePage5: routePage("pages/component/canvas/canvas8/index").changePage
 };

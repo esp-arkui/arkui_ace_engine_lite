@@ -15,7 +15,7 @@
 import { goPage, routePage } from "../../../../common/js/general";
 export default {
   data: {
-    text: "点击/长按/滑动",
+    text: "点击/长按/滑动"
   },
   ...goPage("pages/component/marquee/index/index"),
   clickEvent(e) {
@@ -26,5 +26,5 @@ export default {
   },
   swipeEvent(e) {
     this.text = "swipe方向：" + e.direction;
-  },
+  }
 };

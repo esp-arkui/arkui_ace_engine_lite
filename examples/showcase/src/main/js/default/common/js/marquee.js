@@ -12,14 +12,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const changeStatus = function () {
+export const changeStatus = function() {
   if (this.status == true) {
     this.status = false;
   } else {
     this.status = true;
   }
 };
-export const changeIfStatus = function () {
+export const changeIfStatus = function() {
   if (this.ifstatus == true) {
     this.ifstatus = false;
   } else {

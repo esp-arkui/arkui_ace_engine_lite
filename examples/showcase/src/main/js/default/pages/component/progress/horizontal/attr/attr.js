@@ -19,9 +19,9 @@ export default {
     listData: ["a", "b"],
     status: true,
     ifStatus: true,
-    show: 20,
+    show: 20
   },
   ...goPage("pages/component/progress/horizontal/index/index"),
   changeStatus: changeStatus,
-  changeStatusIf: changeStatusIf,
+  changeStatusIf: changeStatusIf
 };

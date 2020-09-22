@@ -15,13 +15,13 @@
 import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   data: {
-    text1: "",
+    text1: ""
   },
   ...backPage("pages/component/list/list/indexEvent/index"),
-  clickFunc: function () {
+  clickFunc: function() {
     this.text1 = "点击事件已触发";
   },
-  listswipe: function (e) {
+  listswipe: function(e) {
     this.text1 = "swipe方向：" + e.direction;
-  },
+  }
 };

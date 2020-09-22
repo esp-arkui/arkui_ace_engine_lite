@@ -17,7 +17,7 @@ export default {
   data: {
     name: "点击或长按",
     checked: "触发change",
-    show: true,
+    show: true
   },
   clickEvent() {
     this.name = "点击事件触发";
@@ -31,5 +31,5 @@ export default {
   changeEvent(e) {
     this.checked = "change触发";
   },
-  ...goPage("pages/component/input/checkbox/index/index"),
+  ...goPage("pages/component/input/checkbox/index/index")
 };

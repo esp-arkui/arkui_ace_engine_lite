@@ -17,5 +17,5 @@ export default {
   ...goPage("pages/component/index/formIndex/index"),
   changeButton: routePage("pages/component/input/button/index/index").changePage,
   changeCheckbox: routePage("pages/component/input/checkbox/index/index").changePage,
-  changeRadio: routePage("pages/component/input/radio/index/index").changePage,
+  changeRadio: routePage("pages/component/input/radio/index/index").changePage
 };

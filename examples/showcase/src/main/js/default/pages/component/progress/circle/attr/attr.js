@@ -21,7 +21,7 @@ export default {
     percentAttribute: 20,
     loopArray: ["1", "2", "3"],
     p01: "p01",
-    display: "flex",
+    display: "flex"
   },
   ...goPage("pages/component/progress/circle/index/index"),
   changePercent() {
@@ -35,5 +35,5 @@ export default {
     }
   },
   changeStatusIf: changeStatusIf,
-  changeDisplay: changeDisplay,
+  changeDisplay: changeDisplay
 };

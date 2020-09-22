@@ -16,14 +16,14 @@
 import { backPage, routePage } from "../../../../common/js/general";
 export default {
   data: {
-    text1: "边框和内边距",
+    text1: "边框和内边距"
   },
   ...backPage("pages/component/canvas/indexCommonStyle/index"),
-  fillStyleFunc: function () {
+  fillStyleFunc: function() {
     var canvasRef = this.$refs.canvas1;
     var ctx = canvasRef.getContext("2d");
     ctx.fillStyle = "#00ff00";
     ctx.strokeStyle = "#ff0000"; // 因为是填充图形，所以边框设置无效
     ctx.fillRect(0, 0, 100, 150);
-  },
+  }
 };

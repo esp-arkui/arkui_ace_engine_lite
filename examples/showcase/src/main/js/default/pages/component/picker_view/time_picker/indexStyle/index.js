@@ -19,5 +19,5 @@ export default {
   changePage2: routePage("pages/component/picker_view/time_picker/time_picker3/time_picker3").changePage,
   changePage3: routePage("pages/component/picker_view/time_picker/time_picker4/time_picker4").changePage,
   change2Style: routePage("pages/component/picker_view/time_picker/time_picker9/time_picker9").changePage,
-  change2Display: routePage("pages/component/picker_view/time_picker/time_picker10/time_picker10").changePage,
+  change2Display: routePage("pages/component/picker_view/time_picker/time_picker10/time_picker10").changePage
 };

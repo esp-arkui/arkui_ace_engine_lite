@@ -17,16 +17,16 @@ export default {
   data: {
     text1: "点击事件未触发",
     text2: "长按事件未触发",
-    text3: "swipe事件未触发",
+    text3: "swipe事件未触发"
   },
   ...backPage("pages/component/stack/indexEvent/index"),
-  clickFunc: function () {
+  clickFunc: function() {
     this.text1 = "点击事件已触发";
   },
-  longpressFunc: function () {
+  longpressFunc: function() {
     this.text2 = "长按事件已触发";
   },
-  stackswipe: function (e) {
+  stackswipe: function(e) {
     this.text3 = "swipe方向：" + e.direction;
-  },
+  }
 };

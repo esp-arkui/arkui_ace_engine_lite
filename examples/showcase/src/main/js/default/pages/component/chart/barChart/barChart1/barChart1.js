@@ -21,9 +21,9 @@ export default {
     text2: eventCommon().text2,
     text3: eventCommon().text3,
     datasets: dataCommon.datasets.barsets,
-    options: dataCommon.options,
+    options: dataCommon.options
   },
   clickFunc: eventCommon().clickFunc,
   longpressFunc: eventCommon().longpressFunc,
-  swipeFunc: eventCommon().swipeFunc,
+  swipeFunc: eventCommon().swipeFunc
 };

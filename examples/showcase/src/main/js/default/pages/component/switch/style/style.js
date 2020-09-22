@@ -15,14 +15,14 @@
 import { backPage, routePage } from "../../../../common/js/general";
 export default {
   data: {
-    status: "flex",
+    status: "flex"
   },
   ...backPage("pages/component/switch/index/index"),
-  changeStatus: function () {
+  changeStatus: function() {
     if (this.status === "flex") {
       this.status = "none";
     } else {
       this.status = "flex";
     }
-  },
+  }
 };

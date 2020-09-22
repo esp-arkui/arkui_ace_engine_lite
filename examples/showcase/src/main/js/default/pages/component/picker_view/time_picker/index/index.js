@@ -17,5 +17,5 @@ export default {
   ...backPage("pages/component/picker_view/index/index"),
   changePage1: routePage("pages/component/picker_view/time_picker/indexAttr/index").changePage,
   changePage2: routePage("pages/component/picker_view/time_picker/indexStyle/index").changePage,
-  changePage3: routePage("pages/component/picker_view/time_picker/indexEvent/index").changePage,
+  changePage3: routePage("pages/component/picker_view/time_picker/indexEvent/index").changePage
 };

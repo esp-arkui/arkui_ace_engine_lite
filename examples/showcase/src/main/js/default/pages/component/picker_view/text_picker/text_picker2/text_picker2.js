@@ -18,7 +18,7 @@ export default {
     text1: "背景色绿色",
     text2: "left设置85",
     text3: "top设置170",
-    textContent: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
+    textContent: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
   },
-  ...backPage("pages/component/picker_view/text_picker/indexStyle/index"),
+  ...backPage("pages/component/picker_view/text_picker/indexStyle/index")
 };

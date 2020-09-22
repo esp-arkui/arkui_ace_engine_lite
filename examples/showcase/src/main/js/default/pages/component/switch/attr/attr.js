@@ -17,21 +17,21 @@ export default {
   data: {
     status: true,
     statusIf: true,
-    listData: [true, false],
+    listData: [true, false]
   },
   ...backPage("pages/component/switch/index/index"),
-  changeStatus: function () {
+  changeStatus: function() {
     if (this.status == true) {
       this.status = false;
     } else {
       this.status = true;
     }
   },
-  changeIf: function () {
+  changeIf: function() {
     if (this.statusIf == true) {
       this.statusIf = false;
     } else {
       this.statusIf = true;
     }
-  },
+  }
 };

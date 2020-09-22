@@ -18,14 +18,14 @@ export default {
     text1: "上面绿块为list",
     text2: "点击按钮切换display",
     text3: "支持flex/none",
-    display: "flex",
+    display: "flex"
   },
   ...backPage("pages/component/list/list/indexCommonStyle/index"),
-  changeDisplay: function () {
+  changeDisplay: function() {
     if (this.display === "flex") {
       this.display = "none";
     } else {
       this.display = "flex";
     }
-  },
+  }
 };

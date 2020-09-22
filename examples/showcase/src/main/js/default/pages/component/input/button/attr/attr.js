@@ -18,9 +18,9 @@ export default {
   data: {
     status: true,
     ifStatus: true,
-    valueList: ["for1", "for2"],
+    valueList: ["for1", "for2"]
   },
   ...goPage("pages/component/input/button/index/index"),
   changeStatus: changeStatus,
-  changeIf: changeIf,
+  changeIf: changeIf
 };

@@ -18,5 +18,5 @@ export default {
   changePage1: routePage("pages/component/chart/lineChart/lineChart6/lineChart6").changePage,
   changePage2: routePage("pages/component/chart/lineChart/lineChart5/lineChart5").changePage,
   changePage3: routePage("pages/component/chart/lineChart/lineChart7/lineChart7").changePage,
-  changePage4: routePage("pages/component/chart/lineChart/lineChart8/lineChart8").changePage,
+  changePage4: routePage("pages/component/chart/lineChart/lineChart8/lineChart8").changePage
 };

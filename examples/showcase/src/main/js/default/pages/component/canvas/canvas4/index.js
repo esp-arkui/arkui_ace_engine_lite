@@ -18,12 +18,12 @@ export default {
   data: {
     text1: "上面绿块为canvas",
     text2: "背景=绿，",
-    text3: "left=85，top=120",
+    text3: "left=85，top=120"
   },
   ...backPage("pages/component/canvas/indexCommonStyle/index"),
-  fillRect: function () {
+  fillRect: function() {
     var canvasRef = this.$refs.canvasObj;
     var ctx = canvasRef.getContext("2d");
     ctx.fillRect(20, 20, 100, 150);
-  },
+  }
 };

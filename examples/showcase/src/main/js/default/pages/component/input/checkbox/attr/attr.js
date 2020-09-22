@@ -19,7 +19,7 @@ export default {
     show: true,
     status: true,
     ifStatus: true,
-    listData: [true, false],
+    listData: [true, false]
   },
   ...goPage("pages/component/input/checkbox/index/index"),
   changeEvent(e) {
@@ -29,5 +29,5 @@ export default {
     this.show = e.checked;
   },
   changeShow: changeStatus,
-  changeIf: changeIf,
+  changeIf: changeIf
 };

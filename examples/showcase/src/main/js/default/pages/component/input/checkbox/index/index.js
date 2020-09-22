@@ -17,5 +17,5 @@ export default {
   ...backPage("pages/component/input/index/index"),
   changePage1: routePage("pages/component/input/checkbox/attr/attr").changePage,
   changePage2: routePage("pages/component/input/checkbox/style/style").changePage,
-  changePage3: routePage("pages/component/input/checkbox/event/event").changePage,
+  changePage3: routePage("pages/component/input/checkbox/event/event").changePage
 };

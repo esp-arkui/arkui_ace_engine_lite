@@ -18,9 +18,9 @@ export default {
   data: {
     text1: "item-abcd设置display，点击按钮切换display",
     status: true,
-    displayValue: displayData[0],
+    displayValue: displayData[0]
   },
-  changeDisplay: function () {
+  changeDisplay: function() {
     if (this.status == true) {
       this.displayValue = displayData[1];
       this.status = false;
@@ -29,5 +29,5 @@ export default {
       this.status = true;
     }
   },
-  ...backPage("pages/component/list/list-item/indexCommonStyle/index"),
+  ...backPage("pages/component/list/list-item/indexCommonStyle/index")
 };

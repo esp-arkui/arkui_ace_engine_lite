@@ -18,5 +18,5 @@ export default {
   changePage2: routePage("pages/component/marquee/commonStyle/commonStyle").changePage,
   changePage3: routePage("pages/component/marquee/specStyle/specStyle").changePage,
   changePage4: routePage("pages/component/marquee/event/event").changePage,
-  ...backPage("pages/component/index/baseIndex/index"),
+  ...backPage("pages/component/index/baseIndex/index")
 };

@@ -17,5 +17,5 @@ export default {
   ...backPage("pages/component/index/baseIndex/index"),
   changePage1: routePage("pages/component/image/indexAttr/index").changePage,
   changePage2: routePage("pages/component/image/indexStyle/index").changePage,
-  changePage3: routePage("pages/component/image/indexEvent/index").changePage,
+  changePage3: routePage("pages/component/image/indexEvent/index").changePage
 };

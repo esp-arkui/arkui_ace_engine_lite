@@ -18,5 +18,5 @@ export default {
   changePage1: routePage("pages/component/animation/animation1/animation1").changePage,
   changePage2: routePage("pages/component/animation/animation2/animation2").changePage,
   changePage3: routePage("pages/component/animation/animation3/animation3").changePage,
-  changePage4: routePage("pages/component/animation/animation4/animation4").changePage,
+  changePage4: routePage("pages/component/animation/animation4/animation4").changePage
 };

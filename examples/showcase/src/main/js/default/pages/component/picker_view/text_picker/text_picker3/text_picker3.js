@@ -18,7 +18,7 @@ export default {
     text1: "margin左边距85",
     text2: "margin上边距10",
     text3: "宽高已设置",
-    textContent: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
+    textContent: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
   },
-  ...backPage("pages/component/picker_view/text_picker/indexStyle/index"),
+  ...backPage("pages/component/picker_view/text_picker/indexStyle/index")
 };

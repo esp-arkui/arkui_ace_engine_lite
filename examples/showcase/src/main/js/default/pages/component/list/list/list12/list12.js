@@ -16,7 +16,7 @@ import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   data: {
     listData: ["a", "b", "c", "d"],
-    text1: "for类型list包含4个list",
+    text1: "for类型list包含4个list"
   },
-  ...backPage("pages/component/list/list/indexAttr/index"),
+  ...backPage("pages/component/list/list/indexAttr/index")
 };

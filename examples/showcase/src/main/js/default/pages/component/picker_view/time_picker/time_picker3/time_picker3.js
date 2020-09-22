@@ -17,7 +17,7 @@ export default {
   data: {
     text1: "margin左边距85",
     text2: "margin上边距10",
-    text3: "宽高已设置",
+    text3: "宽高已设置"
   },
-  ...backPage("pages/component/picker_view/time_picker/indexStyle/index"),
+  ...backPage("pages/component/picker_view/time_picker/indexStyle/index")
 };

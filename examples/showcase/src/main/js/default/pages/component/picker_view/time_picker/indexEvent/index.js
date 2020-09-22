@@ -15,5 +15,5 @@
 import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   ...backPage("pages/component/picker_view/time_picker/index/index"),
-  changePage1: routePage("pages/component/picker_view/time_picker/time_picker1/time_picker1").changePage,
+  changePage1: routePage("pages/component/picker_view/time_picker/time_picker1/time_picker1").changePage
 };

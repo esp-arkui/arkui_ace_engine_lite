@@ -18,5 +18,5 @@ export default {
   changeInput: routePage("pages/component/input/index/index").changePage,
   changeSlider: routePage("pages/component/slider/index/index").changePage,
   changeSwitch: routePage("pages/component/switch/index/index").changePage,
-  changePickerView: routePage("pages/component/picker_view/index/index").changePage,
+  changePickerView: routePage("pages/component/picker_view/index/index").changePage
 };

@@ -17,5 +17,5 @@ export default {
   ...backPage("pages/component/chart/index/index"),
   changePage1: routePage("pages/component/chart/lineChart/indexAttr/index").changePage,
   changePage2: routePage("pages/component/chart/lineChart/indexStyle/index").changePage,
-  changePage3: routePage("pages/component/chart/lineChart/indexEvent/index").changePage,
+  changePage3: routePage("pages/component/chart/lineChart/indexEvent/index").changePage
 };

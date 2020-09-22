@@ -18,9 +18,9 @@ export default {
   data: {
     text1: eventCommon().text1,
     text2: eventCommon().text2,
-    text3: eventCommon().text3,
+    text3: eventCommon().text3
   },
   clickFunc: eventCommon().clickFunc,
   longpressFunc: eventCommon().longpressFunc,
-  swipeFunc: eventCommon().swipeFunc,
+  swipeFunc: eventCommon().swipeFunc
 };

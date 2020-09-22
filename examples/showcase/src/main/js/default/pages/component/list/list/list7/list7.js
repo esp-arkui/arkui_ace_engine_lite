@@ -15,27 +15,27 @@
 import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   data: {
-    listData: ["text组件b", "text组件c", "text组件d"],
+    listData: ["text组件b", "text组件c", "text组件d"]
   },
   ...backPage("pages/component/list/list/indexOperation/index"),
-  pushItem: function () {
+  pushItem: function() {
     console.log("push an item.");
     this.listData.push("text组件z");
   },
-  popItem: function () {
+  popItem: function() {
     console.log("pop an item.");
     this.listData.pop();
   },
-  shiftItem: function () {
+  shiftItem: function() {
     console.log("shift an item.");
     this.listData.shift();
   },
-  unshiftItem: function () {
+  unshiftItem: function() {
     console.log("unshift an item.");
     this.listData.unshift("text组件a");
   },
-  spliceItem: function () {
+  spliceItem: function() {
     console.log("splice items.");
     this.listData.splice(0, 1, "text组件x", "text组件y");
-  },
+  }
 };

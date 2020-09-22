@@ -22,8 +22,8 @@ export default {
     status: true,
     text1: "显示状态改变",
     loopArray: ["1", "2", "3"],
-    display: "flex",
+    display: "flex"
   },
   changeStatus: changeStatus,
-  changeDisplay: changeDisplay,
+  changeDisplay: changeDisplay
 };

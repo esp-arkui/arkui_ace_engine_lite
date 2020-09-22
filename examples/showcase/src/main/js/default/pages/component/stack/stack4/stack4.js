@@ -14,5 +14,5 @@
  */
 import { backPage, routePage } from "../../../../common/js/general";
 export default {
-  ...backPage("pages/component/stack/indexStyle/index"),
+  ...backPage("pages/component/stack/indexStyle/index")
 };

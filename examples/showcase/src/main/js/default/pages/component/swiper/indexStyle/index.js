@@ -20,5 +20,5 @@ export default {
   changePage3: routePage("pages/component/swiper/swiper4/swiper4").changePage,
   changePage4: routePage("pages/component/swiper/swiper8/swiper8").changePage,
   changePage5: routePage("pages/component/swiper/swiper9/swiper9").changePage,
-  changePage6: routePage("pages/component/swiper/swiper10/swiper10").changePage,
+  changePage6: routePage("pages/component/swiper/swiper10/swiper10").changePage
 };

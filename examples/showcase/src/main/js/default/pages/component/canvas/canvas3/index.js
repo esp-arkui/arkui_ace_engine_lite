@@ -17,15 +17,15 @@ import { backPage, routePage } from "../../../../common/js/general";
 export default {
   data: {
     listData: ["a", "b"],
-    text1: "for类型canvas",
+    text1: "for类型canvas"
   },
   ...backPage("pages/component/canvas/indexAttr/index"),
-  fillRectFunc: function () {
+  fillRectFunc: function() {
     var canvasRefa = this.$refs.canvasa;
     var ctxa = canvasRefa.getContext("2d");
     ctxa.fillRect(20, 20, 40, 150);
     var canvasRefb = this.$refs.canvasb;
     var ctxb = canvasRefb.getContext("2d");
     ctxb.fillRect(20, 20, 30, 100);
-  },
+  }
 };

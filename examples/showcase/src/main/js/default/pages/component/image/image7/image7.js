@@ -15,7 +15,7 @@
 import { backPage } from "../../../../common/js/general";
 export default {
   ...backPage("pages/component/image/indexAttr/index"),
-  changeDisplay: function () {
+  changeDisplay: function() {
     if (this.display === "flex") {
       this.display = "none";
     } else {
@@ -24,6 +24,6 @@ export default {
   },
   data: {
     loopArray: ["1", "2", "3"],
-    display: "flex",
-  },
+    display: "flex"
+  }
 };

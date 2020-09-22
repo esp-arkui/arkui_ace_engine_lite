@@ -17,5 +17,5 @@ export default {
   ...backPage("pages/component/swiper/index/index"),
   changePage1: routePage("pages/component/swiper/swiper6/swiper6").changePage,
   changePage2: routePage("pages/component/swiper/swiper7/swiper7").changePage,
-  changePage3: routePage("pages/component/swiper/swiper11/swiper11").changePage,
+  changePage3: routePage("pages/component/swiper/swiper11/swiper11").changePage
 };

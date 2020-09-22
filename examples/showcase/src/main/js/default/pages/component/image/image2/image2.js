@@ -21,6 +21,6 @@ export default {
   data: {
     text3: eventCommon().text3,
     text2: eventCommon().text2,
-    text1: eventCommon().text1,
-  },
+    text1: eventCommon().text1
+  }
 };

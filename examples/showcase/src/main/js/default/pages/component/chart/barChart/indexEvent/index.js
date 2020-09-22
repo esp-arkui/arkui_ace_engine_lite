@@ -15,5 +15,5 @@
 import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   ...backPage("pages/component/chart/barChart/index/index"),
-  changePage1: routePage("pages/component/chart/barChart/barChart1/barChart1").changePage,
+  changePage1: routePage("pages/component/chart/barChart/barChart1/barChart1").changePage
 };

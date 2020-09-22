@@ -17,5 +17,5 @@ export default {
   ...backPage("pages/component/progress/index/index"),
   changePage1: routePage("pages/component/progress/circle/attr/attr").changePage,
   changePage2: routePage("pages/component/progress/circle/style/style").changePage,
-  changePage3: routePage("pages/component/progress/circle/event/event").changePage,
+  changePage3: routePage("pages/component/progress/circle/event/event").changePage
 };

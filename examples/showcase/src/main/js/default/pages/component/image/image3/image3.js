@@ -16,6 +16,6 @@ import { backPage } from "../../../../common/js/general";
 export default {
   ...backPage("pages/component/image/indexStyle/index"),
   data: {
-    text1: "距离背景已设置",
-  },
+    text1: "距离背景已设置"
+  }
 };

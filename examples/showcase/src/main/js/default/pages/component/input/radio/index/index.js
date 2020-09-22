@@ -17,5 +17,5 @@ export default {
   goAttrs: routePage("pages/component/input/radio/attr/attr").changePage,
   goStyle: routePage("pages/component/input/radio/style/style").changePage,
   goEvent: routePage("pages/component/input/radio/event/event").changePage,
-  ...backPage("pages/component/input/index/index"),
+  ...backPage("pages/component/input/index/index")
 };

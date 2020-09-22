@@ -17,5 +17,5 @@ export default {
   changePage1: routePage("pages/component/input/button/attr/attr").changePage,
   changePage2: routePage("pages/component/input/button/style/style").changePage,
   changePage3: routePage("pages/component/input/button/event/event").changePage,
-  ...backPage("pages/component/input/index/index"),
+  ...backPage("pages/component/input/index/index")
 };

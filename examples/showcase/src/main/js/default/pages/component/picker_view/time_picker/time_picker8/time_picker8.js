@@ -16,7 +16,7 @@ import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   data: {
     status: true,
-    forData: [0, 1],
+    forData: [0, 1]
   },
-  ...backPage("pages/component/picker_view/time_picker/indexAttr/index"),
+  ...backPage("pages/component/picker_view/time_picker/indexAttr/index")
 };

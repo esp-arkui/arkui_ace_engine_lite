@@ -18,6 +18,6 @@ export default {
   ...backPage("pages/component/chart/lineChart/indexAttr/index"),
   data: {
     datasets: dataCommon.datasets.linesets,
-    options: dataCommon.optionsNoDisplay,
-  },
+    options: dataCommon.optionsNoDisplay
+  }
 };

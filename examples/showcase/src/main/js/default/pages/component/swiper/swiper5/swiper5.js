@@ -16,8 +16,8 @@ import { backPage, routePage } from "../../../../common/js/general";
 import { showPage } from "../../../../common/js/swiper";
 export default {
   data: {
-    index: 2,
+    index: 2
   },
   ...backPage("pages/component/swiper/indexSpecSet/index"),
-  showPage: showPage,
+  showPage: showPage
 };

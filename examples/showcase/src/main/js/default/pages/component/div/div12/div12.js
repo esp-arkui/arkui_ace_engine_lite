@@ -18,13 +18,13 @@ export default {
   data: {
     text1: "点击按钮改变状态",
     loopArray: ["1", "2", "3"],
-    display: "flex",
+    display: "flex"
   },
-  changeDisplay: function () {
+  changeDisplay: function() {
     if (this.display === "flex") {
       this.display = "none";
     } else {
       this.display = "flex";
     }
-  },
+  }
 };

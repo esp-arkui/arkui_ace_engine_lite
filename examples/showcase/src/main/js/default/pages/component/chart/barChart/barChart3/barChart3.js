@@ -21,6 +21,6 @@ export default {
     text2: "margin上边距10",
     text3: "宽高已设置",
     datasets: dataCommon.datasets.barsets,
-    options: dataCommon.options,
-  },
+    options: dataCommon.options
+  }
 };

@@ -17,8 +17,8 @@ import { changeStatus } from "../../../../../common/js/list";
 export default {
   data: {
     text1: "点击按钮改变状态",
-    status: true,
+    status: true
   },
   changeStatus: changeStatus,
-  ...backPage("pages/component/list/list-item/indexAttr/index"),
+  ...backPage("pages/component/list/list-item/indexAttr/index")
 };

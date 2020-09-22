@@ -15,12 +15,12 @@
 var router = require("@system.router");
 module.exports = {
   data: {
-    listData: ["a", "b", "c", "d", "e", "f", "g", "h"],
+    listData: ["a", "b", "c", "d", "e", "f", "g", "h"]
   },
-  backMain: function () {
+  backMain: function() {
     router.replace({ uri: "pages/index/index" });
   },
-  backSuperior: function () {
+  backSuperior: function() {
     router.replace({ uri: "pages/component/list/list/indexOperation/index" });
   },
   listClick() {
@@ -40,5 +40,5 @@ module.exports = {
   onShow() {
     this.$refs.listObj.scrollTo({ index: 3 });
     console.log("on Ready called...");
-  },
+  }
 };

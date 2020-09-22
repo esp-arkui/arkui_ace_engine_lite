@@ -16,7 +16,7 @@
 import { backPage, routePage } from "../../../../common/js/general";
 export default {
   ...backPage("pages/component/canvas/indexAPI/index"),
-  fillStyleFunc: function () {
+  fillStyleFunc: function() {
     var canvasRef = this.$refs.canvas1;
     var ctx = canvasRef.getContext("2d");
 
@@ -35,7 +35,7 @@ export default {
     console.info("getFillStyle3=" + getFillStyle3);
     ctx.fillRect(20, 20, 100, 150);
   },
-  strokeStyleFunc: function () {
+  strokeStyleFunc: function() {
     var canvasRef = this.$refs.canvas2;
     var ctx = canvasRef.getContext("2d");
 
@@ -51,7 +51,7 @@ export default {
     console.info("getStrokeStyle3=" + getStrokeStyle3);
     ctx.strokeRect(20, 20, 100, 150);
   },
-  lineWidthFunc: function () {
+  lineWidthFunc: function() {
     var canvasRef = this.$refs.canvas3;
     var ctx = canvasRef.getContext("2d");
 
@@ -69,7 +69,7 @@ export default {
 
     ctx.strokeRect(20, 20, 100, 150);
   },
-  fontFunc: function () {
+  fontFunc: function() {
     var canvasRef = this.$refs.canvas4;
     var ctx = canvasRef.getContext("2d");
 
@@ -87,7 +87,7 @@ export default {
 
     ctx.fillText("Hello ACE", 10, 50);
   },
-  textAlignFunc: function () {
+  textAlignFunc: function() {
     var canvasRef = this.$refs.canvas5;
     var ctx = canvasRef.getContext("2d");
 
@@ -108,5 +108,5 @@ export default {
     var getTextAlign3 = ctx.textAlign; // setter后 getter text align
     console.info("getTextAlign3=" + getTextAlign3);
   },
-  jumpFunc: routePage("pages/component/canvas/indexAPIAttr/index").changePage,
+  jumpFunc: routePage("pages/component/canvas/indexAPIAttr/index").changePage
 };

@@ -16,5 +16,5 @@ import { goPage, routePage } from "../../../../common/js/general";
 export default {
   ...goPage("pages/component/index/baseIndex/index"),
   changeCircle: routePage("pages/component/progress/circle/index/index").changePage,
-  changeHorizontal: routePage("pages/component/progress/horizontal/index/index").changePage,
+  changeHorizontal: routePage("pages/component/progress/horizontal/index/index").changePage
 };

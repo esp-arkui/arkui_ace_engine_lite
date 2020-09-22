@@ -17,5 +17,5 @@ export default {
   ...backPage("pages/component/index/formIndex/index"),
   changePage1: routePage("pages/component/slider/attr/attr").changePage,
   changePage2: routePage("pages/component/slider/style/style").changePage,
-  changePage3: routePage("pages/component/slider/event/event").changePage,
+  changePage3: routePage("pages/component/slider/event/event").changePage
 };

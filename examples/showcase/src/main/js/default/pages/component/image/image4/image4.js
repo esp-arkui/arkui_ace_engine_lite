@@ -17,6 +17,6 @@ export default {
   ...backPage("pages/component/image/indexStyle/index"),
   data: {
     text1: "margin已设置",
-    text2: "宽高已设置",
-  },
+    text2: "宽高已设置"
+  }
 };

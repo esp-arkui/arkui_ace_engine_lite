@@ -17,5 +17,5 @@ export default {
   ...backPage("pages/component/animation/index/index"),
   changePage1: routePage("pages/component/animation/animation5/animation5").changePage,
   changePage2: routePage("pages/component/animation/animation6/animation6").changePage,
-  changePage3: routePage("pages/component/animation/animation7/animation7").changePage,
+  changePage3: routePage("pages/component/animation/animation7/animation7").changePage
 };

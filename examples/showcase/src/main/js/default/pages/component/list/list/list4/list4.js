@@ -17,7 +17,7 @@ export default {
   data: {
     text1: "上面绿块为list",
     text2: "margin已设置",
-    text3: "宽高已设置",
+    text3: "宽高已设置"
   },
-  ...backPage("pages/component/list/list/indexCommonStyle/index"),
+  ...backPage("pages/component/list/list/indexCommonStyle/index")
 };

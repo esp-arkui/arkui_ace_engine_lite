@@ -21,7 +21,7 @@ export default {
     chart01: "chart01",
     status: true,
     datasets: dataCommon.datasets.barsets,
-    options: dataCommon.options,
+    options: dataCommon.options
   },
-  changeStatus: changeStatus,
+  changeStatus: changeStatus
 };

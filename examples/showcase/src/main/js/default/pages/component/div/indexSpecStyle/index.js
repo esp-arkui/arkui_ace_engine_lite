@@ -19,5 +19,5 @@ export default {
   changePage2: routePage("pages/component/div/div6/div6").changePage,
   changePage3: routePage("pages/component/div/div7/div7").changePage,
   changePage4: routePage("pages/component/div/div8/div8").changePage,
-  changePage5: routePage("pages/component/div/div9/div9").changePage,
+  changePage5: routePage("pages/component/div/div9/div9").changePage
 };

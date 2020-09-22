@@ -15,7 +15,7 @@
 import { backPage, routePage } from "../../../../common/js/general";
 export default {
   data: {
-    listData: ["第一个swiper", "第二个swiper"],
+    listData: ["第一个swiper", "第二个swiper"]
   },
-  ...backPage("pages/component/swiper/indexAttr/index"),
+  ...backPage("pages/component/swiper/indexAttr/index")
 };

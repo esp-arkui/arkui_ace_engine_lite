@@ -17,7 +17,7 @@ export default {
   data: {
     name: "点击或长按",
     checked: "触发change",
-    show: true,
+    show: true
   },
   ...goPage("pages/component/input/radio/index/index"),
   clickEvent() {
@@ -31,5 +31,5 @@ export default {
   },
   changeEvent(e) {
     this.checked = "change触发";
-  },
+  }
 };

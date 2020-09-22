@@ -15,14 +15,14 @@
 import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   data: {
-    text1: "",
+    text1: ""
   },
   ...backPage("pages/component/list/list-item/indexEvent/index"),
   changePage1: routePage("pages/component/list/list-item/item1/item1").changePage,
-  clickFunc: function () {
+  clickFunc: function() {
     this.text1 = "点击事件被触发";
   },
-  longPressFunc: function () {
+  longPressFunc: function() {
     this.text1 = "长按事件被触发";
-  },
+  }
 };

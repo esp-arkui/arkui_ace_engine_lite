@@ -18,6 +18,6 @@ export default {
   ...backPage("pages/component/chart/barChart/indexAttr/index"),
   data: {
     datasets: dataCommon.datasets.barsets,
-    options: dataCommon.optionsNoDisplay,
-  },
+    options: dataCommon.optionsNoDisplay
+  }
 };

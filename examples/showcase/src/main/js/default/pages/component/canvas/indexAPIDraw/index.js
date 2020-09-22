@@ -16,27 +16,27 @@
 import { backPage, routePage } from "../../../../common/js/general";
 export default {
   ...backPage("pages/component/canvas/indexAPI/index"),
-  fillRectFunc: function () {
+  fillRectFunc: function() {
     var canvasRef = this.$refs.canvas1;
     var ctx = canvasRef.getContext("2d");
     ctx.fillRect(20, 20, 100, 150);
   },
-  strokeRectFunc: function () {
+  strokeRectFunc: function() {
     var canvasRef = this.$refs.canvas2;
     var ctx = canvasRef.getContext("2d");
     ctx.strokeRect(20, 20, 100, 150);
   },
-  fillTextFunc: function () {
+  fillTextFunc: function() {
     var canvasRef = this.$refs.canvas3;
     var ctx = canvasRef.getContext("2d");
     ctx.font = "30px HYQiHei-65S";
     ctx.fillText("Hello ACE", 10, 50);
   },
-  arcFunc: function () {
+  arcFunc: function() {
     var canvasRef = this.$refs.canvas4;
     var ctx = canvasRef.getContext("2d");
     ctx.beginPath();
     ctx.arc(50, 50, 50, Math.PI * 2 * (1 / 36), Math.PI * 2 * (5 / 36), true);
     ctx.stroke();
-  },
+  }
 };

@@ -21,7 +21,7 @@ export default {
     options: dataCommon.options,
     chart01: "chart01",
     status: true,
-    text1: "显示状态改变",
+    text1: "显示状态改变"
   },
-  changeStatus: changeStatus,
+  changeStatus: changeStatus
 };

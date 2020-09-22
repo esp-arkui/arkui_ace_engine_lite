@@ -17,7 +17,7 @@ export default {
   data: {
     text1: "背景色绿色",
     text2: "left设置85",
-    text3: "top设置170",
+    text3: "top设置170"
   },
-  ...backPage("pages/component/stack/indexStyle/index"),
+  ...backPage("pages/component/stack/indexStyle/index")
 };

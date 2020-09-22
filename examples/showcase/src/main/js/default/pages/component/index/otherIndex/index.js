@@ -15,5 +15,5 @@
 import { backPage, routePage } from "../../../../common/js/general";
 export default {
   ...backPage("pages/index/index"),
-  changeAnimation: routePage("pages/component/animation/index/index").changePage,
+  changeAnimation: routePage("pages/component/animation/index/index").changePage
 };

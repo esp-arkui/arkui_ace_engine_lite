@@ -14,5 +14,5 @@
  */
 import { goPage, routePage } from "../../../../../common/js/general";
 export default {
-  ...goPage("pages/component/input/index/index"),
+  ...goPage("pages/component/input/index/index")
 };

@@ -16,10 +16,10 @@
 import { backPage, routePage } from "../../../../common/js/general";
 export default {
   data: {
-    text1: "",
+    text1: ""
   },
   ...backPage("pages/component/canvas/indexEvent/index"),
-  clickFunc: function () {
+  clickFunc: function() {
     this.text1 = "点击事件被触发";
     var canvasRef = this.$refs.canvas1;
     var ctx = canvasRef.getContext("2d");
@@ -27,7 +27,7 @@ export default {
     ctx.strokeStyle = "#ff0000"; // 因为是填充图形，所以边框设置无效
     ctx.fillRect(10, 10, 50, 100);
   },
-  longPressFunc: function () {
+  longPressFunc: function() {
     this.text1 = "长按事件被触发";
     var canvasRef = this.$refs.canvas1;
     var ctx = canvasRef.getContext("2d");
@@ -35,7 +35,7 @@ export default {
     ctx.strokeStyle = "#ff0000"; // 因为是填充图形，所以边框设置无效
     ctx.fillRect(10, 10, 50, 100);
   },
-  swipeFunc: function (e) {
+  swipeFunc: function(e) {
     this.text1 = "swipe方向：" + e.direction;
-  },
+  }
 };

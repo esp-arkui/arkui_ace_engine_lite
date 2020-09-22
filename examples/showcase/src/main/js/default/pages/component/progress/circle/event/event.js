@@ -17,10 +17,10 @@ import { clickEvent, longpressEvent, swipeEvent } from "../../../../../common/js
 export default {
   data: {
     percent: 20,
-    value: "点击/长按/滑动",
+    value: "点击/长按/滑动"
   },
   ...goPage("pages/component/progress/circle/index/index"),
   clickEvent: clickEvent,
   longpressEvent: longpressEvent,
-  swipeEvent: swipeEvent,
+  swipeEvent: swipeEvent
 };

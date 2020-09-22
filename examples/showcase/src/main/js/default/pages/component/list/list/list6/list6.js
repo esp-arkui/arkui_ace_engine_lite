@@ -15,7 +15,7 @@
 import { backPage, routePage } from "../../../../../common/js/general";
 export default {
   data: {
-    text1: "div方块横向排列",
+    text1: "div方块横向排列"
   },
-  ...backPage("pages/component/list/list/indexSpecStyle/index"),
+  ...backPage("pages/component/list/list/indexSpecStyle/index")
 };

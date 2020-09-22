@@ -15,7 +15,7 @@
 import { goPage, routePage } from "../../../../../common/js/general";
 var displayData = ["flex", "none"];
 export default {
-  changeDisplay: function () {
+  changeDisplay: function() {
     if (this.status == true) {
       this.displayValue = displayData[1];
       this.status = false;
@@ -26,7 +26,7 @@ export default {
   },
   data: {
     status: true,
-    displayValue: displayData[0],
+    displayValue: displayData[0]
   },
-  ...goPage("pages/component/progress/horizontal/index/index"),
+  ...goPage("pages/component/progress/horizontal/index/index")
 };

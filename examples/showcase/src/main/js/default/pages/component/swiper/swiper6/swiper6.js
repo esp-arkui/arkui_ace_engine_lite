@@ -17,8 +17,8 @@ import { changeStatus } from "../../../../common/js/swiper";
 export default {
   data: {
     text1: "点击按钮改变状态",
-    status: true,
+    status: true
   },
   ...backPage("pages/component/swiper/indexAttr/index"),
-  changeStatus: changeStatus,
+  changeStatus: changeStatus
 };

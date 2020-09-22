@@ -19,9 +19,9 @@ export default {
     showStatus: true,
     ifStatus: true,
     display: "flex",
-    textfor: ["text测试for标签，abcdefg", "text测试for标签，abcdefg"],
+    textfor: ["text测试for标签，abcdefg", "text测试for标签，abcdefg"]
   },
   ...goPage("pages/component/text/index/index"),
   changeShow: changeShow,
-  changeStatusIf: changeStatusIf,
+  changeStatusIf: changeStatusIf
 };

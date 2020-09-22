@@ -18,7 +18,7 @@ export default {
   data: {
     text1: "上面黄块为canvas",
     text2: "margin=20",
-    text3: "width=280,height=80",
+    text3: "width=280,height=80"
   },
-  ...backPage("pages/component/canvas/indexCommonStyle/index"),
+  ...backPage("pages/component/canvas/indexCommonStyle/index")
 };

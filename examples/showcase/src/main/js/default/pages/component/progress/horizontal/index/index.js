@@ -17,5 +17,5 @@ export default {
   ...backPage("pages/component/progress/index/index"),
   changePage1: routePage("pages/component/progress/horizontal/attr/attr").changePage,
   changePage2: routePage("pages/component/progress/horizontal/style/style").changePage,
-  changePage3: routePage("pages/component/progress/horizontal/event/event").changePage,
+  changePage3: routePage("pages/component/progress/horizontal/event/event").changePage
 };

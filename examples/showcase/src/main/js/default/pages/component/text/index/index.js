@@ -18,5 +18,5 @@ export default {
   changePage1: routePage("pages/component/text/attr/attr").changePage,
   changePage2: routePage("pages/component/text/commonStyle/commonStyle").changePage,
   changePage3: routePage("pages/component/text/specStyle/specStyle").changePage,
-  changePage4: routePage("pages/component/text/event/event").changePage,
+  changePage4: routePage("pages/component/text/event/event").changePage
 };
