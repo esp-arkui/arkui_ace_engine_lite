@@ -53,30 +53,36 @@ static const struct {
 };
 #undef KEYWORD
 
-static const char js_keys[] =
-#define KEYWORD(name, str) #str "\0"
-#include "keys.h"
-#undef KEYWORD
-    ;
-
 uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
 {
     if (s == nullptr || len >= UINT16_MAX || len == 0) {
         return K_UNKNOWN;
     }
 
-    int len;
-    const char *p = js_keys;
+    uint16_t ret = K_UNKNOWN;
 
-    for (uint16_t i = 1; i < KEYWORDS_MAX; i++) {
-        len = strlen(p);
-        if (!strcmp(key, p)) {
-            return i;
-        }
-        p = p + len + 1;
+#define KEYWORD_CASE case a:
+#define KEYWORD(enumkey, keystr)                             \
+    if (len == strlen(#keystr) && !strcmp(s, #keystr + 1)) { \
+        ret = K_##enumkey;                                   \
+        break;                                               \
+    }
+#define KEYWORD_BREAK_CASE \
+    break;                 \
+    case a:
+
+    switch (*s++) {
+#include "keys.h"
+        break;
+        default:
+            break;
     }
 
-    return K_UNKNOWN;
+#undef KEYWORD_BREAK_CASE
+#undef KEYWORD
+#undef KEYWORD_CASE
+
+    return ret;
 }
 
 uint16_t KeyParser::ParseKeyId(const char *const s)

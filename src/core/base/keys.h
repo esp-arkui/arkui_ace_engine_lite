@@ -28,12 +28,15 @@ enum {
     K_UNKNOWN, // enum start from 0
 #endif         // KEYWORD
 
-    /*
-     * Rules to define the KEYWORD:
-     * Should not be duplicated,
-     * and use xxx_yyy instead the xxx-yyy as enumstr
-     * because of enum define limitation
-     */
+/*
+ * Rules to define the KEYWORD:
+ * Should not be duplicated,
+ * and use xxx_yyy instead the xxx-yyy as enumstr
+ * because of enum define limitation
+ */
+#ifdef KEYWORD_CASE
+    KEYWORD_CASE('a')
+#endif // KEYWORD_CASE
     // clang-format off
     // Reused by the struct begin
     // Sample:KEYWORD(enum_string, real-key-string)
@@ -51,6 +54,10 @@ enum {
 #ifdef FEATURE_COMPONENT_VIDEO
     KEYWORD(AUTOPLAY, autoplay) // video component autoplay attribute
 #endif // FEATURE_COMPONENT_VIDEO
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('b')
+#endif // KEYWORD_BREAK_CASE
     KEYWORD(BACKGROUND_COLOR, backgroundColor) // chart line color
     KEYWORD(BACKGROUND_IMAGE, backgroundImage) // common style, but only button, checkbox, radio support
     KEYWORD(BLOCK_COLOR, blockColor)
@@ -66,6 +73,10 @@ enum {
     KEYWORD(BORDER_TOP_WIDTH, borderTopWidth) // common style border top width
     KEYWORD(BORDER_WIDTH, borderWidth) // common style, horizon progress style
     KEYWORD(BREAK, break) // text overflow type
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('c')
+#endif // KEYWORD_BREAK_CASE   
 #ifdef FEATURE_COMPONENT_CAMERA
     KEYWORD(CAMERA, camera) // camera component
 #endif // FEATURE_COMPONENT_CAMERA
@@ -90,6 +101,10 @@ enum {
 #ifdef FEATURE_COMPONENT_VIDEO
     KEYWORD(CONTROLS, controls) // video component controls attribute
 #endif // FEATURE_COMPONENT_VIDEO
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('d')
+#endif // KEYWORD_BREAK_CASE
     KEYWORD(DATASETS, datasets) // chart data
 #ifdef FEATURE_COMPONENT_DATE_PICKER
     KEYWORD(DATE, date) // picker-view attr value
@@ -99,6 +114,10 @@ enum {
     KEYWORD(DIV, div) // tag name
     KEYWORD(DRAG, drag) // drag event listener
     KEYWORD(DURATION, duration)
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('e')
+#endif // KEYWORD_BREAK_CASE   
     KEYWORD(EASE_IN, ease-in) // animation time function value
     KEYWORD(EASE_IN_OUT, ease-in-out) // animation time function value
     KEYWORD(EASE_OUT, ease-out) // animation time function value
@@ -110,6 +129,10 @@ enum {
     KEYWORD(ERROR, error) // camera component error event
 #endif // FEATURE_COMPONENT_CAMERA
     KEYWORD(EXPAND, expand) // text overflow type
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('f')
+#endif // KEYWORD_BREAK_CASE   
     KEYWORD(FALSE, false) // common attributes
 #ifdef FEATURE_COMPONENT_VIDEO
     KEYWORD(FINISH, finish) // video component finish event tag
@@ -122,10 +145,18 @@ enum {
     KEYWORD(FONT_SIZE, fontSize) // text style type
     KEYWORD(FONT_FAMILY, fontFamily) // text style type
     KEYWORD(FORWARDS, forwards) // animation fill value
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('h')
+#endif // KEYWORD_BREAK_CASE   
     KEYWORD(HEIGHT, height) // common attributes
 #ifdef FEATURE_COMPONENT_ANALOG_CLOCK
     KEYWORD(HOUR, hour) // analog-clock hour
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('i')
+#endif // KEYWORD_BREAK_CASE
     KEYWORD(ID, id) // common attributes
     KEYWORD(IMAGE, image) // tag name
     KEYWORD(IMAGE_ANIMATOR, image-animator) // tag name
@@ -134,10 +165,22 @@ enum {
     KEYWORD(INPUT, input) // input component name
     KEYWORD(ITEM_SELECTED, itemselected) // scroll item selected event listener
     KEYWORD(ITERATION, iteration) // image-animator attribute
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('j')
+#endif // KEYWORD_BREAK_CASE
     KEYWORD(JUSTIFY_CONTENT, justifyContent) // layout style
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('k')
+#endif // KEYWORD_BREAK_CASE   
 #ifdef JS_TOUCH_EVENT_SUPPORT
     KEYWORD(KEY, key) // onkey event
 #endif
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('l')
+#endif // KEYWORD_BREAK_CASE
     KEYWORD(LABELS, labels) // chart labels
     KEYWORD(LARGER, larger) // text font size type
     KEYWORD(LEFT, left) // text align type
@@ -147,6 +190,10 @@ enum {
     KEYWORD(LIST_ITEM, list-item) // list-item tag name
     KEYWORD(LONGPRESS, longpress) // long progress event listener
     KEYWORD(LOOP, loop) // swiper loop attribute
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('m')
+#endif // KEYWORD_BREAK_CASE   
     KEYWORD(MARGIN, margin) // common style margin
     KEYWORD(MARGIN_BOTTOM, marginBottom) // common style margin
     KEYWORD(MARGIN_LEFT, marginLeft) // common style margin left
@@ -159,18 +206,32 @@ enum {
 #ifdef FEATURE_COMPONENT_VIDEO
     KEYWORD(MUTED, muted) // video component muted attribute
 #endif // FEATURE_COMPONENT_VIDEO
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('n')
+#endif // KEYWORD_BREAK_CASE
     KEYWORD(NAME, name) // the attribute name
     KEYWORD(NONE, none) // animation fill value
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('o')
+#endif // KEYWORD_BREAK_CASE   
     KEYWORD(OPACITY, opacity) // common style opacity
     KEYWORD(OPATIONS, opations) // chart options
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('p')
+#endif // KEYWORD_BREAK_CASE   
     KEYWORD(PADDING, padding)
     KEYWORD(PADDING_BOTTOM, paddingBottom)
     KEYWORD(PADDING_LEFT, paddingLeft)
     KEYWORD(PADDING_RIGHT, paddingRight)
     KEYWORD(PADDING_TOP, paddingTop)
+#ifdef FEATURE_COMPONENT_VIDEO
+    KEYWORD(PAUSE, pause) // video component pause event tag
+#endif // FEATURE_COMPONENT_VIDEO    
     KEYWORD(PERCENT, percent)
     KEYWORD(PICKER_VIEW, picker-view) // tag name
-    KEYWORD(REF, ref) // common attribute
 #ifdef FEATURE_COMPONENT_VIDEO
     KEYWORD(PREPARED, prepared) // video component prepared event
 #endif // FEATURE_COMPONENT_VIDEO
@@ -179,17 +240,23 @@ enum {
     KEYWORD(PIVOT_Y, pivotY) // clock-hand pivot-y
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
     KEYWORD(PROGRESS, progress) // progress tag name
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('r')
+#endif // KEYWORD_BREAK_CASE
     KEYWORD(RADIO, radio) // the type in input
     KEYWORD(RADIUS, radius) // circle progress radius
     KEYWORD(RANGE, range) // picker-view attr
-#ifdef FEATURE_COMPONENT_VIDEO
-    KEYWORD(PAUSE, pause) // video component pause event tag
-#endif // FEATURE_COMPONENT_VIDEO
     KEYWORD(REVERSE, reverse) // image-animator attribute
+    KEYWORD(REF, ref) // common attribute
     KEYWORD(RIGHT, right) // text align type
     KEYWORD(ROTATE, rotate) // animation rotate
     KEYWORD(ROW, row) // layout style
     KEYWORD(ROW_REVERSE, row-reverse) // layout style
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('s')
+#endif // KEYWORD_BREAK_CASE    
     KEYWORD(SCROLLAMOUNT, scrollamount) // marquee scroll speed
     KEYWORD(SCROLLEND, scrollend) // scroll end event listener
     KEYWORD(SCROLLSTART, scrollstart) // scroll start event listener
@@ -221,6 +288,10 @@ enum {
     KEYWORD(SWIPE, swipe)  // swipe event listener
     KEYWORD(SWIPER, swiper) // tag name
     KEYWORD(SWITCH, switch) // tag name
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('t')
+#endif // KEYWORD_BREAK_CASE   
 #ifdef FEATURE_COMPONENT_TABS
     KEYWORD(TAB_BAR, tab-bar) // tag name
     KEYWORD(TAB_CONTENT, tab-content) // tag name
@@ -247,11 +318,19 @@ enum {
 #ifdef FEATURE_COMPONENT_ANALOG_CLOCK
     KEYWORD(TYPE, type) // clock-hand type
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('v')
+#endif // KEYWORD_BREAK_CASE
     KEYWORD(VALUE, value) // common attributes
     KEYWORD(VERTICAL, vertical) // swiper attr vertical
 #ifdef FEATURE_COMPONENT_VIDEO
     KEYWORD(VIDEO, video) // video tag name
 #endif // FEATURE_COMPONENT_VIDEO
+
+#ifdef KEYWORD_BREAK_CASE
+KEYWORD_BREAK_CASE('w')
+#endif // KEYWORD_BREAK_CASE
     KEYWORD(WIDTH, width) // common attributes
     KEYWORD(WRAP, wrap) // flex wrap
     // Reused by the struct end
