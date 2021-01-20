@@ -17,8 +17,7 @@
   },
   "module": {
     "deviceType": [
-      "liteWearable",
-      "smartVision"
+      "smartVISION"
     ],
     "abilities": [
       {
