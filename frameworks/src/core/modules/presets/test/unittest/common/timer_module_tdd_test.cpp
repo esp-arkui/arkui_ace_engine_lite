@@ -645,7 +645,6 @@ char *TimerModuleTddTest::TriggerTimer(const double xRate,
 /**
  * @tc.name: SetTimeoutTest001
  * @tc.desc: test setTimeout
- * @tc.require: AR000DT315
  */
 HWTEST_F(TimerModuleTddTest, SetTimeoutTest001, TestSize.Level1)
 {
@@ -673,9 +672,8 @@ HWTEST_F(TimerModuleTddTest, SetTimeoutTest001, TestSize.Level1)
 }
 
 /**
- * @tc.name: SetIntervalTest001
+ * @tc.name: SetIntervalTest002
  * @tc.desc: test set interval
- * @tc.require: AR000DT315
  */
 HWTEST_F(TimerModuleTddTest, SetIntervalTest002, TestSize.Level1)
 {
@@ -705,7 +703,6 @@ HWTEST_F(TimerModuleTddTest, SetIntervalTest002, TestSize.Level1)
 /**
  * @tc.name: SetTimeoutTest003
  * @tc.desc: test clearTimeout
- * @tc.require: AR000DT315
  */
 HWTEST_F(TimerModuleTddTest, SetTimeoutTest003, TestSize.Level1)
 {
@@ -735,7 +732,6 @@ HWTEST_F(TimerModuleTddTest, SetTimeoutTest003, TestSize.Level1)
 /**
  * @tc.name: SetTimeoutTest004
  * @tc.desc: test setTimeout args
- * @tc.require: AR000DT315
  */
 HWTEST_F(TimerModuleTddTest, SetTimeoutTest004, TestSize.Level1)
 {
@@ -782,7 +778,6 @@ HWTEST_F(TimerModuleTddTest, SetTimeoutTest004, TestSize.Level1)
 /**
  * @tc.name: SetIntervalTest005
  * @tc.desc: test setInterval args
- * @tc.require: AR000DT315
  */
 HWTEST_F(TimerModuleTddTest, SetIntervalTest005, TestSize.Level1)
 {
@@ -829,7 +824,6 @@ HWTEST_F(TimerModuleTddTest, SetIntervalTest005, TestSize.Level1)
 /**
  * @tc.name: SetTimeoutTest006
  * @tc.desc: test setTimeout and clearTimeout api
- * @tc.require: AR000DT315
  */
 HWTEST_F(TimerModuleTddTest, SetTimeoutTest006, TestSize.Level1)
 {
@@ -859,7 +853,6 @@ HWTEST_F(TimerModuleTddTest, SetTimeoutTest006, TestSize.Level1)
 /**
  * @tc.name: SetIntervalTest007
  * @tc.desc: test setInterval and clearInterval api
- * @tc.require: AR000DT315
  */
 HWTEST_F(TimerModuleTddTest, SetIntervalTest007, TestSize.Level1)
 {
@@ -889,7 +882,6 @@ HWTEST_F(TimerModuleTddTest, SetIntervalTest007, TestSize.Level1)
 /**
  * @tc.name: ClearTimeoutTest008
  * @tc.desc: test delete not exists timer
- * @tc.require: AR000DT315
  */
 HWTEST_F(TimerModuleTddTest, ClearTimeoutTest008, TestSize.Level1)
 {
@@ -928,7 +920,6 @@ HWTEST_F(TimerModuleTddTest, ClearTimeoutTest008, TestSize.Level1)
 /**
  * @tc.name: ClearIntervalTest009
  * @tc.desc: check boundary value in setTimeout and setInterval
- * @tc.require: AR000DT315
  */
 HWTEST_F(TimerModuleTddTest, ClearIntervalTest009, TestSize.Level1)
 {
@@ -984,9 +975,8 @@ HWTEST_F(TimerModuleTddTest, ClearIntervalTest009, TestSize.Level1)
 }
 
 /**
- * @tc.name: ClearIntervalTest009
+ * @tc.name: TimerLimitTest010
  * @tc.desc: test the timer limit
- * @tc.require: AR000DT315
  */
 HWTEST_F(TimerModuleTddTest, TimerLimitTest010, TestSize.Level1)
 {
