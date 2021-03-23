@@ -13,38 +13,38 @@
  * limitations under the License.
  */
 
-#ifndef OHOS_ACELITE_TEST_DFX_H
-#define OHOS_ACELITE_TEST_DFX_H
+#ifndef OHOS_ACELITE_TEST_DIALOG_H
+#define OHOS_ACELITE_TEST_DIALOG_H
 
 #include "basic_tdd_test.h"
 
 namespace OHOS {
 namespace ACELite {
-class DfxTddTest : public BasicTddTest {
+class DialogTddTest : public BasicTddTest {
 public:
-    DfxTddTest() : BasicTddTest() {}
-    ~DfxTddTest() override {}
+    DialogTddTest() : BasicTddTest() {}
+    ~DialogTddTest() override {}
 
-    void DfxTest001();
-    void DfxTest002();
-    void DfxTest003();
-    void DfxTest004();
-    void DfxTest005();
-    void DfxTest006();
-    void DfxTest007();
+    void DialogTest001();
+    void DialogTest002();
+    void DialogTest003();
+    void DialogTest004();
+    void DialogTest005();
     void RunTests();
+
 private:
     static const char * const BUNDLE1;
     static const char * const BUNDLE2;
     static const char * const BUNDLE3;
     static const char * const BUNDLE4;
     static const char * const BUNDLE5;
-    static const char * const BUNDLE6;
-    static const char * const BUNDLE7;
-    static const char * const FUNC_NAME;
-    static const char * const DOM_NODE_FUNC_NAME;
-    static const char * const DOM_TREE_FUNC_NAME;
+    static const char * const METHOD;
+    static const char * const CONFIRM;
+    static const char * const CANCEL;
+    static const char * const COMPLETE;
+    static const char * const MSG;
+    static const char * const DEFAULT;
 };
 } // namespace ACELite
 } // namespace OHOS
-#endif // OHOS_ACELITE_TEST_DFX_H
+#endif // OHOS_ACELITE_TEST_DIALOG_H

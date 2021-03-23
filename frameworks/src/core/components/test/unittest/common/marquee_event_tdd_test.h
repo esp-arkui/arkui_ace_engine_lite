@@ -12,39 +12,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#ifndef OHOS_ACELITE_TEST_DFX_H
-#define OHOS_ACELITE_TEST_DFX_H
+#ifndef ACELITE_MARQUEE_EVENT_TDD_TEST_H
+#define ACELITE_MARQUEE_EVENT_TDD_TEST_H
 
 #include "basic_tdd_test.h"
 
 namespace OHOS {
 namespace ACELite {
-class DfxTddTest : public BasicTddTest {
+class MarqueeEventTddTest : public BasicTddTest {
 public:
-    DfxTddTest() : BasicTddTest() {}
-    ~DfxTddTest() override {}
-
-    void DfxTest001();
-    void DfxTest002();
-    void DfxTest003();
-    void DfxTest004();
-    void DfxTest005();
-    void DfxTest006();
-    void DfxTest007();
+    MarqueeEventTddTest() : BasicTddTest() {}
+    ~MarqueeEventTddTest() override {}
+    void MarqueeEvent001();
     void RunTests();
+
 private:
-    static const char * const BUNDLE1;
-    static const char * const BUNDLE2;
-    static const char * const BUNDLE3;
-    static const char * const BUNDLE4;
-    static const char * const BUNDLE5;
-    static const char * const BUNDLE6;
-    static const char * const BUNDLE7;
+    static const char * const BUNDLE;
     static const char * const FUNC_NAME;
-    static const char * const DOM_NODE_FUNC_NAME;
-    static const char * const DOM_TREE_FUNC_NAME;
 };
 } // namespace ACELite
 } // namespace OHOS
-#endif // OHOS_ACELITE_TEST_DFX_H
+
+#endif // ACELITE_MARQUEE_EVENT_TDD_TEST_H
