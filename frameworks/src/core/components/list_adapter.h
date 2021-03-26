@@ -66,7 +66,7 @@ public:
 
     void UpdateContentAlignParam(ConstrainedParameter param);
 
-    void SetDirection(int16_t direction)
+    void SetDirection(int8_t direction)
     {
         direction_ = direction;
     }
@@ -86,7 +86,7 @@ private:
     int16_t listItemsCount_;
     // the content area
     ConstrainedParameter uiListContentParam_;
-    int16_t direction_ = UIList::VERTICAL;
+    int8_t direction_ = UIList::VERTICAL;
 };
 } // namespace ACELite
 } // namespace OHOS
