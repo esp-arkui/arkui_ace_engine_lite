@@ -63,13 +63,6 @@ AsyncTaskManager::AsyncTaskManager()
 
 AsyncTaskManager::~AsyncTaskManager()
 {
-    while (head_ != nullptr) {
-        AsyncTask *task = head_;
-        head_ = head_->next;
-        delete task;
-        task = nullptr;
-    }
-    tail_ = nullptr;
 }
 
 AsyncTaskManager &AsyncTaskManager::GetInstance()
@@ -99,6 +92,18 @@ void AsyncTaskManager::Callback()
         delete task;
         task = nullptr;
     }
+}
+
+void AsyncTaskManager::Destroy()
+{
+    while (head_ != nullptr) {
+        AsyncTask *task = head_;
+        head_ = head_->next;
+        delete task;
+        task = nullptr;
+    }
+    tail_ = nullptr;
+    TaskManager::GetInstance()->Remove(this);
 }
 
 uint16_t AsyncTaskManager::Dispatch(AsyncTaskHandler handler, void *data)

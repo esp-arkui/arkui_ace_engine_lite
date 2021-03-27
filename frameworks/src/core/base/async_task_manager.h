@@ -49,6 +49,8 @@ public:
 
     virtual void Callback() override;
 
+    void Destroy();
+
     uint16_t Dispatch(AsyncTaskHandler handler, void *data);
 
     void Cancel(uint16_t taskID);

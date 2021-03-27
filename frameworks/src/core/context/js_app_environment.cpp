@@ -116,6 +116,7 @@ void JsAppEnvironment::Cleanup()
 {
     Debugger::GetInstance().TearDownDebugger();
     FeaAbilityModule::Release();
+    AsyncTaskManager::GetInstance().Destroy();
 
     // clean up engine, NOTE: all JS value must be released properly befor cleanup
     jerry_cleanup();
