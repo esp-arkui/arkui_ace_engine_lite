@@ -16,7 +16,6 @@
 #include "async_task_manager.h"
 #include "ace_log.h"
 #include "fatal_handler.h"
-#include "ace_lock.h"
 
 namespace OHOS {
 namespace ACELite {
