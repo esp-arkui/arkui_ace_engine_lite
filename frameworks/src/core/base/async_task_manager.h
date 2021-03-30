@@ -16,11 +16,7 @@
 #ifndef OHOS_ACELITE_ASYNC_TASK_MANAGER_H
 #define OHOS_ACELITE_ASYNC_TASK_MANAGER_H
 
-#if (defined(__LINUX__) || defined(__LITEOS_A__))
-#include <pthread.h>
-#elif defined(__LITEOS_M__)
-#include "los_task.h"
-#endif
+#include "ace_lock.h"
 
 #include "common/task_manager.h"
 #include "memory_heap.h"
@@ -62,9 +58,7 @@ private:
 
     AsyncTask *head_;
     AsyncTask *tail_;
-#if (defined(__LINUX__) || defined(__LITEOS_A__))
-    pthread_mutex_t lock_;
-#endif
+    LockType lock_;
     uint16_t uniqueTaskID_;
     bool front_;
 };
