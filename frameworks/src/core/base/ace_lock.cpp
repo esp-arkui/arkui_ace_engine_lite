@@ -36,7 +36,7 @@ LockType::~LockType()
 #endif
 }
 
-void LockType::TryLock()
+void LockType::Lock()
 {
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
     if (mutexInited_ == 0) {
@@ -44,7 +44,7 @@ void LockType::TryLock()
     }
 #endif
 }
-void LockType::TryUnlock()
+void LockType::Unlock()
 {
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
     if (mutexInited_ == 0) {
@@ -57,10 +57,9 @@ AutoLockGuard::AutoLockGuard(LockType &lock)
 {
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
     lock_ = &lock;
-    lock_->TryLock();
+    lock_->Lock();
 #elif (defined(__LITEOS_M__) || defined(OHOS_ACELITE_PRODUCT_WATCH))
-    UNUSED(lock);
-    // lock resource is precious for m-core, just disable the task scheduling
+    (void)(lock);
     LOS_TaskLock();
 #endif
 }
@@ -68,7 +67,7 @@ AutoLockGuard::AutoLockGuard(LockType &lock)
 AutoLockGuard::~AutoLockGuard()
 {
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
-    lock_->TryUnlock();
+    lock_->Unlock();
 #elif (defined(__LITEOS_M__) || defined(OHOS_ACELITE_PRODUCT_WATCH))
     LOS_TaskUnlock();
 #endif

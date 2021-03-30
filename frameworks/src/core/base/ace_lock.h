@@ -32,8 +32,9 @@ public:
     ACE_DISALLOW_COPY_AND_MOVE(LockType);
     LockType();
     ~LockType();
-    void TryLock();
-    void TryUnlock();
+    // Lock mutex, waiting for it if necessary.
+    void Lock();
+    void Unlock();
 
 private:
 #if (defined(__LINUX__) || defined(__LITEOS_A__))

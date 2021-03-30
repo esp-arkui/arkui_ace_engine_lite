@@ -16,49 +16,16 @@
 #include "async_task_manager.h"
 #include "ace_log.h"
 #include "fatal_handler.h"
-
-#if (defined(__LINUX__) || defined(__LITEOS_A__))
-#define TRY_LOCK()                  \
-    {                               \
-        pthread_mutex_lock(&lock_); \
-    }
-
-#define TRY_UNLOCK()                  \
-    {                                 \
-        pthread_mutex_unlock(&lock_); \
-    }
-#elif defined(__LITEOS_M__)
-#define TRY_LOCK()      \
-    {                   \
-        LOS_TaskLock(); \
-    }
-#define TRY_UNLOCK()      \
-    {                     \
-        LOS_TaskUnlock(); \
-    }
-#else
-#define TRY_LOCK() \
-    {              \
-    }
-#define TRY_UNLOCK() \
-    {                \
-    }
-#endif
+#include "ace_lock.h"
 
 namespace OHOS {
 namespace ACELite {
 AsyncTaskManager::AsyncTaskManager()
     : head_(nullptr),
       tail_(nullptr),
-#if (defined(__LINUX__) || defined(__LITEOS_A__))
-      lock_(PTHREAD_MUTEX_INITIALIZER),
-#endif
       uniqueTaskID_(0),
       front_(true)
 {
-#if (defined(__LINUX__) || defined(__LITEOS_A__))
-    pthread_mutex_init(&lock_, nullptr);
-#endif
 }
 
 AsyncTaskManager::~AsyncTaskManager()
@@ -111,11 +78,10 @@ uint16_t AsyncTaskManager::Dispatch(AsyncTaskHandler handler, void *data)
         HILOG_ERROR(HILOG_MODULE_ACE, "AsyncTaskManager::Dispatch failed: Fatal error is hitted.");
         return DISPATCH_FAILURE;
     }
-    TRY_LOCK();
+    AutoLockGuard autoLock(lock_);
     auto *task = new AsyncTask();
     if (task == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "AsyncTaskManager::Dispatch failed: out of memory.");
-        TRY_UNLOCK();
         return DISPATCH_FAILURE;
     }
     task->handler = handler;
@@ -129,7 +95,6 @@ uint16_t AsyncTaskManager::Dispatch(AsyncTaskHandler handler, void *data)
         tail_->next = task;
         tail_ = task;
     }
-    TRY_UNLOCK();
     return uniqueTaskID_;
 }
 
@@ -139,7 +104,7 @@ void AsyncTaskManager::Cancel(uint16_t taskID)
         HILOG_ERROR(HILOG_MODULE_ACE, "AsyncTaskManager::Cancel failed: invalid task ID.");
         return;
     }
-    TRY_LOCK();
+    AutoLockGuard autoLock(lock_);
     AsyncTask *node = head_;
     AsyncTask *prev = nullptr;
     while (node != nullptr) {
@@ -159,7 +124,6 @@ void AsyncTaskManager::Cancel(uint16_t taskID)
         prev = node;
         node = node->next;
     }
-    TRY_UNLOCK();
 }
 
 void AsyncTaskManager::SetFront(bool front)
