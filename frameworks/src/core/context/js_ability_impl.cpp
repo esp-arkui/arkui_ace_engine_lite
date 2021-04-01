@@ -15,6 +15,7 @@
 
 #include "js_ability_impl.h"
 #include "ace_event_error_code.h"
+#include "ace_lite_instance.h"
 #include "ace_log.h"
 #include "component.h"
 #include "component_utils.h"
@@ -41,8 +42,8 @@ void JSAbilityImpl::InitEnvironment(const char * const abilityPath, const char *
         return;
     }
     // init engine && js fwk
-    JsAppEnvironment *appJsEnv = JsAppEnvironment::GetInstance();
-    appContext_ = JsAppContext::GetInstance();
+    JsAppEnvironment *appJsEnv = AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment();
+    appContext_ = AceLiteInstance::GetCurrentJsAppContext();
     // check if we should use snapshot mode, do this before everything,
     // but after debugger config is set
     appJsEnv->InitRuntimeMode();
@@ -92,13 +93,16 @@ void JSAbilityImpl::CleanUp()
         delete router_;
         router_ = nullptr;
     }
-    TimersModule::Clear();
+#ifdef FEATURE_TIMER_MODULE
+    AceLiteInstance::GetInstance()->GetCurrentEnviroment()->ClearTimerList();
+#endif
+
     LocalModule::Clear();
     if (appContext_) {
         appContext_->ClearContext();
     }
     ModuleManager::GetInstance()->OnTerminate();
-    JsAppEnvironment::GetInstance()->Cleanup();
+    AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment()->Cleanup();
     isEnvInit_ = false;
     OUTPUT_TRACE();
 }
@@ -187,7 +191,7 @@ void JSAbilityImpl::InvokeOnBackPressed() const
 
 void JSAbilityImpl::InvokeMethodWithoutParameter(const char * const name) const
 {
-    if (FatalHandler::GetInstance().IsJSRuntimeFatal()) {
+    if (AceLiteInstance::GetCurrentFatalHandler()->IsJSRuntimeFatal()) {
         // can not continue to involve any JS object creating on engine in case runtime fatal
         return;
     }

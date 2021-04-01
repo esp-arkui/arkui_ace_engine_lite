@@ -35,7 +35,9 @@ typedef void (*PageInfoFunc)(const Param param);
 
 class DftImpl final : public MemoryHeap {
 public:
-    static DftImpl *GetInstance();
+    DftImpl() : pageReplacedCallback_(nullptr), pageInfoFunc_(nullptr) {}
+
+    ~DftImpl() = default;
 
     /**
      * @fn DftImpl::RegisterPageReplaced()
@@ -54,10 +56,6 @@ public:
     void CallbackPageReplaced(int state, const char *param = nullptr);
 
 private:
-    DftImpl() : pageReplacedCallback_(nullptr), pageInfoFunc_(nullptr) {}
-
-    ~DftImpl() = default;
-
     /**
      * @fn DftImpl::GetPagePath()
      *

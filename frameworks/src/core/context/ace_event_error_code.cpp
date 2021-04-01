@@ -19,12 +19,6 @@
 #ifdef FEATURE_ACELITE_MC_EVENT_ERROR_CODE_PRINT
 namespace OHOS {
 namespace ACELite {
-EventErrorCodePrint *EventErrorCodePrint::GetInstance()
-{
-    static EventErrorCodePrint printInstance;
-    return &printInstance;
-}
-
 void EventErrorCodePrint::AceEventPrint(uint8_t info2, uint8_t info3)
 {
     ProductAdapter::PrintEventTrace(0, info2, info3);

@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+#include "ace_lite_instance.h"
 #include "console_log_impl.h"
 #if ENABLED(CONSOLE_LOG_OUTPUT)
 #include "js_app_environment.h"
@@ -31,11 +32,6 @@
 
 namespace OHOS {
 namespace ACELite {
-#ifdef CONSOLE_LOG_LINE_MAX_LENGTH
-const int16_t LOG_BUFFER_SIZE = CONSOLE_LOG_LINE_MAX_LENGTH;
-#else
-const int16_t LOG_BUFFER_SIZE = 256; // use 256 as default if it's not config
-#endif // CONSOLE_LOG_LINE_MAX_LENGTH
 jerry_value_t LogNative(const LogLevel logLevel,
                         const jerry_value_t func,
                         const jerry_value_t context,
@@ -153,19 +149,17 @@ void LogString(const LogLevel logLevel, const char * const str)
 #endif
 }
 
-static char logBuffer[LOG_BUFFER_SIZE] = {0};
-static uint16_t logBufferIndex = 0;
-
 void LogChar(char c, const LogLevel logLevel, bool endFlag)
 {
-    logBuffer[logBufferIndex++] = c;
-    if ((logBufferIndex == (LOG_BUFFER_SIZE - 1)) || (c == '\n')) {
-        if ((c == '\n') && (logBufferIndex > 0)) {
-            logBufferIndex--; // will trace out line separator after print the content out
+    JerryElement* elelment = AceLiteInstance::GetCurrentJerryElement();
+    elelment->logBuffer[elelment->logBufferIndex++] = c;
+    if ((elelment->logBufferIndex == (LOG_BUFFER_SIZE - 1)) || (c == '\n')) {
+        if ((c == '\n') && (elelment->logBufferIndex > 0)) {
+            elelment->logBufferIndex--; // will trace out line separator after print the content out
         }
-        logBuffer[logBufferIndex] = '\0';
-        Output(logLevel, logBuffer, logBufferIndex);
-        logBufferIndex = 0;
+        elelment->logBuffer[elelment->logBufferIndex] = '\0';
+        Output(logLevel, elelment->logBuffer, elelment->logBufferIndex);
+        elelment->logBufferIndex = 0;
         if (c == '\n' || !endFlag) {
             // this is the newline during the console log, need to append the loglevel prefix,
             // example: console.log("aa\nbb");
@@ -246,7 +240,7 @@ void Output(const LogLevel logLevel, const char * const str, const uint8_t lengt
         return;
     }
     (void)length;
-    Debugger::GetInstance().Output(str);
+    AceLiteInstance::GetCurrentDebugger()->Output(str);
 #if defined(FEATURE_ACELITE_HI_LOG_PRINTF) || defined(FEATURE_USER_MC_LOG_PRINTF)
     OutputToHiLog(logLevel, str);
 #endif
@@ -260,7 +254,7 @@ void Output(const LogLevel logLevel, const char * const str, const uint8_t lengt
 
 void FlushOutput()
 {
-    Debugger::GetInstance().FlushOutput();
+    AceLiteInstance::GetCurrentDebugger()->FlushOutput();
 }
 } // namespace ACELite
 } // namespace OHOS

@@ -119,8 +119,7 @@ jerry_value_t RenderModule::InitStyleSheet(const jerry_value_t func,
                                            const jerry_value_t *args,
                                            const jerry_length_t argsNum)
 {
-    AppStyleManager *manager = const_cast<AppStyleManager *>(JsAppContext::GetInstance()->GetStyleManager());
-
+    AppStyleManager *manager = const_cast<AppStyleManager *>(AceLiteInstance::GetCurrentJsAppContext()->GetStyleManager());
     if (argsNum == 0 || manager == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Failed to initialize style sheet cause by invalid arguments or empty manager!");
         return jerry_create_boolean(false);

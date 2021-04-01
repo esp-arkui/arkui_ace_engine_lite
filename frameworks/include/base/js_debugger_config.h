@@ -77,12 +77,6 @@ struct DebuggerConfig : public MemoryHeap {
  */
 class Debugger final : public MemoryHeap {
 public:
-    /**
-     * @brief Get the debugger instance
-     *
-     * @return an instance of debugger
-     */
-    static Debugger &GetInstance();
     Debugger() = default;
     ~Debugger() = default;
 

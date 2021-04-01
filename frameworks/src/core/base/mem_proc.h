@@ -17,28 +17,12 @@
 #define OHOS_ACELITE_MEM_PROC_H
 
 #include "acelite_config.h"
-#ifdef SIMULATOR_MEMORY_ANALYSIS
-#define CLEAR_UP() AceMemProc::GetInstance()->ClearUp()
-#define SYS_MEMORY_TRACING() AceMemProc::GetInstance()->SysMemTracing()
-#define JERRY_MEMORY_TRACING() AceMemProc::GetInstance()->JerryMemTracing()
-#else
-#define CLEAR_UP()
-#define SYS_MEMORY_TRACING()
-#define JERRY_MEMORY_TRACING()
-#endif // SIMULATOR_MEMORY_ANALYSIS
 
 #ifdef SIMULATOR_MEMORY_ANALYSIS
 namespace OHOS {
 namespace ACELite {
 class AceMemProc {
 public:
-    /**
-     * @brief Use static global variable for easy access in different source code file.
-     *
-     * @return global singleton AceMemProc object
-     */
-    static AceMemProc *GetInstance();
-
     /**
      * @brief Check if the memory proc is enabled or not.
      *
@@ -62,7 +46,6 @@ public:
      */
     void JerryMemTracing();
 
-private:
     /**
      * @brief Default constructor.
      */

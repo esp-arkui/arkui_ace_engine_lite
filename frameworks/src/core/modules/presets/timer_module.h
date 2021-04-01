@@ -27,36 +27,12 @@ namespace ACELite {
 class TimerModule final : PresetModule {
 public:
     ACE_DISALLOW_COPY_AND_MOVE(TimerModule);
-    static TimerModule *GetInstance()
-    {
-        static TimerModule instance;
-        return &instance;
-    }
 
-    void Init() override;
-
-    const int GetInitState()
-    {
-        return initRes_;
-    }
-
-    void Clear()
-    {
-        if (timerList_ != nullptr) {
-            timerList_->ClearTimerList();
-            delete (timerList_);
-            timerList_ = nullptr;
-        }
-    }
-
-private:
     /**
      * @fn TimerModule::TimerModule()
      * @brief Constructor
      */
-    TimerModule() : PresetModule(nullptr),
-        timerList_(nullptr),
-        initRes_(-1)
+    TimerModule() : PresetModule(nullptr)
     {
     }
 
@@ -66,17 +42,9 @@ private:
      */
     ~TimerModule() = default;
 
-    TimerList *GetTimerList()
-    {
-        if (timerList_ == nullptr) {
-            timerList_ = new TimerList();
-            if (timerList_ == nullptr) {
-                HILOG_ERROR(HILOG_MODULE_ACE, "malloc timer heap memory failed.");
-            }
-        }
-        return timerList_;
-    }
+    void Init() override;
 
+private:
     /**
      * @brief set the scheduled tasks, execute only once.
      * @return the id of timer
@@ -134,8 +102,6 @@ private:
 #ifndef TARGET_SIMULATOR
     static void Execute(void *data);
 #endif
-    TimerList *timerList_;
-    int initRes_;
 };
 } // namespace ACELite
 } // namespace OHOS
@@ -150,15 +116,8 @@ public:
     static void Load()
     {
 #ifdef FEATURE_TIMER_MODULE
-        TimerModule *timerModule = const_cast<TimerModule *>(TimerModule::GetInstance());
-        timerModule->Init();
-#endif
-    }
-    static void Clear()
-    {
-#ifdef FEATURE_TIMER_MODULE
-        TimerModule *timerModule = const_cast<TimerModule *>(TimerModule::GetInstance());
-        timerModule->Clear();
+        TimerModule timerModule;
+        timerModule.Init();
 #endif
     }
 };

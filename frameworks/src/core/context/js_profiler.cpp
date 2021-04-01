@@ -165,12 +165,6 @@ JSProfiler::~JSProfiler()
 {
 }
 
-JSProfiler *JSProfiler::GetInstance()
-{
-    static JSProfiler profilerInstance;
-    return &profilerInstance;
-}
-
 bool JSProfiler::IsEnabled()
 {
     bool isEnabled = enabled_ && (data_ != nullptr);

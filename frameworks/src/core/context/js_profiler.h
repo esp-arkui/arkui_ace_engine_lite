@@ -21,28 +21,6 @@
 #include <cstdint>
 #include <stddef.h>
 
-/*
- * Wrapper macro, use directly in code after including this header file.
- */
-#if ENABLED(JS_PROFILER)
-// start tracing for one given phase, and return a traceId which will be used when calling STOP_TRACING
-#define START_TRACING(traceTag) JSProfiler::GetInstance()->PushTrace(traceTag, 0, 0)
-// start tracing for one given phase, and provids the component name together
-#define START_TRACING_WITH_COMPONENT_NAME(traceTag, componentNameId) \
-    JSProfiler::GetInstance()->PushTrace(traceTag, componentNameId, 0)
-#define START_TRACING_WITH_EXTRA_INFO(traceTag, componentNameId, extraInfoId) \
-    JSProfiler::GetInstance()->PushTrace(traceTag, componentNameId, extraInfoId)
-// stop tracing
-#define STOP_TRACING() JSProfiler::GetInstance()->PopTrace()
-#define OUTPUT_TRACE() JSProfiler::GetInstance()->Output()
-#else // ENABLED(JS_PROFILER)
-#define START_TRACING(traceTag)
-#define START_TRACING_WITH_COMPONENT_NAME(traceTag, componentNameId)
-#define START_TRACING_WITH_EXTRA_INFO(traceTag, componentNameId, extraInfoId)
-#define STOP_TRACING()
-#define OUTPUT_TRACE()
-#endif // ENABLED(JS_PROFILER)
-
 // invoked into compiling only if performance measurement enabled
 #if ENABLED(JS_PROFILER)
 namespace OHOS {
@@ -143,13 +121,6 @@ public:
      * @brief Default destructor.
      */
     ~JSProfiler();
-
-    /**
-     * @brief Use static global variable for easy access in different source code file.
-     *
-     * @return global JSProfiler object
-     */
-    static JSProfiler *GetInstance();
 
     /**
      * Called to free all performance data records and the global JSProfiler object.

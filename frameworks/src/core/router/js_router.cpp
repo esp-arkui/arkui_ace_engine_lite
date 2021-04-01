@@ -15,6 +15,7 @@
 
 #include "js_router.h"
 
+#include "ace_lite_instance.h"
 #include "ace_log.h"
 #if (defined(OHOS_ACELITE_PRODUCT_WATCH) || (defined(FEATURE_CUSTOM_ENTRY_PAGE)))
 #include "dft_impl.h"
@@ -59,7 +60,7 @@ jerry_value_t Router::Replace(jerry_value_t object, bool async)
     // dispatch the new page rendering to the async handling as the current context of
     // router.replace need to be released, which need to return out from the scope
     if (async) {
-        if (DISPATCH_FAILURE == AsyncTaskManager::GetInstance().Dispatch(ReplaceAsync, this)) {
+        if (DISPATCH_FAILURE == AceLiteInstance::GetCurrentAsyncTaskManager()->Dispatch(ReplaceAsync, this)) {
             // request replacing failed, no chance to do it, release the new state machine
             HILOG_ERROR(HILOG_MODULE_ACE, "dispatch replacing request failed");
             delete newSm_;
@@ -99,7 +100,7 @@ void Router::ReplaceSync()
         currentSm_->ChangeState(SHOW_STATE);
     }
 #if (defined(OHOS_ACELITE_PRODUCT_WATCH) || (defined(FEATURE_CUSTOM_ENTRY_PAGE)))
-    DftImpl::GetInstance()->CallbackPageReplaced(currentSm_->GetCurrentState());
+    AceLiteInstance::GetCurrentDftImpl()->CallbackPageReplaced(currentSm_->GetCurrentState());
 #endif
     STOP_TRACING();
 }

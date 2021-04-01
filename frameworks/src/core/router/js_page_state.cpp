@@ -14,6 +14,7 @@
  */
 
 #include "ace_event_error_code.h"
+#include "ace_lite_instance.h"
 #include "ace_log.h"
 #include "fatal_handler.h"
 #include "js_page_state.h"
@@ -85,7 +86,7 @@ void PageDestroyState::Handle(StateMachine &sm)
 {
     int currState = sm.GetCurrentState();
     // any normal state can jump to destroy state
-    if ((currState >= INIT_STATE) || (FatalHandler::GetInstance().IsFatalErrorHitted())) {
+    if ((currState >= INIT_STATE) || (AceLiteInstance::GetCurrentFatalHandler()->IsFatalErrorHitted())) {
         HILOG_INFO(HILOG_MODULE_ACE, "current state(%d) -> destroy state", currState);
         ACE_EVENT_PRINT(MT_ACE_RELEASE_HISTORY_PAGE, 0);
         sm.InvokePageLifeCycleCallback(PAGE_LIFECYCLE_CALLBACK_ON_DESTROY);

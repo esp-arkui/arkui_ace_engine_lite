@@ -19,6 +19,7 @@
 #include "ace_event_error_code.h"
 #include "ace_log.h"
 #include "acelite_config.h"
+#include "ace_lite_instance.h"
 #include "async_task_manager.h"
 #ifdef OHOS_ACELITE_PRODUCT_WATCH
 #include "dft_impl.h"
@@ -79,10 +80,19 @@ void JSAbility::Launch(const char * const abilityPath, const char * const bundle
         HILOG_ERROR(HILOG_MODULE_ACE, "Create JSAbilityRuntime failed");
         return;
     }
+    DebuggerConfig jsDebuggerConfig;
+    jsDebuggerConfig.startDebuggerServer = false;
+    jsDebuggerConfig.snapshotMode = false;
+    jsDebuggerConfig.heapSize = 64 * 1024;
+    AceLiteInstance::GetInstance()->GetCurrentDebugger()->ConfigEngineDebugger(jsDebuggerConfig);
+    AceLiteInstance::GetInstance()->CreateAceLiteEnvironment(2, "222");
+    AceLiteInstance::GetInstance()->CreateAceLiteEnvironment(1, "111");
+    AceLiteInstance::GetInstance()->CreateAceLiteEnvironment(3, "333");
+
     START_TRACING(LAUNCH);
     JSAbilityImpl *jsAbilityImpl = CastAbilityImpl(jsAbilityImpl_);
     jsAbilityImpl->InitEnvironment(abilityPath, bundleName, token);
-    FatalHandler::GetInstance().RegisterFatalHandler(this);
+    AceLiteInstance::GetCurrentFatalHandler()->RegisterFatalHandler(this);
     jsAbilityImpl->DeliverCreate(pageInfo);
     STOP_TRACING();
     OUTPUT_TRACE();
@@ -97,7 +107,7 @@ void JSAbility::Show() const
 
     JSAbilityImpl *jsAbilityImpl = CastAbilityImpl(jsAbilityImpl_);
     jsAbilityImpl->Show();
-    AsyncTaskManager::GetInstance().SetFront(true);
+    AceLiteInstance::GetCurrentAsyncTaskManager()->SetFront(true);
     ProductAdapter::UpdateShowingState(true);
 }
 
@@ -110,7 +120,7 @@ void JSAbility::Hide() const
 
     JSAbilityImpl *jsAbilityImpl = CastAbilityImpl(jsAbilityImpl_);
     jsAbilityImpl->Hide();
-    AsyncTaskManager::GetInstance().SetFront(false);
+    AceLiteInstance::GetCurrentAsyncTaskManager()->SetFront(false);
 }
 
 void JSAbility::TransferToDestroy()
@@ -127,8 +137,8 @@ void JSAbility::TransferToDestroy()
     // Reset render flag or low layer task mutex in case we are during the rendering process,
     // this situation might happen if the destroy function is called outside of JS thread, such as AMS.
     ProductAdapter::UpdateShowingState(false);
-    FatalHandler::GetInstance().ResetRendering();
-    FatalHandler::GetInstance().SetExitingFlag(false);
+    AceLiteInstance::GetCurrentFatalHandler()->ResetRendering();
+    AceLiteInstance::GetCurrentFatalHandler()->SetExitingFlag(false);
 #ifdef OHOS_ACELITE_PRODUCT_WATCH
     JsAsyncWork::SetAppQueueHandler(nullptr);
     DftImpl::GetInstance()->RegisterPageReplaced(nullptr);
@@ -149,7 +159,7 @@ void JSAbility::BackPressed()
 
 const char *JSAbility::GetPackageName()
 {
-    return JsAppContext::GetInstance()->GetCurrentBundleName();
+    return AceLiteInstance::GetCurrentJsAppContext()->GetCurrentBundleName();
 }
 
 // this public interface will be deprecated, only fatal scenario can trigger force destroy
@@ -160,7 +170,7 @@ void JSAbility::ForceDestroy()
 
 LazyLoadManager *GetLazyLoadManager()
 {
-    JsAppContext *context = JsAppContext::GetInstance();
+    JsAppContext *context = AceLiteInstance::GetCurrentJsAppContext();
     return const_cast<LazyLoadManager *>(context->GetLazyLoadManager());
 }
 

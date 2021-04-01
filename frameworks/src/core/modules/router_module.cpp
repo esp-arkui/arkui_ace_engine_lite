@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 #include "router_module.h"
+#include "ace_lite_instance.h"
 #include "ace_log.h"
 #include "js_ability_impl.h"
 #include "js_app_context.h"
@@ -30,7 +31,7 @@ JSIValue RouterModule::Replace(const JSIValue thisVal, const JSIValue* args, uin
     }
     jerry_value_t object = AS_JERRY_VALUE(args[0]);
     // router.replace({uri: 'About', params: {id:'1'}}
-    JsAppContext* appContext = JsAppContext::GetInstance();
+    JsAppContext* appContext = AceLiteInstance::GetCurrentJsAppContext();
     const JSAbilityImpl* topJsAbilityImpl = appContext->GetTopJSAbilityImpl();
     if (topJsAbilityImpl == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "topJsAbilityImpl is null.");

@@ -16,7 +16,7 @@
 #define OHOS_ACELITE_COMPONENT_FACTORY_H
 
 #include "acelite_config.h"
-
+#include "ace_lite_instance.h"
 #ifdef FEATURE_COMPONENT_ANALOG_CLOCK
 #include "analog_clock_component.h"
 #include "clock_hand_component.h"
@@ -72,7 +72,7 @@ public:
             return nullptr;
         }
 
-        JsAppContext* context = JsAppContext::GetInstance();
+        JsAppContext* context = AceLiteInstance::GetInstance()->GetCurrentEnviroment()->GetJsAppContext();
         if (context == nullptr) {
             return nullptr;
         }
@@ -185,7 +185,7 @@ public:
                 break;
         }
 
-        FatalHandler::GetInstance().AttachComponentNode(component);
+        AceLiteInstance::GetInstance()->GetCurrentEnviroment()->GetFatalHandler()->AttachComponentNode(component);
         return component;
     }
 };

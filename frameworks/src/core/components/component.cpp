@@ -14,6 +14,7 @@
  */
 #include "component.h"
 #include "ace_log.h"
+#include "ace_lite_instance.h"
 #include "ace_mem_base.h"
 #include "directive/descriptor_utils.h"
 #include "fatal_handler.h"
@@ -186,7 +187,7 @@ void Component::ReleaseViewExtraMsg()
 void Component::Release()
 {
     // detach self from fatal handler monitoring
-    FatalHandler::GetInstance().DetachComponentNode(this);
+    AceLiteInstance::GetCurrentFatalHandler()->DetachComponentNode(this);
     if (parent_ != nullptr) {
         parent_->RemoveChild(this);
     }
@@ -1872,7 +1873,7 @@ bool Component::HandleBackgroundImg(const AppStyleItem &styleItem, char *&presse
         const char * const url = styleItem.GetStrValue();
         char *filePath = CreatePathStrFromUrl(url);
         if (filePath != nullptr) {
-            char *imagePath = JsAppContext::GetInstance()->GetResourcePath(filePath);
+            char *imagePath = AceLiteInstance::GetCurrentJsAppContext()->GetResourcePath(filePath);
             if (imagePath == nullptr) {
                 ace_free(filePath);
                 filePath = nullptr;

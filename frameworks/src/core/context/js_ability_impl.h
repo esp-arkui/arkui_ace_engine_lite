@@ -16,6 +16,7 @@
 #ifndef OHOS_ACELITE_JS_ABILITY_IMPL_H
 #define OHOS_ACELITE_JS_ABILITY_IMPL_H
 
+#include "ace_lite_instance.h"
 #include "js_app_context.h"
 #include "js_debugger_config.h"
 #include "js_router.h"
@@ -45,7 +46,7 @@ public:
     {
 #if ENABLED(JS_PROFILER)
         // Call GetInstance() to prepare data
-        JSProfiler::GetInstance()->PrepareDataBuffer();
+        AceLiteInstance::GetCurrentJSProfiler()->PrepareDataBuffer();
 #endif
     }
 
@@ -60,7 +61,7 @@ public:
     {
 #if ENABLED(JS_PROFILER)
         // Call release() to free all performance data
-        JSProfiler::GetInstance()->Release();
+        AceLiteInstance::GetCurrentJSProfiler()->Release();
 #endif
     }
 

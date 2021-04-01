@@ -15,11 +15,10 @@
 
 #include "event_util.h"
 #include "ace_log.h"
-#include "async_task_manager.h"
+#include "ace_lite_instance.h"
 
 namespace OHOS {
 namespace ACELite {
-constexpr char ATTR_TYPE[] = "type";
 constexpr char ATTR_TARGET[] = "target";
 constexpr char ATTR_CURRENT_TARGET[] = "currentTarget";
 constexpr char ATTR_TIMESTAMP[] = "timestamp";
@@ -121,7 +120,7 @@ void EventUtil::InvokeCallback(JSValue vm, JSValue callback, JSValue event)
     params->arg = event;
     // The views may be destroyed or recreated in conditional or list rendering.
     // If we directly call the event callback function, the program will crash.
-    if (DISPATCH_FAILURE == AsyncTaskManager::GetInstance().Dispatch(CallbackExecutor, static_cast<void *>(params))) {
+    if (DISPATCH_FAILURE == AceLiteInstance::GetCurrentAsyncTaskManager()->Dispatch(CallbackExecutor, static_cast<void *>(params))) {
         HILOG_ERROR(HILOG_MODULE_ACE, "EventUtil::InvokeCallback failed: Async task dispatch failure.");
         delete params;
         params = nullptr;

@@ -23,11 +23,6 @@
 
 namespace OHOS {
 namespace ACELite {
-Debugger &Debugger::GetInstance()
-{
-    static Debugger instance;
-    return instance;
-}
 
 #if ENABLED(ENGINE_DEBUGGER)
 bool Debugger::IsDebuggerEnabled()

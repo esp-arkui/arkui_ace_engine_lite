@@ -17,19 +17,14 @@
 
 #if (defined(OHOS_ACELITE_PRODUCT_WATCH)||(defined(FEATURE_CUSTOM_ENTRY_PAGE)))
 #include "ace_log.h"
+#include "ace_lite_instance.h"
 #include "js_app_context.h"
 
 namespace OHOS {
 namespace ACELite {
-DftImpl *DftImpl::GetInstance()
-{
-    static DftImpl instance;
-    return &instance;
-}
-
 char *DftImpl::GetPagePath()
 {
-    const char * const pagePath = JsAppContext::GetInstance()->GetCurrentJsPath();
+    const char * const pagePath = AceLiteInstance::GetCurrentJsAppContext()->GetCurrentJsPath();
     if (pagePath == nullptr) {
         return nullptr;
     }
@@ -83,7 +78,7 @@ void DftImpl::CallbackPageReplaced(int state, const char *param)
     }
     jerry_release_value(global);
     value.routerParam = paramValue;
-    value.path = JsAppContext::GetInstance()->GetCurrentJsPath();
+    value.path = AceLiteInstance::GetCurrentJsAppContext()->GetCurrentJsPath();
     value.routerPath = DftImpl::GetPagePath();
     pageInfoFunc_(value);
     ACE_FREE(paramValue);

@@ -15,6 +15,7 @@
 
 #include "js_app_context.h"
 #include "ace_event_error_code.h"
+#include "ace_lite_instance.h"
 #include "ace_log.h"
 #if (defined(__LINUX__) || defined(__LITEOS__))
 #include "ace_ability.h"
@@ -60,7 +61,7 @@ jerry_value_t JsAppContext::Eval(const char * const jsFileFullPath, size_t fileN
 
     uint32_t contentLength = 0;
     START_TRACING(PAGE_CODE_LOAD);
-    bool snapshotMode = JsAppEnvironment::GetInstance()->IsSnapshotMode();
+    bool snapshotMode = AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment()->IsSnapshotMode();
     char *jsCode = ReadFile(jsFileFullPath, contentLength, snapshotMode);
     STOP_TRACING();
     if ((jsCode == nullptr) || (contentLength > FILE_CONTENT_LENGTH_MAX)) {
@@ -150,7 +151,7 @@ void JsAppContext::TerminateAbility() const
         // if no running js ability, drop
         return;
     }
-    FatalHandler::GetInstance().SetExitingFlag(true);
+    AceLiteInstance::GetCurrentFatalHandler()->SetExitingFlag(true);
     Terminate(currentToken_);
 }
 

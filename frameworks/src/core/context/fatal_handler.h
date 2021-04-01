@@ -27,7 +27,15 @@ namespace ACELite {
 class FatalHandler final : public MemoryHeap {
 public:
     ACE_DISALLOW_COPY_AND_MOVE(FatalHandler);
-    static FatalHandler& GetInstance();
+    FatalHandler() : jsAbility_(nullptr),
+      pageRootView_(nullptr),
+      componentNodes_(),
+      fatalErrorCode_(0),
+      isRecycling_(false),
+      isFatalHandled_(false),
+      isTEHandling_(false),
+      isExiting_(false) {}
+~FatalHandler() {}
     const char* GetErrorStr(int errorCode) const;
     void RegisterFatalHandler(JSAbility *ability);
     void SetFatalError(int errorCode);
@@ -57,16 +65,6 @@ public:
     static const int ERR_EVAL_JS_FAILED = 204;
 
 private:
-    FatalHandler()
-        : jsAbility_(nullptr),
-          pageRootView_(nullptr),
-          componentNodes_(),
-          fatalErrorCode_(0),
-          isRecycling_(false),
-          isFatalHandled_(false),
-          isTEHandling_(false),
-          isExiting_(false) {}
-    ~FatalHandler() {}
     bool IsErrorSupported(int errorCode) const;
     void RecycleComponents();
     JSAbility *jsAbility_;

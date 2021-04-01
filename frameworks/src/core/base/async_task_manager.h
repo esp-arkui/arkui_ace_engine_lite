@@ -43,7 +43,9 @@ class AsyncTaskManager final : public Task {
 public:
     ACE_DISALLOW_COPY_AND_MOVE(AsyncTaskManager);
 
-    static AsyncTaskManager &GetInstance();
+    AsyncTaskManager();
+
+    ~AsyncTaskManager();
 
     virtual void Init() override;
 
@@ -56,11 +58,8 @@ public:
     void SetFront(bool front);
 
 private:
-    AsyncTaskManager();
-
-    ~AsyncTaskManager();
-
     AsyncTask *head_;
+
     AsyncTask *tail_;
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
     pthread_mutex_t lock_;

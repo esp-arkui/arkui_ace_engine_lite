@@ -15,6 +15,7 @@
 
 #include "async_task_manager.h"
 #include "ace_log.h"
+#include "ace_lite_instance.h"
 #include "fatal_handler.h"
 
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
@@ -72,12 +73,6 @@ AsyncTaskManager::~AsyncTaskManager()
     tail_ = nullptr;
 }
 
-AsyncTaskManager &AsyncTaskManager::GetInstance()
-{
-    static AsyncTaskManager instance;
-    return instance;
-}
-
 void AsyncTaskManager::Init()
 {
     Task::Init();
@@ -107,7 +102,7 @@ uint16_t AsyncTaskManager::Dispatch(AsyncTaskHandler handler, void *data)
         HILOG_ERROR(HILOG_MODULE_ACE, "AsyncTaskManager::Dispatch failed: handler is null.");
         return DISPATCH_FAILURE;
     }
-    if (FatalHandler::GetInstance().IsFatalErrorHitted()) {
+    if (AceLiteInstance::GetCurrentFatalHandler()->IsFatalErrorHitted()) {
         HILOG_ERROR(HILOG_MODULE_ACE, "AsyncTaskManager::Dispatch failed: Fatal error is hitted.");
         return DISPATCH_FAILURE;
     }

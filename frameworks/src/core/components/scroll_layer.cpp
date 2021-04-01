@@ -15,6 +15,7 @@
 
 #include "scroll_layer.h"
 #include "ace_log.h"
+#include "ace_lite_instance.h"
 #include "component.h"
 #include "component_utils.h"
 #include "fatal_handler.h"
@@ -31,7 +32,7 @@ ScrollLayer::~ScrollLayer()
         scroll_ = nullptr;
     }
     pageRootView_ = nullptr;
-    FatalHandler::GetInstance().SetCurrentPageRootView(nullptr);
+    AceLiteInstance::GetCurrentFatalHandler()->SetCurrentPageRootView(nullptr);
 }
 
 UIScrollView *ScrollLayer::AddScrollLayer(UIView &view) const
@@ -98,7 +99,7 @@ void ScrollLayer::AppendScrollLayer(Component *rootComponent)
 
     scroll_ = AddScrollLayer(*view);
     pageRootView_ = (scroll_ == nullptr) ? view : scroll_;
-    FatalHandler::GetInstance().SetCurrentPageRootView(pageRootView_);
+    AceLiteInstance::GetCurrentFatalHandler()->SetCurrentPageRootView(nullptr);
 }
 
 void ScrollLayer::Hide() const

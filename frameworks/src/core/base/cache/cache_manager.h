@@ -48,7 +48,9 @@ enum CacheSetupState : uint8_t {
  */
 class CacheManager final {
 public:
-    static CacheManager &GetInstance();
+    ACE_DISALLOW_COPY_AND_MOVE(CacheManager);
+    CacheManager();
+    ~CacheManager() = default;
     void SetupCacheMemInfo(uintptr_t startAddr, size_t length);
     uintptr_t GetCacheBufAddress(CacheUser user) const;
     size_t GetCacheBufLength(CacheUser user) const;
@@ -63,9 +65,6 @@ public:
     void SetConfigTable(const CacheUnit *table, size_t count);
 
 private:
-    ACE_DISALLOW_COPY_AND_MOVE(CacheManager);
-    CacheManager();
-    ~CacheManager() = default;
     /**
      * @brief ResetDistributedInfo clean up all assigned buffer info
      */

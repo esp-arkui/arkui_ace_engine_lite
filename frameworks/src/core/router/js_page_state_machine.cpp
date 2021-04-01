@@ -14,6 +14,7 @@
  */
 
 #include "js_page_state_machine.h"
+#include "ace_lite_instance.h"
 #include "ace_log.h"
 #include "component.h"
 #include "directive/descriptor_utils.h"
@@ -54,7 +55,7 @@ StateMachine::~StateMachine()
 {
     // release this page's all resource
     // if error hapens, statemachie must force to jump to destroy state for releasing resource.
-    if ((currentState_ >= INIT_STATE) || FatalHandler::GetInstance().IsFatalErrorHitted()) {
+    if ((currentState_ >= INIT_STATE) || AceLiteInstance::GetCurrentFatalHandler()->IsFatalErrorHitted()) {
         ChangeState(BACKGROUND_STATE);
         ChangeState(DESTROY_STATE);
     }
@@ -107,7 +108,7 @@ int StateMachine::GenerateJsPagePath(const char * const uri)
         len = strlen(JS_INDEX_FILE_PATH);
     }
 #endif
-    const char * const sourceFileSuffix = (JsAppEnvironment::GetInstance()->IsSnapshotMode()) ? ".bc" : ".js";
+    const char * const sourceFileSuffix = (AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment()->IsSnapshotMode()) ? ".bc" : ".js";
     len += strlen(sourceFileSuffix);
     // add ending character:'\0'
     len += 1;
@@ -154,7 +155,7 @@ void StateMachine::RegisterUriAndParamsToPage(const char * const uri, jerry_valu
 
 bool StateMachine::Init(jerry_value_t object, jerry_value_t &jsRes)
 {
-    appContext_ = JsAppContext::GetInstance();
+    appContext_ = AceLiteInstance::GetCurrentJsAppContext();
     appRootPath_ = const_cast<char *>(appContext_->GetCurrentAbilityPath());
     if ((appRootPath_ == nullptr) || (strlen(appRootPath_) == 0)) {
         HILOG_ERROR(HILOG_MODULE_ACE, "statemachine init failed as this app's root path is invalid.");
@@ -291,7 +292,7 @@ static void ForceGC(void *data)
     static_cast<void>(data);
     jerry_gc(jerry_gc_mode_t::JERRY_GC_PRESSURE_HIGH);
 #if ENABLED(JS_PROFILER)
-    if (JSProfiler::GetInstance()->IsEnabled()) {
+    if (AceLiteInstance::GetCurrentJSProfiler()->IsEnabled()) {
         // dump the JS heap status
         JSHeapStatus heapStatus;
         if (JSI::GetJSHeapStatus(heapStatus)) {
@@ -360,7 +361,7 @@ void StateMachine::HidePage() const
 
 void StateMachine::InvokePageLifeCycleCallback(const char * const name) const
 {
-    if (FatalHandler::GetInstance().IsJSRuntimeFatal()) {
+    if (AceLiteInstance::GetCurrentFatalHandler()->IsJSRuntimeFatal()) {
         // can not continue to involve any JS object creating on engine in case runtime fatal
         return;
     }
@@ -380,7 +381,7 @@ void StateMachine::InvokePageLifeCycleCallback(const char * const name) const
 
 void StateMachine::ReleaseRootObject() const
 {
-    if (FatalHandler::GetInstance().IsJSRuntimeFatal()) {
+    if (AceLiteInstance::GetCurrentFatalHandler()->IsJSRuntimeFatal()) {
         // can not continue to involve any JS object creating on engine in case runtime fatal
         return;
     }
@@ -422,7 +423,7 @@ void StateMachine::ReleaseHistoryPageResource()
     }
     // if some fatal error happens and is hanled by FatalHandler, the resource is already
     // recycled by it, do not repeat the recycling
-    if (!FatalHandler::GetInstance().IsFatalErrorHandleDone()) {
+    if (!AceLiteInstance::GetCurrentFatalHandler()->IsFatalErrorHandleDone()) {
         // release all native views and their binding js objects
         ComponentUtils::ReleaseComponents(rootComponent_);
         rootComponent_ = nullptr;

@@ -23,6 +23,7 @@
 #endif
 #include "ace_event_error_code.h"
 #include "ace_log.h"
+#include "ace_lite_instance.h"
 #include "ace_mem_base.h"
 #include "component.h"
 #include "component_utils.h"
@@ -482,7 +483,7 @@ static bool PathIsRelative(const char * const resPath)
 
 char *RelocateFilePathRelative(const char * const appRootPath, const char * const resFileName)
 {
-    const char * const jsPath = JsAppContext::GetInstance()->GetCurrentJsPath();
+    const char * const jsPath = AceLiteInstance::GetCurrentJsAppContext()->GetCurrentJsPath();
     if (jsPath == nullptr) {
         return nullptr;
     }
@@ -695,7 +696,7 @@ char *ReadJSFile(const char * const appPath, const char * const jsFileName, uint
         return nullptr;
     }
 
-    char *fileBuffer = ReadFile(fullPath, fileSize, JsAppEnvironment::GetInstance()->IsSnapshotMode());
+    char *fileBuffer = ReadFile(fullPath, fileSize, AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment()->IsSnapshotMode());
     ace_free(fullPath);
     fullPath = nullptr;
     return fileBuffer;
@@ -823,7 +824,7 @@ void ClearWatchersCommon(Watcher *&head)
     while (node) {
         head = node->next;
         // avoid allocating any JS objects when JS runtime broken
-        if (!(FatalHandler::GetInstance().IsJSRuntimeFatal())) {
+        if (!(AceLiteInstance::GetCurrentFatalHandler()->IsJSRuntimeFatal())) {
             // call js watcher.unsubscribe to release watcher
             jerry_value_t watcher = node->watcher;
             jerry_value_t unsubscribe = jerryx_get_property_str(watcher, "unsubscribe");
@@ -1230,7 +1231,7 @@ const char *ParseImageSrc(jerry_value_t source)
         return nullptr;
     }
 
-    char *imageSrc = JsAppContext::GetInstance()->GetResourcePath(rawSrc);
+    char *imageSrc = AceLiteInstance::GetCurrentJsAppContext()->GetResourcePath(rawSrc);
     ace_free(rawSrc);
     rawSrc = nullptr;
 #ifdef OHOS_ACELITE_PRODUCT_WATCH

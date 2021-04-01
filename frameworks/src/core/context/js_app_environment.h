@@ -27,16 +27,9 @@ namespace ACELite {
 class JsAppEnvironment final : public MemoryHeap {
 public:
     ACE_DISALLOW_COPY_AND_MOVE(JsAppEnvironment);
-    /**
-     * @brief: get instance of js app Environment.
-     *
-     * @returns: js app environment instance
-     */
-    static JsAppEnvironment *GetInstance()
-    {
-        static JsAppEnvironment instance;
-        return &instance;
-    }
+    JsAppEnvironment();
+
+    ~JsAppEnvironment() {}
 
     /**
      * @brief: init js framework.
@@ -58,8 +51,7 @@ public:
 
 private:
     void LoadAceBuiltInModules() const;
-    JsAppEnvironment();
-    ~JsAppEnvironment() {}
+
     void LoadFramework() const;
     // we use snapshot as default on device and JS parser as default on simulator
     bool snapshotMode_;

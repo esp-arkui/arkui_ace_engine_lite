@@ -23,19 +23,7 @@
 #include "memory_heap.h"
 #include "non_copyable.h"
 #include <cstdint>
-#define ACE_EVENT_PRINT(info2, info3) \
-    EventErrorCodePrint::GetInstance()->AceEventPrint(info2, info3)
-#define ACE_FEATURE_EVENT_PRINT(info1, info2, info3) \
-    EventErrorCodePrint::GetInstance()->AceEventPrint(info1, info2, info3)
-#define ACE_ERROR_CODE_PRINT(info2, rfu) \
-    EventErrorCodePrint::GetInstance()->AceErrorCodePrint(info2, rfu)
-#else
-#define ACE_EVENT_PRINT(info2, info3)
-#define ACE_FEATURE_EVENT_PRINT(info1, info2, info3)
-#define ACE_ERROR_CODE_PRINT(info2, rfu)
-#endif // ENABLED(FEATURE_ACELITE_MC_EVENT_ERROR_CODE_PRINT)
 
-#if defined(FEATURE_ACELITE_MC_EVENT_ERROR_CODE_PRINT)
 namespace OHOS {
 namespace ACELite {
 class EventErrorCodePrint final : public MemoryHeap {
@@ -45,8 +33,6 @@ public:
     EventErrorCodePrint() = default;
 
     ~EventErrorCodePrint() = default;
-
-    static EventErrorCodePrint *GetInstance();
 
     void AceEventPrint(uint8_t info2, uint8_t info3);
 

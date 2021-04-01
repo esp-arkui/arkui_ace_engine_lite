@@ -14,6 +14,7 @@
  */
 #include "list_component.h"
 #include "ace_log.h"
+#include "ace_lite_instance.h"
 #include "component.h"
 #include "component_utils.h"
 #include "directive/descriptor_utils.h"
@@ -52,7 +53,7 @@ void ListComponent::ReleaseNativeViews()
 
     // only let list component release its children when the whole application
     // is not in fatal error handling process, as FatalHandler will do the recycle
-    if (!FatalHandler::GetInstance().IsFatalErrorHandling()) {
+    if (!AceLiteInstance::GetCurrentFatalHandler()->IsFatalErrorHandling()) {
         if (!IS_UNDEFINED(GetDescriptors())) {
             DescriptorUtils::ReleaseDescriptorOrElements(GetDescriptors());
         }

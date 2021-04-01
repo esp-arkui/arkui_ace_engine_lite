@@ -16,6 +16,7 @@
 #include "fatal_handler.h"
 #include "ace_event_error_code.h"
 #include "ace_log.h"
+#include "ace_lite_instance.h"
 #ifdef OHOS_ACELITE_PRODUCT_WATCH
 #include "cmsis_os2.h"
 #endif // OHOS_ACELITE_PRODUCT_WATCH
@@ -30,15 +31,6 @@
 
 namespace OHOS {
 namespace ACELite {
-/**
- * Global instance for saving fatal error code and handling fatal errors
- */
-FatalHandler &FatalHandler::GetInstance()
-{
-    static FatalHandler instance;
-    return instance;
-}
-
 static void HandleFatal(int errorCode)
 {
 #ifdef FEATURE_FATAL_ERROR_HANDLING
@@ -65,7 +57,7 @@ static void HandleFatal(int errorCode)
     HILOG_ERROR(HILOG_MODULE_ACE, "the JS task is not killed after sleep very long time");
 #endif // OHOS_ACELITE_PRODUCT_WATCH
 #else
-    const char * const fatalErrorStr = FatalHandler::GetInstance().GetErrorStr(errorCode);
+    const char * const fatalErrorStr = AceLiteInstance::GetCurrentFatalHandler()->GetErrorStr(errorCode);
     LogString(LogLevel::LOG_LEVEL_ERR, "[JS Exception]: ");
     LogString(LogLevel::LOG_LEVEL_ERR, fatalErrorStr);
     LogString(LogLevel::LOG_LEVEL_ERR, "\n");
@@ -145,7 +137,7 @@ void FatalHandler::HandleFatalError(int errorCode)
     }
 
     // reset the low layer rendering flag if needed
-    FatalHandler::GetInstance().ResetRendering();
+    AceLiteInstance::GetCurrentFatalHandler()->ResetRendering();
     FeaAbilityModule::Release();
     componentNodes_.Clear();
     isFatalHandled_ = true;

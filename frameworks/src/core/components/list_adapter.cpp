@@ -18,6 +18,7 @@
 #include <stdlib.h>
 
 #include "ace_log.h"
+#include "ace_lite_instance.h"
 #include "ace_mem_base.h"
 #include "component_utils.h"
 #include "directive/descriptor_utils.h"
@@ -55,7 +56,7 @@ ListAdapter::~ListAdapter()
         nextNode = currentNode->next;
         // only let list component release its children when the whole application
         // is not in fatal error handling process, as FatalHandler will do the recycle
-        if (!FatalHandler::GetInstance().IsFatalErrorHandling()) {
+        if (!AceLiteInstance::GetCurrentFatalHandler()->IsFatalErrorHandling()) {
             DescriptorUtils::ReleaseDescriptorOrElement(currentNode->nativeElement);
         }
         ace_free(currentNode);

@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 #include "profiler_module.h"
+#include "ace_lite_instance.h"
+
 #if ENABLED(JS_PROFILER)
 namespace OHOS {
 namespace ACELite {

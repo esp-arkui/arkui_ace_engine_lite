@@ -39,12 +39,6 @@ CacheManager::CacheManager() : cacheState_(STATE_NORMAL)
     ResetDistributedInfo();
 }
 
-CacheManager &CacheManager::GetInstance()
-{
-    static CacheManager cacheManager;
-    return cacheManager;
-}
-
 void CacheManager::ResetDistributedInfo()
 {
     wholeCacheMemInfo_.cacheStartAddr = 0;

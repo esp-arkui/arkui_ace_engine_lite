@@ -15,7 +15,7 @@
 #include "ace_mem_base.h"
 
 #include <cstdlib>
-#include "cache_manager.h"
+#include "ace_lite_instance.h"
 
 namespace OHOS {
 namespace ACELite {
@@ -49,7 +49,7 @@ void InitMemHooks(const ACEMemHooks &hooks)
 
 void InitCacheBuf(uintptr_t bufAddress, size_t bufSize)
 {
-    CacheManager::GetInstance().SetupCacheMemInfo(bufAddress, bufSize);
+    AceLiteInstance::GetCurrentCacheManager()->SetupCacheMemInfo(bufAddress, bufSize);
 }
 
 void *ace_malloc(size_t size)

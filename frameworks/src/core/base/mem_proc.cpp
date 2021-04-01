@@ -32,12 +32,6 @@ constexpr uint8_t MSG_LENGTH = 100;
 
 constexpr uint32_t UNIT = 1024;
 
-AceMemProc *AceMemProc::GetInstance()
-{
-    static AceMemProc instance;
-    return &instance;
-}
-
 void AceMemProc::ClearUp()
 {
     if (!IsEnabled()) {

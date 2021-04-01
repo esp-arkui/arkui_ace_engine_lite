@@ -27,12 +27,6 @@ class JSAbilityImpl;
  */
 class JsAppContext final : public MemoryHeap {
 public:
-    static JsAppContext *GetInstance()
-    {
-        static JsAppContext instance;
-        return &instance;
-    }
-
     /**
      * @brief trigger terminate request
      */
