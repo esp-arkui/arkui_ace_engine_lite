@@ -42,14 +42,13 @@ void JSAbilityImpl::InitEnvironment(const char * const abilityPath, const char *
         return;
     }
     // init engine && js fwk
-    JsAppEnvironment *appJsEnv = AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment();
-    appContext_ = AceLiteInstance::GetCurrentJsAppContext();
+    JsAppEnvironment &appJsEnv = AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment();
     // check if we should use snapshot mode, do this before everything,
     // but after debugger config is set
-    appJsEnv->InitRuntimeMode();
-    appContext_->SetCurrentAbilityInfo(abilityPath, bundleName, token);
-    appContext_->SetTopJSAbilityImpl(this);
-    appJsEnv->InitJsFramework();
+    appJsEnv.InitRuntimeMode();
+    AceLiteInstance::GetCurrentJsAppContext().SetCurrentAbilityInfo(abilityPath, bundleName, token);
+    AceLiteInstance::GetCurrentJsAppContext().SetTopJSAbilityImpl(this);
+    appJsEnv.InitJsFramework();
 
     // initialize js object after engine started up
     abilityModel_ = UNDEFINED;
@@ -57,7 +56,7 @@ void JSAbilityImpl::InitEnvironment(const char * const abilityPath, const char *
     isEnvInit_ = true;
 
     // relocate app.js fullpath
-    const char * const appJSFileName = (appJsEnv->IsSnapshotMode()) ? "app.bc" : "app.js";
+    const char * const appJSFileName = (appJsEnv.IsSnapshotMode()) ? "app.bc" : "app.js";
     char *fileFullPath = RelocateJSSourceFilePath(abilityPath, appJSFileName);
     if (fileFullPath == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "relocate js file failed");
@@ -66,7 +65,7 @@ void JSAbilityImpl::InitEnvironment(const char * const abilityPath, const char *
     }
 
     START_TRACING(APP_CODE_EVAL);
-    abilityModel_ = appContext_->Eval(fileFullPath, strlen(fileFullPath), true); // generate global.$app js object
+    abilityModel_ = AceLiteInstance::GetCurrentJsAppContext().Eval(fileFullPath, strlen(fileFullPath), true);
     STOP_TRACING();
 
     ace_free(fileFullPath);
@@ -98,11 +97,9 @@ void JSAbilityImpl::CleanUp()
 #endif
 
     LocalModule::Clear();
-    if (appContext_) {
-        appContext_->ClearContext();
-    }
+    AceLiteInstance::GetCurrentJsAppContext().ClearContext();
     ModuleManager::GetInstance()->OnTerminate();
-    AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment()->Cleanup();
+    AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment().Cleanup();
     isEnvInit_ = false;
     OUTPUT_TRACE();
 }
@@ -114,7 +111,7 @@ void JSAbilityImpl::DeliverCreate(const char *param)
     InvokeOnCreate();
     STOP_TRACING();
     // if we have done the render or not initialized yet, don't call render
-    if (rendered_ || (appContext_ == nullptr)) {
+    if (rendered_) {
         ACE_ERROR_CODE_PRINT(EXCE_ACE_FWK_LAUNCH_FAILED, EXCE_ACE_APP_RENDER_FAILED);
         return;
     }
@@ -153,13 +150,10 @@ void JSAbilityImpl::Hide() const
 
 void JSAbilityImpl::NotifyBackPressed() const
 {
-    if (appContext_ == nullptr) {
-        return;
-    }
 
     InvokeOnBackPressed();
 
-    appContext_->TerminateAbility();
+    AceLiteInstance::GetCurrentJsAppContext().TerminateAbility();
 }
 
 void JSAbilityImpl::InvokeOnCreate() const

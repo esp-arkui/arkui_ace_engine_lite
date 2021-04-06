@@ -159,7 +159,7 @@ void JSAbility::BackPressed()
 
 const char *JSAbility::GetPackageName()
 {
-    return AceLiteInstance::GetCurrentJsAppContext()->GetCurrentBundleName();
+    return AceLiteInstance::GetCurrentJsAppContext().GetCurrentBundleName();
 }
 
 // this public interface will be deprecated, only fatal scenario can trigger force destroy
@@ -170,8 +170,7 @@ void JSAbility::ForceDestroy()
 
 LazyLoadManager *GetLazyLoadManager()
 {
-    JsAppContext *context = AceLiteInstance::GetCurrentJsAppContext();
-    return const_cast<LazyLoadManager *>(context->GetLazyLoadManager());
+    return const_cast<LazyLoadManager *>(AceLiteInstance::GetCurrentJsAppContext().GetLazyLoadManager());
 }
 
 LazyLoadState GetLazyLoadManagerState()

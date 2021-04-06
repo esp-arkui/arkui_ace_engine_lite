@@ -37,7 +37,7 @@ public:
      * @brief constructor with the ability path parameter.
      */
     JSAbilityImpl()
-        : appContext_(nullptr),
+        :
           abilityModel_(0),
           nativeElement_(0),
           rendered_(false),
@@ -123,7 +123,6 @@ private:
     void InvokeOnBackPressed() const;
     void InvokeMethodWithoutParameter(const char * const name) const;
 
-    JsAppContext* appContext_;
     jerry_value_t abilityModel_;  // the object evaled from user JS code
     jerry_value_t nativeElement_; // the object returned from render function
     bool rendered_;

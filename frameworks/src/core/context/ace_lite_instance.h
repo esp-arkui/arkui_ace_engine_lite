@@ -87,13 +87,14 @@ public:
         return GetInstance()->GetCurrentEnviroment()->GetCacheManager();
     }
 
-    static JsAppContext* GetCurrentJsAppContext()
+    static JsAppContext& GetCurrentJsAppContext()
     {
         return GetInstance()->GetCurrentEnviroment()->GetJsAppContext();
     }
 
-    static JsAppEnvironment* GetCurrentJsAppEnvironment()
+    static JsAppEnvironment& GetCurrentJsAppEnvironment()
     {
+
         return GetInstance()->GetCurrentEnviroment()->GetJsAppEnvironment();
     }
 

@@ -54,14 +54,14 @@ public:
 
     ~AceLiteEnvironment();
 
-    JsAppEnvironment* GetJsAppEnvironment()
+    JsAppEnvironment& GetJsAppEnvironment()
     {
-        return &jsAppEnvironment_;
+        return jsAppEnvironment_;
     }
 
-    JsAppContext* GetJsAppContext()
+    JsAppContext& GetJsAppContext()
     {
-        return &jsAppContext_;
+        return jsAppContext_;
     }
 
     AsyncTaskManager* GetAsyncTaskManager()
