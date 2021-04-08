@@ -14,6 +14,7 @@
  */
 
 #include "ace_lite_instance.h"
+
 namespace OHOS {
 namespace ACELite {
 AceLiteInstance *AceLiteInstance::GetInstance()
@@ -30,15 +31,24 @@ AceLiteInstance::~AceLiteInstance()
 {
 }
 
-void AceLiteInstance::CreateAceLiteEnvironment(uint8_t id) {
-    CreateAceLiteEnvironment(id, "");
+void AceLiteInstance::CreateAceLiteEnvironment(uint64_t taskId) {
+    CreateAceLiteEnvironment(taskId, "");
 }
 
-void AceLiteInstance::CreateAceLiteEnvironment(uint8_t id, const char* name) {
-    // 通过线程id绑定
-    AceLiteEnvironment * environment = new AceLiteEnvironment();
-    environment->SetId(id);
+void AceLiteInstance::CreateAceLiteEnvironment(uint64_t taskId, const char* name) {
+    AutoLockGuard lockGuard(lock_);
+    AceLiteEnvironment *environment = new AceLiteEnvironment();
+    if (environment == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "");
+        return;
+    }
+
+//    environment->SetId(id_++);
+    environment->SetTaskId(taskId);
     environment->SetName(name);
+    if (taskId == 1) {
+        currentEnvironment_ = environment;
+    }
     if (environmentList_ == nullptr) {
         environmentList_ = environment;
         return;
@@ -54,13 +64,14 @@ void AceLiteInstance::CreateAceLiteEnvironment(uint8_t id, const char* name) {
     prev->next = environment;
 }
 
-void AceLiteInstance::DeleteAceLiteEnvironment(uint8_t id) {
+void AceLiteInstance::DeleteAceLiteEnvironment(uint64_t taskId) {
+    AutoLockGuard lockGuard(lock_);
     if (environmentList_ == nullptr) {
         return;
     }
 
     AceLiteEnvironment *current = environmentList_;
-    if (current->id == id) {
+    if (current->taskId_ == taskId) {
         environmentList_ = current->next;
         delete current;
         return;
@@ -68,31 +79,38 @@ void AceLiteInstance::DeleteAceLiteEnvironment(uint8_t id) {
 
     AceLiteEnvironment *prev = nullptr;
     while (current != nullptr) {
-        if (current->id == id) {
+        if (current->taskId_ == taskId) {
             prev->next = current->next;
+            delete current;
             return;
         }
         prev = current;
         current = current->next;
     }
-    delete current;
 }
 
-AceLiteEnvironment* AceLiteInstance::GetCurrentEnviroment() {
-    if (currentEnvironment_ == nullptr) {
-        return GetAceLiteEnvironment(1);
-    }
-    return currentEnvironment_;
+void AceLiteInstance::ClearCurrentEnvironment() {
+    delete currentEnvironment_;
+    currentEnvironment_ = nullptr;
 }
 
-AceLiteEnvironment* AceLiteInstance::GetAceLiteEnvironment(uint8_t id) {
+AceLiteEnvironment* AceLiteInstance::GetAceLiteEnvironmentList() {
+    return environmentList_;
+}
+
+AceLiteEnvironment& AceLiteInstance::GetCurrentEnvironment() {
+    return *currentEnvironment_;
+}
+
+AceLiteEnvironment* AceLiteInstance::GetAceLiteEnvironment(uint64_t taskId) {
+
+    AutoLockGuard lockGuard(lock_);
     if (environmentList_ == nullptr) {
-        HILOG_INFO(HILOG_MODULE_ACE, "init...");
-        CreateAceLiteEnvironment(id);
+        return nullptr;
     }
     AceLiteEnvironment *current = environmentList_;
     while (current != nullptr) {
-        if (current->id == id) {
+        if (current->taskId_ == taskId) {
             return current;
         }
         current = current->next;

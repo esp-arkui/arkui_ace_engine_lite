@@ -32,7 +32,7 @@ ScrollLayer::~ScrollLayer()
         scroll_ = nullptr;
     }
     pageRootView_ = nullptr;
-    AceLiteInstance::GetCurrentFatalHandler()->SetCurrentPageRootView(nullptr);
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().SetCurrentPageRootView(nullptr);
 }
 
 UIScrollView *ScrollLayer::AddScrollLayer(UIView &view) const
@@ -99,7 +99,7 @@ void ScrollLayer::AppendScrollLayer(Component *rootComponent)
 
     scroll_ = AddScrollLayer(*view);
     pageRootView_ = (scroll_ == nullptr) ? view : scroll_;
-    AceLiteInstance::GetCurrentFatalHandler()->SetCurrentPageRootView(nullptr);
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().SetCurrentPageRootView(nullptr);
 }
 
 void ScrollLayer::Hide() const

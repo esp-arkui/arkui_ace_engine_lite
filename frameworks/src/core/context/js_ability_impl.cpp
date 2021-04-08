@@ -46,8 +46,8 @@ void JSAbilityImpl::InitEnvironment(const char * const abilityPath, const char *
     // check if we should use snapshot mode, do this before everything,
     // but after debugger config is set
     appJsEnv.InitRuntimeMode();
-    AceLiteInstance::GetCurrentJsAppContext().SetCurrentAbilityInfo(abilityPath, bundleName, token);
-    AceLiteInstance::GetCurrentJsAppContext().SetTopJSAbilityImpl(this);
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().SetCurrentAbilityInfo(abilityPath, bundleName, token);
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().SetTopJSAbilityImpl(this);
     appJsEnv.InitJsFramework();
 
     // initialize js object after engine started up
@@ -65,7 +65,7 @@ void JSAbilityImpl::InitEnvironment(const char * const abilityPath, const char *
     }
 
     START_TRACING(APP_CODE_EVAL);
-    abilityModel_ = AceLiteInstance::GetCurrentJsAppContext().Eval(fileFullPath, strlen(fileFullPath), true);
+    abilityModel_ = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().Eval(fileFullPath, strlen(fileFullPath), true);
     STOP_TRACING();
 
     ace_free(fileFullPath);
@@ -93,13 +93,17 @@ void JSAbilityImpl::CleanUp()
         router_ = nullptr;
     }
 #ifdef FEATURE_TIMER_MODULE
-    AceLiteInstance::GetInstance()->GetCurrentEnviroment()->ClearTimerList();
+   TimerList* timerList = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetTimerList();
+   if (timerList != nullptr) {
+       timerList->ClearTimerList();
+   }
 #endif
 
     LocalModule::Clear();
-    AceLiteInstance::GetCurrentJsAppContext().ClearContext();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().ClearContext();
     ModuleManager::GetInstance()->OnTerminate();
-    AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment().Cleanup();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppEnvironment().Cleanup();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppEnvironment().Cleanup();
     isEnvInit_ = false;
     OUTPUT_TRACE();
 }
@@ -153,7 +157,7 @@ void JSAbilityImpl::NotifyBackPressed() const
 
     InvokeOnBackPressed();
 
-    AceLiteInstance::GetCurrentJsAppContext().TerminateAbility();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().TerminateAbility();
 }
 
 void JSAbilityImpl::InvokeOnCreate() const
@@ -185,7 +189,7 @@ void JSAbilityImpl::InvokeOnBackPressed() const
 
 void JSAbilityImpl::InvokeMethodWithoutParameter(const char * const name) const
 {
-    if (AceLiteInstance::GetCurrentFatalHandler()->IsJSRuntimeFatal()) {
+    if (AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().IsJSRuntimeFatal()) {
         // can not continue to involve any JS object creating on engine in case runtime fatal
         return;
     }

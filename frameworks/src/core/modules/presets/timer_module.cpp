@@ -38,7 +38,7 @@ void TimerModule::Init()
     if (initRes < 0) {
         HILOG_ERROR(HILOG_MODULE_ACE, "init timer failed %d", initRes);
     }
-    AceLiteInstance::GetCurrentJSStateMachine()->timerInitState = initRes;
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetRuntimeContext()->timerInitState = initRes;
     CreateNamedFunction(setTimeout, SetTimeout);
     CreateNamedFunction(clearTimeout, ClearTimer);
     CreateNamedFunction(setInterval, SetInterval);
@@ -51,13 +51,13 @@ jerry_value_t TimerModule::CreateTimer(const jerry_value_t func,
                                        const jerry_length_t argsNum,
                                        bool repeated)
 {
-    if (AceLiteInstance::GetCurrentJSStateMachine()->timerInitState < 0) {
+    if (AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetRuntimeContext()->timerInitState < 0) {
         HILOG_ERROR(HILOG_MODULE_ACE, "start timer failed, timer init failed %d",
-                    AceLiteInstance::GetCurrentJSStateMachine()->timerInitState);
+                    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetRuntimeContext()->timerInitState);
         return UNDEFINED;
     }
     const uint8_t leastArguments = 2;
-    if ((argsNum < leastArguments) || (AceLiteInstance::GetCurrentTimerList() == nullptr)) {
+    if ((argsNum < leastArguments) || (AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetTimerList() == nullptr)) {
         return UNDEFINED;
     }
     TimerList::Arguments *arguments = new TimerList::Arguments();
@@ -68,7 +68,7 @@ jerry_value_t TimerModule::CreateTimer(const jerry_value_t func,
     jerry_value_t function = args[0];
     arguments->func = jerry_acquire_value(function);
     arguments->repeated = repeated;
-    TimerList* timerList = AceLiteInstance::GetCurrentTimerList();
+    TimerList* timerList = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetTimerList();
     if (argsNum > leastArguments) {
         uint8_t funcNumber = argsNum - leastArguments;
         jerry_value_t *funcArg =
@@ -93,7 +93,7 @@ jerry_value_t TimerModule::CreateTimer(const jerry_value_t func,
 jerry_value_t TimerModule::StartTask(TimerList::Arguments *arguments, jerry_value_t time, bool repeated)
 {
     timerHandle_t timerId = nullptr;
-    TimerList* timerList = AceLiteInstance::GetCurrentTimerList();
+    TimerList* timerList = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetTimerList();
     jerry_value_t retVal = UNDEFINED;
     if (timerList == nullptr) {
         return retVal;
@@ -130,15 +130,15 @@ jerry_value_t TimerModule::ClearTimer(const jerry_value_t func,
                                       const jerry_value_t *args,
                                       const jerry_length_t argsNum)
 {
-    if (AceLiteInstance::GetCurrentJSStateMachine()->timerInitState < 0) {
+    if (AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetRuntimeContext()->timerInitState < 0) {
         HILOG_ERROR(HILOG_MODULE_ACE, "stop timer failed, init timer failed %d",
-                    AceLiteInstance::GetCurrentJSStateMachine()->timerInitState);
+                    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetRuntimeContext()->timerInitState);
         return UNDEFINED;
     }
     if (argsNum == 0) {
         return UNDEFINED;
     }
-    TimerList* timerList = AceLiteInstance::GetCurrentTimerList();
+    TimerList* timerList = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetTimerList();
     if ((timerList != nullptr) && (jerry_value_is_number(args[0]))) {
         int16_t timerKey = IntegerOf(args[0]);
         if (timerKey < 0) {
@@ -162,8 +162,7 @@ void TimerModule::Task(void *arguments)
     if (arg == nullptr) {
         return;
     }
-
-    TimerList* timerList = AceLiteInstance::GetCurrentTimerList();
+    TimerList* timerList = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetTimerList();
     if (timerList == nullptr) {
         return;
     }

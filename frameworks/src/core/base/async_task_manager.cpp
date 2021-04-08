@@ -102,7 +102,8 @@ uint16_t AsyncTaskManager::Dispatch(AsyncTaskHandler handler, void *data)
         HILOG_ERROR(HILOG_MODULE_ACE, "AsyncTaskManager::Dispatch failed: handler is null.");
         return DISPATCH_FAILURE;
     }
-    if (AceLiteInstance::GetCurrentFatalHandler()->IsFatalErrorHitted()) {
+	
+    if (AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().IsFatalErrorHitted()) {
         HILOG_ERROR(HILOG_MODULE_ACE, "AsyncTaskManager::Dispatch failed: Fatal error is hitted.");
         return DISPATCH_FAILURE;
     }

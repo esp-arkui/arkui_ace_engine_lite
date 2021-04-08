@@ -56,7 +56,7 @@ ListAdapter::~ListAdapter()
         nextNode = currentNode->next;
         // only let list component release its children when the whole application
         // is not in fatal error handling process, as FatalHandler will do the recycle
-        if (!AceLiteInstance::GetCurrentFatalHandler()->IsFatalErrorHandling()) {
+        if (!AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().IsFatalErrorHandling()) {
             DescriptorUtils::ReleaseDescriptorOrElement(currentNode->nativeElement);
         }
         ace_free(currentNode);

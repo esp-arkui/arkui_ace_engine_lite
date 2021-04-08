@@ -49,7 +49,7 @@ void InitMemHooks(const ACEMemHooks &hooks)
 
 void InitCacheBuf(uintptr_t bufAddress, size_t bufSize)
 {
-    AceLiteInstance::GetCurrentCacheManager()->SetupCacheMemInfo(bufAddress, bufSize);
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetCacheManager().SetupCacheMemInfo(bufAddress, bufSize);
 }
 
 void *ace_malloc(size_t size)

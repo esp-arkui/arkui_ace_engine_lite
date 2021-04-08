@@ -74,25 +74,35 @@ void JSAbility::Launch(const char * const abilityPath, const char * const bundle
         return;
     }
 
+    AceLiteInstance::GetInstance()->CreateAceLiteEnvironment(2, "222");
+    AceLiteInstance::GetInstance()->CreateAceLiteEnvironment(1, "111");
+    AceLiteInstance::GetInstance()->CreateAceLiteEnvironment(3, "333");
+
+    DebuggerConfig jsDebuggerConfig;
+    jsDebuggerConfig.startDebuggerServer = false;
+    jsDebuggerConfig.snapshotMode = false;
+    jsDebuggerConfig.heapSize = 64 * 1024;
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetDebugger().ConfigEngineDebugger(jsDebuggerConfig);
+
     DumpNativeMemoryUsage();
     jsAbilityImpl_ = new JSAbilityImpl();
     if (jsAbilityImpl_ == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Create JSAbilityRuntime failed");
         return;
     }
-    DebuggerConfig jsDebuggerConfig;
-    jsDebuggerConfig.startDebuggerServer = false;
-    jsDebuggerConfig.snapshotMode = false;
-    jsDebuggerConfig.heapSize = 64 * 1024;
-    AceLiteInstance::GetInstance()->GetCurrentDebugger()->ConfigEngineDebugger(jsDebuggerConfig);
-    AceLiteInstance::GetInstance()->CreateAceLiteEnvironment(2, "222");
-    AceLiteInstance::GetInstance()->CreateAceLiteEnvironment(1, "111");
-    AceLiteInstance::GetInstance()->CreateAceLiteEnvironment(3, "333");
+
+//    AceLiteEnvironment *list = AceLiteInstance::GetInstance()->GetAceLiteEnvironmentList();
+
+//    AceLiteEnvironment *current = AceLiteInstance::GetInstance()->GetCurrentEnviroment();
+
+//    AceLiteInstance::GetInstance()->DeleteAceLiteEnvironment(3);
+
+//    AceLiteEnvironment *list1 = AceLiteInstance::GetInstance()->GetAceLiteEnvironmentList();
 
     START_TRACING(LAUNCH);
     JSAbilityImpl *jsAbilityImpl = CastAbilityImpl(jsAbilityImpl_);
     jsAbilityImpl->InitEnvironment(abilityPath, bundleName, token);
-    AceLiteInstance::GetCurrentFatalHandler()->RegisterFatalHandler(this);
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().RegisterFatalHandler(this);
     jsAbilityImpl->DeliverCreate(pageInfo);
     STOP_TRACING();
     OUTPUT_TRACE();
@@ -107,7 +117,7 @@ void JSAbility::Show() const
 
     JSAbilityImpl *jsAbilityImpl = CastAbilityImpl(jsAbilityImpl_);
     jsAbilityImpl->Show();
-    AceLiteInstance::GetCurrentAsyncTaskManager()->SetFront(true);
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetAsyncTaskManager().SetFront(true);
     ProductAdapter::UpdateShowingState(true);
 }
 
@@ -120,7 +130,7 @@ void JSAbility::Hide() const
 
     JSAbilityImpl *jsAbilityImpl = CastAbilityImpl(jsAbilityImpl_);
     jsAbilityImpl->Hide();
-    AceLiteInstance::GetCurrentAsyncTaskManager()->SetFront(false);
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetAsyncTaskManager().SetFront(false);
 }
 
 void JSAbility::TransferToDestroy()
@@ -137,8 +147,8 @@ void JSAbility::TransferToDestroy()
     // Reset render flag or low layer task mutex in case we are during the rendering process,
     // this situation might happen if the destroy function is called outside of JS thread, such as AMS.
     ProductAdapter::UpdateShowingState(false);
-    AceLiteInstance::GetCurrentFatalHandler()->ResetRendering();
-    AceLiteInstance::GetCurrentFatalHandler()->SetExitingFlag(false);
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().ResetRendering();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().SetExitingFlag(false);
 #ifdef OHOS_ACELITE_PRODUCT_WATCH
     JsAsyncWork::SetAppQueueHandler(nullptr);
     DftImpl::GetInstance()->RegisterPageReplaced(nullptr);
@@ -159,7 +169,7 @@ void JSAbility::BackPressed()
 
 const char *JSAbility::GetPackageName()
 {
-    return AceLiteInstance::GetCurrentJsAppContext().GetCurrentBundleName();
+    return AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().GetCurrentBundleName();
 }
 
 // this public interface will be deprecated, only fatal scenario can trigger force destroy
@@ -170,7 +180,7 @@ void JSAbility::ForceDestroy()
 
 LazyLoadManager *GetLazyLoadManager()
 {
-    return const_cast<LazyLoadManager *>(AceLiteInstance::GetCurrentJsAppContext().GetLazyLoadManager());
+    return const_cast<LazyLoadManager *>(AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().GetLazyLoadManager());
 }
 
 LazyLoadState GetLazyLoadManagerState()

@@ -16,7 +16,7 @@
 #include "ace_lite_environment.h"
 namespace OHOS {
 namespace ACELite {
-AceLiteEnvironment::AceLiteEnvironment() : id(0), next(nullptr)
+AceLiteEnvironment::AceLiteEnvironment() : id_(0), next(nullptr)
 {
 }
 
@@ -25,7 +25,7 @@ AceLiteEnvironment::~AceLiteEnvironment()
 }
 
 #ifdef FEATURE_TIMER_MODULE
-TimerList* AceLiteEnvironment::GetTimerList();
+TimerList* AceLiteEnvironment::GetTimerList()
 {
     if (timerList_ == nullptr) {
         timerList_ = new TimerList();
@@ -36,7 +36,7 @@ TimerList* AceLiteEnvironment::GetTimerList();
     return timerList_;
 }
 
-void AceLiteEnvironment::ClearTimerList();
+void AceLiteEnvironment::ClearTimerList()
 {
     if (timerList_ != nullptr) {
         timerList_->ClearTimerList();

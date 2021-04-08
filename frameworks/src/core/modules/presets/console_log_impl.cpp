@@ -151,7 +151,7 @@ void LogString(const LogLevel logLevel, const char * const str)
 
 void LogChar(char c, const LogLevel logLevel, bool endFlag)
 {
-    JerryElement* elelment = AceLiteInstance::GetCurrentJerryElement();
+    RuntimeContext* elelment = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetRuntimeContext();
     elelment->logBuffer[elelment->logBufferIndex++] = c;
     if ((elelment->logBufferIndex == (LOG_BUFFER_SIZE - 1)) || (c == '\n')) {
         if ((c == '\n') && (elelment->logBufferIndex > 0)) {
@@ -240,7 +240,7 @@ void Output(const LogLevel logLevel, const char * const str, const uint8_t lengt
         return;
     }
     (void)length;
-    AceLiteInstance::GetCurrentDebugger()->Output(str);
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetDebugger().Output(str);
 #if defined(FEATURE_ACELITE_HI_LOG_PRINTF) || defined(FEATURE_USER_MC_LOG_PRINTF)
     OutputToHiLog(logLevel, str);
 #endif
@@ -254,7 +254,7 @@ void Output(const LogLevel logLevel, const char * const str, const uint8_t lengt
 
 void FlushOutput()
 {
-    AceLiteInstance::GetCurrentDebugger()->FlushOutput();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetDebugger().FlushOutput();
 }
 } // namespace ACELite
 } // namespace OHOS

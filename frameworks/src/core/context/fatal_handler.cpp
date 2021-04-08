@@ -57,7 +57,7 @@ static void HandleFatal(int errorCode)
     HILOG_ERROR(HILOG_MODULE_ACE, "the JS task is not killed after sleep very long time");
 #endif // OHOS_ACELITE_PRODUCT_WATCH
 #else
-    const char * const fatalErrorStr = AceLiteInstance::GetCurrentFatalHandler()->GetErrorStr(errorCode);
+    const char * const fatalErrorStr = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().GetErrorStr(errorCode);
     LogString(LogLevel::LOG_LEVEL_ERR, "[JS Exception]: ");
     LogString(LogLevel::LOG_LEVEL_ERR, fatalErrorStr);
     LogString(LogLevel::LOG_LEVEL_ERR, "\n");
@@ -137,7 +137,7 @@ void FatalHandler::HandleFatalError(int errorCode)
     }
 
     // reset the low layer rendering flag if needed
-    AceLiteInstance::GetCurrentFatalHandler()->ResetRendering();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().ResetRendering();
     FeaAbilityModule::Release();
     componentNodes_.Clear();
     isFatalHandled_ = true;

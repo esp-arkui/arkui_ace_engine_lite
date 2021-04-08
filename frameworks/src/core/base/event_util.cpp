@@ -120,7 +120,7 @@ void EventUtil::InvokeCallback(JSValue vm, JSValue callback, JSValue event)
     params->arg = event;
     // The views may be destroyed or recreated in conditional or list rendering.
     // If we directly call the event callback function, the program will crash.
-    if (DISPATCH_FAILURE == AceLiteInstance::GetCurrentAsyncTaskManager()->Dispatch(CallbackExecutor, static_cast<void *>(params))) {
+    if (DISPATCH_FAILURE == AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetAsyncTaskManager().Dispatch(CallbackExecutor, static_cast<void *>(params))) {
         HILOG_ERROR(HILOG_MODULE_ACE, "EventUtil::InvokeCallback failed: Async task dispatch failure.");
         delete params;
         params = nullptr;

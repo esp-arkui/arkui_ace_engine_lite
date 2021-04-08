@@ -61,7 +61,7 @@ jerry_value_t JsAppContext::Eval(const char * const jsFileFullPath, size_t fileN
 
     uint32_t contentLength = 0;
     START_TRACING(PAGE_CODE_LOAD);
-    bool snapshotMode = AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment()->IsSnapshotMode();
+    bool snapshotMode = AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment().IsSnapshotMode();
     char *jsCode = ReadFile(jsFileFullPath, contentLength, snapshotMode);
     STOP_TRACING();
     if ((jsCode == nullptr) || (contentLength > FILE_CONTENT_LENGTH_MAX)) {
@@ -151,7 +151,8 @@ void JsAppContext::TerminateAbility() const
         // if no running js ability, drop
         return;
     }
-    AceLiteInstance::GetCurrentFatalHandler()->SetExitingFlag(true);
+
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().SetExitingFlag(true);
     Terminate(currentToken_);
 }
 

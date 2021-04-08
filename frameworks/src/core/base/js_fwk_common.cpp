@@ -483,7 +483,7 @@ static bool PathIsRelative(const char * const resPath)
 
 char *RelocateFilePathRelative(const char * const appRootPath, const char * const resFileName)
 {
-    const char * const jsPath = AceLiteInstance::GetCurrentJsAppContext()->GetCurrentJsPath();
+    const char * const jsPath = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().GetCurrentJsPath();
     if (jsPath == nullptr) {
         return nullptr;
     }
@@ -696,7 +696,7 @@ char *ReadJSFile(const char * const appPath, const char * const jsFileName, uint
         return nullptr;
     }
 
-    char *fileBuffer = ReadFile(fullPath, fileSize, AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment()->IsSnapshotMode());
+    char *fileBuffer = ReadFile(fullPath, fileSize, AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment().IsSnapshotMode());
     ace_free(fullPath);
     fullPath = nullptr;
     return fileBuffer;
@@ -824,7 +824,7 @@ void ClearWatchersCommon(Watcher *&head)
     while (node) {
         head = node->next;
         // avoid allocating any JS objects when JS runtime broken
-        if (!(AceLiteInstance::GetCurrentFatalHandler()->IsJSRuntimeFatal())) {
+        if (!(AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().IsJSRuntimeFatal())) {
             // call js watcher.unsubscribe to release watcher
             jerry_value_t watcher = node->watcher;
             jerry_value_t unsubscribe = jerryx_get_property_str(watcher, "unsubscribe");
@@ -1231,7 +1231,7 @@ const char *ParseImageSrc(jerry_value_t source)
         return nullptr;
     }
 
-    char *imageSrc = AceLiteInstance::GetCurrentJsAppContext()->GetResourcePath(rawSrc);
+    char *imageSrc = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().GetResourcePath(rawSrc);
     ace_free(rawSrc);
     rawSrc = nullptr;
 #ifdef OHOS_ACELITE_PRODUCT_WATCH

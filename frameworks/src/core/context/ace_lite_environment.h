@@ -35,13 +35,53 @@ const int16_t LOG_BUFFER_SIZE = CONSOLE_LOG_LINE_MAX_LENGTH;
 const int16_t LOG_BUFFER_SIZE = 256; // use 256 as default if it's not config
 #endif // CONSOLE_LOG_LINE_MAX_LENGTH
 
-struct JerryElement final : public MemoryHeap {
+#if ENABLED(JS_PROFILER)
+#define START_TRACING(traceTag) AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJSProfiler().PushTrace(traceTag, 0, 0)
+#define START_TRACING_WITH_COMPONENT_NAME(traceTag, componentNameId) \
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJSProfiler().PushTrace(traceTag, componentNameId, 0)
+#define START_TRACING_WITH_EXTRA_INFO(traceTag, componentNameId, extraInfoId) \
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJSProfiler().PushTrace(traceTag, componentNameId, extraInfoId)
+#define STOP_TRACING() AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJSProfiler().PopTrace()
+#define OUTPUT_TRACE() AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJSProfiler().Output()
+#else
+#define START_TRACING(traceTag)
+#define START_TRACING_WITH_COMPONENT_NAME(traceTag, componentNameId)
+#define START_TRACING_WITH_EXTRA_INFO(traceTag, componentNameId, extraInfoId)
+#define STOP_TRACING()
+#define OUTPUT_TRACE()
+#endif // ENABLED(JS_PROFILER)
+
+#ifdef FEATURE_ACELITE_MC_EVENT_ERROR_CODE_PRINT
+#define ACE_EVENT_PRINT(info2, info3) \
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetEventErrorCodePrint().AceEventPrint(info2, info3)
+#define ACE_FEATURE_EVENT_PRINT(info1, info2, info3) \
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetEventErrorCodePrint().AceEventPrint(info1, info2, info3)
+#define ACE_ERROR_CODE_PRINT(info2, rfu) \
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetEventErrorCodePrint().AceErrorCodePrint(info2, rfu)
+#else
+#define ACE_EVENT_PRINT(info2, info3)
+#define ACE_FEATURE_EVENT_PRINT(info1, info2, info3)
+#define ACE_ERROR_CODE_PRINT(info2, rfu)
+#endif // ENABLED(FEATURE_ACELITE_MC_EVENT_ERROR_CODE_PRINT)
+
+#ifdef SIMULATOR_MEMORY_ANALYSIS
+#define CLEAR_UP() AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetMemProc().ClearUp()
+#define SYS_MEMORY_TRACING() AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetMemProc().SysMemTracing()
+#define JERRY_MEMORY_TRACING() AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetMemProc().JerryMemTracing()
+#else
+#define CLEAR_UP()
+#define SYS_MEMORY_TRACING()
+#define JERRY_MEMORY_TRACING()
+#endif // ENABLED(SIMULATOR_MEMORY_ANALYSIS)
+
+/**
+ * @brief The RuntimeContext struct contains js application runtime fields
+ */
+struct RuntimeContext final : public MemoryHeap {
     char logBuffer[LOG_BUFFER_SIZE] = {0};
 
     uint16_t logBufferIndex = 0;
-};
 
-struct JSStateMachine final : public MemoryHeap {
     int timerInitState = -1;
 };
 
@@ -64,63 +104,62 @@ public:
         return jsAppContext_;
     }
 
-    AsyncTaskManager* GetAsyncTaskManager()
+    AsyncTaskManager& GetAsyncTaskManager()
     {
-        return &asyncTaskManager_;
+        return asyncTaskManager_;
     }
 
-    FatalHandler* GetFatalHandler()
+    FatalHandler& GetFatalHandler()
     {
-        return &fatalHandler_;
+        return fatalHandler_;
     }
 
-    DftImpl* GetDftImpl()
+    DftImpl& GetDftImpl()
     {
-        return &dftImpl_;
+        return dftImpl_;
     }
 
-    Debugger* GetDebugger()
+    Debugger& GetDebugger()
     {
-        return &debugger_;
+        return debugger_;
     }
 
-    JerryElement* GetJerryElement()
+    CacheManager& GetCacheManager()
     {
-        return &jerryElement_;
+        return cacheManager_;
     }
 
-    CacheManager* GetCacheManager()
+    JSProfiler& GetJSProfiler()
     {
-        return &cacheManager_;
+        return jsProfiler_;
     }
 
-    JSProfiler* GetJSProfiler()
+    EventErrorCodePrint& GetEventErrorCodePrint()
     {
-        return &jsProfiler_;
+        return eventErrorCodePrint_;
     }
 
-    EventErrorCodePrint* GetEventErrorCodePrint()
+    RuntimeContext* GetRuntimeContext()
     {
-        return &eventErrorCodePrint_;
-    }
-
-    JSStateMachine* GetJSStateMachine()
-    {
-        return &jsStateMachine_;
+        return &runtimeContext_;
     }
 
     void SetName(const char* name) {
-        this->name = name;
+        this->name_ = name;
     }
 
     void SetId(uint8_t id) {
-        this->id = id;
+        this->id_ = id;
+    }
+
+    void SetTaskId(uint64_t taskId) {
+        this->taskId_ = taskId;
     }
 
 #ifdef SIMULATOR_MEMORY_ANALYSIS
-    AceMemProc* GetMemProc()
+    AceMemProc& GetMemProc()
     {
-        return &aceMemProc_;
+        return aceMemProc_;
     }
 #endif
 
@@ -129,10 +168,11 @@ public:
 
     void ClearTimerList();
 #endif
+    uint64_t taskId_;
 
-    uint8_t id;
+    uint8_t id_;
 
-    const char* name;
+    const char* name_;
 
     AceLiteEnvironment *next;
 
@@ -149,15 +189,13 @@ private:
 
     Debugger debugger_;
 
-    JerryElement jerryElement_;
-
     CacheManager cacheManager_;
 
     JSProfiler jsProfiler_;
 
     EventErrorCodePrint eventErrorCodePrint_;
 
-    JSStateMachine jsStateMachine_;
+    RuntimeContext runtimeContext_;
 
 #ifdef SIMULATOR_MEMORY_ANALYSIS
     AceMemProc aceMemProc_;

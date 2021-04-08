@@ -56,7 +56,7 @@ JSIValue AppModule::GetInfo(const JSIValue thisVal, const JSIValue *args, uint8_
 
 cJSON *AppModule::ReadManifest()
 {
-    char *appPath = const_cast<char *>(AceLiteInstance::GetCurrentJsAppContext()->GetCurrentAbilityPath());
+    char *appPath = const_cast<char *>(AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().GetCurrentAbilityPath());
     if ((appPath == nullptr) || !strlen(appPath)) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Fail to get app information because the app path is null or empty.");
         return nullptr;
@@ -104,7 +104,7 @@ JSIValue AppModule::Terminate(const JSIValue thisVal, const JSIValue *args, uint
     UNUSED(thisVal);
     UNUSED(args);
     UNUSED(argsNum);
-    AceLiteInstance::GetCurrentJsAppContext()->TerminateAbility();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().TerminateAbility();
     return JSI::CreateUndefined();
 }
 } // namespace ACELite

@@ -40,7 +40,6 @@ StateMachine::StateMachine()
     }
     jsPagePath_ = nullptr;
     appRootPath_ = nullptr;
-    appContext_ = nullptr;
     uri_ = nullptr;
     rootComponent_ = nullptr;
     viewModel_ = UNDEFINED;
@@ -55,7 +54,7 @@ StateMachine::~StateMachine()
 {
     // release this page's all resource
     // if error hapens, statemachie must force to jump to destroy state for releasing resource.
-    if ((currentState_ >= INIT_STATE) || AceLiteInstance::GetCurrentFatalHandler()->IsFatalErrorHitted()) {
+    if ((currentState_ >= INIT_STATE) || AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().IsFatalErrorHitted()) {
         ChangeState(BACKGROUND_STATE);
         ChangeState(DESTROY_STATE);
     }
@@ -108,7 +107,7 @@ int StateMachine::GenerateJsPagePath(const char * const uri)
         len = strlen(JS_INDEX_FILE_PATH);
     }
 #endif
-    const char * const sourceFileSuffix = (AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment()->IsSnapshotMode()) ? ".bc" : ".js";
+    const char * const sourceFileSuffix = (AceLiteInstance::GetInstance()->GetAceLiteEnvironment(1)->GetJsAppEnvironment().IsSnapshotMode()) ? ".bc" : ".js";
     len += strlen(sourceFileSuffix);
     // add ending character:'\0'
     len += 1;
@@ -155,8 +154,7 @@ void StateMachine::RegisterUriAndParamsToPage(const char * const uri, jerry_valu
 
 bool StateMachine::Init(jerry_value_t object, jerry_value_t &jsRes)
 {
-    appContext_ = AceLiteInstance::GetCurrentJsAppContext();
-    appRootPath_ = const_cast<char *>(appContext_->GetCurrentAbilityPath());
+    appRootPath_ = const_cast<char *>(AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().GetCurrentAbilityPath());
     if ((appRootPath_ == nullptr) || (strlen(appRootPath_) == 0)) {
         HILOG_ERROR(HILOG_MODULE_ACE, "statemachine init failed as this app's root path is invalid.");
         return false;
@@ -215,7 +213,7 @@ bool StateMachine::BindUri(jerry_value_t &jsRes)
     }
     // check5:object's uri is not existed, need to move
     char *fullPath = RelocateJSSourceFilePath(appRootPath_, jsPagePath_);
-    appContext_->SetCurrentJsPath(jsPagePath_);
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().SetCurrentJsPath(jsPagePath_);
     if (GetFileSize(fullPath) == 0) {
         ACE_FREE(fullPath);
         ace_free(uri_);
@@ -264,7 +262,7 @@ void StateMachine::EvalPage()
         return;
     }
 
-    viewModel_ = appContext_->Eval(pageFilePath, strlen(pageFilePath), false);
+    viewModel_ = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().Eval(pageFilePath, strlen(pageFilePath), false);
     if (IS_UNDEFINED(viewModel_)) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Eval JS file failed");
         ace_free(pageFilePath);
@@ -292,7 +290,7 @@ static void ForceGC(void *data)
     static_cast<void>(data);
     jerry_gc(jerry_gc_mode_t::JERRY_GC_PRESSURE_HIGH);
 #if ENABLED(JS_PROFILER)
-    if (AceLiteInstance::GetCurrentJSProfiler()->IsEnabled()) {
+    if (AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJSProfiler().IsEnabled()) {
         // dump the JS heap status
         JSHeapStatus heapStatus;
         if (JSI::GetJSHeapStatus(heapStatus)) {
@@ -307,13 +305,12 @@ void StateMachine::RenderPage()
 {
     START_TRACING(RENDER);
     // if not in init state, reset all watchers of previous page at first
-    LazyLoadManager* lazy = const_cast<LazyLoadManager *>(appContext_->GetLazyLoadManager());
+    LazyLoadManager* lazy = const_cast<LazyLoadManager *>(AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().GetLazyLoadManager());
     if (lazy->GetState() != LazyLoadState::INIT) {
         lazy->ResetWatchers();
     }
     // Note: do not release the returned value by Render function, it will be released by component
-    jerry_value_t element = appContext_->Render(viewModel_);
-
+    jerry_value_t element = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().Render(viewModel_);
     // mark lazy load te task
     if (lazy->GetLazyWatcher() != nullptr) {
         lazy->SetState(LazyLoadState::READY);
@@ -361,7 +358,7 @@ void StateMachine::HidePage() const
 
 void StateMachine::InvokePageLifeCycleCallback(const char * const name) const
 {
-    if (AceLiteInstance::GetCurrentFatalHandler()->IsJSRuntimeFatal()) {
+    if (AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().IsJSRuntimeFatal()) {
         // can not continue to involve any JS object creating on engine in case runtime fatal
         return;
     }
@@ -381,7 +378,7 @@ void StateMachine::InvokePageLifeCycleCallback(const char * const name) const
 
 void StateMachine::ReleaseRootObject() const
 {
-    if (AceLiteInstance::GetCurrentFatalHandler()->IsJSRuntimeFatal()) {
+    if (AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().IsJSRuntimeFatal()) {
         // can not continue to involve any JS object creating on engine in case runtime fatal
         return;
     }
@@ -408,10 +405,8 @@ void StateMachine::ReleaseRootObject() const
 void StateMachine::ReleaseHistoryPageResource()
 {
     // remove all native views and release components styles.
-    if (appContext_ != nullptr) {
-        appContext_->ReleaseStyles();
-        appContext_->ReleaseLazyLoadManager();
-    }
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().ReleaseStyles();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().ReleaseLazyLoadManager();
     // release scroll layer object.
     if (scrollLayer_ != nullptr) {
         if (!isEntireHidden_) {
@@ -423,7 +418,7 @@ void StateMachine::ReleaseHistoryPageResource()
     }
     // if some fatal error happens and is hanled by FatalHandler, the resource is already
     // recycled by it, do not repeat the recycling
-    if (!AceLiteInstance::GetCurrentFatalHandler()->IsFatalErrorHandleDone()) {
+    if (!AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().IsFatalErrorHandleDone()) {
         // release all native views and their binding js objects
         ComponentUtils::ReleaseComponents(rootComponent_);
         rootComponent_ = nullptr;

@@ -24,7 +24,7 @@ namespace OHOS {
 namespace ACELite {
 char *DftImpl::GetPagePath()
 {
-    const char * const pagePath = AceLiteInstance::GetCurrentJsAppContext()->GetCurrentJsPath();
+    const char * const pagePath = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().GetCurrentJsPath();
     if (pagePath == nullptr) {
         return nullptr;
     }
@@ -78,7 +78,7 @@ void DftImpl::CallbackPageReplaced(int state, const char *param)
     }
     jerry_release_value(global);
     value.routerParam = paramValue;
-    value.path = AceLiteInstance::GetCurrentJsAppContext()->GetCurrentJsPath();
+    value.path = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().GetCurrentJsPath();
     value.routerPath = DftImpl::GetPagePath();
     pageInfoFunc_(value);
     ACE_FREE(paramValue);

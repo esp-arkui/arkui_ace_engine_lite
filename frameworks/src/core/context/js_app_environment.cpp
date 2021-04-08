@@ -69,7 +69,7 @@ void JsAppEnvironment::InitJsFramework() const
 #ifndef JERRY_PORTING_DEPENDENCY
     Srand((unsigned)jerry_port_get_current_time());
 #endif
-    AceLiteInstance::GetCurrentDebugger()->SetupJSContext();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetDebugger().SetupJSContext();
     jerry_init(JERRY_INIT_EMPTY);
     STOP_TRACING();
     START_TRACING(FWK_INIT);
@@ -78,7 +78,7 @@ void JsAppEnvironment::InitJsFramework() const
     jerry_release_value(jerryx_set_property_str(globalThis, "globalThis", globalThis));
     jerry_release_value(globalThis);
 #endif // JSFWK_TEST
-    AceLiteInstance::GetCurrentAsyncTaskManager()->Init();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetAsyncTaskManager().Init();
     LoadAceBuiltInModules();
     LoadFramework();
     LocalModule::Load();
@@ -110,18 +110,18 @@ void JsAppEnvironment::LoadFramework() const
         HILOG_INFO(HILOG_MODULE_ACE, "Success to load JavaScript framework.");
     }
     jerry_release_value(retValue);
-    AceLiteInstance::GetCurrentDebugger()->StartDebugger();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetDebugger().StartDebugger();
 }
 
 void JsAppEnvironment::Cleanup()
 {
-    AceLiteInstance::GetCurrentDebugger()->TearDownDebugger();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetDebugger().TearDownDebugger();
     FeaAbilityModule::Release();
 
     // clean up engine, NOTE: all JS value must be released properly befor cleanup
     jerry_cleanup();
     // free the external JS context, only can be called after clean up engine
-    AceLiteInstance::GetCurrentDebugger()->ReleaseJSContext();
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetDebugger().ReleaseJSContext();
 #ifdef JS_ENGINE_STATIC_MULTI_CONTEXTS_ENABLED
     jerry_port_default_remove_current_context_record();
 #endif

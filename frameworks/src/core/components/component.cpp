@@ -187,7 +187,7 @@ void Component::ReleaseViewExtraMsg()
 void Component::Release()
 {
     // detach self from fatal handler monitoring
-    AceLiteInstance::GetCurrentFatalHandler()->DetachComponentNode(this);
+    AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetFatalHandler().DetachComponentNode(this);
     if (parent_ != nullptr) {
         parent_->RemoveChild(this);
     }

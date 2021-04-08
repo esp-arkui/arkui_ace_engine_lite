@@ -31,8 +31,7 @@ JSIValue RouterModule::Replace(const JSIValue thisVal, const JSIValue* args, uin
     }
     jerry_value_t object = AS_JERRY_VALUE(args[0]);
     // router.replace({uri: 'About', params: {id:'1'}}
-    JsAppContext* appContext = AceLiteInstance::GetCurrentJsAppContext();
-    const JSAbilityImpl* topJsAbilityImpl = appContext->GetTopJSAbilityImpl();
+    const JSAbilityImpl* topJsAbilityImpl = AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJsAppContext().GetTopJSAbilityImpl();
     if (topJsAbilityImpl == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "topJsAbilityImpl is null.");
         return AS_JSI_VALUE(UNDEFINED);

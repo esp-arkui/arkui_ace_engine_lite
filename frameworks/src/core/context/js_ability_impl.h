@@ -46,7 +46,7 @@ public:
     {
 #if ENABLED(JS_PROFILER)
         // Call GetInstance() to prepare data
-        AceLiteInstance::GetCurrentJSProfiler()->PrepareDataBuffer();
+        AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJSProfiler().PrepareDataBuffer();
 #endif
     }
 
@@ -61,7 +61,7 @@ public:
     {
 #if ENABLED(JS_PROFILER)
         // Call release() to free all performance data
-        AceLiteInstance::GetCurrentJSProfiler()->Release();
+        AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetJSProfiler().Release();
 #endif
     }
 
