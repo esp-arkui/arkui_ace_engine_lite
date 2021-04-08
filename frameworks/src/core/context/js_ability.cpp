@@ -108,7 +108,7 @@ void JSAbility::Launch(const char * const abilityPath, const char * const bundle
     OUTPUT_TRACE();
 }
 
-void JSAbility::Show() const
+void JSAbility::Show()
 {
     if (jsAbilityImpl_ == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Must trigger Launch first");
@@ -119,9 +119,10 @@ void JSAbility::Show() const
     jsAbilityImpl->Show();
     AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetAsyncTaskManager().SetFront(true);
     ProductAdapter::UpdateShowingState(true);
+    isActived_ = true;
 }
 
-void JSAbility::Hide() const
+void JSAbility::Hide()
 {
     if (jsAbilityImpl_ == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Must trigger Launch first");
@@ -131,6 +132,8 @@ void JSAbility::Hide() const
     JSAbilityImpl *jsAbilityImpl = CastAbilityImpl(jsAbilityImpl_);
     jsAbilityImpl->Hide();
     AceLiteInstance::GetInstance()->GetCurrentEnvironment().GetAsyncTaskManager().SetFront(false);
+    ProductAdapter::UpdateShowingState(false);
+    isActived_ = false;
 }
 
 void JSAbility::TransferToDestroy()
@@ -142,8 +145,6 @@ void JSAbility::TransferToDestroy()
 
     JSAbilityImpl *jsAbilityImpl = CastAbilityImpl(jsAbilityImpl_);
     jsAbilityImpl->CleanUp();
-    delete reinterpret_cast<JSAbilityImpl *>(jsAbilityImpl_);
-    jsAbilityImpl_ = nullptr;
     // Reset render flag or low layer task mutex in case we are during the rendering process,
     // this situation might happen if the destroy function is called outside of JS thread, such as AMS.
     ProductAdapter::UpdateShowingState(false);
@@ -153,6 +154,8 @@ void JSAbility::TransferToDestroy()
     JsAsyncWork::SetAppQueueHandler(nullptr);
     DftImpl::GetInstance()->RegisterPageReplaced(nullptr);
 #endif // OHOS_ACELITE_PRODUCT_WATCH
+    delete reinterpret_cast<JSAbilityImpl *>(jsAbilityImpl_);
+    jsAbilityImpl_ = nullptr;
     DumpNativeMemoryUsage();
 }
 
@@ -176,6 +179,11 @@ const char *JSAbility::GetPackageName()
 void JSAbility::ForceDestroy()
 {
     HILOG_ERROR(HILOG_MODULE_ACE, "ForceDestroy interface is deprecated as JS engine can not run on other task");
+}
+
+bool JSAbility::IsRecycled()
+{
+    return (jsAbilityImpl_ == nullptr);
 }
 
 LazyLoadManager *GetLazyLoadManager()
@@ -203,6 +211,22 @@ void JSAbility::LazyLoadHandleRenderTick(void *data)
 
 void JSAbility::HandleRenderTick()
 {
+    if (!isActived_) {
+        // skip the TE tick if we are not forground
+        ProductAdapter::NotifyRenderEnd();
+        errorTickCount_++;
+        if (errorTickCount_ %  ERR_TICK_COUNT_TRACE_CTRL == 1) {
+            HILOG_WARN(HILOG_MODULE_ACE, "skip one render tick process since not actived, count[%d]", errorTickCount_);
+        }
+        if (errorTickCount_ == UINT32_MAX) {
+            errorTickCount_ = 0;
+        }
+        return;
+    }
+
+    // reset error tick tracing count
+    errorTickCount_ = 0;
+
 #if defined(TARGET_SIMULATOR) && defined(FEATURE_LAZY_LOADING_MODULE)
     LazyLoadHandleRenderTick(nullptr);
 #endif

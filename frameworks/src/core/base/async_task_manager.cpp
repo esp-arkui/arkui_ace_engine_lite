@@ -55,7 +55,8 @@ AsyncTaskManager::AsyncTaskManager()
       lock_(PTHREAD_MUTEX_INITIALIZER),
 #endif
       uniqueTaskID_(0),
-      front_(true)
+      front_(false),
+      initialized_(false)
 {
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
     pthread_mutex_init(&lock_, nullptr);
@@ -75,7 +76,12 @@ AsyncTaskManager::~AsyncTaskManager()
 
 void AsyncTaskManager::Init()
 {
+    if (initialized_) {
+        // do not add repeatly
+        return;
+    }
     Task::Init();
+    initialized_ = true;
 }
 
 void AsyncTaskManager::Callback()
