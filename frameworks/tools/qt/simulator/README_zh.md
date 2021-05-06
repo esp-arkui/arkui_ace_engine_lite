@@ -1,20 +1,27 @@
-# 模拟器调试使用说明
+# 模拟器使用指导
 
+## 准备
+本工程基于Qt Creator搭建，开发者使用前需要下载和安装Qt Creator。
+### Qt 下载与安装
+#### Qt 下载
+Qt 官方下载
+https://download.qt.io/archive/
 
+国内镜像站下载
+中国科学技术大学：http://mirrors.ustc.edu.cn/qtproject/
+清华大学：https://mirrors.tuna.tsinghua.edu.cn/qt/
+北京理工大学：http://mirror.bit.edu.cn/qtproject/
+中国互联网络信息中心：https://mirrors.cnnic.cn/qt/
 
-## 1、环境安装说明
+具体Qt下载相关可参考地址：http://c.biancheng.net/view/3851.html
 
-​    本工程基于QT Creator搭建，开发者使用前需要下载和安装QT Creator。
-
-1. **安装程序下载。**
-
-   地址：https://www.qt.io/offline-installers ，安装程序较大，建议下载离线稳定版本。
-
-2. **双击安装程序安装。**
-
-   安装前需要注册账号（已注册直接登录），登录完成后，按引导界面完成安装即可。
-
-   *注意安装时，在选择组件界面，Qt x.x.x展开栏和Developer and Designer Tools展开栏都要勾选minGW组件（基于当前电脑操作系统选择32-bit还是64-bit）。*
+#### Qt 安装
+双击下载的Qt安装程序，按引导界面完成安装即可。
+注意事项：
+1. 注册安装界面
+可选择注册账号进行安装，或者断网安装跳过注册界面。
+2. 选择组件界面。
+需勾选Qt x.x.x展开栏（这栏是为qt自动配置构建套件，如果漏选，开发者可后期在Qt控件中自行手动配置）和Developer and Designer Tools展开栏（这栏是编译器组件下载）都要勾选minGW组件（基于当前电脑操作系统选择32-bit还是64-bit）。
 
 ![安装组件选择](../../../../figures/MinGW-select.png)
 
@@ -102,3 +109,9 @@
 
 ​    编译完成后，点击调试按钮即可运行调试。
 
+6. **Q&A**
+
+```
+Q: 图片或者字体加载失败。
+A: 资源路径加载错误。Qt构建采用Shadow build模式，需要保持构建目录与qt模拟器工程目录正确。
+```
