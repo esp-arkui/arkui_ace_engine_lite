@@ -17,6 +17,7 @@
 #define OHOS_ACELITE_DEVICEINFO_MODULE_H
 
 #include "acelite_config.h"
+#ifdef FEATURE_MODULE_DEVICE_ENABLE
 #include "jsi.h"
 
 namespace OHOS {
@@ -42,4 +43,5 @@ private:
 };
 } // ACELite
 } // OHOS
+#endif // FEATURE_MODULE_DEVICE_ENABLE
 #endif // OHOS_ACELITE_DEVICEINFO_MODULE_H

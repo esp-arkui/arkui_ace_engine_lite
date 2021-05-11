@@ -12,7 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+#include "acelite_config.h"
+#ifdef FEATURE_MODULE_DEVICE_ENABLE
 #include "deviceinfo_module.h"
 #include "global.h"
 #include "js_async_work.h"
@@ -36,7 +37,11 @@ JSIValue ExecuteAsyncWork(const JSIValue thisVal, const JSIValue* args,
     params->thisVal = JSI::AcquireValue(thisVal);
     params->args = JSI::AcquireValue(args[0]);
     params->flag = flag;
-    JsAsyncWork::DispatchAsyncWork(ExecuteFunc, reinterpret_cast<void *>(params));
+    if (!(JsAsyncWork::DispatchAsyncWork(ExecuteFunc, reinterpret_cast<void *>(params)))) {
+        JSI::ReleaseValueList(params->thisVal, params->args, ARGS_END);
+        delete params;
+        params = nullptr;
+    }
     return undefValue;
 }
 
@@ -165,3 +170,4 @@ bool DeviceInfoModule::GetRegion(JSIValue result)
 }
 } // ACELite
 } // OHOS
+#endif // FEATURE_MODULE_DEVICE_ENABLE
