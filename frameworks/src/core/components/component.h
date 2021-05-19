@@ -215,7 +215,7 @@ public:
     /**
      * @brief This function will be called after the ApplyCommonStyle, make padding style work.
      */
-    bool AdaptBoxSizing() const;
+    bool AdaptBoxSizing(uint16_t attrKeyId = K_UNKNOWN) const;
     void AlignDimensions(const ConstrainedParameter &param);
 
 protected:
@@ -515,6 +515,7 @@ private:
     void ApplyStyles(const jerry_value_t options, Component& currentComponent) const;
     void ApplyAlignedPosition(UIView &uiView) const;
     void AdapteBoxRectArea(UIView &uiView) const;
+    bool IsModifyPosition(uint16_t attrKeyId) const;
     void SetVisible(UIView& view, const AppStyleItem *styleItem) const;
     void SetClickEventListener(UIView& view, const jerry_value_t eventFunc, bool isStopPropagation);
     void SetLongPressEventListener(UIView& view, const jerry_value_t eventFunc, bool isStopPropagation);
