@@ -16,6 +16,7 @@
 #include "async_task_manager.h"
 #include "ace_log.h"
 #include "fatal_handler.h"
+#include "dfx_assist.h"
 
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
 #define TRY_LOCK()                  \
@@ -105,6 +106,10 @@ void AsyncTaskManager::Callback()
         delete task;
         task = nullptr;
     }
+#ifdef QT_SIMULATOR
+    DfxAssist dfxAssist;
+    dfxAssist.DumpJSHeap();
+#endif // QT_SIMULATOR
 }
 
 uint16_t AsyncTaskManager::Dispatch(AsyncTaskHandler handler, void *data)

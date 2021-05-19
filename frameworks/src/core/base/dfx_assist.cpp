@@ -117,5 +117,22 @@ void DfxAssist::DumpErrorMessage(const jerry_value_t errorValue)
     errStrBuffer = nullptr;
     jerry_release_value(backtraceVal);
 }
+
+static size_t currentSize = 0;
+static size_t peakSize = 0;
+static size_t totalSize = 0;
+void DfxAssist::DumpJSHeap()
+{
+    jerry_heap_stats_t stats = {0};
+    if (!jerry_get_memory_stats(&stats)) {
+        return;
+    }
+    if (currentSize != stats.allocated_bytes || peakSize != stats.peak_allocated_bytes) {
+        currentSize = stats.allocated_bytes;
+        peakSize = stats.peak_allocated_bytes;
+        totalSize = stats.size;
+        HILOG_ERROR(HILOG_MODULE_ACE, "[JS Heap Size] Current: %d, Peak: %d, Total: %d", currentSize, peakSize, totalSize);
+    }
+}
 } // namespace ACELite
 } // namespace OHOS
