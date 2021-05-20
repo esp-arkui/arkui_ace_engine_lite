@@ -15,8 +15,10 @@
 
 #include "async_task_manager.h"
 #include "ace_log.h"
-#include "fatal_handler.h"
+#ifdef QT_SIMULATOR
 #include "dfx_assist.h"
+#endif // QT_SIMULATOR
+#include "fatal_handler.h"
 
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
 #define TRY_LOCK()                  \
