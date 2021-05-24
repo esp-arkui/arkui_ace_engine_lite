@@ -69,7 +69,7 @@ void DfxAssist::DumpErrorMessage(const jerry_value_t errorValue)
 {
     const uint16_t stackMsgMaxLength = 256;
     const uint8_t arrMaxLength = 32;
-    jerry_value_t stackStr = jerry_create_string((const jerry_char_t *) "stack");
+    jerry_value_t stackStr = jerry_create_string((const jerry_char_t *)"stack");
     jerry_value_t errorVal = jerry_get_value_from_error(errorValue, false);
 
     jerry_value_t backtraceVal = jerry_get_property(errorVal, stackStr);
@@ -131,7 +131,8 @@ void DfxAssist::DumpJSHeap()
         currentSize = stats.allocated_bytes;
         peakSize = stats.peak_allocated_bytes;
         totalSize = stats.size;
-        HILOG_ERROR(HILOG_MODULE_ACE, "[JS Heap Size] Current: %d, Peak: %d, Total: %d", currentSize, peakSize, totalSize);
+        HILOG_ERROR(HILOG_MODULE_ACE, "[JS Heap Size] Current: %d, Peak: %d, Total: %d", currentSize, peakSize,
+                    totalSize);
     }
 }
 } // namespace ACELite
