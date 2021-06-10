@@ -494,7 +494,7 @@ bool CJSONParser::CacheValue(const char *key, cJSON item)
     if ((item.type == cJSON_Number) || (item.type == cJSON_String)) {
         result = PutNumOrStrValue(mergeKey, item);
     } else if (item.type == cJSON_Object) {
-        if ((cJSON_IsNull(item.child)) || (!CacheValue(mergeKey, *item.child))) {
+        if ((item.child == nullptr) || (!CacheValue(mergeKey, *item.child))) {
             result = false;
         }
     } else {
