@@ -531,7 +531,7 @@ jerry_value_t CJSONParser::GetValueFromFile(const char *key, jerry_value_t args,
     } else {
         if (cJSON_IsNumber(curJsonItem)) {
             result = jerry_create_number(curJsonItem->valuedouble);
-        } else {
+        } else if (cJSON_IsString(curJsonItem)){
             char *value = FillPlaceholder(curJsonItem->valuestring, args, argsNum);
             result = jerry_create_string(reinterpret_cast<jerry_char_t *>(value));
             ACE_FREE(value);
