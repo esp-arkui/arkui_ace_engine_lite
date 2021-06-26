@@ -88,6 +88,8 @@
  */
 #define FEATURE_MODULE_DEVICE
 
+#define FEATURE_MODULE_DEVICE_ENABLE
+
 /**
  * timer module
  */

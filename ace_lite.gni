@@ -67,6 +67,7 @@ ace_lite_include_dirs += [
   "//third_party/cJSON",
   "//utils/native/lite/timer_task/include/",
   "//third_party/freetype/include",
+  "//base/startup/syspara_lite/interfaces/kits",
   "//base/global/resmgr_lite/interfaces/innerkits/include",
   "//base/global/i18n_lite/interfaces/kits/i18n/include",
 ]
@@ -160,6 +161,7 @@ ace_lite_sources = [
   "$ACE_LITE_PATH/src/core/directive/directive_watcher_callback.cpp",
   "$ACE_LITE_PATH/src/core/jsi/jsi.cpp",
   "$ACE_LITE_PATH/src/core/modules/app_module.cpp",
+  "$ACE_LITE_PATH/src/core/modules/deviceinfo_module.cpp",
   "$ACE_LITE_PATH/src/core/modules/dfx_module.cpp",
   "$ACE_LITE_PATH/src/core/modules/dialog_module.cpp",
   "$ACE_LITE_PATH/src/core/modules/module_manager.cpp",
