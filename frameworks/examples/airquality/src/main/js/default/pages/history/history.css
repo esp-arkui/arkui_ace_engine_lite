@@ -14,21 +14,23 @@
 */
 .div-info-location {
   color: #dcdcdc;
-  width: 321px;
+  width: 100%;
   height: 40px;
 }
 .div-info-historical-data {
   color: #f5fffa;
-  width: 321px;
+  width: 100%;
   height: 40px;
 }
 .gas-name {
   color: #f0ffff;
   text-align: right;
-  width: 321px;
+  width: 100%;
   height: 35px;
 }
 .info-list-item {
-  width: 321px;
+  width: 100%;
   height: 80px;
+  justify-content: center;
+  align-items: center;
 }

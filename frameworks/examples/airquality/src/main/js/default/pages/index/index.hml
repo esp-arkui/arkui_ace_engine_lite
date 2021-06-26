@@ -16,8 +16,8 @@
  -->
 <swiper class="container" index="{{ swiperPage }}" duration="500" onchange="swiperChange">
   <stack class="container">
-    <text class="airquality" style="color:{{ textColor1 }};">{{ airData[0].airQuality }}</text>
     <text class="location-text">{{ airData[0].location }}</text>
+    <text class="airquality" style="color:{{ textColor1 }};">{{ airData[0].airQuality }}</text>
     <progress
       class="circleProgress"
       style="color:{{ textColor1 }};background-Color:{{ bgColor1 }};"
