@@ -15,6 +15,9 @@
 
 #include "async_task_manager.h"
 #include "ace_log.h"
+#ifdef QT_SIMULATOR
+#include "dfx_assist.h"
+#endif // QT_SIMULATOR
 #include "fatal_handler.h"
 
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
@@ -106,6 +109,10 @@ void AsyncTaskManager::Callback()
         delete task;
         task = nullptr;
     }
+#ifdef QT_SIMULATOR
+    DfxAssist dfxAssist;
+    dfxAssist.DumpJSHeap();
+#endif // QT_SIMULATOR
 }
 
 uint16_t AsyncTaskManager::Dispatch(AsyncTaskHandler handler, void *data)
