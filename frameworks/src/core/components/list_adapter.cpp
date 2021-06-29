@@ -23,6 +23,7 @@
 #include "directive/descriptor_utils.h"
 #include "fatal_handler.h"
 #include "securec.h"
+#include "js_profiler.h"
 
 namespace OHOS {
 namespace ACELite {
@@ -49,23 +50,40 @@ ListAdapter::~ListAdapter()
     if (currentNode == nullptr) {
         HILOG_DEBUG(HILOG_MODULE_ACE, "the viewNativePair linked list is null");
     }
-
-    // delete nativeElement in viewNativePair link list, then free viewNativePair link list.
+    // delete the node info
     while (currentNode != nullptr) {
         nextNode = currentNode->next;
         // only let list component release its children when the whole application
         // is not in fatal error handling process, as FatalHandler will do the recycle
         if (!FatalHandler::GetInstance().IsFatalErrorHandling()) {
-            DescriptorUtils::ReleaseDescriptorOrElement(currentNode->nativeElement);
+            delete currentNode;
         }
-        ace_free(currentNode);
         currentNode = nextNode;
     }
+    // delete nativeElement in viewNativePair link list, then free viewNativePair link list.
     headNode_ = nullptr;
     tailNode_ = nullptr;
 
     itemsCount_ = 0;
     listItemsCount_ = 0;
+}
+
+ViewNativePair::~ViewNativePair()
+{
+    // release component render list
+    renderComponentList.Clear();
+    if (rootView == nullptr) {
+        return;
+    }
+    UIView::ViewExtraMsg *msg = rootView->GetExtraMsg();
+    if (msg == nullptr) {
+        return;
+    }
+    JSValue *element = reinterpret_cast<JSValue *>(msg->elementPtr);
+    if (element == nullptr) {
+        return;
+    }
+    DescriptorUtils::ReleaseDescriptorOrElement(*element);
 }
 
 bool ListAdapter::Initialize(const JSValue descriptors)
@@ -195,21 +213,31 @@ UIView *ListAdapter::GetView(UIView *inView, int16_t index)
     if (listItemsIndex < 0) {
         return nullptr;
     }
-    // 2. delete inView if it is not null(if inView not null, it means this view is out of the list visible area, need
-    // delete.) if the UIView found belongs to "For type" child, need create it dynamically,
-    // or else just get it from native Element.
-    if (inView != nullptr) {
-        // this function will check whether the inView is For type UIView, if it is, delete it, or else do nothing.
-        DeleteItem(inView);
+    bool isFor = DescriptorUtils::IsForDescriptor(listItems_[listItemsIndex].descriptorOrElement);
+    // if render the for type element, try to reuse the native element
+    // if the current item is not rendered by for, get the target render element
+    if (inView != nullptr && isFor) {
+        return ChangeForView(inView, listItemsIndex, index);
     }
+    JSValue element = UNDEFINED;
+    JSValue descriptorOrElement = listItems_[listItemsIndex].descriptorOrElement;
 
-    bool isFor = false;
-    JSValue element = GetElement(listItemsIndex, index, isFor);
+    if (isFor) {
+        // inView is nullptr, create the element tree and record the created sequence
+        return CreateForView(listItemsIndex, index);
+    } else if(DescriptorUtils::IsIfDescriptor(descriptorOrElement)) {
+        element = DescriptorUtils::GetDescriptorRendered(descriptorOrElement);
+        if (IS_UNDEFINED(element)) {
+            element = DescriptorUtils::RenderIfDescriptor(descriptorOrElement);
+        }
+    } else {
+        element = descriptorOrElement;
+    }
+    BuildItemViewTree(element);
     if (jerry_value_is_undefined(element)) {
         HILOG_ERROR(HILOG_MODULE_ACE, "List adapter: Failed to get element.");
         return nullptr;
     }
-
     // get rootview from nativeElement
     UIView *newView = ComponentUtils::GetViewFromBindingObject(element);
     if (newView == nullptr) {
@@ -217,65 +245,193 @@ UIView *ListAdapter::GetView(UIView *inView, int16_t index)
         jerry_release_value(element);
         return nullptr;
     }
+    return newView;
+}
 
-    if (isFor) {
-        InsertItem(element, newView);
+UIView *ListAdapter::CreateForView(int16_t listItemIndex, int16_t index)
+{
+    ViewNativePair *pair = new ViewNativePair();
+    if (pair == nullptr) {
+        return nullptr;
+    }
+    // add the _createList_ attribute to viewModel to record the created sequence
+    JSValue viewModel = JSGlobal::Get(ATTR_ROOT);
+    JSValue renderObj = JSObject::Create();
+    JSObject::SetNativePointer(renderObj, &pair->renderComponentList);
+    JSObject::Set(viewModel, "_createList_", renderObj);
+    // add _descriptor to check the render item has if or not
+    JSObject::SetBoolean(viewModel, "_descriptor", false);
+    JSValue element = GetElementFromFor(listItemIndex, index);
+    JSObject::Del(viewModel, "_createList_");
+    bool isAddToList = !JSObject::GetBoolean(viewModel, "_descriptor");
+    JSObject::Del(viewModel, "_descriptor");
+    JSObject::DelNativePointer(renderObj);
+    ReleaseJerryValue(renderObj, viewModel, VA_ARG_END_FLAG);
+    if (jerry_value_is_undefined(element)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "List adapter: Failed to get element.");
+        return nullptr;
+    }
+    UIView *newView = ComponentUtils::GetViewFromBindingObject(element);
+    if (newView == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "List adapter: Failed to get view from js object.");
+        jerry_release_value(element);
+        return nullptr;
+    }
+    BuildItemViewTree(element);
+    // add the item component node the list
+    pair->rootView = newView;
+    pair->listItemIndex = listItemIndex;
+    pair->hasDescriptor = isAddToList;
+    if (headNode_ == nullptr) {
+        headNode_ = pair;
+        tailNode_ = headNode_;
+    } else {
+        tailNode_->next = pair;
+        tailNode_ = pair;
     }
     return newView;
 }
 
-JSValue ListAdapter::GetElement(int16_t listItemsIndex, int16_t index, bool &isFor) const
+UIView *ListAdapter::ChangeForView(UIView *inView, int16_t listItemIndex, int16_t index) const
 {
-    JSValue element = UNDEFINED;
-    JSValue descriptorOrElement = listItems_[listItemsIndex].descriptorOrElement;
+    // find the target element by inView
+    ViewNativePair *current = headNode_;
+    while (current != nullptr) {
+        if (current->rootView == inView) {
+            break;
+        }
+        current = current->next;
+    }
+    if (current == nullptr || (current->rootView != inView)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "find target ui view failed");
+        return nullptr;
+    }
+    // if the item is not rendered by if command and the listIndex is the same with last rendered listItem,
+    // reuse the native element
+    if (!current->hasDescriptor && (listItemIndex == current->listItemIndex)) {
+        return ReuseNativeView(current, listItemIndex, index);
+    }
+    // cann't reuse the native view, get the root element of the target list item, then release the native resource
+    UIView::ViewExtraMsg *msg = current->rootView->GetExtraMsg();
+    if (msg == nullptr) {
+        return nullptr;
+    }
+    JSValue *element = reinterpret_cast<JSValue *>(msg->elementPtr);
+    if (element == nullptr) {
+        return nullptr;
+    }
+    DescriptorUtils::ReleaseDescriptorOrElement(*element);
+    JSValue viewModel = JSGlobal::Get(ATTR_ROOT);
+    // render the new list item
+    JSValue renderObj = JSObject::Create();
+    // delete the last rendered component list
+    current->renderComponentList.Clear();
+    // set the new listItem index in list record node
+    current->listItemIndex = listItemIndex;
+    JSObject::SetNativePointer(renderObj, &current->renderComponentList);
+    JSObject::Set(viewModel, "_createList_", renderObj);
+    JSObject::Set(viewModel, "_isDescriptor", false);
+    JSValue newEle = GetElementFromFor(listItemIndex, index);
+    JSObject::Del(viewModel, "_createList_");
+    JSObject::Del(viewModel, "_isDescriptor");
+    JSObject::DelNativePointer(renderObj);
+    ReleaseJerryValue(viewModel, renderObj, VA_ARG_END_FLAG);
+    BuildItemViewTree(newEle);
+    current->rootView = ComponentUtils::GetViewFromBindingObject(newEle);
+    return current->rootView;
+}
+
+UIView *ListAdapter::ReuseNativeView(ViewNativePair *current, int16_t listItemIndex, int16_t index) const
+{
+    ListNode<Component *> *currentRender = current->renderComponentList.Head();
+    if (currentRender == nullptr) {
+        return nullptr;
+    }
+    JSValue viewModel = JSGlobal::Get(ATTR_ROOT);
+    // set the reused component list to _renderList_ attribute in viewModel
+    JSValue renderObj = JSObject::Create();
+    JSObject::SetNativePointer(renderObj, currentRender);
+    JSObject::Set(viewModel, "_renderList_", renderObj);
+    JSValue element = listItems_[listItemIndex].descriptorOrElement;
+    JSValue getterRetList = listItems_[listItemIndex].getterRetList;
+    int16_t startIndex = listItems_[listItemIndex].startIndex;
+    // if it is a for or for+if type list-item, we need create view dynamically.
+    // get render argument
+    JSValue item = jerry_get_property_by_index(getterRetList, index - startIndex);
+    if (jerry_value_is_undefined(item)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "List adapter: Get item from getterRetList failed.");
+        ReleaseJerryValue(renderObj, viewModel, VA_ARG_END_FLAG);
+        return nullptr;
+    }
+    JSValue itemIdx = jerry_create_number(index - startIndex);
+    const int8_t argsLen = 2;
+    JSValue args[argsLen] = {item, itemIdx};
+    // get render function
+    JSValue renderPropValue = jerryx_get_property_str(element, DESCRIPTOR_ATTR_RENDER);
+    if (!jerry_value_is_function(renderPropValue)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "List adapter: Get View failed, render argument is not a function.");
+        ReleaseJerryValue(item, itemIdx, renderPropValue, viewModel, renderObj, VA_ARG_END_FLAG);
+        return nullptr;
+    }
+    // excute render function, get nativeElement
+    JSValue nativeElement = CallJSFunction(renderPropValue, UNDEFINED, args, argsLen);
+    // if it is a for+if type list-item, here will ignore if attribute
+    if (DescriptorUtils::IsIfDescriptor(nativeElement)) {
+        element = DescriptorUtils::GetDescriptorRendered(nativeElement);
+        if (IS_UNDEFINED(element)) {
+            element = DescriptorUtils::RenderIfDescriptor(nativeElement);
+        }
+        ReleaseJerryValue(nativeElement, VA_ARG_END_FLAG);
+        HILOG_ERROR(HILOG_MODULE_ACE, "List_adapter: list-item not support setting if and for attribute at once.");
+    } else { // if it is a for type list-item
+        element = nativeElement;
+    }
+    JSObject::Del(viewModel, "_renderList_");
+    JSObject::DelNativePointer(renderObj);
+    ReleaseJerryValue(item, itemIdx, renderPropValue, viewModel, renderObj, VA_ARG_END_FLAG);
+    return current->rootView;
+}
+
+JSValue ListAdapter::GetElementFromFor(int16_t listItemsIndex, int16_t index) const
+{
+    JSValue element = listItems_[listItemsIndex].descriptorOrElement;
     JSValue getterRetList = listItems_[listItemsIndex].getterRetList;
     int16_t startIndex = listItems_[listItemsIndex].startIndex;
-    isFor = DescriptorUtils::IsForDescriptor(descriptorOrElement);
     // if it is a for or for+if type list-item, we need create view dynamically.
-    if (isFor) {
-        // get render argument
-        JSValue item = jerry_get_property_by_index(getterRetList, index - startIndex);
-        if (jerry_value_is_undefined(item)) {
-            HILOG_ERROR(HILOG_MODULE_ACE, "List adapter: Get item from getterRetList failed.");
-            return UNDEFINED;
-        }
-        JSValue itemIdx = jerry_create_number(index - startIndex);
-        const int8_t argsLen = 2;
-        JSValue args[argsLen] = {item, itemIdx};
-        // get render function
-        JSValue renderPropValue = jerryx_get_property_str(descriptorOrElement, DESCRIPTOR_ATTR_RENDER);
-        if (!jerry_value_is_function(renderPropValue)) {
-            HILOG_ERROR(HILOG_MODULE_ACE, "List adapter: Get View failed, render argument is not a function.");
-            ReleaseJerryValue(item, itemIdx, renderPropValue, VA_ARG_END_FLAG);
-            return UNDEFINED;
-        }
-        // excute render function, get nativeElement
-        JSValue nativeElement = CallJSFunction(renderPropValue, UNDEFINED, args, argsLen);
-        if (jerry_value_is_undefined(nativeElement)) {
-            ReleaseJerryValue(item, itemIdx, renderPropValue, nativeElement, VA_ARG_END_FLAG);
-            return UNDEFINED;
-        }
-        // if it is a for+if type list-item, here will ignore if attribute
-        if (DescriptorUtils::IsIfDescriptor(nativeElement)) {
-            element = DescriptorUtils::GetDescriptorRendered(nativeElement);
-            if (IS_UNDEFINED(element)) {
-                element = DescriptorUtils::RenderIfDescriptor(nativeElement);
-            }
-            ReleaseJerryValue(nativeElement, VA_ARG_END_FLAG);
-            HILOG_ERROR(HILOG_MODULE_ACE, "List_adapter: list-item not support setting if and for attribute at once.");
-        } else { // if it is a for type list-item
-            element = nativeElement;
-        }
-        ReleaseJerryValue(item, itemIdx, renderPropValue, VA_ARG_END_FLAG);
-    } else if (DescriptorUtils::IsIfDescriptor(descriptorOrElement)) { // if it is a if type list-item
-        element = DescriptorUtils::GetDescriptorRendered(descriptorOrElement);
-        if (IS_UNDEFINED(element)) {
-            element = DescriptorUtils::RenderIfDescriptor(descriptorOrElement);
-        }
-    } else { // if it is a common list-item
-        element = descriptorOrElement;
+    // get render argument
+    JSValue item = jerry_get_property_by_index(getterRetList, index - startIndex);
+    if (jerry_value_is_undefined(item)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "List adapter: Get item from getterRetList failed.");
+        return UNDEFINED;
     }
-    BuildItemViewTree(element);
+    JSValue itemIdx = jerry_create_number(index - startIndex);
+    const int8_t argsLen = 2;
+    JSValue args[argsLen] = {item, itemIdx};
+    // get render function
+    JSValue renderPropValue = jerryx_get_property_str(element, DESCRIPTOR_ATTR_RENDER);
+    if (!jerry_value_is_function(renderPropValue)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "List adapter: Get View failed, render argument is not a function.");
+        ReleaseJerryValue(item, itemIdx, renderPropValue, VA_ARG_END_FLAG);
+        return UNDEFINED;
+    }
+    // excute render function, get nativeElement
+    JSValue nativeElement = CallJSFunction(renderPropValue, UNDEFINED, args, argsLen);
+    if (jerry_value_is_undefined(nativeElement)) {
+        ReleaseJerryValue(item, itemIdx, renderPropValue, nativeElement, VA_ARG_END_FLAG);
+        return UNDEFINED;
+    }
+    // if it is a for+if type list-item, here will ignore if attribute
+    if (DescriptorUtils::IsIfDescriptor(nativeElement)) {
+        element = DescriptorUtils::GetDescriptorRendered(nativeElement);
+        if (IS_UNDEFINED(element)) {
+            element = DescriptorUtils::RenderIfDescriptor(nativeElement);
+        }
+        ReleaseJerryValue(nativeElement, VA_ARG_END_FLAG);
+        HILOG_ERROR(HILOG_MODULE_ACE, "List_adapter: list-item not support setting if and for attribute at once.");
+    } else { // if it is a for type list-item
+        element = nativeElement;
+    }
+    ReleaseJerryValue(item, itemIdx, renderPropValue, VA_ARG_END_FLAG);
     return element;
 }
 
@@ -293,78 +449,6 @@ void ListAdapter::BuildItemViewTree(const JSValue element) const
     }
     Component::BuildViewTree(component, nullptr, parentParam);
     component->OnViewAttached();
-}
-
-void ListAdapter::InsertItem(JSValue nativeElement, UIView *uiView)
-{
-    ViewNativePair *insertNode = reinterpret_cast<ViewNativePair *>(ace_malloc(sizeof(ViewNativePair)));
-    if (insertNode == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "List adapter: insertNode failed to allocate memory!");
-        return;
-    }
-
-    insertNode->nativeElement = nativeElement;
-    insertNode->uiView = uiView;
-    insertNode->next = nullptr;
-
-    // if the link list is null, insertNode as head node.
-    if (headNode_ == nullptr) {
-        headNode_ = insertNode;
-        tailNode_ = headNode_;
-        return;
-    }
-
-    tailNode_->next = insertNode;
-    // update the tailNode_ position
-    tailNode_ = insertNode;
-    return;
-}
-
-void ListAdapter::DeleteItem(const UIView *uiView)
-{
-    ViewNativePair *delNode = headNode_;
-    ViewNativePair *preNode = nullptr;
-
-    // if viewNativePair not exsit, can not confirm whether the uiView is belongs For type child or common child,
-    // although it can not be deleted, does not effect rendering new View.
-    if (delNode == nullptr) {
-        return;
-    }
-
-    // check this view is belongs For type child
-    while (delNode->uiView != uiView && delNode->next != nullptr) {
-        preNode = delNode;
-        delNode = delNode->next;
-    }
-
-    if (delNode->uiView == uiView) {
-        // if found it, delete this view's nativeElement.
-        if (delNode == headNode_) {
-            // it is the head node.
-            headNode_ = delNode->next;
-            // update the tailNode_ position
-            if (headNode_ == nullptr) {
-                tailNode_ = headNode_;
-            }
-        } else if (preNode != nullptr) {
-            // it is not head node.
-            preNode->next = delNode->next;
-            // update the tailNode_ position
-            if (preNode->next == nullptr) {
-                tailNode_ = preNode;
-            }
-        } else {
-            HILOG_WARN(HILOG_MODULE_ACE, "item to be deleted is not found");
-        }
-
-        DescriptorUtils::ReleaseDescriptorOrElement(delNode->nativeElement);
-        ace_free(delNode);
-        delNode = nullptr;
-    } else {
-        // if not found, it means this view is not belongs For type child, do nothing.
-        HILOG_INFO(HILOG_MODULE_ACE,
-                   "not found the view can be free, it means this inView is not belongs For type child");
-    }
 }
 
 void ListAdapter::CleanUp()

@@ -218,6 +218,8 @@ public:
     bool AdaptBoxSizing(uint16_t attrKeyId = K_UNKNOWN) const;
     void AlignDimensions(const ConstrainedParameter &param);
 
+    void UpdateOptions(JSValue options);
+
 protected:
     void SetComponentName(uint16_t name)
     {

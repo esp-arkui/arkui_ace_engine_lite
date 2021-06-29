@@ -41,6 +41,16 @@ void RenderModule::Init()
 
 jerry_value_t RenderModule::CreateElement(jerry_value_t tagName, jerry_value_t options, jerry_value_t children)
 {
+    JSValue viewModel = JSGlobal::Get(ATTR_ROOT);
+    // check whether the current render element can be reused or not
+    if (JSObject::Has(viewModel, "_renderList_")) {
+        // get the current render component and update attributes and styles
+        JSValue renderList = JSObject::Get(viewModel, "_renderList_");
+        RenderInComponent(renderList, options, children);
+        ReleaseJerryValue(renderList, viewModel, VA_ARG_END_FLAG);
+        return UNDEFINED;
+    }
+    JSRelease(viewModel);
     uint16_t tagNameLength = 0;
     char *componentName = MallocStringOf(tagName, &tagNameLength);
     if (componentName == nullptr) {
@@ -64,10 +74,25 @@ jerry_value_t RenderModule::CreateElement(jerry_value_t tagName, jerry_value_t o
         DescriptorUtils::ReleaseDescriptorOrElements(children);
         return UNDEFINED;
     }
-
+    // add current component to component list
+    viewModel = JSGlobal::Get(ATTR_ROOT);
+    bool createResult = true;
+    // check whether the current component is rendered in list for command
+    if (JSObject::Has(viewModel, "_createList_")) {
+        JSValue renderList = JSObject::Get(viewModel, "_createList_");
+        List<Component *> *componentList = nullptr;
+        if (!JSObject::GetNativePointer(renderList, reinterpret_cast<void **>(&componentList))) {
+            HILOG_ERROR(HILOG_MODULE_ACE, "add component to create list failed");
+            createResult = false;
+        }
+        // push the current component to the record component list
+        componentList->PushBack(component);
+        JSRelease(renderList);
+    }
+    JSRelease(viewModel);
     // component begin to render
     bool renderResult = component->Render();
-    if (!renderResult) {
+    if (!renderResult || (!createResult)) {
         // render failed, drop this element by release its all children and itself
         DescriptorUtils::ReleaseDescriptorOrElements(children);
         component->Release();
@@ -157,6 +182,27 @@ jerry_value_t RenderModule::ConditionalRender(const jerry_value_t func,
     }
 
     return DescriptorUtils::CreateIfDescriptor(args[0], args[1]);
+}
+
+void RenderModule::RenderInComponent(JSValue renderList, JSValue options, JSValue children)
+{
+    if (JSUndefined::Is(renderList)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "the element is undefined");
+        return;
+    }
+    ListNode<Component *> *currentComponent = nullptr;
+    if (!JSObject::GetNativePointer(renderList, reinterpret_cast<void **>(&currentComponent))) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "get native element failed");
+        return;
+    }
+    if (currentComponent->data_ == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "target component find failed");
+        return;
+    }
+    // update watchers, styles and attributes
+    currentComponent->data_->UpdateOptions(options);
+    // switch to the next rendered component through component record list
+    JSObject::SetNativePointer(renderList, currentComponent->next_);
 }
 } // namespace ACELite
 } // namespace OHOS

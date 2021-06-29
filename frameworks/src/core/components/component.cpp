@@ -702,6 +702,57 @@ void Component::ParseOptions()
     STOP_TRACING();
 }
 
+void Component::UpdateOptions(JSValue options)
+{
+    JSValue attributes = JSObject::Get(options, ATTR_ATTRS);
+    JSValue dynamicStyle = JSObject::Get(options, "dynamicStyle");
+    JSValue value = UNDEFINED;
+    Watcher *head = watchersHead_;
+    while (head) {
+        JSValue watcher = head->watcher;
+        // get the current watcher key
+        JSValue meta = JSObject::Get(watcher, "_meta");
+        char *key = JSObject::GetString(meta, ARG_WATCH_ATTR);
+        if (key == nullptr) {
+            JSRelease(meta);
+            head = head->next;
+            continue;
+        }
+        // get the new watcher value in current list item
+        if (JSObject::Has(attributes, key)) {
+            value = JSObject::Get(attributes, key);
+        } else if (JSObject::Has(dynamicStyle, key)) {
+            value = JSObject::Get(dynamicStyle, key);
+        }
+        uint16_t keyId = KeyParser::ParseKeyId(key);
+        ace_free(key);
+        key = nullptr;
+        if (jerry_value_is_undefined(value)) {
+            HILOG_ERROR(HILOG_MODULE_ACE, "can't find target value");
+            JSRelease(meta);
+            head = head->next;
+            continue;
+        }
+        // create new js watcher in current list item
+        JSValue newWatcher = CallJSWatcher(value, WatcherCallbackFunc, meta);
+        if (jerry_value_is_undefined(newWatcher)) {
+            ReleaseJerryValue(meta, value, VA_ARG_END_FLAG);
+            head = head->next;
+            continue;
+        }
+        // release the old watcher in last rendered component
+        jerry_value_t unsubscribe = jerryx_get_property_str(watcher, "unsubscribe");
+        CallJSFunctionAutoRelease(unsubscribe, watcher, nullptr, 0);
+        // update new watcher, and update the current view
+        head->watcher = newWatcher;
+        JSValue newVal = JSObject::Get(newWatcher, "_lastValue");
+        UpdateView(keyId, newVal);
+        ReleaseJerryValue(unsubscribe, watcher, newVal, value, meta, VA_ARG_END_FLAG);
+        head = head->next;
+    }
+    ReleaseJerryValue(dynamicStyle, attributes, VA_ARG_END_FLAG);
+}
+
 void Component::SetAnimationKeyFrames(const UIView &view, const AppStyleItem *styleItem)
 {
     if (trans_ == nullptr) {
@@ -1776,6 +1827,9 @@ void Component::BuildViewTree(Component *currComponent, Component *parent, Const
 
 void Component::HandleChildrenChange(jerry_value_t descriptor)
 {
+    if (JSObject::Has(viewModel_, "_createList_")) {
+        JSObject::SetBoolean(viewModel_, "_descriptor", true);
+    }
     RemoveAllChildren();
     if (!JSUndefined::Is(children_)) {
         JSRelease(children_);

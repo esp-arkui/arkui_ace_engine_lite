@@ -69,6 +69,8 @@ private:
                                            const jerry_value_t *args,
                                            const jerry_length_t argsNum);
 
+    static void RenderInComponent(JSValue renderList, JSValue options, JSValue children);
+
     static const char * const FUNC_CREATE_ELEMENT;
     static const char * const FUNC_INIT_STYLE_SHEET;
     static const char * const FUNC_LOOP_RENDER;
