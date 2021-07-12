@@ -413,6 +413,7 @@ void TransitionImpl::RecoveryViewStatus(Rect invalidatedAreaBefore) const
     TransformMap& transMap = view_->GetTransformMap();
     Polygon polygon(Rect(0, 0, 0, 0));
     transMap.SetPolygon(polygon);
+    view_->SetTransformMap(transMap);
     view_->SetStyle(STYLE_BACKGROUND_COLOR, viewStatus_.background_color.full);
     view_->SetStyle(STYLE_BACKGROUND_OPA, viewStatus_.rectOpacity);
     view_->SetStyle(STYLE_IMAGE_OPA, viewStatus_.imageOpacity);
