@@ -18,6 +18,8 @@
 #include "global.h"
 #include "js_app_context.h"
 #include "js_app_environment.h"
+#include "iostream"
+#include <string>
 namespace OHOS {
 namespace ACELite {
 void NumberFormatModuleTddTest::SetUp()
@@ -457,7 +459,8 @@ HWTEST_F(NumberFormatModuleTddTest, NumberFormat_MinimumFractionDigit_Test008, T
     formatRes = FormatNumber(numberFormat, args, 1);
     EXPECT_FALSE(formatRes == nullptr);
     if (formatRes != nullptr) {
-        EXPECT_FALSE(strcmp(formatRes, "1.234560") != 0);
+	std::string formatResString(formatRes);
+        EXPECT_EQ(formatResString, "1.234560");
     }
     ACE_FREE(formatRes);
     ReleaseJerryValue(numberFormat, args[0], VA_ARG_END_FLAG);
