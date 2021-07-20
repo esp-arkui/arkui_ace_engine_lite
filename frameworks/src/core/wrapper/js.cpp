@@ -337,10 +337,11 @@ void JSArray::Push(JSValue array, JSValue element)
     JSValue args[1] = {element};
     JSRelease(JSObject::Call(array, "push", args, 1));
 }
+
 bool JSArray::Is(JSValue target)
 {
-    return jerry_value_is_array(target);
-}
+    return jerry_value_is_array(target);}
+    
 bool JSError::Is(JSValue target)
 {
     return jerry_value_is_error(target);
