@@ -292,6 +292,12 @@ enum {
     KEYWORD(MINIMUMFRACTIONDIGITS, minimumFractionDigits)
     KEYWORD(MAXIMUMFRACTIONDIGITS, maximumFractionDigits)
 #endif
+    KEYWORD(OBJECT_FIT, object_fit) // image component object-fit
+    KEYWORD(COVER, cover) // image component cover
+    KEYWORD(FILL, fill) // image component fill
+    KEYWORD(CONTAIN, contain) // image component contain
+    KEYWORD(SCALE_DOWN, scale-down) // image component scale down
+    KEYWORD(FIT_ORIGINAL_SIZE, fit-original-size) // image component fit original size
     // Reused by the struct end
 // clang-format on
 #ifdef KEYWORDS_ENUM_DEFINE
