@@ -51,13 +51,11 @@ ace_test_includes = [
   "$ace_lite_root/frameworks/src/core",
   "$ace_lite_root/frameworks/src/core/animation",
   "$ace_lite_root/frameworks/src/core/base",
-  "$ace_lite_root/frameworks/src/core/base/cache",
   "$ace_lite_root/frameworks/src/core/components",
   "$ace_lite_root/frameworks/src/core/components/test/unittest/common",
   "$ace_lite_root/frameworks/src/core/context",
   "$ace_lite_root/frameworks/src/core/directive",
   "$ace_lite_root/frameworks/src/core/router",
-  "$ace_lite_root/frameworks/src/core/jsi",
   "$ace_lite_root/frameworks/src/core/modules",
   "$ace_lite_root/frameworks/src/core/modules/presets",
   "$ace_lite_root/frameworks/src/core/router",
@@ -87,6 +85,9 @@ ace_test_deps = [
   "//foundation/graphic/wms:lite_wms",
   "//utils/native/lite/js/builtin:ace_utils_kits",
   "//utils/native/lite/kv_store/src:utils_kv_store",
+  "$ACE_LITE_COMMON_PATH:ace_engine_common",
+  "$NATIVE_ENGINE_PATH:ace_lite_native_engine",
+  "$MODULE_MANAGER_PATH:ace_lite_module_manager"
 ]
 
 # all other extra deps when compiling the whole ace source code with test case together
