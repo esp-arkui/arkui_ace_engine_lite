@@ -25,7 +25,7 @@ void LocalizationModuleTddTest::SetUp()
 {
 #ifdef TARGET_SIMULATOR
     constexpr char testAppPath[] = "..\\moduletest\\unittest";
-#elif __linux__
+#elif defined(__linux__)
     constexpr char testAppPath[] = "/storage/nfs";
 #else
     constexpr char testAppPath[] = "/nfs";
