@@ -34,10 +34,14 @@ struct ListItemValue : public MemoryHeap {
 
 // mapping link list of UIView<--->nativeElement
 struct ViewNativePair : public MemoryHeap {
-    JSValue nativeElement;
-    UIView *uiView;
+    List<Component *> renderComponentList;
+    UIView *rootView;
     ViewNativePair *next;
+    int16_t listItemIndex;
+    bool hasDescriptor;
     ACE_DISALLOW_COPY_AND_MOVE(ViewNativePair);
+    ViewNativePair() : rootView(nullptr), next(nullptr), listItemIndex(-1), hasDescriptor(false) {}
+    ~ViewNativePair();
 };
 
 class ListAdapter final : public AbstractAdapter {
@@ -74,11 +78,12 @@ public:
 private:
     bool GenerateListItems(const JSValue descriptors, int16_t size);
     int16_t CalculateItemIndex(int16_t itemIndex) const;
-    JSValue GetElement(int16_t listItemsIndex, int16_t index, bool &isFor) const;
+    JSValue GetElementFromFor(int16_t listItemsIndex, int16_t index) const;
+    UIView *ChangeForView(UIView *inView, int16_t listItemIndex, int16_t index) const;
     bool AddForDescriptorToList(JSValue descriptorOrElement, int16_t listItemsIndex) const;
-    void InsertItem(JSValue nativeElement, UIView *uiView);
-    void DeleteItem(const UIView *uiView);
     void BuildItemViewTree(const JSValue element) const;
+    UIView *ReuseNativeView(ViewNativePair *current, int16_t listItemIndex, int16_t index) const;
+    UIView *CreateForView(int16_t listItemIndex, int16_t index);
     ListItemValue *listItems_;
     ViewNativePair *headNode_;
     ViewNativePair *tailNode_;
