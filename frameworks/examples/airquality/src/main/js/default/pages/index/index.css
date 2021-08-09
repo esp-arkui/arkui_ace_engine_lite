@@ -16,47 +16,45 @@
   text-align: center;
   font-size: 38px;
   color: #f0ffff;
-  width: 454px;
+  width: 100%;
   height: 50px;
-  top: 275px;
+  top: 50%;
 }
 .pm25-name {
   text-align: center;
   color: #a2c4a2;
-  width: 454px;
+  width: 100%;
   height: 50px;
-  top: 335px;
+  top: 62%;
 }
 .location-text {
+  top: 10px;
   text-align: center;
   color: #f0ffff;
-  width: 454px;
+  width: 100%;
   height: 50px;
-  top: 20px;
 }
 .container {
-  height: 454px;
-  width: 454px;
+  height: 100%;
+  width: 100%;
 }
 .circleProgress {
-  center-x: 227px;
-  center-y: 250px;
-  radius: 180px;
+  radius: 150px;
   start-angle: 198;
   total-angle: 320;
   stroke-width: 45px;
-  width: 454px;
-  height: 454px;
+  width: 100%;
+  height: 100%;
 }
 .image {
-  top: 390px;
-  left: 217px;
+  top: 75%;
+  left: 48%;
   width: 32px;
   height: 32px;
 }
 .airquality {
-  top: 220px;
+  top: 33%;
   text-align: center;
-  width: 454px;
+  width: 100%;
   height: 40px;
 }
