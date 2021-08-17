@@ -258,7 +258,7 @@ void ChartTddTest::VerifyWidthAndHeight(const char *bundle, int16_t defaultWidth
     JSValue page = CreatePage(bundle, strlen(bundle));
     UIChart *chart = reinterpret_cast<UIChart *>(GetViewByRef(page, "chart"));
     EXPECT_TRUE(chart != nullptr);
-    if(chart != nullptr) {
+    if (chart != nullptr) {
         int16_t width = chart->GetWidth();
         EXPECT_TRUE(width == defaultWidth);
         int16_t height = chart->GetHeight();
@@ -276,7 +276,7 @@ void ChartTddTest::ChangeComponentHeight(const char *bundle, int16_t changedHeig
     JSValue page = CreatePage(bundle, strlen(bundle));
     UIChart *chart = reinterpret_cast<UIChart *>(GetViewByRef(page, "chart"));
     EXPECT_TRUE(chart != nullptr);
-    if(chart != nullptr) {
+    if (chart != nullptr) {
         ClickByRef(page, "chart");
         int16_t height = chart->GetHeight();
         EXPECT_TRUE(height == changedHeight);

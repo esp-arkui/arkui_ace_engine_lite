@@ -14,9 +14,9 @@
  */
 
 #include "acelite_config.h"
-#include "qrcode_tdd_test.h"
 #include "component_factory.h"
 #include "js_app_environment.h"
+#include "qrcode_tdd_test.h"
 #include "root_view.h"
 #include "ui_qrcode.h"
 
@@ -91,7 +91,7 @@ void QRCodeTddTest::ComponentQrcodeStyleValueTest001()
     JSValue page = CreatePage(BUNDLE_ATTRIBUTE1, strlen(BUNDLE_ATTRIBUTE1));
     UIQrcode *qrcode = reinterpret_cast<UIQrcode *>(GetViewByRef(page, "qrcode"));
     EXPECT_TRUE(qrcode != nullptr);
-    if(qrcode != nullptr) {
+    if (qrcode != nullptr) {
         int16_t defaultWidth = 300;
         int16_t defaultHeight = 300;
         int16_t width = qrcode->GetWidth();
@@ -111,7 +111,7 @@ void QRCodeTddTest::ComponentQrcodeStyleValueTest002()
     JSValue page = CreatePage(BUNDLE_ATTRIBUTE2, strlen(BUNDLE_ATTRIBUTE2));
     UIQrcode *qrcode = reinterpret_cast<UIQrcode *>(GetViewByRef(page, "qrcode"));
     EXPECT_TRUE(qrcode != nullptr);
-    if(qrcode != nullptr) {
+    if (qrcode != nullptr) {
         ClickByRef(page, "div");
         int16_t defaultHeight = 400;
         int16_t height = qrcode->GetHeight();
@@ -127,7 +127,7 @@ void QRCodeTddTest::ComponentQrcodeAttributeValueTest001()
     JSValue page = CreatePage(BUNDLE_ATTRIBUTE1, strlen(BUNDLE_ATTRIBUTE1));
     UIQrcode *qrcode = reinterpret_cast<UIQrcode *>(GetViewByRef(page, "qrcode"));
     EXPECT_TRUE(qrcode != nullptr);
-    if(qrcode != nullptr) {
+    if (qrcode != nullptr) {
         UIViewType viewType = qrcode->GetViewType();
         EXPECT_TRUE(viewType == UI_QRCODE);
     }

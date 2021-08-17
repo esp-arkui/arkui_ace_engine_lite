@@ -73,15 +73,15 @@ void CanvasTddTest::ComponentCanvasDefaultValueTest001()
 {
     TDD_CASE_BEGIN();
     JSValue page = CreatePage(BUNDLE1, strlen(BUNDLE1));
-    UICanvas *canvas_ = reinterpret_cast<UICanvas *>(GetViewByRef(page, "canvas1"));
-    EXPECT_TRUE(canvas_ != nullptr);
-    if(canvas_ != nullptr) {
-        UIViewType viewType = canvas_->GetViewType();
+    UICanvas *canvas = reinterpret_cast<UICanvas *>(GetViewByRef(page, "canvas1"));
+    EXPECT_TRUE(canvas != nullptr);
+    if (canvas != nullptr) {
+        UIViewType viewType = canvas->GetViewType();
         EXPECT_TRUE(viewType == UI_CANVAS);
         int16_t defaultWidth = 454;
         int16_t defaultHeight = 454;
-        EXPECT_TRUE(canvas_->GetWidth() == defaultWidth);
-        EXPECT_TRUE(canvas_->GetHeight() == defaultHeight);
+        EXPECT_TRUE(canvas->GetWidth() == defaultWidth);
+        EXPECT_TRUE(canvas->GetHeight() == defaultHeight);
     }
     DestroyPage(page);
     TDD_CASE_END();
@@ -91,11 +91,11 @@ void CanvasTddTest::ComponentCanvasDefaultValueTest002()
 {
     TDD_CASE_BEGIN();
     JSValue page = CreatePage(BUNDLE1, strlen(BUNDLE1));
-    UICanvas *canvas_ = reinterpret_cast<UICanvas *>(GetViewByRef(page, "canvas1"));
-    EXPECT_TRUE(canvas_ != nullptr);
-    if(canvas_ != nullptr) {
-        EXPECT_TRUE(canvas_->GetStartPosition().x == 0);
-        EXPECT_TRUE(canvas_->GetStartPosition().y == 0);
+    UICanvas *canvas = reinterpret_cast<UICanvas *>(GetViewByRef(page, "canvas1"));
+    EXPECT_TRUE(canvas != nullptr);
+    if (canvas != nullptr) {
+        EXPECT_TRUE(canvas->GetStartPosition().x == 0);
+        EXPECT_TRUE(canvas->GetStartPosition().y == 0);
     }
     DestroyPage(page);
     TDD_CASE_END();
@@ -105,12 +105,12 @@ void CanvasTddTest::ComponentCanvasChangeHeightTest001()
 {
     TDD_CASE_BEGIN();
     JSValue page = CreatePage(BUNDLE2, strlen(BUNDLE2));
-    UICanvas *canvas_ = reinterpret_cast<UICanvas *>(GetViewByRef(page, "canvas1"));
-    EXPECT_TRUE(canvas_ != nullptr);
-    if(canvas_ != nullptr) {
+    UICanvas *canvas = reinterpret_cast<UICanvas *>(GetViewByRef(page, "canvas1"));
+    EXPECT_TRUE(canvas != nullptr);
+    if (canvas != nullptr) {
         ClickByRef(page, "canvas1");
         int16_t changedHeight = 300;
-        int16_t height = canvas_->GetHeight();
+        int16_t height = canvas->GetHeight();
         EXPECT_TRUE(height == changedHeight);
     }
     DestroyPage(page);
