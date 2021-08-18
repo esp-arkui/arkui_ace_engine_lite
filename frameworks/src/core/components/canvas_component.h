@@ -32,11 +32,23 @@ struct AttrMap {
     const char *attrName;
     jerry_external_handler_t setterName;
     jerry_external_handler_t getterName;
+    void Set(const char *name, jerry_external_handler_t setter, jerry_external_handler_t getter)
+    {
+        attrName = name;
+        setterName = setter;
+        getterName = getter;
+    }
 };
+
 struct MethodMap {
     ACE_DISALLOW_COPY_AND_MOVE(MethodMap);
     const char *methodName;
     jerry_external_handler_t callbackName;
+    void Set(const char *name, jerry_external_handler_t callback)
+    {
+        methodName = name;
+        callbackName = callback;
+    }
 };
 
 class CanvasComponent final : public Component {
@@ -52,6 +64,7 @@ protected:
     UIView *GetComponentRootView() const override;
 
 private:
+    static void InitMaps();
     void GetSubFont(const char *font, const uint8_t index, char *&subFont) const;
     bool FormatArcAngle(double sAngle,
                         double eAngle,
@@ -182,11 +195,13 @@ private:
     char *fontValue_;
     char *textAlignValue_;
     int16_t lineWidthValue_;
+    static const uint8_t ATTR_MAP_SIZE = 5;
+    static AttrMap attrMap_[ATTR_MAP_SIZE];
+    static const uint8_t METHOD_MAP_SIZE = 11;
+    static MethodMap methodMap_[METHOD_MAP_SIZE];
     static const char * const DEFAULT_FILLSTYLE;
     static const char * const DEFAULT_STROKESTYLE;
     static const char * const DEFAULT_TEXTALIGN;
-    static const AttrMap attrMap_[];
-    static const MethodMap methodMap_[];
     static const char * const ATTR_FILLSTYLE;
     static const char * const ATTR_STROKESTYLE;
     static const char * const ATTR_LINEWIDTH;

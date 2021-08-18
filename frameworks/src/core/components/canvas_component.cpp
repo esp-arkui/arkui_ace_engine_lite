@@ -50,29 +50,37 @@ const char * const CanvasComponent::FUNC_ARC = "arc";
 const char * const CanvasComponent::FUNC_CLOSEPATH = "closePath";
 const char * const CanvasComponent::FUNC_STROKE = "stroke";
 
-// create canvas draw attribute-callback mapping
-const AttrMap CanvasComponent::attrMap_[] = {
-    {ATTR_FILLSTYLE, FillStyleSetter, FillStyleGetter},
-    {ATTR_STROKESTYLE, StrokeStyleSetter, StrokeStyleGetter},
-    {ATTR_LINEWIDTH, LineWidthSetter, LineWidthGetter},
-    {ATTR_FONT, FontSetter, FontGetter},
-    {ATTR_TEXTALIGN, TextAlignSetter, TextAlignGetter}
-};
+AttrMap CanvasComponent::attrMap_[ATTR_MAP_SIZE] = {{nullptr, nullptr, nullptr}};
+MethodMap CanvasComponent::methodMap_[METHOD_MAP_SIZE] = {{nullptr, nullptr}};
 
-// create canvas draw method-callback mapping
-const MethodMap CanvasComponent::methodMap_[] = {
-    {FUNC_GETCONTEXT, GetContext},
-    {FUNC_FILLRECT, FillRect},
-    {FUNC_STROKERECT, StrokeRect},
-    {FUNC_FILLTEXT, FillText},
-    {FUNC_BEGINPATH, BeginPath},
-    {FUNC_MOVETO, MoveTo},
-    {FUNC_LINETO, LineTo},
-    {FUNC_RECT, Rect},
-    {FUNC_ARC, Arc},
-    {FUNC_CLOSEPATH, ClosePath},
-    {FUNC_STROKE, Stroke}
-};
+void CanvasComponent::InitMaps()
+{
+    // create canvas draw attribute-callback mapping
+    static bool mapInitialized = false;
+    if (mapInitialized) {
+        return;
+    }
+    size_t index = 0;
+    attrMap_[index++].Set(ATTR_FILLSTYLE, FillStyleSetter, FillStyleGetter);
+    attrMap_[index++].Set(ATTR_STROKESTYLE, StrokeStyleSetter, StrokeStyleGetter);
+    attrMap_[index++].Set(ATTR_LINEWIDTH, LineWidthSetter, LineWidthGetter);
+    attrMap_[index++].Set(ATTR_FONT, FontSetter, FontGetter);
+    attrMap_[index++].Set(ATTR_TEXTALIGN, TextAlignSetter, TextAlignGetter);
+
+    // create canvas draw method-callback mapping
+    index = 0;
+    methodMap_[index++].Set(FUNC_GETCONTEXT, GetContext);
+    methodMap_[index++].Set(FUNC_FILLRECT, FillRect);
+    methodMap_[index++].Set(FUNC_STROKERECT, StrokeRect);
+    methodMap_[index++].Set(FUNC_FILLTEXT, FillText);
+    methodMap_[index++].Set(FUNC_BEGINPATH, BeginPath);
+    methodMap_[index++].Set(FUNC_MOVETO, MoveTo);
+    methodMap_[index++].Set(FUNC_LINETO, LineTo);
+    methodMap_[index++].Set(FUNC_RECT, Rect);
+    methodMap_[index++].Set(FUNC_ARC, Arc);
+    methodMap_[index++].Set(FUNC_CLOSEPATH, ClosePath);
+    methodMap_[index++].Set(FUNC_STROKE, Stroke);
+}
 
 CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, AppStyleManager *styleManager)
     : Component(options, children, styleManager),
@@ -84,6 +92,7 @@ CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, 
       lineWidthValue_(1)
 {
     SetComponentName(K_CANVAS);
+    InitMaps();
     // set default paint pattern
     paint_.SetFillColor(Color::Black());
     paint_.SetOpacity(OPA_OPAQUE);

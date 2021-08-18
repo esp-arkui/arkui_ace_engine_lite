@@ -87,7 +87,6 @@ private:
     const CacheUnit *configTable_;
     size_t configTableLen_;
     CacheSetupState cacheState_;
-    static const CacheUnit DEFAULT_CONFIG_TABLE[];
 };
 } // namespace ACELite
 } // namespace OHOS
