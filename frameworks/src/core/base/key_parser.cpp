@@ -27,22 +27,22 @@ namespace ACELite {
 
 // Replace the struct keys.h "KEYWORD" sector for init
 #if defined(ENABLE_KEY)
-#define KEYWORD(enumkey, keystr) {#keystr, K_##enumkey, static_cast<uint8_t>(strlen(#enumkey))},
+#define KEYWORD(enumkey, keystr) {#keystr, static_cast<uint8_t>(strlen(#enumkey)), K_##enumkey},
 #else // ENABLE_KEY
-#define KEYWORD(enumkey, keystr) {K_##enumkey, static_cast<uint8_t>(strlen(#enumkey))},
+#define KEYWORD(enumkey, keystr) {K_##enumkey},
 #endif // ENABLE_KEY
 
 static const struct {
 #if defined(ENABLE_KEY)
     const char * const key;
+    const uint8_t LENGTH;
 #endif
     const uint16_t ID;
-    const uint8_t LENGTH;
 } G_KEYWORD_INFO[KEYWORDS_MAX] = {
 #if defined(ENABLE_KEY)
-    {"UNKNOWN", K_UNKNOWN, static_cast<uint8_t>(strlen("UNKNOWN"))},
+    {"UNKNOWN", static_cast<uint8_t>(strlen("UNKNOWN")), K_UNKNOWN},
 #else  // ENABLE_KEY
-    {K_UNKNOWN, static_cast<uint8_t>(strlen("UNKNOWN"))},
+    {K_UNKNOWN},
 #endif // ENABLE_KEY
 
 #ifdef OHOS_ACELITE_KEYS_H
@@ -769,10 +769,14 @@ const char *KeyParser::GetKeyById(uint16_t id)
 
 uint8_t KeyParser::GetKeyLengthById(uint16_t id)
 {
+#if defined(ENABLE_KEY)
     if (!IsKeyValid(id)) {
         return 0;
     }
     return G_KEYWORD_INFO[id].LENGTH;
+#else  // ENABLE_KEY
+    return 0;
+#endif // ENABLE_KEY
 }
 } // namespace ACELite
 } // namespace OHOS

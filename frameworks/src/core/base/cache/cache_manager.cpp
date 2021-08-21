@@ -20,20 +20,19 @@
 
 namespace OHOS {
 namespace ACELite {
-/**
- * This table will decide the cache usage distribution. If one module want to use cache functionality,
- * it must config here first. The cache manager will assign buffer according to the actual whole
- * buffer rang, if the buffer supplement is rich, every cache user might be assigned one buffer
- * rang bigger than its lowest requirement.
- *
- * NOTE: the user must not be duplicated in this list
- */
-const CacheUnit CacheManager::DEFAULT_CONFIG_TABLE[] = {
-    {USER_LOCALICATION, 16}, // localication key-value cache, lowest 16KB
-};
-
 CacheManager::CacheManager() : cacheState_(STATE_NORMAL)
 {
+    /**
+     * This table will decide the cache usage distribution. If one module want to use cache functionality,
+     * it must config here first. The cache manager will assign buffer according to the actual whole
+     * buffer rang, if the buffer supplement is rich, every cache user might be assigned one buffer
+     * rang bigger than its lowest requirement.
+     *
+     * NOTE: the user must not be duplicated in this list
+     */
+    static const CacheUnit DEFAULT_CONFIG_TABLE[] = {
+        {USER_LOCALICATION, 16}, // localication key-value cache, lowest 16KB
+    };
     configTable_ = DEFAULT_CONFIG_TABLE;
     configTableLen_ = sizeof(DEFAULT_CONFIG_TABLE) / sizeof(CacheUnit);
     ResetDistributedInfo();
