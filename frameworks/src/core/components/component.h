@@ -227,6 +227,7 @@ public:
      */
     bool AdaptBoxSizing(uint16_t attrKeyId = K_UNKNOWN) const;
     void AlignDimensions(const ConstrainedParameter &param);
+    void EnableTransmitSwipe();
 
 protected:
     void SetComponentName(uint16_t name)
