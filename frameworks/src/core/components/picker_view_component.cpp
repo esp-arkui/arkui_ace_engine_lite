@@ -75,6 +75,10 @@ void TimePickerListener::OnTimePickerStoped(UITimePicker &picker)
 
 PickerViewComponent::PickerViewComponent(jerry_value_t options, jerry_value_t children, AppStyleManager *styleManager)
     : Component(options, children, styleManager),
+#ifdef FEATURE_ROTATION_API
+      isTimerPickerFocused_(false),
+      timerPickerSelectedPickerColumn_(nullptr),
+#endif // FEATURE_ROTATION_API
       options_(options),
       pickerType_(PickerType::TEXT),
       pickerView_(nullptr),
@@ -99,9 +103,6 @@ PickerViewComponent::PickerViewComponent(jerry_value_t options, jerry_value_t ch
 {
     SetComponentName(K_PICKER_VIEW);
     fontSize_ = ProductAdapter::GetDefaultFontSize();
-#ifdef FEATURE_ROTATION_API
-    RegisterNamedFunction(FUNC_ROTATION_NAME, HandleRotationRequest);
-#endif // FEATURE_ROTATION_API
 }
 
 bool PickerViewComponent::CreateNativeViews()
@@ -159,7 +160,107 @@ bool PickerViewComponent::CreateTextPicker()
     }
     uiPicker->SetItemHeight(PICKER_ITEM_HEIGHT);
     pickerView_ = static_cast<UIView *>(uiPicker);
+#ifdef FEATURE_ROTATION_API
+    RegisterNamedFunction(FUNC_ROTATION_NAME, Component::HandleRotationRequest);
+#endif // FEATURE_ROTATION_API
     return true;
+}
+
+#ifdef FEATURE_ROTATION_API
+bool PickerViewComponent::TimerPickerColumnClickListener::OnClick(UIView &view, const ClickEvent &event)
+{
+    UNUSED(event);
+    if (&view == hourColumnView_ || &view == minuteColumnView_) {
+        if (pickerComponent_ != nullptr) {
+            pickerComponent_->OnTimePickerColumnClickedInner(&view);
+        }
+    }
+    return false;
+}
+
+void PickerViewComponent::TimerPickerColumnClickListener::UpdatePickerInfos(PickerViewComponent *pickerComponent,
+                                                                            UITimePicker &timePicker)
+{
+    if (pickerComponent == nullptr) {
+        return;
+    }
+    UIView *hourColumn = timePicker.GetChildById(UITimePicker::HOUR_LIST_NAME);
+    UIView *minuteColumn = timePicker.GetChildById(UITimePicker::MIN_LIST_NAME);
+    pickerComponent_ = pickerComponent;
+    if (hourColumn == nullptr || minuteColumn == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "can not get picker column");
+        return;
+    }
+    // set default picker selected column as hour column
+    pickerComponent_->OnTimePickerColumnClickedInner(hourColumn);
+    hourColumn->SetOnClickListener(this);
+    hourColumn->SetTouchable(true);
+    minuteColumn->SetOnClickListener(this);
+    minuteColumn->SetTouchable(true);
+    hourColumnView_ = hourColumn;
+    minuteColumnView_ = minuteColumn;
+}
+
+void PickerViewComponent::OnTimePickerColumnClickedInner(UIView *pickerColumnView)
+{
+    if (pickerColumnView == nullptr) {
+        return;
+    }
+    timerPickerSelectedPickerColumn_ = pickerColumnView;
+    // column changed, update the focus to the new column view
+    static_cast<UIList *>(timerPickerSelectedPickerColumn_)->ClearFocus();
+    HandleTimePickerRotationRequestInner(isTimerPickerFocused_);
+}
+
+jerry_value_t PickerViewComponent::HandleTimePickerRotationRequest(const jerry_value_t func,
+                                                                   const jerry_value_t dom,
+                                                                   const jerry_value_t args[],
+                                                                   const jerry_length_t size)
+{
+    UNUSED(func);
+    PickerViewComponent *component =
+        static_cast<PickerViewComponent *>(ComponentUtils::GetComponentFromBindingObject(dom));
+    if (component == nullptr) {
+        return UNDEFINED;
+    }
+
+    // default action is to request the focus even user do not pass the argument
+    bool focusRequest = true;
+    if (args != nullptr && size > 0) {
+        if (!JerryGetBoolProperty(args[0], ATTR_NAME_FOCUS, focusRequest)) {
+            HILOG_ERROR(HILOG_MODULE_ACE, "not bool argument passed, will clear the focus!");
+            focusRequest = false;
+        }
+    }
+    component->HandleTimePickerRotationRequestInner(focusRequest);
+    return UNDEFINED;
+}
+
+void PickerViewComponent::HandleTimePickerRotationRequestInner(bool focusRequest)
+{
+    isTimerPickerFocused_ = focusRequest;
+    if (timerPickerSelectedPickerColumn_ == nullptr) {
+        return;
+    }
+    if (focusRequest) {
+        static_cast<UIList *>(timerPickerSelectedPickerColumn_)->RequestFocus();
+        return;
+    }
+
+    static_cast<UIList *>(timerPickerSelectedPickerColumn_)->ClearFocus();
+}
+#endif // FEATURE_ROTATION_API
+
+void PickerViewComponent::EnsureColumnMonitorStatus()
+{
+#ifdef FEATURE_ROTATION_API
+    if (pickerType_ != PickerType::TIME || pickerView_ == nullptr) {
+        return;
+    }
+
+    UITimePicker *timePicker = reinterpret_cast<UITimePicker *>(pickerView_);
+    timerPickerColumnClickListener_.UpdatePickerInfos(this, *timePicker);
+#endif
 }
 
 bool PickerViewComponent::CreateTimePicker()
@@ -181,6 +282,9 @@ bool PickerViewComponent::CreateTimePicker()
     }
     uiTimePicker->SetItemHeight(PICKER_ITEM_HEIGHT);
     pickerView_ = static_cast<UIView *>(uiTimePicker);
+#ifdef FEATURE_ROTATION_API
+    RegisterNamedFunction(FUNC_ROTATION_NAME, PickerViewComponent::HandleTimePickerRotationRequest);
+#endif // FEATURE_ROTATION_API
     return true;
 }
 
@@ -268,6 +372,12 @@ void PickerViewComponent::PostRender()
 
     UpdatePickerStyles();
     UpdatePickerAttrs();
+    EnsureColumnMonitorStatus();
+}
+
+void PickerViewComponent::OnViewAttached()
+{
+    EnsureColumnMonitorStatus();
 }
 
 void PickerViewComponent::PostUpdate(uint16_t attrKeyId)
@@ -296,6 +406,7 @@ void PickerViewComponent::PostUpdate(uint16_t attrKeyId)
         default:
             break;
     }
+    EnsureColumnMonitorStatus();
 }
 
 void PickerViewComponent::UpdatePickerStyles() const
@@ -462,6 +573,7 @@ bool PickerViewComponent::RegisterPrivateEventListener(uint16_t eventTypeId,
                                                        jerry_value_t funcValue,
                                                        bool isStopPropagation)
 {
+    UNUSED(isStopPropagation);
     bool result = false;
     switch (eventTypeId) {
         case K_CHANGE: {
