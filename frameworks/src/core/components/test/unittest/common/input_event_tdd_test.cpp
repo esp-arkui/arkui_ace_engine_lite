@@ -856,11 +856,7 @@ UIView *InputEventTddTest::GetComponent(JSValue page, const char *name) const
     return target;
 }
 
-/**
- * @tc.name:InputBindingTest001
- * @tc.desc:test the input binding data
- */
-HWTEST_F(InputEventTddTest, InputBindingTest001, TestSize.Level0)
+void InputEventTddTest::InputBindingTest001()
 {
     TDD_CASE_BEGIN();
     /**
@@ -930,11 +926,7 @@ void InputEventTddTest::InputBindingTest001Extra(JSValue page)
     TDD_CASE_END();
 }
 
-/**
- * @tc.name: InputEventTest002
- * @tc.desc: test the click and longpress event
- */
-HWTEST_F(InputEventTddTest, InputEventTest002, TestSize.Level1)
+void InputEventTddTest::InputEventTest002()
 {
     TDD_CASE_BEGIN();
 
@@ -987,11 +979,7 @@ HWTEST_F(InputEventTddTest, InputEventTest002, TestSize.Level1)
     TDD_CASE_END();
 }
 
-/**
- * @tc.name:ChangeEventTest003
- * @tc.desc:test the change event in checkbox
- */
-HWTEST_F(InputEventTddTest, ChangeEventTest003, TestSize.Level1)
+void InputEventTddTest::ChangeEventTest003()
 {
     TDD_CASE_BEGIN();
 
@@ -1029,11 +1017,7 @@ HWTEST_F(InputEventTddTest, ChangeEventTest003, TestSize.Level1)
     TDD_CASE_END();
 }
 
-/**
- * @tc.name: CheckboxEventTest004
- * @tc.desc: test the longpress, click and change event
- */
-HWTEST_F(InputEventTddTest, CheckboxEventTest004, TestSize.Level1)
+void InputEventTddTest::CheckboxEventTest004()
 {
     TDD_CASE_BEGIN();
 
@@ -1084,11 +1068,7 @@ HWTEST_F(InputEventTddTest, CheckboxEventTest004, TestSize.Level1)
     TDD_CASE_END();
 }
 
-/**
- * @tc.name: ChangeEventTest005
- * @tc.desc: test the looper change event
- */
-HWTEST_F(InputEventTddTest, ChangeEventTest005, TestSize.Level1)
+void InputEventTddTest::ChangeEventTest005()
 {
     TDD_CASE_BEGIN();
 
@@ -1121,11 +1101,7 @@ HWTEST_F(InputEventTddTest, ChangeEventTest005, TestSize.Level1)
     TDD_CASE_END();
 }
 
-/**
- * @tc.name: InputIfTest006
- * @tc.expected: test the if attribute
- */
-HWTEST_F(InputEventTddTest, InputIfTest006, TestSize.Level0)
+void InputEventTddTest::InputIfTest006()
 {
     TDD_CASE_BEGIN();
 
@@ -1202,11 +1178,7 @@ HWTEST_F(InputEventTddTest, InputIfTest006, TestSize.Level0)
     TDD_CASE_END();
 }
 
-/**
- * @tc.name: InputShowTest007
- * @tc.expected: test the if attribute
- */
-HWTEST_F(InputEventTddTest, InputShowTest007, TestSize.Level1)
+void InputEventTddTest::InputShowTest007()
 {
     TDD_CASE_BEGIN();
 
@@ -1231,6 +1203,7 @@ HWTEST_F(InputEventTddTest, InputShowTest007, TestSize.Level1)
      * @tc.steps: step3.click the changeButton button
      * @tc.expected: step3.the visiblity of button is true
      */
+    yRate = 0.05;
     ClickPosition(xRate, yRate);
     EXPECT_TRUE((button != nullptr) && (button->IsVisible()));
 
@@ -1247,6 +1220,7 @@ HWTEST_F(InputEventTddTest, InputShowTest007, TestSize.Level1)
      * @tc.steps: step5.click the changeCheckboxButton button
      * @tc.expected: step5.the visibility of checkbox is true
      */
+    yRate = 0.35;
     ClickPosition(xRate, yRate);
     EXPECT_TRUE((checkbox != nullptr) && (checkbox->IsVisible()));
 
@@ -1263,17 +1237,14 @@ HWTEST_F(InputEventTddTest, InputShowTest007, TestSize.Level1)
      * @tc.steps: step7.click the changeRadioShow button
      * @tc.expected: step7.the visibility of radio is true
      */
+    yRate = 0.65;
     ClickPosition(xRate, yRate);
     EXPECT_TRUE((radio != nullptr) && (radio->IsVisible()));
     DestroyPage(page);
     TDD_CASE_END();
 }
 
-/**
- * @tc.name: InputForTest008
- * @tc.desc: test the for attribute in input
- */
-HWTEST_F(InputEventTddTest, InputForTest008, TestSize.Level0)
+void InputEventTddTest::InputForTest008()
 {
     TDD_CASE_BEGIN();
 
@@ -1358,11 +1329,7 @@ HWTEST_F(InputEventTddTest, InputForTest008, TestSize.Level0)
     TDD_CASE_END();
 }
 
-/**
- * @tc.name:RadioTest009
- * @tc.name: test the name attribute in radio
- */
-HWTEST_F(InputEventTddTest, RadioTest009, TestSize.Level1)
+void InputEventTddTest::RadioTest009()
 {
     TDD_CASE_BEGIN();
 
@@ -1411,11 +1378,7 @@ HWTEST_F(InputEventTddTest, RadioTest009, TestSize.Level1)
     TDD_CASE_END();
 }
 
-/**
- * @tc.name: InputTest010
- * @tc.desc: test the different event in input
- */
-HWTEST_F(InputEventTddTest, InputTest010, TestSize.Level1)
+void InputEventTddTest::InputTest010()
 {
     TDD_CASE_BEGIN();
 
@@ -1469,11 +1432,7 @@ HWTEST_F(InputEventTddTest, InputTest010, TestSize.Level1)
     TDD_CASE_END();
 }
 
-/**
- * @tc.name: CheckboxChangeClick011
- * @tc.desc: test the click and change event in checkbox
- */
-HWTEST_F(InputEventTddTest, CheckboxChangeClick011, TestSize.Level0)
+void InputEventTddTest::CheckboxChangeClick011()
 {
     TDD_CASE_BEGIN();
     /**
@@ -1526,11 +1485,7 @@ HWTEST_F(InputEventTddTest, CheckboxChangeClick011, TestSize.Level0)
     TDD_CASE_END();
 }
 
-/**
- * @tc.name: RadioChangeClick012
- * @tc.desc: test click and change event in radio
- */
-HWTEST_F(InputEventTddTest, RadioChangeClick012, TestSize.Level1)
+void InputEventTddTest::RadioChangeClick012()
 {
     /**
      * @tc.steps:step1.eval js bundle
@@ -1581,5 +1536,115 @@ HWTEST_F(InputEventTddTest, RadioChangeClick012, TestSize.Level1)
     DestroyPage(page);
     TDD_CASE_END();
 }
+
+#ifdef TDD_ASSERTIONS
+/**
+ * @tc.name:InputBindingTest001
+ * @tc.desc:test the input binding data
+ */
+HWTEST_F(InputEventTddTest, test001, TestSize.Level0)
+{
+    InputEventTddTest::InputBindingTest001();
+}
+
+/**
+ * @tc.name: InputEventTest002
+ * @tc.desc: test the click and longpress event
+ */
+HWTEST_F(InputEventTddTest, test002, TestSize.Level1)
+{
+    InputEventTddTest::InputEventTest002();
+}
+
+/**
+ * @tc.name:ChangeEventTest003
+ * @tc.desc:test the change event in checkbox
+ */
+HWTEST_F(InputEventTddTest, test003, TestSize.Level1)
+{
+    InputEventTddTest::ChangeEventTest003();
+}
+
+/**
+ * @tc.name: CheckboxEventTest004
+ * @tc.desc: test the longpress, click and change event
+ */
+HWTEST_F(InputEventTddTest, test004, TestSize.Level1)
+{
+    InputEventTddTest::CheckboxEventTest004();
+}
+
+/**
+ * @tc.name: ChangeEventTest005
+ * @tc.desc: test the looper change event
+ */
+HWTEST_F(InputEventTddTest, test005, TestSize.Level1)
+{
+    InputEventTddTest::ChangeEventTest005();
+}
+
+/**
+ * @tc.name: InputIfTest006
+ * @tc.expected: test the if attribute
+ */
+HWTEST_F(InputEventTddTest, test006, TestSize.Level0)
+{
+    InputEventTddTest::InputIfTest006();
+}
+
+/**
+ * @tc.name: InputShowTest007
+ * @tc.expected: test the if attribute
+ */
+HWTEST_F(InputEventTddTest, test007, TestSize.Level1)
+{
+    InputEventTddTest::InputShowTest007();
+}
+
+/**
+ * @tc.name: InputForTest008
+ * @tc.desc: test the for attribute in input
+ */
+HWTEST_F(InputEventTddTest, test008, TestSize.Level0)
+{
+    InputEventTddTest::InputForTest008();
+}
+
+/**
+ * @tc.name:RadioTest009
+ * @tc.name: test the name attribute in radio
+ */
+HWTEST_F(InputEventTddTest, test009, TestSize.Level1)
+{
+    InputEventTddTest::RadioTest009();
+}
+
+/**
+ * @tc.name: InputTest010
+ * @tc.desc: test the different event in input
+ */
+HWTEST_F(InputEventTddTest, test010, TestSize.Level1)
+{
+    InputEventTddTest::InputTest010();
+}
+
+/**
+ * @tc.name: CheckboxChangeClick011
+ * @tc.desc: test the click and change event in checkbox
+ */
+HWTEST_F(InputEventTddTest, test011, TestSize.Level0)
+{
+    InputEventTddTest::CheckboxChangeClick011();
+}
+
+/**
+ * @tc.name: RadioChangeClick012
+ * @tc.desc: test click and change event in radio
+ */
+HWTEST_F(InputEventTddTest, test012, TestSize.Level1)
+{
+    InputEventTddTest::RadioChangeClick012();
+}
+#endif
 }
 }
