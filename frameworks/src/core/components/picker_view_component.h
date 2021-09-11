@@ -128,6 +128,24 @@ public:
     PickerViewComponent(jerry_value_t options, jerry_value_t children, AppStyleManager* styleManager);
     ~PickerViewComponent() override {}
 
+#ifdef FEATURE_ROTATION_API
+    void OnTimePickerColumnClickedInner(UIView *pickerColumnView);
+    // the click listener which is used to monitor the picker column selecting
+    class TimerPickerColumnClickListener final : public UIView::OnClickListener {
+    public:
+        TimerPickerColumnClickListener() = default;
+        ~TimerPickerColumnClickListener() = default;
+
+        bool OnClick(UIView& view, const ClickEvent& event) override;
+        void UpdatePickerInfos(PickerViewComponent *pickerComponent, UITimePicker &timePicker);
+
+    private:
+        PickerViewComponent *pickerComponent_ = nullptr;
+        UIView *hourColumnView_ = nullptr;
+        UIView *minuteColumnView_ = nullptr;
+    };
+#endif // FEATURE_ROTATION_API
+
 protected:
     bool CreateNativeViews() override;
     void ReleaseNativeViews() override;
@@ -137,6 +155,7 @@ protected:
     bool RegisterPrivateEventListener(uint16_t eventTypeId, jerry_value_t funcValue, bool isStopPropagation) override;
     void PostRender() override;
     void PostUpdate(uint16_t attrKeyId) override;
+    void OnViewAttached() override;
 
     /**
      * @enum    PickerType
@@ -167,7 +186,17 @@ private:
     void ReleaseTextRange();
     void UpdatePickerAttrs() const;
     void UpdatePickerStyles() const;
-
+    void EnsureColumnMonitorStatus();
+#ifdef FEATURE_ROTATION_API
+    static jerry_value_t HandleTimePickerRotationRequest(const jerry_value_t func,
+                                               const jerry_value_t dom,
+                                               const jerry_value_t args[],
+                                               const jerry_length_t size);
+    void HandleTimePickerRotationRequestInner(bool focusRequest);
+    bool isTimerPickerFocused_;
+    UIView *timerPickerSelectedPickerColumn_;
+    TimerPickerColumnClickListener timerPickerColumnClickListener_;
+#endif // FEATURE_ROTATION_API
     jerry_value_t options_;
     PickerType pickerType_;
     UIView* pickerView_;
