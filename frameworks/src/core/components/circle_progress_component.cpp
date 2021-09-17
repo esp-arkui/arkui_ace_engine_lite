@@ -33,7 +33,7 @@ bool CircleProgressComponent::CreateNativeViews()
 {
     // set default value
     progressView_.SetBackgroundStyle(StyleDefault::GetBrightStyle());
-    const int8_t defaultLineWidth = 32;
+    int8_t defaultLineWidth = 32;
     const uint8_t compatibleApiVersion = 6;
     if (JsAppContext::GetInstance()->GetCompatibleApi() >= compatibleApiVersion) {
         defaultLineWidth = 4; // set the default strokeWidth 4px after api version 6
