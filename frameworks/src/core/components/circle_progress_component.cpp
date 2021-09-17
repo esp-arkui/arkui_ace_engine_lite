@@ -14,6 +14,7 @@
  */
 
 #include "circle_progress_component.h"
+#include "js_app_context.h"
 
 namespace OHOS {
 namespace ACELite {
@@ -33,6 +34,10 @@ bool CircleProgressComponent::CreateNativeViews()
     // set default value
     progressView_.SetBackgroundStyle(StyleDefault::GetBrightStyle());
     const int8_t defaultLineWidth = 32;
+    const uint8_t compatibleApiVersion = 6;
+    if (JsAppContext::GetInstance()->GetCompatibleApi() >= compatibleApiVersion) {
+        defaultLineWidth = 4; // set the default strokeWidth 4px after api version 6
+    }
     progressView_.SetBackgroundStyle(STYLE_LINE_WIDTH, defaultLineWidth); // Compatible with rich devices
     progressView_.SetBackgroundStyle(STYLE_LINE_CAP, CapType::CAP_ROUND);
     uint32_t color = 0;
