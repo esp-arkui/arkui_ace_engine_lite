@@ -28,6 +28,8 @@ struct ACEMemHooks {
     void *(*malloc_func)(size_t sz);
     void (*free_func)(void *ptr);
     void *(*calloc_func)(size_t num, size_t size);
+    void *(*lsram_malloc_func)(size_t sz);
+    void (*lsram_free_func)(void *ptr);
 };
 
 /**
@@ -71,6 +73,22 @@ void *ace_calloc(size_t num, size_t size);
  * @param [in] ptr: pointer points to a memory block to be freed
  */
 void ace_free(void *ptr);
+
+/**
+ * @brief Allocate the required memory space from low speed ram
+ *
+ * @param [in] size: size of memory block,in bytes
+ *
+ * @return a pointer to the allocated memory block. if the request fails,return nullptr
+ */
+void *lsram_ace_malloc(size_t size);
+
+/**
+ * @brief Free the memory space allocated by lsram_ace_malloc
+ *
+ * @param [in] ptr: pointer points to a memory block to be freed
+ */
+void lsram_ace_free(void *ptr);
 } // namespace ACELite
 } // namespace OHOS
 #endif // OHOS_ACELITE_ACE_MEM_BASE_H
