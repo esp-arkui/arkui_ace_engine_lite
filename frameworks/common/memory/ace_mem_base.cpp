@@ -24,7 +24,7 @@ namespace ACELite {
  * Record the memory hooks used for ACE, only can be setup once when system start-up.
  * The standard memory allocating methods are used as default.
  */
-static ACEMemHooks g_memoryHooks = {malloc, free, calloc};
+static ACEMemHooks g_memoryHooks = {malloc, free, calloc, malloc, free};
 /**
  * @brief g_customHookSet flag for representing if the customer hooks are set
  */
@@ -43,6 +43,10 @@ void InitMemHooks(const ACEMemHooks &hooks)
     g_memoryHooks.malloc_func = hooks.malloc_func;
     g_memoryHooks.free_func = hooks.free_func;
     g_memoryHooks.calloc_func = hooks.calloc_func;
+    if (hooks.lsram_malloc_func != nullptr && hooks.lsram_free_func != nullptr) {
+        g_memoryHooks.lsram_malloc_func = hooks.lsram_malloc_func;
+        g_memoryHooks.lsram_free_func = hooks.lsram_free_func;
+    }
     // set the flag
     g_customHookSet = true;
 }
@@ -65,6 +69,16 @@ void *ace_calloc(size_t num, size_t size)
 void ace_free(void *ptr)
 {
     g_memoryHooks.free_func(ptr);
+}
+
+void *lsram_ace_malloc(size_t size)
+{
+    return g_memoryHooks.lsram_malloc_func(size);
+}
+
+void lsram_ace_free(void *ptr)
+{
+    g_memoryHooks.lsram_free_func(ptr);
 }
 } // namespace ACELite
 } // namespace OHOS
