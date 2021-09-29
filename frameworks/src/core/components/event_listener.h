@@ -17,6 +17,7 @@
 #define OHOS_ACELITE_EVENT_LISTENER_H
 
 #include "ace_log.h"
+#include "async_task_manager.h"
 #include "event_util.h"
 #include "js_fwk_common.h"
 #include "keys.h"
@@ -89,10 +90,12 @@ public:
     ViewOnClickListener(jerry_value_t fn, bool isStopPropagation)
         : changeListener_(nullptr),
           fn_(jerry_acquire_value(fn)),
-          isStopPropagation_(isStopPropagation) {}
+          isStopPropagation_(isStopPropagation),
+          taskID_(DISPATCH_FAILURE) {}
 
     ~ViewOnClickListener()
     {
+        AsyncTaskManager::GetInstance().Cancel(taskID_);
         jerry_release_value(fn_);
     }
 
@@ -106,7 +109,7 @@ public:
             return isStopPropagation_;
         }
         JSValue arg = EventUtil::CreateEvent(EventUtil::EVENT_CLICK, view, event);
-        EventUtil::InvokeCallback(JSUndefined::Create(), fn_, arg);
+        taskID_ = EventUtil::InvokeCallback(JSUndefined::Create(), fn_, arg);
 
         return isStopPropagation_;
     }
@@ -120,16 +123,18 @@ private:
     StateChangeListener *changeListener_;
     jerry_value_t fn_;
     bool isStopPropagation_;
+    uint16_t taskID_;
 };
 
 class ViewOnLongPressListener final : public UIView::OnLongPressListener {
 public:
     ACE_DISALLOW_COPY_AND_MOVE(ViewOnLongPressListener);
     ViewOnLongPressListener(jerry_value_t fn, bool isStopPropagation)
-        : fn_(jerry_acquire_value(fn)), isStopPropagation_(isStopPropagation) {}
+        : fn_(jerry_acquire_value(fn)), isStopPropagation_(isStopPropagation), taskID_(DISPATCH_FAILURE) {}
 
     ~ViewOnLongPressListener()
     {
+        AsyncTaskManager::GetInstance().Cancel(taskID_);
         jerry_release_value(fn_);
     }
 
@@ -140,12 +145,13 @@ public:
         }
 
         JSValue arg = EventUtil::CreateEvent(EventUtil::EVENT_LONGPRESS, view, event);
-        EventUtil::InvokeCallback(JSUndefined::Create(), fn_, arg);
+        taskID_ = EventUtil::InvokeCallback(JSUndefined::Create(), fn_, arg);
 
         return isStopPropagation_;
     }
     jerry_value_t fn_;
     bool isStopPropagation_;
+    uint16_t taskID_;
 };
 
 #ifdef JS_TOUCH_EVENT_SUPPORT
@@ -214,12 +220,13 @@ class ViewOnSwipeListener final : public UIView::OnDragListener {
 public:
     ACE_DISALLOW_COPY_AND_MOVE(ViewOnSwipeListener);
     ViewOnSwipeListener(jerry_value_t fn, bool isStopPropagation)
-        : fn_(jerry_acquire_value(fn)), isStopPropagation_(isStopPropagation)
+        : fn_(jerry_acquire_value(fn)), isStopPropagation_(isStopPropagation), taskID_(DISPATCH_FAILURE)
     {
     }
 
     ~ViewOnSwipeListener()
     {
+        AsyncTaskManager::GetInstance().Cancel(taskID_);
         jerry_release_value(fn_);
     }
 
@@ -231,6 +238,7 @@ public:
 private:
     jerry_value_t fn_;
     bool isStopPropagation_;
+    uint16_t taskID_;
 };
 
 class SliderEventListener final : public UISlider::UISliderEventListener {

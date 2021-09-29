@@ -109,24 +109,26 @@ JSValue EventUtil::CreateSwipeEvent(UIView &view, const DragEvent &event)
     }
     return arg;
 }
-void EventUtil::InvokeCallback(JSValue vm, JSValue callback, JSValue event)
+uint16_t EventUtil::InvokeCallback(JSValue vm, JSValue callback, JSValue event)
 {
     auto *params = new CallbackParams();
     if (params == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "fail to invoke event callback.");
-        return;
+        return DISPATCH_FAILURE;
     }
     params->vm = vm;
     params->fn = callback;
     params->arg = event;
     // The views may be destroyed or recreated in conditional or list rendering.
     // If we directly call the event callback function, the program will crash.
-    if (DISPATCH_FAILURE == AsyncTaskManager::GetInstance().Dispatch(CallbackExecutor, static_cast<void *>(params))) {
+    uint16_t taskID = AsyncTaskManager::GetInstance().Dispatch(CallbackExecutor, static_cast<void *>(params));
+    if (DISPATCH_FAILURE == taskID) {
         HILOG_ERROR(HILOG_MODULE_ACE, "EventUtil::InvokeCallback failed: Async task dispatch failure.");
         delete params;
         params = nullptr;
         JSRelease(event);
     }
+    return taskID;
 }
 JSValue EventUtil::GetElementByUIView(UIView *view)
 {
