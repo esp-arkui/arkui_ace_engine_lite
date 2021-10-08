@@ -18,7 +18,6 @@
 #include <string.h>
 #include "ace_log.h"
 #include "font/ui_font_header.h"
-#include "global.h"
 #include "js_app_context.h"
 #include "key_parser.h"
 #include "keys.h"
