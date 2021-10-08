@@ -18,6 +18,7 @@
 #include <string.h>
 #include "ace_log.h"
 #include "font/ui_font_header.h"
+#include "global.h"
 #include "js_app_context.h"
 #include "key_parser.h"
 #include "keys.h"
@@ -49,6 +50,13 @@ bool TextComponent::CreateNativeViews()
     } else {
         uiLabel_.SetAlign(UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT, UITextLanguageAlignment::TEXT_ALIGNMENT_CENTER);
         uiLabel_.SetSupportBaseLine(true);
+    }
+    const int32_t languageLength = 2;
+    char currentLanguage[languageLength];
+    GLOBAL_GetLanguage(currentLanguage, languageLength);
+    if (currentLanguage != nullptr && (strcmp(currentLanguage, "ar") == 0 || strcmp(currentLanguage, "iw") == 0
+        || strcmp(currentLanguage, "he") == 0)) {
+        uiLabel_.SetDirect(UITextLanguageDirect::TEXT_DIRECT_RTL);
     }
     return CopyFontFamily(fontFamily_, ProductAdapter::GetDefaultFontFamilyName());
 }
