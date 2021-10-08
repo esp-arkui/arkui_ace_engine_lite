@@ -18,6 +18,7 @@
 #include <string.h>
 #include "ace_log.h"
 #include "font/ui_font_header.h"
+#include "global.h"
 #include "js_app_context.h"
 #include "key_parser.h"
 #include "keys.h"
@@ -42,12 +43,19 @@ bool TextComponent::CreateNativeViews()
 {
     /* set default text OverFlow clip */
     uiLabel_.SetLineBreakMode(overflowMode_);
+    UITextLanguageAlignment align = UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT;
+    char *currentLanguage = static_cast<char *>(ace_malloc(MAX_LANGUAGE_LENGTH));
+    GLOBAL_GetLanguage(currentLanguage, MAX_LANGUAGE_LENGTH);
+    if (currentLanguage != nullptr && (strcmp(currentLanguage, "ar") == 0 || strcmp(currentLanguage, "iw") == 0
+        || strcmp(currentLanguage, "he") == 0)) {
+        align = UITextLanguageAlignment::TEXT_ALIGNMENT_RIGHT;
+    }
     const int32_t supportBaseLineApiVersion = 5;
     if (JsAppContext::GetInstance()->GetTargetApi() < supportBaseLineApiVersion) {
-        uiLabel_.SetAlign(UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT, UITextLanguageAlignment::TEXT_ALIGNMENT_TOP);
+        uiLabel_.SetAlign(align, UITextLanguageAlignment::TEXT_ALIGNMENT_TOP);
         uiLabel_.SetSupportBaseLine(false);
     } else {
-        uiLabel_.SetAlign(UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT, UITextLanguageAlignment::TEXT_ALIGNMENT_CENTER);
+        uiLabel_.SetAlign(align, UITextLanguageAlignment::TEXT_ALIGNMENT_CENTER);
         uiLabel_.SetSupportBaseLine(true);
     }
     return CopyFontFamily(fontFamily_, ProductAdapter::GetDefaultFontFamilyName());
