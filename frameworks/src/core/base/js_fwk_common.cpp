@@ -28,6 +28,7 @@
 #include "component_utils.h"
 #include "dfx_assist.h"
 #include "fatal_handler.h"
+#include "global.h"
 #include "js_app_context.h"
 #include "js_app_environment.h"
 #include "js_profiler.h"
