@@ -163,6 +163,9 @@ bool PickerViewComponent::CreateTextPicker()
         uiPicker = nullptr;
         return false;
     }
+    if (IsRTLSystemLanguage()) {
+        uiPicker->SetDirect(UITextLanguageDirect::TEXT_DIRECT_RTL);
+    }
     uiPicker->SetItemHeight(PICKER_ITEM_HEIGHT);
     pickerView_ = static_cast<UIView *>(uiPicker);
     return true;

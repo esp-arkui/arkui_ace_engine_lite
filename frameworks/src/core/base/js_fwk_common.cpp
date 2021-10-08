@@ -1298,6 +1298,17 @@ bool CopyFontFamily(char *&destination, const char * const fontFamily, uint32_t 
     return true;
 }
 
+bool IsRTLSystemLanguage()
+{
+    char currentLanguage[MAX_LANGUAGE_LENGTH] = {0};
+    int langRet = GLOBAL_GetLanguage(currentLanguage, MAX_LANGUAGE_LENGTH);
+    if (langRet == 0 && (strcmp(currentLanguage, "ar") == 0 || strcmp(currentLanguage, "iw") == 0 ||
+        strcmp(currentLanguage, "he") == 0)) {
+        return true;
+    }
+    return false;
+}
+
 uint16_t ParseKeyIdFromJSString(const jerry_value_t str)
 {
     // calculate key ID

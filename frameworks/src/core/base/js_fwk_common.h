@@ -22,6 +22,7 @@
 #ifdef JS_TOUCH_EVENT_SUPPORT
 #include "root_view.h"
 #endif
+#include "global.h"
 #include "graphic_config.h"
 #include "wrapper/js.h"
 
@@ -312,6 +313,7 @@ bool ParseHexColor(const char * const source, uint32_t &color, uint8_t &alpha);
 bool ParseRgbaColor(const char * const source, uint32_t &color, uint8_t &alpha);
 bool ParseColor(const char * const source, uint32_t &color, uint8_t &alpha);
 bool CopyFontFamily(char *&destination, const char * const fontFamily, uint32_t fontFamilyNameLen = 0);
+bool IsRTLSystemLanguage();
 
 #if (defined(_WIN32) || defined(_WIN64))
 constexpr char PATH_SEPARATOR = '\\';

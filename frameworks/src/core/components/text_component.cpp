@@ -51,10 +51,7 @@ bool TextComponent::CreateNativeViews()
         uiLabel_.SetAlign(UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT, UITextLanguageAlignment::TEXT_ALIGNMENT_CENTER);
         uiLabel_.SetSupportBaseLine(true);
     }
-    char currentLanguage[MAX_LANGUAGE_LENGTH] = {0};
-    GLOBAL_GetLanguage(currentLanguage, MAX_LANGUAGE_LENGTH);
-    if (currentLanguage != nullptr && (strcmp(currentLanguage, "ar") == 0 || strcmp(currentLanguage, "iw") == 0
-        || strcmp(currentLanguage, "he") == 0)) {
+    if (IsRTLSystemLanguage()) {
         uiLabel_.SetDirect(UITextLanguageDirect::TEXT_DIRECT_RTL);
     }
     return CopyFontFamily(fontFamily_, ProductAdapter::GetDefaultFontFamilyName());
