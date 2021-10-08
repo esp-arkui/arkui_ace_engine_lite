@@ -22,7 +22,6 @@
 #ifdef JS_TOUCH_EVENT_SUPPORT
 #include "root_view.h"
 #endif
-#include "global.h"
 #include "graphic_config.h"
 #include "wrapper/js.h"
 
