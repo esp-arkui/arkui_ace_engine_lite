@@ -14,14 +14,14 @@
 import("//build/lite/config/test.gni")
 import("//foundation/ace/ace_engine_lite/test/ace_test_config.gni")
 
-unittest("js_frameworks_test_jsfwk") {
+unittest("js_frameworks_test_system_info") {
   output_extension = "bin"
   output_dir = test_output_root
   configs = [ "$ace_lite_root/test:test_common_config" ]
-  sources = [ "common/jsfwk_tdd_test.cpp" ]
+  sources = [ "common/system_info_tdd_test.cpp" ]
   deps = ace_test_deps
 }
 
-group("js_frameworks_unittest") {
-  deps = [ ":js_frameworks_test_jsfwk" ]
+group("base_utils_unittest") {
+  deps = [ ":js_frameworks_test_system_info" ]
 }

@@ -16,10 +16,12 @@
 #include "product_adapter.h"
 
 #include "acelite_config.h"
+#include "ace_log.h"
 #include "graphic_config.h"
 #include "js_async_work.h"
 #include "message_queue_utils.h"
 #include "module_manager.h"
+#include "securec.h"
 
 namespace OHOS {
 namespace ACELite {
@@ -58,6 +60,11 @@ static char *g_defaultFontFamilyName = nullptr;
 static uint8_t g_defaultFontSize = 30;
 static uint16_t g_screenWidth = 454;
 static uint16_t g_screenHeight = 454;
+
+// default device info
+constexpr static uint8_t DEVICE_TYPE_STR_LEN = 24;
+// smartVision as default
+static char g_deviceType[DEVICE_TYPE_STR_LEN] = {'s', 'm', 'a', 'r', 't', 'V', 'i', 's', 'i', 'o', 'n', 0};
 
 // indicating if the ace application is on forground
 static bool g_isRenderTickAcceptable = false;
@@ -252,6 +259,21 @@ void ProductAdapter::UnloadExtraPresetModules()
     if (g_extraPresetModulesHooks.unloadingHandler != nullptr) {
         g_extraPresetModulesHooks.unloadingHandler();
     }
+}
+
+void ProductAdapter::InitDeviceInfo(const char *deviceType)
+{
+    if (deviceType == nullptr || (strlen(deviceType) == 0) || strlen(deviceType) >= DEVICE_TYPE_STR_LEN) {
+        return;
+    }
+    if (strcpy_s(g_deviceType, DEVICE_TYPE_STR_LEN, deviceType) != 0) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "initialize device type info failed");
+    }
+}
+
+const char *ProductAdapter::GetDeviceType()
+{
+    return g_deviceType;
 }
 } // namespace ACELite
 } // namespace OHOS
