@@ -14,6 +14,7 @@
  */
 
 #include "ace_mem_base.h"
+#include "ctype.h"
 #include "js_config.h"
 #include "securec.h"
 #include "string_util.h"
@@ -58,13 +59,14 @@ char *StringUtil::Slice(const char *sequence, const int32_t start, const int32_t
         return nullptr;
     }
     uint32_t size = strlen(sequence);
-    if (size == 0) {
+    if (size == 0 || size >= UINT16_MAX) {
         return nullptr;
     }
     int32_t startIdx = (start < 0) ? (start + size) : start;
     startIdx = (startIdx < 0) ? 0 : startIdx;
     int32_t endIdx = (end < 0) ? (end + size) : end;
-    if (startIdx < endIdx || endIdx < 0) {
+    endIdx = (endIdx > (int32_t)size) ? size : endIdx;
+    if (startIdx > endIdx || endIdx < 0) {
         return nullptr;
     }
     int32_t diffSize = endIdx - startIdx;
@@ -90,6 +92,35 @@ bool StringUtil::StartsWith(const char *sequence, const char *subsequence)
         return true;
     }
     return strncmp(sequence, subsequence, strlen(subsequence)) == 0;
+}
+
+char *StringUtil::Trim(char *sequence)
+{
+    if (sequence == nullptr) {
+        return nullptr;
+    }
+    if (strlen(sequence) == 0) {
+        return sequence;
+    }
+    char *leftP = sequence;
+    char *rightP = sequence;
+    char *endP = sequence;
+    // find the first no-space position
+    while (*leftP != '\0' && isspace(*leftP)) {
+        leftP++;
+    }
+    // copy all charaters one by one from the first no-space position to the start of the buffer
+    while (*leftP != '\0') {
+        *rightP = *leftP;
+        if (!isspace(*rightP)) {
+            // record the next position of the last no-space character
+            endP = rightP + 1;
+        }
+        leftP++;
+        rightP++;
+    }
+    *endP = '\0';
+    return sequence;
 }
 } // namespace ACELite
 } // namespace OHOS
