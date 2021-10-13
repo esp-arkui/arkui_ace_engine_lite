@@ -41,6 +41,9 @@ bool InputButtonComponent::CreateNativeViews()
     button_.SetStyle(STYLE_BACKGROUND_OPA, OPA_OPAQUE);
     button_.SetStateForStyle(UIButton::ButtonState::RELEASED);
     button_.SetStyle(STYLE_BACKGROUND_OPA, OPA_OPAQUE);
+    if (IsRTLSystemLanguage()) {
+        button_.SetDirect(UITextLanguageDirect::TEXT_DIRECT_RTL);
+    }
     return true;
 }
 

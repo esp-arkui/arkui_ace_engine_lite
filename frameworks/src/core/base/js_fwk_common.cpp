@@ -28,6 +28,7 @@
 #include "component_utils.h"
 #include "dfx_assist.h"
 #include "fatal_handler.h"
+#include "global.h"
 #include "js_app_context.h"
 #include "js_app_environment.h"
 #include "js_profiler.h"
@@ -1312,6 +1313,19 @@ uint16_t ParseKeyIdFromJSString(const jerry_value_t str)
         keyStr = nullptr;
     }
     return keyId;
+}
+
+bool IsRTLSystemLanguage()
+{
+    char currentLanguage[MAX_LANGUAGE_LENGTH] = {0};
+    int langRet = GLOBAL_GetLanguage(currentLanguage, MAX_LANGUAGE_LENGTH);
+    // For current supporting situation, only Arabic and Hebrew is RTL,
+    // Arabic : ar, Hebrew : iw, (note 'he' is equal to 'iw' for some operating  system)
+    if (langRet == 0 && (strcmp(currentLanguage, "ar") == 0 || strcmp(currentLanguage, "iw") == 0 ||
+        strcmp(currentLanguage, "he") == 0)) {
+        return true;
+    }
+    return false;
 }
 } // namespace ACELite
 } // namespace OHOS

@@ -50,6 +50,9 @@ bool TextComponent::CreateNativeViews()
         uiLabel_.SetAlign(UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT, UITextLanguageAlignment::TEXT_ALIGNMENT_CENTER);
         uiLabel_.SetSupportBaseLine(true);
     }
+    if (IsRTLSystemLanguage()) {
+        uiLabel_.SetDirect(UITextLanguageDirect::TEXT_DIRECT_RTL);
+    }
     return CopyFontFamily(fontFamily_, ProductAdapter::GetDefaultFontFamilyName());
 }
 

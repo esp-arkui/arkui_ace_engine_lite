@@ -292,6 +292,12 @@ const char *ParseImageSrc(jerry_value_t source);
  */
 uint16_t ParseKeyIdFromJSString(const jerry_value_t str);
 
+/**
+ * @brief Check if the current system language is RTL
+ * @return true for positive result
+ */
+bool IsRTLSystemLanguage();
+
 constexpr char PATH_PREFIX[] = ".";
 constexpr char PATH_DEFAULT[] = "/";
 
