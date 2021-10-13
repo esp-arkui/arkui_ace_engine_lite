@@ -41,8 +41,8 @@ namespace ACELite {
 constexpr char URI_PREFIX_DATA[] = "internal://app";
 constexpr uint8_t URI_PREFIX_DATA_LENGTH = 14;
 #ifdef OHOS_ACELITE_PRODUCT_WATCH
-constexpr char APP_DATA_DIR_PATH[] = "app/ace/data/";
-constexpr uint8_t APP_DATA_DIR_PATH_LENGTH = 13;
+constexpr char APP_DATA_DIR_PATH[] = "user/ace/data/";
+constexpr uint8_t APP_DATA_DIR_PATH_LENGTH = 14;
 #endif
 void JsAppContext::ClearContext()
 {
@@ -325,7 +325,7 @@ char *JsAppContext::GetResourcePath(const char *uri) const
             ACE_FREE(path);
             return nullptr;
         }
-        if (sprintf_s(dataPath, dataPathSize + 1, "%s%s%s", APP_DATA_DIR_PATH, currentBundleName_, path) < 0) {
+        if (sprintf_s(dataPath, dataPathSize + 1, "%s%s", APP_DATA_DIR_PATH, currentBundleName_) < 0) {
             HILOG_ERROR(HILOG_MODULE_ACE, "fail to get resource path.");
             ACE_FREE(path);
             ACE_FREE(dataPath);
@@ -333,6 +333,9 @@ char *JsAppContext::GetResourcePath(const char *uri) const
         }
 #else
         const char *dataPath = GetDataPath();
+        if (dataPath == nullptr || strlen(dataPath) == 0) {
+            dataPath = currentBundleName_;
+        }
 #endif
         char *relocatedPath = RelocateResourceFilePath(dataPath, path);
 #ifdef OHOS_ACELITE_PRODUCT_WATCH
