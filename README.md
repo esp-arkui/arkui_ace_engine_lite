@@ -8,7 +8,7 @@
 
 ## Introduction<a name="section11660541593"></a>
 
-The JS UI framework is a set of JS-UI framework provided for you to develop OpenHarmony applications. The following figure shows the framework architecture.
+The JS UI framework is a set of JS-UI framework provided for you to develop OpenHarmony applications. The following figure shows the framework architecture.huawei haha.
 
 **Figure  1**  Framework architecture<a name="fig11520531310"></a>
 
@@ -55,7 +55,7 @@ The source code of the framework is stored in  **/foundation/ace/ace\_engine\_li
 
 ## Available APIs<a name="section1096322014288"></a>
 
-For details about the APIs, see the  [JS Application Development](https://device.harmonyos.com/en/docs/apiref/js-framework-file-0000000000616658).
+For the details about the APIs, see the  [JS Application Development](https://device.harmonyos.com/en/docs/apiref/js-framework-file-0000000000616658).
 
 ## Usage<a name="section1529834174016"></a>
 
