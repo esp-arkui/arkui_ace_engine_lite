@@ -38,6 +38,8 @@ public:
 
     void Reset();
     void AddStyle(AppStyle* newStyle);
+    bool IsStyleExist(const AppStyle &newStyle);
+    AppStyle *GetExistStyle(const char *name) const;
 
 private:
     AppStyle* firstStyle_;
