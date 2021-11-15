@@ -698,17 +698,17 @@ char *JSI::ValueToString(JSIValue value)
 
 char *JSI::ValueToString(JSIValue value, size_t &size)
 {
-    size = 0;
 #if defined(ENABLE_JERRY)
     char *result = nullptr;
     jerry_value_t jVal = AS_JERRY_VALUE(value);
     if (!jerry_value_is_string(jVal)) {
         HILOG_ERROR(HILOG_MODULE_ACE, "JSI:ValueToString params invalid!");
+        size = 0;
         return nullptr;
     }
 
-    jerry_size_t tempSize = jerry_get_string_size(jVal);
-    if ((tempSize == 0) || (tempSize == UINT32_MAX)) {
+    size = jerry_get_string_size(jVal);
+    if ((size == 0) || (size == UINT32_MAX)) {
         // Output empty char instead of nullptr, thus caller can free safely
         result = static_cast<char *>(ace_malloc(sizeof(char)));
         if (result == nullptr) {
@@ -716,27 +716,30 @@ char *JSI::ValueToString(JSIValue value, size_t &size)
             return nullptr;
         }
         result[0] = '\0';
+        size = 0;
         return result;
     } else {
-        jerry_char_t *buffer = static_cast<jerry_char_t *>(ace_malloc(sizeof(jerry_char_t) * (tempSize + 1)));
+        jerry_char_t *buffer = static_cast<jerry_char_t *>(ace_malloc(sizeof(jerry_char_t) * (size + 1)));
         if (buffer == nullptr) {
             HILOG_ERROR(HILOG_MODULE_ACE, "JSI:ValueToString malloc memory failed!");
+            size = 0;
             return nullptr;
         }
-        jerry_size_t length = jerry_string_to_char_buffer(jVal, buffer, tempSize);
-        if ((length == 0) || (length > tempSize)) {
+        jerry_size_t length = jerry_string_to_char_buffer(jVal, buffer, size);
+        if ((length == 0) || (length > size)) {
             HILOG_ERROR(HILOG_MODULE_ACE, "JSI:ValueToString jerry string to char buffer failed");
             ace_free(buffer);
             buffer = nullptr;
+            size = 0;
             return nullptr;
         }
         buffer[length] = '\0';
         result = reinterpret_cast<char *>(buffer);
-        size = tempSize;
         return result;
     }
 #else
     HILOG_ERROR(HILOG_MODULE_ACE, "JSI:ValueToString has not been implemented in this js engine!");
+    size = 0;
     return nullptr;
 #endif
 }
