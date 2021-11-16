@@ -108,7 +108,7 @@ extra_deps = [
   "//third_party/jerryscript/jerry-ext:jerry-ext_shared",
   "//third_party/jerryscript/jerry-libm:jerry-libm_shared",
   "//third_party/jerryscript/jerry-port/default:jerry-port-default_shared",
-  "//utils/native/lite/timer_task:ace_kit_timer",
+  "//utils/native/lite/peripherals/timer_task:ace_kit_timer",
 ]
 
 all_external_deps = ace_test_deps + extra_deps

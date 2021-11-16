@@ -72,7 +72,7 @@ ace_lite_include_dirs += [
   "//third_party/jerryscript/jerry-ext/include/jerryscript-ext",
   "///third_party/jerryscript/jerry-port/default/include",
   "//third_party/cJSON",
-  "//utils/native/lite/timer_task/include/",
+  "//utils/native/lite/peripherals/timer_task/include/",
   "//third_party/freetype/include",
   "//base/global/resmgr_lite/interfaces/innerkits/include",
   "//base/global/i18n_lite/interfaces/kits/i18n/include",

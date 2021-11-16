@@ -221,7 +221,7 @@ INCLUDEPATH += \
             $${ROOT_PATH}/third_party/jerryscript/jerry-ext/include/jerryscript-ext \
             $${ROOT_PATH}//third_party/jerryscript/jerry-port/default/include \
             $${ROOT_PATH}/third_party/cJSON \
-            $${ROOT_PATH}/utils/native/lite/timer_task/include/ \
+            $${ROOT_PATH}/utils/native/lite/peripherals/timer_task/include/ \
             $${ROOT_PATH}/third_party/freetype/include \
             $${ROOT_PATH}/base/global/resmgr_lite/interfaces/innerkits/include \
             $${ROOT_PATH}/base/global/i18n_lite/interfaces/kits/i18n/include \
