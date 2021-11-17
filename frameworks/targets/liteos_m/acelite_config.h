@@ -29,9 +29,6 @@
  */
 #define OHOS_ACELITE_PRODUCT_WATCH
 
-// delete this after jerry porting is ready
-#define JERRY_PORTING_DEPENDENCY
-
 /**
  * enable Canvas component Feature API on ipcamera real devices
  */
@@ -67,8 +64,11 @@
 /**
  * enable localization feature
  */
-#define FEATURE_LOCALIZATION_MODULE
+// #define FEATURE_LOCALIZATION_MODULE
 
+#define FEATURE_ACELITE_HI_LOG_PRINTF
+
+#if 0
 /**
  * support mc ace log module trace
  */
@@ -83,6 +83,7 @@
  * support mc console log
  */
 #define FEATURE_USER_MC_LOG_PRINTF
+#endif
 
 /**
  * support config for product JS modules
@@ -140,22 +141,23 @@
 /**
  * date time module
  */
-#define FEATURE_DATE_FORMAT
+// #define FEATURE_DATE_FORMAT
 
-#define FEATURE_API_VERSION
+// #define FEATURE_API_VERSION
 
-#define JS_ENGINE_STATIC_MULTI_CONTEXTS_ENABLED
-
+// #define JS_ENGINE_STATIC_MULTI_CONTEXTS_ENABLED
+#define FEATURE_MODULE_STORAGE
+#define FEATURE_MODULE_DEVICE
 /**
  * support js profiler
  */
 #define FEATURE_ACELITE_MC_JS_PROFILER
 
-#define DEFAULT_PROFILER_MSG_PATH "user/log/"
+#define DEFAULT_PROFILER_MSG_PATH "/log/"
 
-#define PROFILER_ENABLE_FLAG_FILE "user/data/profiler_enable"
+#define PROFILER_ENABLE_FLAG_FILE "/data/profiler_enable"
 
-#define RUNTIME_MODE_FILE_PATH "user/data/jsparser_enable"
+#define RUNTIME_MODE_FILE_PATH "/data/jsparser_enable"
 
 /**
  * Rotation API feature

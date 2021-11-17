@@ -23,7 +23,13 @@ lite_component("ace_native_engine_lite") {
   features = [ ":ace_native_engine" ]
 }
 
-shared_library("ace_native_engine") {
+lite_library("ace_native_engine") {
+  if (ohos_kernel_type == "liteos_m") {
+    target_type = "static_library"
+  } else {
+    target_type = "shared_library"
+  }
+
   include_dirs = [
     "$ace_common_root/log",
     "$ace_common_root/memory",
@@ -33,7 +39,9 @@ shared_library("ace_native_engine") {
     "//base/hiviewdfx/hilog_lite/interfaces/native/kits",
     "//third_party/jerryscript/jerry-core/include",
   ]
-  if (ohos_kernel_type == "liteos_a" || ohos_kernel_type == "liteos_m") {
+  if (ohos_kernel_type == "liteos_m") {
+    include_dirs += [ "$ace_target_root/liteos_m" ]
+  } else if (ohos_kernel_type == "liteos_a") {
     include_dirs += [ "$ace_target_root/liteos_a" ]
   } else if (ohos_kernel_type == "linux") {
     include_dirs += [ "$ace_target_root/linux" ]
@@ -50,6 +58,7 @@ shared_library("ace_native_engine") {
 
   public_deps = [
     "$ace_common_root:ace_common_lite",
-    "//third_party/jerryscript/jerry-core:jerry-core_shared",
+    "//foundation/graphic/ui:ui",
+    "//third_party/jerryscript:jerry_engine",
   ]
 }

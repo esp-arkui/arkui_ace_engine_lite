@@ -22,7 +22,13 @@ lite_component("ace_common_lite") {
   features = [ ":ace_common" ]
 }
 
-shared_library("ace_common") {
+lite_library("ace_common") {
+  if (ohos_kernel_type == "liteos_m") {
+    target_type = "static_library"
+  } else {
+    target_type = "shared_library"
+  }
+
   include_dirs = [
     "$ace_common_root/log",
     "$ace_common_root/memory",
@@ -49,5 +55,9 @@ shared_library("ace_common") {
     "$ace_common_root/memory/memory_heap.cpp",
   ]
 
-  public_deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
+  if (ohos_kernel_type == "liteos_m") {
+    public_deps = [ "//third_party/bounds_checking_function:libsec_static" ]
+  } else {
+    public_deps = [ "//third_party/bounds_checking_function:libsec_shared" ]
+  }
 }
