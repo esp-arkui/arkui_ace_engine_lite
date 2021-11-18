@@ -16,7 +16,7 @@
 #include "js_app_context.h"
 #include "ace_event_error_code.h"
 #include "ace_log.h"
-#if (defined(__LINUX__) || defined(__LITEOS__))
+#if (defined(__LINUX__) || defined(__LITEOS_A__))
 #include "ace_ability.h"
 #endif
 #ifdef FEATURE_API_VERSION

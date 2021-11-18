@@ -16,7 +16,7 @@
 #include "platform_adapter.h"
 #include <cstdlib>
 #include "acelite_config.h"
-#if (defined(__LINUX__) || defined(__LITEOS__))
+#if (defined(__LINUX__) || defined(__LITEOS_A__))
 #include "ace_ability.h"
 #endif
 #include "ace_log.h"
