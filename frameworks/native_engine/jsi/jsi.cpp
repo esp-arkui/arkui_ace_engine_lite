@@ -110,6 +110,17 @@ void JSI::SetStringProperty(JSIValue object, const char * const propName, const 
     ReleaseValue(strValue);
 }
 
+void JSI::SetStringProperty(JSIValue object, const char * const propName, const char *value, size_t size)
+{
+    if (!ValueIsObject(object)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "JSI:SetStringProperty failed!");
+        return;
+    }
+    JSIValue strValue = CreateString(value, size);
+    SetNamedProperty(object, propName, strValue);
+    ReleaseValue(strValue);
+}
+
 #if defined(ENABLE_JERRY)
 /**
  * @brief: CreateJerryFuncHelper is used to create jerry function
@@ -173,6 +184,19 @@ JSIValue JSI::CreateString(const char * const str)
     }
 #if defined(ENABLE_JERRY)
     return AS_JSI_VALUE(jerry_create_string(reinterpret_cast<const jerry_char_t *>(str)));
+#else
+    HILOG_ERROR(HILOG_MODULE_ACE, "JSI:CreateString has not been implemented in this js engine!");
+    return CreateUndefined();
+#endif
+}
+
+JSIValue JSI::CreateString(const char * const str, size_t size)
+{
+    if (str == nullptr) {
+        return CreateUndefined();
+    }
+#if defined(ENABLE_JERRY)
+    return AS_JSI_VALUE(jerry_create_string_sz(reinterpret_cast<const jerry_char_t *>(str), size));
 #else
     HILOG_ERROR(HILOG_MODULE_ACE, "JSI:CreateString has not been implemented in this js engine!");
     return CreateUndefined();
@@ -366,6 +390,18 @@ char *JSI::GetStringProperty(JSIValue object, const char * const propName)
     }
     JSIValue propValue = GetNamedProperty(object, propName);
     char *res = ValueToString(propValue);
+    ReleaseValue(propValue);
+    return res;
+}
+
+char *JSI::GetStringProperty(JSIValue object, const char * const propName, size_t &size)
+{
+    if (!ValueIsObject(object)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "JSI:GetStringProperty failed!");
+        return nullptr;
+    }
+    JSIValue propValue = GetNamedProperty(object, propName);
+    char *res = ValueToString(propValue, size);
     ReleaseValue(propValue);
     return res;
 }
@@ -656,6 +692,54 @@ char *JSI::ValueToString(JSIValue value)
     }
 #else
     HILOG_ERROR(HILOG_MODULE_ACE, "JSI:ValueToString has not been implemented in this js engine!");
+    return nullptr;
+#endif
+}
+
+char *JSI::ValueToString(JSIValue value, size_t &size)
+{
+#if defined(ENABLE_JERRY)
+    char *result = nullptr;
+    jerry_value_t jVal = AS_JERRY_VALUE(value);
+    if (!jerry_value_is_string(jVal)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "JSI:ValueToString params invalid!");
+        size = 0;
+        return nullptr;
+    }
+
+    size = jerry_get_string_size(jVal);
+    if ((size == 0) || (size == UINT32_MAX)) {
+        // Output empty char instead of nullptr, thus caller can free safely
+        result = static_cast<char *>(ace_malloc(sizeof(char)));
+        if (result == nullptr) {
+            HILOG_ERROR(HILOG_MODULE_ACE, "JSI:ValueToString malloc memory for empty char failed!");
+            return nullptr;
+        }
+        result[0] = '\0';
+        size = 0;
+        return result;
+    } else {
+        jerry_char_t *buffer = static_cast<jerry_char_t *>(ace_malloc(sizeof(jerry_char_t) * (size + 1)));
+        if (buffer == nullptr) {
+            HILOG_ERROR(HILOG_MODULE_ACE, "JSI:ValueToString malloc memory failed!");
+            size = 0;
+            return nullptr;
+        }
+        jerry_size_t length = jerry_string_to_char_buffer(jVal, buffer, size);
+        if ((length == 0) || (length > size)) {
+            HILOG_ERROR(HILOG_MODULE_ACE, "JSI:ValueToString jerry string to char buffer failed");
+            ace_free(buffer);
+            buffer = nullptr;
+            size = 0;
+            return nullptr;
+        }
+        buffer[length] = '\0';
+        result = reinterpret_cast<char *>(buffer);
+        return result;
+    }
+#else
+    HILOG_ERROR(HILOG_MODULE_ACE, "JSI:ValueToString has not been implemented in this js engine!");
+    size = 0;
     return nullptr;
 #endif
 }
