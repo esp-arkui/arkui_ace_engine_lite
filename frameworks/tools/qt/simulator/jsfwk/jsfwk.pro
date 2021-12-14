@@ -172,6 +172,7 @@ INCLUDEPATH += \
             $${ROOT_PATH}/foundation/graphic/ui/interfaces/kits/font \
             $${ROOT_PATH}/foundation/graphic/ui/interfaces/kits/layout \
             $${ROOT_PATH}/foundation/graphic/ui/interfaces/kits/themes \
+            $${ROOT_PATH}/foundation/graphic/ui/frameworks \
             $${ROOT_PATH}/foundation/graphic/utils/frameworks/windows \
             $${ROOT_PATH}/foundation/graphic/utils/interfaces/innerkits \
             $${ROOT_PATH}/foundation/graphic/utils/interfaces/kits \
@@ -221,6 +222,7 @@ INCLUDEPATH += \
             $${ROOT_PATH}/third_party/jerryscript/jerry-ext/include/jerryscript-ext \
             $${ROOT_PATH}//third_party/jerryscript/jerry-port/default/include \
             $${ROOT_PATH}/third_party/cJSON \
+            $${ROOT_PATH}/third_party/giflib \
             $${ROOT_PATH}/utils/native/lite/timer_task/include/ \
             $${ROOT_PATH}/third_party/freetype/include \
             $${ROOT_PATH}/base/global/resmgr_lite/interfaces/innerkits/include \
