@@ -1094,29 +1094,8 @@ jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_v
             ACE_FREE(value);
         }
     }
-    int16_t width = -1;
-    int16_t height = -1;
-    if (argsNum >= ArgsCount::NUM_5){
-        if(jerry_value_is_number(args[ArgsIndex::IDX_3])){
-            width = IntegerOf(args[ArgsIndex::IDX_3]);
-        }else if(jerry_value_is_string(args[ArgsIndex::IDX_3])){
-            char* value = MallocStringOf(args[ArgsIndex::IDX_3]);
-            width = atoi(value);
-            ACE_FREE(value);
-        }
-
-    }
-    if (argsNum >= ArgsCount::NUM_6){
-        if(jerry_value_is_number(args[ArgsIndex::IDX_4])){
-            height = IntegerOf(args[ArgsIndex::IDX_4]);
-        }else if(jerry_value_is_string(args[ArgsIndex::IDX_4])){
-            char* value = MallocStringOf(args[ArgsIndex::IDX_4]);
-            height = atoi(value);
-            ACE_FREE(value);
-        }
-    }
     Point startLocat = {startX, startY};
-    component->canvas_.DrawImage(startLocat, imageName, component->paint_,width,height);
+    component->canvas_.DrawImage(startLocat, imageName, component->paint_);
     ACE_FREE(imageName);
     return UNDEFINED;
 }
