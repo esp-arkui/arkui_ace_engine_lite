@@ -23,6 +23,12 @@
 
 namespace OHOS {
 namespace ACELite {
+
+//const AttrMap ImageComponent::attrMap_[] = {
+//    //{ATTR_SRC, SrcSetter, SrcGetter}
+
+//};
+
 ImageComponent::ImageComponent(jerry_value_t options, jerry_value_t children, AppStyleManager *styleManager)
     : Component(options, children, styleManager),
       fitOriginalSize_(0),
@@ -30,6 +36,7 @@ ImageComponent::ImageComponent(jerry_value_t options, jerry_value_t children, Ap
       hasSetHeight_(false)
 {
     SetComponentName(K_IMAGE);
+   // RegisterNamedFunction(methodMap_[0].methodName, methodMap_[0].callbackName);
 }
 
 bool ImageComponent::CreateNativeViews()

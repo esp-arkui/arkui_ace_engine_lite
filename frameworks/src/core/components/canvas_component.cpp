@@ -20,7 +20,7 @@
 #include "js_fwk_common.h"
 #include "product_adapter.h"
 #include "securec.h"
-
+#include "jerryscript.h"
 namespace OHOS {
 namespace ACELite {
 // default fill style color=black
@@ -29,6 +29,14 @@ const char * const CanvasComponent::DEFAULT_FILLSTYLE = "#000000";
 const char * const CanvasComponent::DEFAULT_STROKESTYLE = "#000000";
 // default text align=left
 const char * const CanvasComponent::DEFAULT_TEXTALIGN = "left";
+// default line lineCap
+const char * const CanvasComponent::DEFAULT_LINECAP = "butt";
+// default line lineJoin
+const char * const CanvasComponent::DEFAULT_LINEJOIN = "miter";
+// default line lineJoin
+const int16_t CanvasComponent::DEFAULT_MITERLIMIT = 10;
+//default lineDashOffset
+const int16_t CanvasComponent::DEFAULT_LINEDASHOFFSET = 0;
 
 // API-attribute
 const char * const CanvasComponent::ATTR_FILLSTYLE = "fillStyle";
@@ -36,7 +44,10 @@ const char * const CanvasComponent::ATTR_STROKESTYLE = "strokeStyle";
 const char * const CanvasComponent::ATTR_LINEWIDTH = "lineWidth";
 const char * const CanvasComponent::ATTR_FONT = "font";
 const char * const CanvasComponent::ATTR_TEXTALIGN = "textAlign";
-
+const char * const CanvasComponent::ATTR_LINECAP = "lineCap";
+const char * const CanvasComponent::ATTR_LINEJOIN = "lineJoin";
+const char * const CanvasComponent::ATTR_MITERLIMIT = "miterLimit";
+const char * const CanvasComponent::ATTR_LINEDASHOFFSET = "lineDashOffset";
 // API-method
 const char * const CanvasComponent::FUNC_GETCONTEXT = "getContext";
 const char * const CanvasComponent::FUNC_FILLRECT = "fillRect";
@@ -49,6 +60,8 @@ const char * const CanvasComponent::FUNC_RECT = "rect";
 const char * const CanvasComponent::FUNC_ARC = "arc";
 const char * const CanvasComponent::FUNC_CLOSEPATH = "closePath";
 const char * const CanvasComponent::FUNC_STROKE = "stroke";
+const char * const CanvasComponent::FUNC_DRAWIMAGE = "drawImage";
+const char * const CanvasComponent::FUNC_SETLINEDASH = "setLineDash";
 
 // create canvas draw attribute-callback mapping
 const AttrMap CanvasComponent::attrMap_[] = {
@@ -56,7 +69,11 @@ const AttrMap CanvasComponent::attrMap_[] = {
     {ATTR_STROKESTYLE, StrokeStyleSetter, StrokeStyleGetter},
     {ATTR_LINEWIDTH, LineWidthSetter, LineWidthGetter},
     {ATTR_FONT, FontSetter, FontGetter},
-    {ATTR_TEXTALIGN, TextAlignSetter, TextAlignGetter}
+    {ATTR_TEXTALIGN, TextAlignSetter, TextAlignGetter},
+    {ATTR_LINECAP,LineCapSetter,LineCapGetter},
+    {ATTR_LINEJOIN,LineJoinSetter,LineJoinGetter},
+    {ATTR_MITERLIMIT,MiterLimitSetter,MiterLimitGetter},
+    {ATTR_LINEDASHOFFSET,LineDashOffsetSetter,LineDashOffsetGetter}
 };
 
 // create canvas draw method-callback mapping
@@ -71,7 +88,9 @@ const MethodMap CanvasComponent::methodMap_[] = {
     {FUNC_RECT, Rect},
     {FUNC_ARC, Arc},
     {FUNC_CLOSEPATH, ClosePath},
-    {FUNC_STROKE, Stroke}
+    {FUNC_STROKE, Stroke},
+    {FUNC_DRAWIMAGE, DrawImage},
+    {FUNC_SETLINEDASH,SetLineDash}
 };
 
 CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, AppStyleManager *styleManager)
@@ -81,7 +100,11 @@ CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, 
       strokeStyleValue_(nullptr),
       fontValue_(nullptr),
       textAlignValue_(nullptr),
-      lineWidthValue_(1)
+      lineCapValue_(nullptr),
+      lineJoinValue_(nullptr),
+      lineWidthValue_(1),
+      miterLimitValue_(DEFAULT_MITERLIMIT),
+      lineDashOffsetValue_(0)
 {
     SetComponentName(K_CANVAS);
     // set default paint pattern
@@ -114,6 +137,8 @@ void CanvasComponent::ReleaseNativeViews()
     ACE_FREE(strokeStyleValue_);
     ACE_FREE(fontValue_);
     ACE_FREE(textAlignValue_);
+    ACE_FREE(lineCapValue_);
+    ACE_FREE(lineJoinValue_);
     // free fontStyle_.fontName memory which malloc in FontSetter method.
     if (fontStyle_.fontName != nullptr) {
         ace_free(const_cast<char *>(fontStyle_.fontName));
@@ -473,14 +498,14 @@ jerry_value_t CanvasComponent::TextAlignSetter(const jerry_value_t func,
 }
 
 jerry_value_t CanvasComponent::TextAlignGetter(const jerry_value_t func,
-                                               const jerry_value_t dom,
+                                               const jerry_value_t contex,
                                                const jerry_value_t args[],
                                                const jerry_length_t argsNum)
 {
     (void)func;
     (void)args;
     (void)argsNum;
-    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(dom));
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(contex));
     if (component == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
         return jerry_create_error(JERRY_ERROR_TYPE,
@@ -495,6 +520,185 @@ jerry_value_t CanvasComponent::TextAlignGetter(const jerry_value_t func,
         return jerry_create_string(reinterpret_cast<const jerry_char_t *>(component->textAlignValue_));
     }
     return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("textAlign value error"));
+}
+
+jerry_value_t CanvasComponent::LineCapSetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+    (void)func;
+    if (argsNum != ArgsCount::NUM_1) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: lineCap value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("lineCap value error"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(contex));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+
+    ACE_FREE(component->lineCapValue_);
+
+    uint16_t length = 0;
+    component->lineCapValue_ = MallocStringOf(args[ArgsIndex::IDX_0], &length);
+    if (component->lineCapValue_ == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: lineCap value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("lineCap value error"));
+    }
+
+    uint8_t lineCap = ParseLineCap(component->lineCapValue_);
+    component->paint_.SetLineCap((BaseGfxExtendEngine::LineCap)lineCap);
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::LineCapGetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+    (void)func;
+    (void)args;
+    (void)argsNum;
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(contex));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    if (component->lineCapValue_ == nullptr) {
+        CopyFontFamily(component->lineCapValue_, DEFAULT_LINECAP);
+    }
+    if (component->lineCapValue_ != nullptr) {
+        return jerry_create_string(reinterpret_cast<const jerry_char_t *>(component->lineCapValue_));
+    }
+    return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("lineCap value error"));
+}
+
+jerry_value_t CanvasComponent::LineJoinSetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+    (void)func;
+    if (argsNum != ArgsCount::NUM_1) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: lineCap value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("lineCap value error"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(contex));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+
+    ACE_FREE(component->lineJoinValue_);
+
+    uint16_t length = 0;
+    component->lineJoinValue_ = MallocStringOf(args[ArgsIndex::IDX_0], &length);
+    if (component->lineJoinValue_ == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: lineJoin value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("lineJoin value error"));
+    }
+
+    uint8_t lineJoin = ParseLineJoin(component->lineJoinValue_);
+    component->paint_.SetLineJoin((BaseGfxExtendEngine::LineJoin)lineJoin);
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::LineJoinGetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+    (void)func;
+    (void)args;
+    (void)argsNum;
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(contex));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    if (component->lineJoinValue_ == nullptr) {
+        CopyFontFamily(component->lineJoinValue_, DEFAULT_LINEJOIN);
+    }
+    if (component->lineJoinValue_ != nullptr) {
+        return jerry_create_string(reinterpret_cast<const jerry_char_t *>(component->lineJoinValue_));
+    }
+    return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("lineJoin value error"));
+}
+
+jerry_value_t CanvasComponent::MiterLimitSetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+    (void)func;
+    if (argsNum != ArgsCount::NUM_1) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: miterLimit value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("lineWidth value error!"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(contex));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    if(jerry_value_is_number(args[ArgsIndex::IDX_0])){
+        component->miterLimitValue_ = jerry_get_number_value(args[ArgsIndex::IDX_0]);
+    }else if(jerry_value_is_string(args[ArgsIndex::IDX_0])){
+        char* value = MallocStringOf(args[ArgsIndex::IDX_0]);
+        component->miterLimitValue_ = atof(value);
+        ACE_FREE(value);
+    }
+    component->paint_.SetMiterLimit(component->miterLimitValue_);
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::MiterLimitGetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+    (void)func;
+    (void)args;
+    (void)argsNum;
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(contex));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    return jerry_create_number(component->miterLimitValue_);
+}
+
+jerry_value_t CanvasComponent::LineDashOffsetSetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+    (void)func;
+    if (argsNum != ArgsCount::NUM_1) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: lineWidth value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("lineWidth value error!"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(contex));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    if(jerry_value_is_number(args[ArgsIndex::IDX_0])){
+        component->lineDashOffsetValue_ = jerry_get_number_value(args[ArgsIndex::IDX_0]);
+    }else if(jerry_value_is_string(args[ArgsIndex::IDX_0])){
+        char* value = MallocStringOf(args[ArgsIndex::IDX_0]);
+        component->lineDashOffsetValue_ = atof(value);
+        ACE_FREE(value);
+    }
+
+    component->paint_.SetLineDashOffset(component->lineDashOffsetValue_);
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::LineDashOffsetGetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+    (void)func;
+    (void)args;
+    (void)argsNum;
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(contex));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    return jerry_create_number(component->lineDashOffsetValue_);
 }
 
 jerry_value_t CanvasComponent::FillRect(const jerry_value_t func,
@@ -561,7 +765,8 @@ jerry_value_t CanvasComponent::StrokeRect(const jerry_value_t func,
     Point startPoint;
     startPoint.x = startX;
     startPoint.y = startY;
-    component->canvas_.DrawRect(startPoint, height, width, component->paint_);
+    //component->canvas_.DrawRect(startPoint, height, width, component->paint_);
+    component->canvas_.StrokeRect(startPoint, height, width, component->paint_);
     return UNDEFINED;
 }
 
@@ -819,6 +1024,145 @@ jerry_value_t CanvasComponent::Stroke(const jerry_value_t func,
     }
 
     component->canvas_.DrawPath(component->paint_);
+    return UNDEFINED;
+}
+static void
+buffer_native_freecb (void *native_p)
+{
+
+//  char *data_p = ((buffer_native_object_t*)native_p)->data_p;
+
+//  if (data_p != NULL)
+//  {
+//    free (data_p);
+//  }
+
+  free (native_p);
+}
+static const jerry_object_native_info_t natFree = {
+.free_cb = buffer_native_freecb
+};
+jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_value_t context, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    if (argsNum < ArgsCount::NUM_1) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: DrawImage arg error!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("canvas_component: DrawImage arg error!"));
+    }
+    char *imageName = nullptr;
+    if(jerry_value_is_string(args[ArgsIndex::IDX_0])){
+        imageName = MallocStringOf(args[ArgsIndex::IDX_0]);
+        if (imageName == nullptr) {
+            HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imageName value failed");
+            return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("get imageName value failed"));
+        }
+    }else if(jerry_value_is_object(args[ArgsIndex::IDX_0])){
+//        jerry_value_t global_object = jerry_get_global_object ();
+//          jerry_value_t prop_name = jerry_create_string ((const jerry_char_t *) "src");
+//       jerry_value_t has = jerry_has_property (args[ArgsIndex::IDX_0],prop_name);
+//       bool hasV = jerry_value_is_boolean(has);
+//       jerry_value_t v = jerry_get_property(args[ArgsIndex::IDX_0],prop_name);
+//       bool isStr = jerry_value_is_string(v);
+//       isStr = jerry_value_is_number(v);
+//       isStr = jerry_value_is_object(v);
+//       int a = 0;
+    }
+
+    int16_t startX = 0;
+    int16_t startY = 0;
+    if (argsNum >= ArgsCount::NUM_3){
+        if(jerry_value_is_number(args[ArgsIndex::IDX_1])){
+            startX = IntegerOf(args[ArgsIndex::IDX_1]);
+        }else if(jerry_value_is_string(args[ArgsIndex::IDX_1])){
+            char* value = MallocStringOf(args[ArgsIndex::IDX_1]);
+            startX = atoi(value);
+            ACE_FREE(value);
+        }
+    }
+    if (argsNum >= ArgsCount::NUM_4){
+        if(jerry_value_is_number(args[ArgsIndex::IDX_2])){
+            startY = IntegerOf(args[ArgsIndex::IDX_2]);
+        }else if(jerry_value_is_string(args[ArgsIndex::IDX_2])){
+            char* value = MallocStringOf(args[ArgsIndex::IDX_2]);
+            startY = atoi(value);
+            ACE_FREE(value);
+        }
+    }
+    int16_t width = -1;
+    int16_t height = -1;
+    if (argsNum >= ArgsCount::NUM_5){
+        if(jerry_value_is_number(args[ArgsIndex::IDX_3])){
+            width = IntegerOf(args[ArgsIndex::IDX_3]);
+        }else if(jerry_value_is_string(args[ArgsIndex::IDX_3])){
+            char* value = MallocStringOf(args[ArgsIndex::IDX_3]);
+            width = atoi(value);
+            ACE_FREE(value);
+        }
+
+    }
+    if (argsNum >= ArgsCount::NUM_6){
+        if(jerry_value_is_number(args[ArgsIndex::IDX_4])){
+            height = IntegerOf(args[ArgsIndex::IDX_4]);
+        }else if(jerry_value_is_string(args[ArgsIndex::IDX_4])){
+            char* value = MallocStringOf(args[ArgsIndex::IDX_4]);
+            height = atoi(value);
+            ACE_FREE(value);
+        }
+    }
+    Point startLocat = {startX, startY};
+    component->canvas_.DrawImage(startLocat, imageName, component->paint_,width,height);
+    ACE_FREE(imageName);
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::SetLineDash(const jerry_value_t func, const jerry_value_t context, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+    if (argsNum != ArgsCount::NUM_1) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: SetLineDash arg error!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("canvas_component: DrawImage arg error!"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    jerry_value_t array = args[ArgsIndex::IDX_0];
+    if(!jerry_value_is_array(array)){
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: SetLineDash arg error!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("canvas_component: DrawImage arg error!"));
+    }
+    uint32_t len = jerry_get_array_length(array);
+    float *buff = new float[len];
+    for (uint32_t i = 0; i < len; i++) {
+        jerry_value_t val = jerry_get_property_by_index(array, i);
+        float num = 0;
+        if(jerry_value_is_number(val)){
+            num = jerry_get_number_value(val);
+        }
+        else if(jerry_value_is_string(val)){
+            char *value = MallocStringOf(val);
+            num = atof(value);
+            ACE_FREE(value);
+        }else{
+             HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: SetLineDash arg error!");
+        }
+
+        buff[i] = num;
+        jerry_release_value(val);
+    }
+
+    component->paint_.SetLineDash(buff, len);
+    delete[] buff;
     return UNDEFINED;
 }
 

@@ -119,10 +119,48 @@ private:
                                          const jerry_length_t argsNum);
 
     static jerry_value_t TextAlignGetter(const jerry_value_t func,
-                                         const jerry_value_t dom,
+                                         const jerry_value_t contex,
                                          const jerry_value_t args[],
                                          const jerry_length_t argsNum);
+    static jerry_value_t LineCapSetter(const jerry_value_t func,
+                                       const jerry_value_t contex,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
 
+    static jerry_value_t LineCapGetter(const jerry_value_t func,
+                                       const jerry_value_t context,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
+
+    static jerry_value_t LineJoinSetter(const jerry_value_t func,
+                                       const jerry_value_t contex,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
+
+    static jerry_value_t LineJoinGetter(const jerry_value_t func,
+                                       const jerry_value_t contex,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
+
+    static jerry_value_t MiterLimitSetter(const jerry_value_t func,
+                                       const jerry_value_t contex,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
+
+    static jerry_value_t MiterLimitGetter(const jerry_value_t func,
+                                       const jerry_value_t contex,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
+
+    static jerry_value_t LineDashOffsetSetter(const jerry_value_t func,
+                                        const jerry_value_t contex,
+                                        const jerry_value_t args[],
+                                        const jerry_length_t argsNum);
+
+    static jerry_value_t LineDashOffsetGetter(const jerry_value_t func,
+                                        const jerry_value_t contex,
+                                        const jerry_value_t args[],
+                                        const jerry_length_t argsNum);
     static jerry_value_t FillRect(const jerry_value_t func,
                                   const jerry_value_t dom,
                                   const jerry_value_t args[],
@@ -173,6 +211,15 @@ private:
                                 const jerry_value_t args[],
                                 const jerry_length_t argsNum);
 
+    static jerry_value_t DrawImage(const jerry_value_t func,
+                                const jerry_value_t context,
+                                const jerry_value_t args[],
+                                const jerry_length_t argsNum);
+    static jerry_value_t SetLineDash(const jerry_value_t func,
+                                 const jerry_value_t context,
+                                 const jerry_value_t args[],
+                                 const jerry_length_t argsNum);
+
     UICanvas canvas_;
     jerry_value_t context_;
     Paint paint_;
@@ -182,9 +229,18 @@ private:
     char *fontValue_;
     char *textAlignValue_;
     int16_t lineWidthValue_;
+    char *lineCapValue_;
+    char *lineJoinValue_;
+    double miterLimitValue_;
+    float lineDashOffsetValue_;
     static const char * const DEFAULT_FILLSTYLE;
     static const char * const DEFAULT_STROKESTYLE;
     static const char * const DEFAULT_TEXTALIGN;
+    static const char * const DEFAULT_LINECAP;
+    static const char * const DEFAULT_LINEJOIN;
+    static const int16_t DEFAULT_MITERLIMIT;
+    static const int16_t DEFAULT_LINEDASHOFFSET;
+
     static const AttrMap attrMap_[];
     static const MethodMap methodMap_[];
     static const char * const ATTR_FILLSTYLE;
@@ -192,6 +248,11 @@ private:
     static const char * const ATTR_LINEWIDTH;
     static const char * const ATTR_FONT;
     static const char * const ATTR_TEXTALIGN;
+    static const char * const ATTR_LINECAP;
+    static const char * const ATTR_LINEJOIN;
+    static const char * const ATTR_MITERLIMIT;
+    static const char * const ATTR_LINEDASHOFFSET;
+
     static const char * const FUNC_GETCONTEXT;
     static const char * const FUNC_FILLRECT;
     static const char * const FUNC_STROKERECT;
@@ -203,6 +264,9 @@ private:
     static const char * const FUNC_ARC;
     static const char * const FUNC_CLOSEPATH;
     static const char * const FUNC_STROKE;
+    static const char * const FUNC_DRAWIMAGE;
+    static const char * const FUNC_SETLINEDASH;
+
 };
 } // namespace ACELite
 } // namespace OHOS

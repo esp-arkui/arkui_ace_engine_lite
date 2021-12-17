@@ -24,6 +24,8 @@
 
 namespace OHOS {
 namespace ACELite {
+
+
 class ImageComponent final : public Component {
 public:
     ACE_DISALLOW_COPY_AND_MOVE(ImageComponent);
@@ -44,6 +46,11 @@ private:
     bool fitOriginalSize_ : 1;
     bool hasSetWidth_ : 1;
     bool hasSetHeight_ : 1;
+
+
+     static const char * const ATTR_SRC;
+
+
 };
 } // namespace ACELite
 } // namespace OHOS
