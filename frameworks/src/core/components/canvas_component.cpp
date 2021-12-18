@@ -57,11 +57,15 @@ const char * const CanvasComponent::FUNC_BEGINPATH = "beginPath";
 const char * const CanvasComponent::FUNC_MOVETO = "moveTo";
 const char * const CanvasComponent::FUNC_LINETO = "lineTo";
 const char * const CanvasComponent::FUNC_RECT = "rect";
+const char * const CanvasComponent::FUNC_CLEANRECT = "cleanRect";
 const char * const CanvasComponent::FUNC_ARC = "arc";
 const char * const CanvasComponent::FUNC_CLOSEPATH = "closePath";
 const char * const CanvasComponent::FUNC_STROKE = "stroke";
+const char * const CanvasComponent::FUNC_FILL = "fill";
 const char * const CanvasComponent::FUNC_DRAWIMAGE = "drawImage";
 const char * const CanvasComponent::FUNC_SETLINEDASH = "setLineDash";
+const char * const CanvasComponent::FUNC_GETLINEDASH = "getLineDash";
+
 
 // create canvas draw attribute-callback mapping
 const AttrMap CanvasComponent::attrMap_[] = {
@@ -86,11 +90,14 @@ const MethodMap CanvasComponent::methodMap_[] = {
     {FUNC_MOVETO, MoveTo},
     {FUNC_LINETO, LineTo},
     {FUNC_RECT, Rect},
+    {FUNC_CLEANRECT, CleanRect},
     {FUNC_ARC, Arc},
     {FUNC_CLOSEPATH, ClosePath},
     {FUNC_STROKE, Stroke},
+    {FUNC_FILL, Fill},
     {FUNC_DRAWIMAGE, DrawImage},
-    {FUNC_SETLINEDASH,SetLineDash}
+    {FUNC_SETLINEDASH,SetLineDash},
+    {FUNC_GETLINEDASH,GetLineDash}
 };
 
 CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, AppStyleManager *styleManager)
@@ -122,6 +129,7 @@ CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, 
     fontStyle_.fontName = defaultFontName;
     fontStyle_.letterSpace = DEFAULT_FONT_LETTERSPACE;
 
+    canvas_.SetDrawGraphicsContext(paint_);
     RegisterNamedFunction(methodMap_[0].methodName, methodMap_[0].callbackName);
 }
 
@@ -150,6 +158,14 @@ void CanvasComponent::ReleaseNativeViews()
             HILOG_WARN(HILOG_MODULE_ACE, "canvas_component: delete object native pointer context_ failed!");
         }
         jerry_release_value(context_);
+    }
+    if (!IS_UNDEFINED(dashArray_)) {
+        uint32_t length = jerry_get_array_length(dashArray_);
+        for (uint32_t i =0; i < length; i++) {
+            jerry_value_t val = jerry_get_property_by_index(dashArray_, i);
+            jerry_release_value(val);
+        }
+        jerry_release_value(dashArray_);
     }
 }
 
@@ -930,6 +946,34 @@ jerry_value_t CanvasComponent::Rect(const jerry_value_t func,
     return UNDEFINED;
 }
 
+jerry_value_t CanvasComponent::CleanRect(const jerry_value_t func, const jerry_value_t context, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+    (void)func;
+    if (argsNum != ArgsCount::NUM_4) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: the number of rect method parameter error!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("rect method parameter error"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+
+    int16_t x = IntegerOf(args[ArgsIndex::IDX_0]);
+    int16_t y = IntegerOf(args[ArgsIndex::IDX_1]);
+    int16_t width = IntegerOf(args[ArgsIndex::IDX_2]);
+    int16_t height = IntegerOf(args[ArgsIndex::IDX_3]);
+
+    Point point;
+    point.x = x;
+    point.y = y;
+    component->canvas_.ClearRect(point, height, width, component->paint_);
+    return UNDEFINED;
+}
+
 jerry_value_t CanvasComponent::Arc(const jerry_value_t func,
                                    const jerry_value_t context,
                                    const jerry_value_t args[],
@@ -1026,22 +1070,22 @@ jerry_value_t CanvasComponent::Stroke(const jerry_value_t func,
     component->canvas_.DrawPath(component->paint_);
     return UNDEFINED;
 }
-static void
-buffer_native_freecb (void *native_p)
+
+jerry_value_t CanvasComponent::Fill(const jerry_value_t func, const jerry_value_t context, const jerry_value_t args[], const jerry_length_t argsNum)
 {
-
-//  char *data_p = ((buffer_native_object_t*)native_p)->data_p;
-
-//  if (data_p != NULL)
-//  {
-//    free (data_p);
-//  }
-
-  free (native_p);
+    (void)func;
+    (void)args;
+    (void)argsNum;
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    component->canvas_.FillPath(component->paint_);
+    return UNDEFINED;
 }
-static const jerry_object_native_info_t natFree = {
-.free_cb = buffer_native_freecb
-};
+
 jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_value_t context, const jerry_value_t args[], const jerry_length_t argsNum)
 {
     CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
@@ -1076,6 +1120,8 @@ jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_v
 
     int16_t startX = 0;
     int16_t startY = 0;
+    int16_t width = -1;
+    int16_t height = -1;
     if (argsNum >= ArgsCount::NUM_3){
         if(jerry_value_is_number(args[ArgsIndex::IDX_1])){
             startX = IntegerOf(args[ArgsIndex::IDX_1]);
@@ -1094,8 +1140,26 @@ jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_v
             ACE_FREE(value);
         }
     }
+    if (argsNum >= ArgsCount::NUM_5){
+        if(jerry_value_is_number(args[ArgsIndex::IDX_1])){
+            width = IntegerOf(args[ArgsIndex::IDX_1]);
+        }else if(jerry_value_is_string(args[ArgsIndex::IDX_1])){
+            char* value = MallocStringOf(args[ArgsIndex::IDX_1]);
+            width = atoi(value);
+            ACE_FREE(value);
+        }
+    }
+    if (argsNum >= ArgsCount::NUM_6){
+        if(jerry_value_is_number(args[ArgsIndex::IDX_2])){
+            height = IntegerOf(args[ArgsIndex::IDX_2]);
+        }else if(jerry_value_is_string(args[ArgsIndex::IDX_2])){
+            char* value = MallocStringOf(args[ArgsIndex::IDX_2]);
+            height = atoi(value);
+            ACE_FREE(value);
+        }
+    }
     Point startLocat = {startX, startY};
-    component->canvas_.DrawImage(startLocat, imageName, component->paint_);
+    component->canvas_.DrawImage(startLocat, imageName, component->paint_, width, height);
     ACE_FREE(imageName);
     return UNDEFINED;
 }
@@ -1143,6 +1207,28 @@ jerry_value_t CanvasComponent::SetLineDash(const jerry_value_t func, const jerry
     component->paint_.SetLineDash(buff, len);
     delete[] buff;
     return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::GetLineDash(const jerry_value_t func, const jerry_value_t context, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    float* pArr = component->paint_.GetLineDash();
+    uint32_t length = component->paint_.GetLineDashCount();
+
+    if(!jerry_value_is_array(component->dashArray_))
+    {
+        component->dashArray_ = jerry_create_array(length);
+        for (uint32_t i = 0; i < length; i++) {
+            jerry_set_property_by_index(component->dashArray_ ,i , jerry_create_number(pArr[i]));
+        }
+    }
+    return component->dashArray_;
+
 }
 
 void CanvasComponent::GetSubFont(const char *font, const uint8_t index, char *&subFont) const

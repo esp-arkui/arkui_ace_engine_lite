@@ -196,6 +196,11 @@ private:
                               const jerry_value_t args[],
                               const jerry_length_t argsNum);
 
+    static jerry_value_t CleanRect(const jerry_value_t func,
+                              const jerry_value_t context,
+                              const jerry_value_t args[],
+                              const jerry_length_t argsNum);
+
     static jerry_value_t Arc(const jerry_value_t func,
                              const jerry_value_t context,
                              const jerry_value_t args[],
@@ -211,6 +216,12 @@ private:
                                 const jerry_value_t args[],
                                 const jerry_length_t argsNum);
 
+    static jerry_value_t Fill(const jerry_value_t func,
+                                const jerry_value_t context,
+                                const jerry_value_t args[],
+                                const jerry_length_t argsNum);
+
+
     static jerry_value_t DrawImage(const jerry_value_t func,
                                 const jerry_value_t context,
                                 const jerry_value_t args[],
@@ -219,9 +230,13 @@ private:
                                  const jerry_value_t context,
                                  const jerry_value_t args[],
                                  const jerry_length_t argsNum);
-
+    static jerry_value_t GetLineDash(const jerry_value_t func,
+                                 const jerry_value_t context,
+                                 const jerry_value_t args[],
+                                 const jerry_length_t argsNum);
     UICanvas canvas_;
     jerry_value_t context_;
+    jerry_value_t dashArray_;
     Paint paint_;
     UICanvas::FontStyle fontStyle_;
     char *fillStyleValue_;
@@ -261,12 +276,14 @@ private:
     static const char * const FUNC_MOVETO;
     static const char * const FUNC_LINETO;
     static const char * const FUNC_RECT;
+    static const char * const FUNC_CLEANRECT;
     static const char * const FUNC_ARC;
     static const char * const FUNC_CLOSEPATH;
     static const char * const FUNC_STROKE;
+    static const char * const FUNC_FILL;
     static const char * const FUNC_DRAWIMAGE;
     static const char * const FUNC_SETLINEDASH;
-
+    static const char * const FUNC_GETLINEDASH;
 };
 } // namespace ACELite
 } // namespace OHOS
