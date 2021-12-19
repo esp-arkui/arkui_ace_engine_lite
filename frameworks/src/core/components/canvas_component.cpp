@@ -21,6 +21,8 @@
 #include "product_adapter.h"
 #include "securec.h"
 #include "jerryscript.h"
+#include "image_component.h"
+
 namespace OHOS {
 namespace ACELite {
 // default fill style color=black
@@ -96,8 +98,8 @@ const MethodMap CanvasComponent::methodMap_[] = {
     {FUNC_STROKE, Stroke},
     {FUNC_FILL, Fill},
     {FUNC_DRAWIMAGE, DrawImage},
-    {FUNC_SETLINEDASH,SetLineDash},
-    {FUNC_GETLINEDASH,GetLineDash}
+    {FUNC_SETLINEDASH, SetLineDash},
+    {FUNC_GETLINEDASH, GetLineDash}
 };
 
 CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, AppStyleManager *styleManager)
@@ -1086,7 +1088,8 @@ jerry_value_t CanvasComponent::Fill(const jerry_value_t func, const jerry_value_
     return UNDEFINED;
 }
 
-jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_value_t context, const jerry_value_t args[], const jerry_length_t argsNum)
+jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_value_t context,
+                                         const jerry_value_t args[], const jerry_length_t argsNum)
 {
     CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
     if (component == nullptr) {
@@ -1099,6 +1102,7 @@ jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_v
         return jerry_create_error(JERRY_ERROR_TYPE,
                                   reinterpret_cast<const jerry_char_t *>("canvas_component: DrawImage arg error!"));
     }
+    ImageComponent* imageComponent = nullptr;
     char *imageName = nullptr;
     if(jerry_value_is_string(args[ArgsIndex::IDX_0])){
         imageName = MallocStringOf(args[ArgsIndex::IDX_0]);
@@ -1106,18 +1110,25 @@ jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_v
             HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imageName value failed");
             return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("get imageName value failed"));
         }
-    }else if(jerry_value_is_object(args[ArgsIndex::IDX_0])){
-//        jerry_value_t global_object = jerry_get_global_object ();
-//          jerry_value_t prop_name = jerry_create_string ((const jerry_char_t *) "src");
-//       jerry_value_t has = jerry_has_property (args[ArgsIndex::IDX_0],prop_name);
-//       bool hasV = jerry_value_is_boolean(has);
-//       jerry_value_t v = jerry_get_property(args[ArgsIndex::IDX_0],prop_name);
-//       bool isStr = jerry_value_is_string(v);
-//       isStr = jerry_value_is_number(v);
-//       isStr = jerry_value_is_object(v);
-//       int a = 0;
+    } else if(jerry_value_is_object(args[ArgsIndex::IDX_0])){
+        void *nativePtr = nullptr;
+        bool exist = jerry_get_object_native_pointer(args[ArgsIndex::IDX_0], &nativePtr, nullptr);
+        imageComponent = reinterpret_cast<ImageComponent*>(nativePtr);
+        if(imageComponent == nullptr){
+            HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imageComponent value failed");
+            return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("get imageComponent value failed"));
+        }
+        const char * src = imageComponent->GetSrc();
+        if(src == nullptr){
+            HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: by imageComponent get src failed");
+            return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("by imageComponent get src failed"));
+        }
+        imageName = (char*)malloc(strlen(src) + 1);
+        strcpy_s(imageName, strlen(src) + 1, src);
+    } else{
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imageName value failed");
+        return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("get imageName value failed"));
     }
-
     int16_t startX = 0;
     int16_t startY = 0;
     int16_t width = -1;
@@ -1160,7 +1171,12 @@ jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_v
     }
     Point startLocat = {startX, startY};
     component->canvas_.DrawImage(startLocat, imageName, component->paint_, width, height);
-    ACE_FREE(imageName);
+    if(imageComponent){
+        free(imageName);
+    }else{
+        ACE_FREE(imageName);
+    }
+
     return UNDEFINED;
 }
 
@@ -1219,13 +1235,10 @@ jerry_value_t CanvasComponent::GetLineDash(const jerry_value_t func, const jerry
     }
     float* pArr = component->paint_.GetLineDash();
     uint32_t length = component->paint_.GetLineDashCount();
-
-    if(!jerry_value_is_array(component->dashArray_))
-    {
-        component->dashArray_ = jerry_create_array(length);
-        for (uint32_t i = 0; i < length; i++) {
-            jerry_set_property_by_index(component->dashArray_ ,i , jerry_create_number(pArr[i]));
-        }
+    jerry_release_value(component->dashArray_);
+    component->dashArray_ = jerry_create_array(length);
+    for (uint32_t i = 0; i < length; i++) {
+        jerry_set_property_by_index(component->dashArray_ ,i , jerry_create_number(pArr[i]));
     }
     return component->dashArray_;
 

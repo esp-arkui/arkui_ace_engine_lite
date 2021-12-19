@@ -1348,5 +1348,18 @@ int8_t ParseLineJoin(const char *lineJoin)
     return -1;
 }
 
+int16_t ParseImageSize(jerry_value_t value)
+{
+    int16_t val = 0;
+    if(jerry_value_is_number(value)){
+        val = jerry_get_number_value(value);
+    }else if(jerry_value_is_string(value)){
+        char* str = MallocStringOf(value);
+        val = atoi(str);
+        ACE_FREE(str);
+    }
+    return val;
+}
+
 } // namespace ACELite
 } // namespace OHOS

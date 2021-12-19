@@ -29,6 +29,14 @@ namespace ACELite {
 
 //};
 
+
+const char * const ImageComponent::ATTR_ONLOAD = "onload";
+const char * const ImageComponent::ATTR_ONERROR = "onerror";
+const ImageAttrMap ImageComponent::attrMap_[] = {
+   // {ATTR_ONLOAD, OnLoadSetter, OnLoadGetter},
+   // {ATTR_ONERROR, OnErrorSetter, OnErrorGetter},
+
+};
 ImageComponent::ImageComponent(jerry_value_t options, jerry_value_t children, AppStyleManager *styleManager)
     : Component(options, children, styleManager),
       fitOriginalSize_(0),
@@ -36,7 +44,18 @@ ImageComponent::ImageComponent(jerry_value_t options, jerry_value_t children, Ap
       hasSetHeight_(false)
 {
     SetComponentName(K_IMAGE);
-   // RegisterNamedFunction(methodMap_[0].methodName, methodMap_[0].callbackName);
+    RegisterNamedFunction(ATTR_ONLOAD, OnLoadSetter);
+    // register fillStyle, strokeStyle, lineWidth, font, textAlign attribute
+//    uint16_t attrMapLength = sizeof(attrMap_) / sizeof(attrMap_[0]);
+//    for (uint16_t index = 0; index < attrMapLength; index++) {
+//        RegisterAttributeFunc(component->context_, attrMap_[index].attrName, attrMap_[index].setterName,
+//                              attrMap_[index].getterName);
+//    }
+}
+
+const char * ImageComponent::GetSrc()
+{
+    return imageView_.GetPath();
 }
 
 bool ImageComponent::CreateNativeViews()
@@ -64,6 +83,16 @@ bool ImageComponent::SetPrivateAttribute(uint16_t attrKeyId, jerry_value_t attrV
             ACE_FREE(src);
             break;
         }
+        case K_WIDTH: {
+            int16_t width = ParseImageSize(attrValue);
+            imageView_.SetWidth(width);
+            break;
+        }
+        case K_HEIGHT: {
+            int16_t height = ParseImageSize(attrValue);
+            imageView_.SetWidth(height);
+            break;
+        }
         default:
             setResult = false;
             break;
@@ -81,6 +110,27 @@ void ImageComponent::UpdateWidgetFitMode()
         imageView_.SetAutoEnable(false);
     }
     imageView_.SetResizeMode(resizeMode_);
+}
+
+jerry_value_t ImageComponent::OnLoadSetter(const jerry_value_t func, const jerry_value_t dom, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+    int a = 1;
+    printf("%d",a);
+}
+
+jerry_value_t ImageComponent::OnLoadGetter(const jerry_value_t func, const jerry_value_t dom, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+
+}
+
+jerry_value_t ImageComponent::OnErrorSetter(const jerry_value_t func, const jerry_value_t dom, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+
+}
+
+jerry_value_t ImageComponent::OnErrorGetter(const jerry_value_t func, const jerry_value_t dom, const jerry_value_t args[], const jerry_length_t argsNum)
+{
+
 }
 
 bool ImageComponent::ApplyPrivateStyle(const AppStyleItem *style)

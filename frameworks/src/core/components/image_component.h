@@ -25,6 +25,12 @@
 namespace OHOS {
 namespace ACELite {
 
+struct ImageAttrMap {
+    ACE_DISALLOW_COPY_AND_MOVE(ImageAttrMap);
+    const char *attrName;
+    jerry_external_handler_t setterName;
+    jerry_external_handler_t getterName;
+};
 
 class ImageComponent final : public Component {
 public:
@@ -32,6 +38,7 @@ public:
     ImageComponent() = delete;
     ImageComponent(jerry_value_t options, jerry_value_t children, AppStyleManager *styleManager);
     ~ImageComponent() override {}
+    const char *  GetSrc();
 
 protected:
     bool CreateNativeViews() override;
@@ -46,11 +53,29 @@ private:
     bool fitOriginalSize_ : 1;
     bool hasSetWidth_ : 1;
     bool hasSetHeight_ : 1;
+    static const char * const ATTR_SRC;
 
+    static jerry_value_t OnLoadSetter(const jerry_value_t func,
+                                         const jerry_value_t dom,
+                                         const jerry_value_t args[],
+                                         const jerry_length_t argsNum);
+    static jerry_value_t OnLoadGetter(const jerry_value_t func,
+                                         const jerry_value_t dom,
+                                         const jerry_value_t args[],
+                                         const jerry_length_t argsNum);
 
-     static const char * const ATTR_SRC;
+    static jerry_value_t OnErrorSetter(const jerry_value_t func,
+                                         const jerry_value_t dom,
+                                         const jerry_value_t args[],
+                                         const jerry_length_t argsNum);
 
-
+    static jerry_value_t OnErrorGetter(const jerry_value_t func,
+                                         const jerry_value_t dom,
+                                         const jerry_value_t args[],
+                                         const jerry_length_t argsNum);
+static const ImageAttrMap attrMap_[];
+static const char * const ATTR_ONLOAD;
+static const char * const ATTR_ONERROR;
 };
 } // namespace ACELite
 } // namespace OHOS

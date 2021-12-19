@@ -284,6 +284,7 @@ void ExpandImagePathMem(char *&imagePath, const int16_t dotPos, const int16_t su
 void CureImagePath(char *&imagePath);
 #endif // OHOS_ACELITE_PRODUCT_WATCH
 const char *ParseImageSrc(jerry_value_t source);
+int16_t ParseImageSize(jerry_value_t width);
 
 /**
  * @brief ParseKeyIdFromJSString parse key ID from JS value
