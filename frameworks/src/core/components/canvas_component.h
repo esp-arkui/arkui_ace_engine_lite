@@ -122,6 +122,42 @@ private:
                                          const jerry_value_t dom,
                                          const jerry_value_t args[],
                                          const jerry_length_t argsNum);
+    static jerry_value_t ShadowOffsetXSetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+
+    static jerry_value_t ShadowOffsetXGetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+    static jerry_value_t ShadowOffsetYSetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+
+    static jerry_value_t ShadowOffsetYGetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+    static jerry_value_t ShadowColorSetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+
+    static jerry_value_t ShadowColorGetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+    static jerry_value_t ShadowBlurSetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+
+    static jerry_value_t ShadowBlurGetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
 
     static jerry_value_t FillRect(const jerry_value_t func,
                                   const jerry_value_t dom,
@@ -173,6 +209,27 @@ private:
                                 const jerry_value_t args[],
                                 const jerry_length_t argsNum);
 
+    static jerry_value_t CreateLInearGradient(const jerry_value_t func,
+                                              const jerry_value_t context,
+                                              const jerry_value_t args[],
+                                              const jerry_length_t argsNum);
+    static jerry_value_t CreateRadialGradient(const jerry_value_t func,
+                                              const jerry_value_t context,
+                                              const jerry_value_t args[],
+                                              const jerry_length_t argsNum);
+    static jerry_value_t AddColorStop(const jerry_value_t func,
+                                      const jerry_value_t context,
+                                      const jerry_value_t args[],
+                                      const jerry_length_t argsNum);
+    static jerry_value_t CreatePattern(const jerry_value_t func,
+                                       const jerry_value_t context,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
+    static jerry_value_t Fill(const jerry_value_t func,
+                              const jerry_value_t context,
+                              const jerry_value_t args[],
+                              const jerry_length_t argsNum);
+
     UICanvas canvas_;
     jerry_value_t context_;
     Paint paint_;
@@ -181,7 +238,15 @@ private:
     char *strokeStyleValue_;
     char *fontValue_;
     char *textAlignValue_;
+    int16_t shadowOffsetXValue_;
+    int16_t shadowOffsetYValue_;
+    int16_t shadowBlurValue_;
+    char *shadowColorValue_;
     int16_t lineWidthValue_;
+    GradientControl gradientControl_;
+    char *colorStopValue_;
+    char *patternPathValue_;
+    char *patternRepeatTypeValue_;
     static const char * const DEFAULT_FILLSTYLE;
     static const char * const DEFAULT_STROKESTYLE;
     static const char * const DEFAULT_TEXTALIGN;
@@ -192,6 +257,10 @@ private:
     static const char * const ATTR_LINEWIDTH;
     static const char * const ATTR_FONT;
     static const char * const ATTR_TEXTALIGN;
+    static const char * const ATTR_SHADOWOFFSETX;
+    static const char * const ATTR_SHADOWOFFSETY;
+    static const char * const ATTR_SHADOWBLUR;
+    static const char * const ATTR_SHADOWCOLOR;
     static const char * const FUNC_GETCONTEXT;
     static const char * const FUNC_FILLRECT;
     static const char * const FUNC_STROKERECT;
@@ -203,6 +272,11 @@ private:
     static const char * const FUNC_ARC;
     static const char * const FUNC_CLOSEPATH;
     static const char * const FUNC_STROKE;
+    static const char * const FUNC_CREATELINEARGRADIENT;
+    static const char * const FUNC_CREATERADIALGRADIENT;
+    static const char * const FUNC_ADDCOLORSTOP;
+    static const char * const FUNC_CREATEPATTERN;
+    static const char * const FUNC_FILL;
 };
 } // namespace ACELite
 } // namespace OHOS
