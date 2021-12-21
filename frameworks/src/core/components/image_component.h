@@ -53,7 +53,6 @@ private:
     bool fitOriginalSize_ : 1;
     bool hasSetWidth_ : 1;
     bool hasSetHeight_ : 1;
-    static const char * const ATTR_SRC;
 
     static jerry_value_t OnLoadSetter(const jerry_value_t func,
                                          const jerry_value_t dom,
@@ -73,9 +72,7 @@ private:
                                          const jerry_value_t dom,
                                          const jerry_value_t args[],
                                          const jerry_length_t argsNum);
-static const ImageAttrMap attrMap_[];
-static const char * const ATTR_ONLOAD;
-static const char * const ATTR_ONERROR;
+
 };
 } // namespace ACELite
 } // namespace OHOS

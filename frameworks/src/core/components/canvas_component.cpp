@@ -21,8 +21,8 @@
 #include "product_adapter.h"
 #include "securec.h"
 #include "jerryscript.h"
+#include "modules/presets/image_module.h"
 #include "image_component.h"
-
 namespace OHOS {
 namespace ACELite {
 // default fill style color=black
@@ -113,7 +113,8 @@ CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, 
       lineJoinValue_(nullptr),
       lineWidthValue_(1),
       miterLimitValue_(DEFAULT_MITERLIMIT),
-      lineDashOffsetValue_(0)
+      lineDashOffsetValue_(0),
+      dashArray_(UNDEFINED)
 {
     SetComponentName(K_CANVAS);
     // set default paint pattern
@@ -1102,81 +1103,64 @@ jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_v
         return jerry_create_error(JERRY_ERROR_TYPE,
                                   reinterpret_cast<const jerry_char_t *>("canvas_component: DrawImage arg error!"));
     }
-    ImageComponent* imageComponent = nullptr;
+    ImageModule* imageModule = nullptr;
+    ImageComponent* imageCom = nullptr;
     char *imageName = nullptr;
-    if(jerry_value_is_string(args[ArgsIndex::IDX_0])){
+    const char * src = nullptr;
+    int16_t startX = 0;
+    int16_t startY = 0;
+    int16_t width = -1;
+    int16_t height = -1;
+    if(jerry_value_is_string(args[ArgsIndex::IDX_0])){// 参数是文件名
         imageName = MallocStringOf(args[ArgsIndex::IDX_0]);
         if (imageName == nullptr) {
             HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imageName value failed");
             return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("get imageName value failed"));
         }
-    } else if(jerry_value_is_object(args[ArgsIndex::IDX_0])){
+    } else if(jerry_value_is_object(args[ArgsIndex::IDX_0])){// 参数是获取到的HTML image标签对象
         void *nativePtr = nullptr;
         bool exist = jerry_get_object_native_pointer(args[ArgsIndex::IDX_0], &nativePtr, nullptr);
-        imageComponent = reinterpret_cast<ImageComponent*>(nativePtr);
-        if(imageComponent == nullptr){
-            HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imageComponent value failed");
-            return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("get imageComponent value failed"));
+        imageModule = reinterpret_cast<ImageModule*>(nativePtr);//
+        imageCom = reinterpret_cast<ImageComponent*>(nativePtr);
+        if(imageCom){
+            src = imageCom->GetSrc();
+            if(src == nullptr){
+                HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imagePath value failed");
+                return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("get imagePath value failed"));
+            }
+            imageName = (char*)malloc(strlen(src) + 1);
+            strcpy_s(imageName, strlen(src) + 1, src);
+        }else{// 参数是通过new Image()的对象
+            jerry_value_t src = jerryx_get_property_str(args[ArgsIndex::IDX_0],ImageModule::ATTR_SRC);
+            char* srcVal = MallocStringOf(src);
+            imageName = (char*)malloc(strlen(srcVal) + 1);
+            strcpy_s(imageName, strlen(srcVal) + 1, srcVal);
+            ACE_FREE(srcVal);
+            jerry_value_t jWidth = jerryx_get_property_str(args[ArgsIndex::IDX_0],ImageModule::ATTR_WIDTH);
+            jerry_value_t jHeight = jerryx_get_property_str(args[ArgsIndex::IDX_0],ImageModule::ATTR_HEIGHT);
+            width = IntegerOf(jWidth);
+            height = IntegerOf(jHeight);
         }
-        const char * src = imageComponent->GetSrc();
-        if(src == nullptr){
-            HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: by imageComponent get src failed");
-            return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("by imageComponent get src failed"));
-        }
-        imageName = (char*)malloc(strlen(src) + 1);
-        strcpy_s(imageName, strlen(src) + 1, src);
     } else{
         HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imageName value failed");
         return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("get imageName value failed"));
     }
-    int16_t startX = 0;
-    int16_t startY = 0;
-    int16_t width = -1;
-    int16_t height = -1;
+
+    if (argsNum >= ArgsCount::NUM_2){
+        startX = IntegerOf(args[ArgsIndex::IDX_1]);
+    }
     if (argsNum >= ArgsCount::NUM_3){
-        if(jerry_value_is_number(args[ArgsIndex::IDX_1])){
-            startX = IntegerOf(args[ArgsIndex::IDX_1]);
-        }else if(jerry_value_is_string(args[ArgsIndex::IDX_1])){
-            char* value = MallocStringOf(args[ArgsIndex::IDX_1]);
-            startX = atoi(value);
-            ACE_FREE(value);
-        }
+        startY = IntegerOf(args[ArgsIndex::IDX_2]);
     }
     if (argsNum >= ArgsCount::NUM_4){
-        if(jerry_value_is_number(args[ArgsIndex::IDX_2])){
-            startY = IntegerOf(args[ArgsIndex::IDX_2]);
-        }else if(jerry_value_is_string(args[ArgsIndex::IDX_2])){
-            char* value = MallocStringOf(args[ArgsIndex::IDX_2]);
-            startY = atoi(value);
-            ACE_FREE(value);
-        }
+        width = IntegerOf(args[ArgsIndex::IDX_3]);
     }
     if (argsNum >= ArgsCount::NUM_5){
-        if(jerry_value_is_number(args[ArgsIndex::IDX_1])){
-            width = IntegerOf(args[ArgsIndex::IDX_1]);
-        }else if(jerry_value_is_string(args[ArgsIndex::IDX_1])){
-            char* value = MallocStringOf(args[ArgsIndex::IDX_1]);
-            width = atoi(value);
-            ACE_FREE(value);
-        }
-    }
-    if (argsNum >= ArgsCount::NUM_6){
-        if(jerry_value_is_number(args[ArgsIndex::IDX_2])){
-            height = IntegerOf(args[ArgsIndex::IDX_2]);
-        }else if(jerry_value_is_string(args[ArgsIndex::IDX_2])){
-            char* value = MallocStringOf(args[ArgsIndex::IDX_2]);
-            height = atoi(value);
-            ACE_FREE(value);
-        }
+        height = IntegerOf(args[ArgsIndex::IDX_4]);
     }
     Point startLocat = {startX, startY};
     component->canvas_.DrawImage(startLocat, imageName, component->paint_, width, height);
-    if(imageComponent){
-        free(imageName);
-    }else{
-        ACE_FREE(imageName);
-    }
-
+    free(imageName);
     return UNDEFINED;
 }
 
