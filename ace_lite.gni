@@ -171,6 +171,7 @@ ace_lite_sources = [
   "$ACE_LITE_PATH/src/core/modules/presets/localization_module.cpp",
   "$ACE_LITE_PATH/src/core/modules/presets/number_format_module.cpp",
   "$ACE_LITE_PATH/src/core/modules/presets/preset_module.cpp",
+  "$ACE_LITE_PATH/src/core/modules/presets/image_module.cpp",
   "$ACE_LITE_PATH/src/core/modules/presets/profiler_module.cpp",
   "$ACE_LITE_PATH/src/core/modules/presets/render_module.cpp",
   "$ACE_LITE_PATH/src/core/modules/presets/require_module.cpp",
