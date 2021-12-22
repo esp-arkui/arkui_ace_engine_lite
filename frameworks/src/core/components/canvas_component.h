@@ -161,6 +161,27 @@ private:
                                         const jerry_value_t contex,
                                         const jerry_value_t args[],
                                         const jerry_length_t argsNum);
+										
+   static jerry_value_t GlobalAlphaSetter(const jerry_value_t func,
+                                           const jerry_value_t dom,
+                                           const jerry_value_t args[],
+                                           const jerry_length_t argsNum);
+
+    static jerry_value_t GlobalAlphaGetter(const jerry_value_t func,
+                                           const jerry_value_t dom,
+                                           const jerry_value_t args[],
+                                           const jerry_length_t argsNum);
+
+    static jerry_value_t GlobalCompositeOperationSetter(const jerry_value_t func,
+                                                        const jerry_value_t dom,
+                                                        const jerry_value_t args[],
+                                                        const jerry_length_t argsNum);
+
+    static jerry_value_t GlobalCompositeOperationGetter(const jerry_value_t func,
+                                                        const jerry_value_t dom,
+                                                        const jerry_value_t args[],
+                                                        const jerry_length_t argsNum);
+														
     static jerry_value_t FillRect(const jerry_value_t func,
                                   const jerry_value_t dom,
                                   const jerry_value_t args[],
@@ -234,9 +255,61 @@ private:
                                  const jerry_value_t context,
                                  const jerry_value_t args[],
                                  const jerry_length_t argsNum);
+								 
+    static jerry_value_t StrokeText(const jerry_value_t func,
+                                    const jerry_value_t context,
+                                    const jerry_value_t args[],
+                                    const jerry_length_t argsNum);
+
+    static jerry_value_t Rotate(const jerry_value_t func,
+                                const jerry_value_t context,
+                                const jerry_value_t args[],
+                                const jerry_length_t argsNum);
+
+    static jerry_value_t Scale(const jerry_value_t func,
+                               const jerry_value_t context,
+                               const jerry_value_t args[],
+                               const jerry_length_t argsNum);
+
+    static jerry_value_t MeasureText(const jerry_value_t func,
+                                     const jerry_value_t context,
+                                     const jerry_value_t args[],
+                                     const jerry_length_t argsNum);
+
+    static jerry_value_t Translate(const jerry_value_t func,
+                                   const jerry_value_t context,
+                                   const jerry_value_t args[],
+                                   const jerry_length_t argsNum);
+
+    static jerry_value_t Transform(const jerry_value_t func,
+                                   const jerry_value_t context,
+                                   const jerry_value_t args[],
+                                   const jerry_length_t argsNum);
+
+    static jerry_value_t SetTransform(const jerry_value_t func,
+                                      const jerry_value_t context,
+                                      const jerry_value_t args[],
+                                      const jerry_length_t argsNum);
+
+    static jerry_value_t Save(const jerry_value_t func,
+                              const jerry_value_t context,
+                              const jerry_value_t args[],
+                              const jerry_length_t argsNum);
+
+    static jerry_value_t Restore(const jerry_value_t func,
+                                 const jerry_value_t context,
+                                 const jerry_value_t args[],
+                                 const jerry_length_t argsNum);
+
+    static jerry_value_t DrawCircle(const jerry_value_t func,
+                                    const jerry_value_t context,
+                                    const jerry_value_t args[],
+                                    const jerry_length_t argsNum);
     UICanvas canvas_;
     jerry_value_t context_;
     jerry_value_t dashArray_;
+	jerry_value_t measureTextObject_;
+    jerry_value_t measureTextWidthString_;
     Paint paint_;
     UICanvas::FontStyle fontStyle_;
     char *fillStyleValue_;
@@ -267,6 +340,8 @@ private:
     static const char * const ATTR_LINEJOIN;
     static const char * const ATTR_MITERLIMIT;
     static const char * const ATTR_LINEDASHOFFSET;
+	static const char * const ATTR_GLOBALALPHA;
+    static const char * const ATTR_GLOBALCOMPOSITEOPERATION;
 
     static const char * const FUNC_GETCONTEXT;
     static const char * const FUNC_FILLRECT;
@@ -284,6 +359,16 @@ private:
     static const char * const FUNC_DRAWIMAGE;
     static const char * const FUNC_SETLINEDASH;
     static const char * const FUNC_GETLINEDASH;
+	static const char * const FUNC_STROKETEXT;
+    static const char * const FUNC_ROTATE;
+    static const char * const FUNC_SCALE;
+    static const char * const FUNC_MEASURETEXT;
+    static const char * const FUNC_TRANSLATE;
+    static const char * const FUNC_TRANFORM;
+    static const char * const FUNC_SETTRANFORM;
+    static const char * const FUNC_SAVE;
+    static const char * const FUNC_RESTORE;
+    static const char * const FUNC_DRAWCIRCLE;
 };
 } // namespace ACELite
 } // namespace OHOS
