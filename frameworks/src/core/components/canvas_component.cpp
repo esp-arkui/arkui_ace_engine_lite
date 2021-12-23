@@ -33,10 +33,13 @@ const char * const CanvasComponent::DEFAULT_TEXTALIGN = "left";
 // API-attribute
 const char * const CanvasComponent::ATTR_FILLSTYLE = "fillStyle";
 const char * const CanvasComponent::ATTR_STROKESTYLE = "strokeStyle";
-const char * const CanvasComponent::ATTR_LINEWIDTH = "lineWidth";
+const char * const CanvasComponent::ATTR_LINEWIDTH = "lineWidthtest";
 const char * const CanvasComponent::ATTR_FONT = "font";
 const char * const CanvasComponent::ATTR_TEXTALIGN = "textAlign";
-
+const char * const CanvasComponent::ATTR_SHADOWOFFSETX = "shadowOffsetX";
+const char * const CanvasComponent::ATTR_SHADOWOFFSETY = "shadowOffsetY";
+const char * const CanvasComponent::ATTR_SHADOWCOLOR = "shadowColor";
+const char * const CanvasComponent::ATTR_SHADOWBLUR = "shadowBlur";
 // API-method
 const char * const CanvasComponent::FUNC_GETCONTEXT = "getContext";
 const char * const CanvasComponent::FUNC_FILLRECT = "fillRect";
@@ -49,14 +52,22 @@ const char * const CanvasComponent::FUNC_RECT = "rect";
 const char * const CanvasComponent::FUNC_ARC = "arc";
 const char * const CanvasComponent::FUNC_CLOSEPATH = "closePath";
 const char * const CanvasComponent::FUNC_STROKE = "stroke";
-
+const char * const CanvasComponent::FUNC_CREATELINEARGRADIENT = "createLinearGradient";
+const char * const CanvasComponent::FUNC_CREATERADIALGRADIENT = "createRadialGradient";
+const char * const CanvasComponent::FUNC_ADDCOLORSTOP = "addColorStop";
+const char * const CanvasComponent::FUNC_CREATEPATTERN = "createPattern";
+const char * const CanvasComponent::FUNC_FILL = "fill";
 // create canvas draw attribute-callback mapping
 const AttrMap CanvasComponent::attrMap_[] = {
     {ATTR_FILLSTYLE, FillStyleSetter, FillStyleGetter},
     {ATTR_STROKESTYLE, StrokeStyleSetter, StrokeStyleGetter},
     {ATTR_LINEWIDTH, LineWidthSetter, LineWidthGetter},
     {ATTR_FONT, FontSetter, FontGetter},
-    {ATTR_TEXTALIGN, TextAlignSetter, TextAlignGetter}
+    {ATTR_TEXTALIGN, TextAlignSetter, TextAlignGetter},
+    {ATTR_SHADOWOFFSETX, ShadowOffsetXSetter, ShadowOffsetXGetter},
+    {ATTR_SHADOWOFFSETY, ShadowOffsetYSetter, ShadowOffsetYGetter},
+    {ATTR_SHADOWCOLOR, ShadowColorSetter, ShadowColorGetter},
+    {ATTR_SHADOWBLUR, ShadowBlurSetter, ShadowBlurGetter}
 };
 
 // create canvas draw method-callback mapping
@@ -71,7 +82,12 @@ const MethodMap CanvasComponent::methodMap_[] = {
     {FUNC_RECT, Rect},
     {FUNC_ARC, Arc},
     {FUNC_CLOSEPATH, ClosePath},
-    {FUNC_STROKE, Stroke}
+    {FUNC_STROKE, Stroke},
+    {FUNC_CREATELINEARGRADIENT, CreateLInearGradient},
+    {FUNC_CREATERADIALGRADIENT, CreateRadialGradient},
+    {FUNC_ADDCOLORSTOP, AddColorStop},
+    {FUNC_CREATEPATTERN, CreatePattern},
+    {FUNC_FILL, Fill}
 };
 
 CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, AppStyleManager *styleManager)
@@ -81,7 +97,14 @@ CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, 
       strokeStyleValue_(nullptr),
       fontValue_(nullptr),
       textAlignValue_(nullptr),
-      lineWidthValue_(1)
+      shadowOffsetXValue_(0),
+      shadowOffsetYValue_(0),
+      shadowBlurValue_(0),
+      shadowColorValue_(nullptr),
+      lineWidthValue_(1),
+      colorStopValue_(nullptr),
+      patternPathValue_(nullptr),
+      patternRepeatTypeValue_(nullptr)
 {
     SetComponentName(K_CANVAS);
     // set default paint pattern
@@ -197,8 +220,8 @@ jerry_value_t CanvasComponent::FillStyleSetter(const jerry_value_t func,
     }
 
     ACE_FREE(component->fillStyleValue_);
-
-    component->fillStyleValue_ = MallocStringOf(args[ArgsIndex::IDX_0]);
+    uint16_t fillStyleLength = 0;
+    component->fillStyleValue_ = MallocStringOf(args[ArgsIndex::IDX_0], &fillStyleLength);
     if (component->fillStyleValue_ == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: fillStyle value error!");
         return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("fillStyle value erro!"));
@@ -206,9 +229,19 @@ jerry_value_t CanvasComponent::FillStyleSetter(const jerry_value_t func,
 
     uint32_t color = 0;
     uint8_t alpha = OPA_OPAQUE;
-    ParseColor(component->fillStyleValue_, color, alpha);
-    component->paint_.SetFillColor(component->GetRGBColor(color));
-    component->paint_.SetOpacity(alpha);
+    uint16_t fillStyleId = KeyParser::ParseKeyId(component->fillStyleValue_, fillStyleLength);
+    if (fillStyleId == K_CANVASPATTERN) {
+        component->paint_.SetStyle(Paint::PaintStyle::PATTERN);
+        return UNDEFINED;
+    }
+    if (fillStyleId == K_CANVASGRADIENT) {
+        component->paint_.SetStyle(Paint::PaintStyle::FILL_GRADIENT);
+        component->paint_.fillStyle(component->gradientControl_);
+    }
+    if(ParseColor(component->fillStyleValue_, color, alpha)){
+        component->paint_.SetFillColor(component->GetRGBColor(color));
+        component->paint_.SetOpacity(alpha);
+    }
     return UNDEFINED;
 }
 
@@ -257,8 +290,8 @@ jerry_value_t CanvasComponent::StrokeStyleSetter(const jerry_value_t func,
     }
 
     ACE_FREE(component->strokeStyleValue_);
-
-    component->strokeStyleValue_ = MallocStringOf(args[ArgsIndex::IDX_0]);
+    uint16_t strokeStyleLength = 0;
+    component->strokeStyleValue_ = MallocStringOf(args[ArgsIndex::IDX_0], &strokeStyleLength);
     if (component->strokeStyleValue_ == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: strokeStyle value error");
         return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("strokeStyle value error"));
@@ -266,9 +299,19 @@ jerry_value_t CanvasComponent::StrokeStyleSetter(const jerry_value_t func,
 
     uint32_t color = 0;
     uint8_t alpha = OPA_OPAQUE;
-    ParseColor(component->strokeStyleValue_, color, alpha);
-    component->paint_.SetStrokeColor(component->GetRGBColor(color));
-    component->paint_.SetOpacity(alpha);
+    uint16_t strokeStyleId = KeyParser::ParseKeyId(component->strokeStyleValue_, strokeStyleLength);
+    if (strokeStyleId == K_CANVASPATTERN) {
+        component->paint_.SetStyle(Paint::PaintStyle::PATTERN);
+        return UNDEFINED;
+    }
+    if (strokeStyleId == K_CANVASGRADIENT) {
+        component->paint_.SetStyle(Paint::PaintStyle::STROKE_GRADIENT);
+        return UNDEFINED;
+    }
+    if (ParseColor(component->strokeStyleValue_, color, alpha)) {
+        component->paint_.SetStrokeColor(component->GetRGBColor(color));
+        component->paint_.SetOpacity(alpha);
+    }
     return UNDEFINED;
 }
 
@@ -495,6 +538,186 @@ jerry_value_t CanvasComponent::TextAlignGetter(const jerry_value_t func,
         return jerry_create_string(reinterpret_cast<const jerry_char_t *>(component->textAlignValue_));
     }
     return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("textAlign value error"));
+}
+
+jerry_value_t CanvasComponent::ShadowOffsetXSetter(const jerry_value_t func,
+                                                   const jerry_value_t context,
+                                                   const jerry_value_t *args,
+                                                   const jerry_length_t argsNum)
+{
+    (void)func;
+    if (argsNum != ArgsCount::NUM_1) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: shadowOffsetX value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("shadowOffsetX value error"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    component->shadowOffsetXValue_ = IntegerOf(args[ArgsIndex::IDX_0]);
+    component->paint_.SetShadowOffsetX(component->shadowOffsetXValue_);
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::ShadowOffsetXGetter(const jerry_value_t func,
+                                               const jerry_value_t dom,
+                                               const jerry_value_t args[],
+                                               const jerry_length_t argsNum)
+{
+    (void)func;
+    (void)args;
+    (void)argsNum;
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(dom));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    return jerry_create_number(component->shadowOffsetXValue_);
+}
+
+jerry_value_t CanvasComponent::ShadowOffsetYSetter(const jerry_value_t func,
+                                                   const jerry_value_t context,
+                                                   const jerry_value_t *args,
+                                                   const jerry_length_t argsNum)
+{
+    (void)func;
+    if (argsNum != ArgsCount::NUM_1) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: shadowOffsetY value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("shadowOffsetY value error"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    component->shadowOffsetYValue_ = IntegerOf(args[ArgsIndex::IDX_0]);
+    component->paint_.SetShadowOffsetY(component->shadowOffsetYValue_);
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::ShadowOffsetYGetter(const jerry_value_t func,
+                                               const jerry_value_t dom,
+                                               const jerry_value_t args[],
+                                               const jerry_length_t argsNum)
+{
+    (void)func;
+    (void)args;
+    (void)argsNum;
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(dom));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    return jerry_create_number(component->shadowOffsetYValue_);
+}
+
+jerry_value_t CanvasComponent::ShadowBlurSetter(const jerry_value_t func,
+                                                   const jerry_value_t context,
+                                                   const jerry_value_t *args,
+                                                   const jerry_length_t argsNum)
+{
+    (void)func;
+    if (argsNum != ArgsCount::NUM_1) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: shadowBlur value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("shadowBlur value error"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    component->shadowBlurValue_ = IntegerOf(args[ArgsIndex::IDX_0]);
+    component->paint_.SetShadowBlurRadius(component->shadowBlurValue_);
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::ShadowBlurGetter(const jerry_value_t func,
+                                               const jerry_value_t dom,
+                                               const jerry_value_t args[],
+                                               const jerry_length_t argsNum)
+{
+    (void)func;
+    (void)args;
+    (void)argsNum;
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(dom));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    return jerry_create_number(component->shadowBlurValue_);
+}
+
+jerry_value_t CanvasComponent::ShadowColorSetter(const jerry_value_t func,
+                                                 const jerry_value_t context,
+                                                 const jerry_value_t args[],
+                                                 const jerry_length_t argsNum)
+{
+    (void)func;
+    if (argsNum != ArgsCount::NUM_1) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: shadowColor value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("shadowColor value error"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+
+    ACE_FREE(component->shadowColorValue_);
+
+    component->shadowColorValue_ = MallocStringOf(args[ArgsIndex::IDX_0]);
+    if (component->shadowColorValue_ == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: shadowColor value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("shadowColor value erro!"));
+    }
+
+    uint32_t color = 0;
+    uint8_t alpha = OPA_OPAQUE;
+    ParseColor(component->shadowColorValue_, color, alpha);
+    ColorType shadowColor = component->GetRGBColor(color);
+    shadowColor.alpha = alpha;
+    component->paint_.SetShadowColor(shadowColor);
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::ShadowColorGetter(const jerry_value_t func,
+                                                 const jerry_value_t dom,
+                                                 const jerry_value_t args[],
+                                                 const jerry_length_t argsNum)
+{
+    (void)func;
+    (void)args;
+    (void)argsNum;
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(dom));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+
+    if (component->shadowColorValue_ == nullptr) {
+        CopyFontFamily(component->shadowColorValue_, DEFAULT_FILLSTYLE);
+    }
+
+    if (component->shadowColorValue_ != nullptr) {
+        return jerry_create_string(reinterpret_cast<const jerry_char_t *>(component->shadowColorValue_));
+    }
+    return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("shadowColor value error"));
 }
 
 jerry_value_t CanvasComponent::FillRect(const jerry_value_t func,
@@ -817,8 +1040,169 @@ jerry_value_t CanvasComponent::Stroke(const jerry_value_t func,
         return jerry_create_error(JERRY_ERROR_TYPE,
                                   reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
     }
-
+    if (component->paint_.GetStyle() == Paint::PaintStyle::PATTERN) {
+        component->canvas_.StrokePattern(component->paint_);
+        return UNDEFINED;
+    }
+    if (component->paint_.GetStyle() == Paint::PaintStyle::STROKE_GRADIENT) {
+        component->canvas_.Gradient(component->paint_);
+        return UNDEFINED;
+    }
     component->canvas_.DrawPath(component->paint_);
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::CreateLInearGradient(const jerry_value_t func,
+                                                    const jerry_value_t context,
+                                                    const jerry_value_t args[],
+                                                    const jerry_length_t argsNum)
+{
+    (void)func;
+    if (argsNum != ArgsCount::NUM_4 ) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: the number of createLinearGradient method parameter error!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("createLinearGradient method parameter error"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+
+    double startX = jerry_get_number_value(args[ArgsIndex::IDX_0]);
+    double startY = jerry_get_number_value(args[ArgsIndex::IDX_1]);
+    double endX = jerry_get_number_value(args[ArgsIndex::IDX_2]);
+    double endY = jerry_get_number_value(args[ArgsIndex::IDX_3]);
+
+
+    component->gradientControl_.createLinearGradient(startX, startY, endX, endY);
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::CreateRadialGradient(const jerry_value_t func,
+                                                    const jerry_value_t context,
+                                                    const jerry_value_t args[],
+                                                    const jerry_length_t argsNum)
+{
+    (void)func;
+    if (argsNum != ArgsCount::NUM_6 ) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: the number of createRadialGradient method parameter error!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("createRadialGradient method parameter error"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+
+    double startX = jerry_get_number_value(args[ArgsIndex::IDX_0]);
+    double startY = jerry_get_number_value(args[ArgsIndex::IDX_1]);
+    double startR = jerry_get_number_value(args[ArgsIndex::IDX_2]);
+    double endX = jerry_get_number_value(args[ArgsIndex::IDX_3]);
+    double endY = jerry_get_number_value(args[ArgsIndex::IDX_4]);
+    double endR = jerry_get_number_value(args[ArgsIndex::IDX_5]);
+
+
+    component->gradientControl_.createRadialGradient(startX, startY, startR, endX, endY, endR);
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::AddColorStop(const jerry_value_t func,
+                                            const jerry_value_t context,
+                                            const jerry_value_t args[],
+                                            const jerry_length_t argsNum)
+{
+    (void)func;
+    if (argsNum != ArgsCount::NUM_2) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: the number of addColorStop method parameter error!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("addColorStop method parameter error"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+
+    ACE_FREE(component->colorStopValue_);
+    double stop = jerry_get_number_value(args[ArgsIndex::IDX_0]);
+    component->colorStopValue_ = MallocStringOf(args[ArgsIndex::IDX_1]);
+    if (component->colorStopValue_ == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: colorStop value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("colorStop value erro!"));
+    }
+
+    uint32_t color = 0;
+    uint8_t alpha = OPA_OPAQUE;
+    ParseColor(component->colorStopValue_, color, alpha);
+    ColorType colorStop = component->GetRGBColor(color);
+    colorStop.alpha = alpha;
+    component->gradientControl_.addColorStop(stop, colorStop);
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::CreatePattern(const jerry_value_t func,
+                                             const jerry_value_t context,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum)
+{
+    (void)func;
+    if (argsNum != ArgsCount::NUM_2 ) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: the number of createPattern method parameter error!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("createPattern method parameter error"));
+    }
+
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+
+    ACE_FREE(component->patternPathValue_);
+    ACE_FREE(component->patternRepeatTypeValue_);
+    component->patternPathValue_ = MallocStringOf(args[ArgsIndex::IDX_0]);
+    component->patternRepeatTypeValue_ = MallocStringOf(args[ArgsIndex::IDX_1]);
+    if (component->patternPathValue_ == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: patternPath value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("patternPath value erro!"));
+    }
+    if (component->patternRepeatTypeValue_ == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: patternRepeatType value error!");
+        return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("patternRepeatType value erro!"));
+    }
+    if (IsFileExisted(component->patternPathValue_)) {
+        component->paint_.createPattern(component->patternPathValue_,component->patternRepeatTypeValue_);
+    } else {
+        component->canvas_.Stroke(component->paint_);
+    }
+
+    return UNDEFINED;
+}
+
+jerry_value_t CanvasComponent::Fill(const jerry_value_t func,
+                                      const jerry_value_t context,
+                                      const jerry_value_t args[],
+                                      const jerry_length_t argsNum)
+{
+    (void)func;
+    (void)args;
+    (void)argsNum;
+    CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
+    if (component == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get canvas component from js object failed!");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
+    }
+    component->canvas_.Fill(component->paint_);
     return UNDEFINED;
 }
 

@@ -72,6 +72,8 @@ enum {
 #ifdef FEATURE_COMPONENT_CANVAS
     KEYWORD(CANVAS, canvas) // tag name
 #endif // FEATURE_COMPONENT_CANVAS
+    KEYWORD(CANVASGRADIENT, canvasGradient) // gradient fillstyle or strokestyle
+    KEYWORD(CANVASPATTERN, canvasPattern) //pattern fillstyle or strokestyle
     KEYWORD(CENTER, center) // text align type
     KEYWORD(CENTER_X, centerX) // circle progress x
     KEYWORD(CENTER_Y, centerY) // circle progress y
