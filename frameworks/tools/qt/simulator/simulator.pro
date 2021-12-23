@@ -21,3 +21,4 @@ SUBDIRS += \
     jerryScript \
     jsfwk \
     entry/entry.pro
+

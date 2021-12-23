@@ -246,6 +246,8 @@ enum {
     KEYWORD(SPACE_BETWEEN, space-between) // layout style
     KEYWORD(SPACE_EVENLY, space-evenly) // layout style
     KEYWORD(SRC, src) // common attributes, use for image view, video compnent
+    KEYWORD(IMAGE_WIDTH, width) // common attributes, use for image view, video compnent
+    KEYWORD(IMAGE_HEIGHT, height) // common attributes, use for image view, video compnent
     KEYWORD(STACK, stack) // tag name
     KEYWORD(STANDARD, standard) // text font size type
     KEYWORD(STOP, stop) // image-animator stop event, video component end event tag

@@ -122,6 +122,7 @@ SOURCES += \
         $${ACELITE_CORE_PATH}/modules/presets/intl_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/localization_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/number_format_module.cpp \
+        $${ACELITE_CORE_PATH}/modules/presets/image_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/preset_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/profiler_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/render_module.cpp \
