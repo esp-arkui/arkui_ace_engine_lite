@@ -1041,27 +1041,27 @@ jerry_value_t CanvasComponent::GlobalCompositeOperationSetter(const jerry_value_
     }
 
     if (strcmp(globalCompositeOperation, "source-over") == 0) {
-        component->paint_.SetGlobalCompositeOperation(BaseGfxExtendEngine::BlendMode::BLENDSRCOVER);
+        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_SRC_OVER);
     } else if (strcmp(globalCompositeOperation, "source-atop") == 0) {
-        component->paint_.SetGlobalCompositeOperation(BaseGfxExtendEngine::BlendMode::BLENDSRCATOP);
+        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_SRC_ATOP);
     } else if (strcmp(globalCompositeOperation, "source-in") == 0) {
-        component->paint_.SetGlobalCompositeOperation(BaseGfxExtendEngine::BlendMode::BLENDSRCIN);
+        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_SRC_IN);
     } else if (strcmp(globalCompositeOperation, "source-out") == 0) {
-        component->paint_.SetGlobalCompositeOperation(BaseGfxExtendEngine::BlendMode::BLENDSRCOUT);
+        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_SRC_OUT);
     } else if (strcmp(globalCompositeOperation, "destination-over") == 0) {
-        component->paint_.SetGlobalCompositeOperation(BaseGfxExtendEngine::BlendMode::BLENDDSTOVER);
+        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_DST_OVER);
     } else if (strcmp(globalCompositeOperation, "destination-atop") == 0) {
-        component->paint_.SetGlobalCompositeOperation(BaseGfxExtendEngine::BlendMode::BLENDDSTATOP);
+        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_DST_ATOP);
     } else if (strcmp(globalCompositeOperation, "destination-in") == 0) {
-        component->paint_.SetGlobalCompositeOperation(BaseGfxExtendEngine::BlendMode::BLENDDSTIN);
+        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_DST_IN);
     } else if (strcmp(globalCompositeOperation, "destination-out") == 0) {
-        component->paint_.SetGlobalCompositeOperation(BaseGfxExtendEngine::BlendMode::BLENDDSTOUT);
+        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_DST_OUT);
     } else if (strcmp(globalCompositeOperation, "lighter") == 0) {
-        component->paint_.SetGlobalCompositeOperation(BaseGfxExtendEngine::BlendMode::BLENDLIGHTEN);
+        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_LIGHTEN);
     } else if (strcmp(globalCompositeOperation, "copy") == 0) {
-        component->paint_.SetGlobalCompositeOperation(BaseGfxExtendEngine::BlendMode::BLENDCOPY);
+        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_COPY);
     } else if (strcmp(globalCompositeOperation, "xor") == 0) {
-        component->paint_.SetGlobalCompositeOperation(BaseGfxExtendEngine::BlendMode::BLENDXOR);
+        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_XOR);
     }
 
     ACE_FREE(globalCompositeOperation);
