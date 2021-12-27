@@ -385,7 +385,6 @@ private:
     double miterLimitValue_;
     float lineDashOffsetValue_;
 
-    GradientControl gradientControl_;
     char *colorStopValue_;
     char *patternPathValue_;
     char *patternRepeatTypeValue_;

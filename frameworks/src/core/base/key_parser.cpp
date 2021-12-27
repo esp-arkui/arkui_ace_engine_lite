@@ -462,6 +462,9 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "one")) {
                 return K_NONE;
             }
+            if (!strcmp(s, "o-repeat")) {
+                return K_NO_REPEAT;
+            }
 #ifdef FEATURE_DATE_FORMAT
             if (!strcmp(s, "umeric")) {
                 return K_NUMERIC;
@@ -542,6 +545,15 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             }
             if (!strcmp(s, "ef")) {
                 return K_REF;
+            }
+            if (!strcmp(s, "epeat")) {
+                return K_REPEAT;
+            }
+            if (!strcmp(s, "epeat-x")) {
+                return K_REPEAT_X;
+            }
+            if (!strcmp(s, "epeat-y")) {
+                return K_REPEAT_Y;
             }
             if (!strcmp(s, "everse")) {
                 return K_REVERSE;
