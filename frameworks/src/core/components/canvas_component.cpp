@@ -23,6 +23,7 @@
 #include "jerryscript.h"
 #include "modules/presets/image_module.h"
 #include "image_component.h"
+
 namespace OHOS {
 namespace ACELite {
 // default fill style color=black
@@ -178,7 +179,6 @@ CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, 
     CopyFontFamily(defaultFontName, ProductAdapter::GetDefaultFontFamilyName());
     fontStyle_.fontName = defaultFontName;
     fontStyle_.letterSpace = DEFAULT_FONT_LETTERSPACE;
-	canvas_.SetDrawGraphicsContext(paint_);
     RegisterNamedFunction(methodMap_[0].methodName, methodMap_[0].callbackName);
 }
 
@@ -822,7 +822,7 @@ jerry_value_t CanvasComponent::LineCapSetter(const jerry_value_t func, const jer
     }
 
     uint8_t lineCap = ParseLineCap(component->lineCapValue_);
-    component->paint_.SetLineCap((BaseGfxExtendEngine::LineCap)lineCap);
+    component->paint_.SetLineCap((LineCapEnum)lineCap);
     return UNDEFINED;
 }
 
@@ -872,7 +872,7 @@ jerry_value_t CanvasComponent::LineJoinSetter(const jerry_value_t func, const je
     }
 
     uint8_t lineJoin = ParseLineJoin(component->lineJoinValue_);
-    component->paint_.SetLineJoin((BaseGfxExtendEngine::LineJoin)lineJoin);
+    component->paint_.SetLineJoin((LineJoinEnum)lineJoin);
     return UNDEFINED;
 }
 
@@ -1970,7 +1970,8 @@ jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_v
         height = IntegerOf(args[ArgsIndex::IDX_4]);
     }
     Point startLocat = {startX, startY};
-    component->canvas_.DrawImage(startLocat, imageName, component->paint_, width, height);
+    component->canvas_.DrawImage(startLocat, imageName, component->paint_);
+//    component->canvas_.DrawImage(startLocat, imageName, component->paint_, width, height);
     free(imageName);
     return UNDEFINED;
 }
