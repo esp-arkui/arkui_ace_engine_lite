@@ -313,8 +313,7 @@ jerry_value_t CanvasComponent::FillStyleSetter(const jerry_value_t func,
         return UNDEFINED;
     }
     if (fillStyleId == K_CANVASGRADIENT) {
-        component->paint_.SetStyle(Paint::PaintStyle::FILL_GRADIENT);
-        component->paint_.FillStyle(component->gradientControl_);
+        component->paint_.SetStyle(Paint::PaintStyle::GRADIENT);
     }
     if(ParseColor(component->fillStyleValue_, color, alpha)){
         component->paint_.SetFillColor(component->GetRGBColor(color));
@@ -383,7 +382,7 @@ jerry_value_t CanvasComponent::StrokeStyleSetter(const jerry_value_t func,
         return UNDEFINED;
     }
     if (strokeStyleId == K_CANVASGRADIENT) {
-        component->paint_.SetStyle(Paint::PaintStyle::STROKE_GRADIENT);
+        component->paint_.SetStyle(Paint::PaintStyle::GRADIENT);
         return UNDEFINED;
     }
     if (ParseColor(component->strokeStyleValue_, color, alpha)) {
@@ -717,7 +716,7 @@ jerry_value_t CanvasComponent::ShadowBlurSetter(const jerry_value_t func,
                                   reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
     }
     component->shadowBlurValue_ = IntegerOf(args[ArgsIndex::IDX_0]);
-    component->paint_.SetShadowBlurRadius(component->shadowBlurValue_);
+    component->paint_.SetShadowBlur(component->shadowBlurValue_);
     return UNDEFINED;
 }
 
@@ -1730,14 +1729,6 @@ jerry_value_t CanvasComponent::Stroke(const jerry_value_t func,
         return jerry_create_error(JERRY_ERROR_TYPE,
                                   reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
     }
-    if (component->paint_.GetStyle() == Paint::PaintStyle::PATTERN) {
-        component->canvas_.StrokePattern(component->paint_);
-        return UNDEFINED;
-    }
-    if (component->paint_.GetStyle() == Paint::PaintStyle::STROKE_GRADIENT) {
-        component->canvas_.Gradient(component->paint_);
-        return UNDEFINED;
-    }
     component->canvas_.DrawPath(component->paint_);
     return UNDEFINED;
 }
@@ -1767,7 +1758,7 @@ jerry_value_t CanvasComponent::CreateLInearGradient(const jerry_value_t func,
     double endY = jerry_get_number_value(args[ArgsIndex::IDX_3]);
 
 
-    component->gradientControl_.createLinearGradient(startX, startY, endX, endY);
+    component->paint_.createLinearGradient(startX, startY, endX, endY);
     return UNDEFINED;
 }
 
@@ -1798,7 +1789,7 @@ jerry_value_t CanvasComponent::CreateRadialGradient(const jerry_value_t func,
     double endR = jerry_get_number_value(args[ArgsIndex::IDX_5]);
 
 
-    component->gradientControl_.createRadialGradient(startX, startY, startR, endX, endY, endR);
+    component->paint_.createRadialGradient(startX, startY, startR, endX, endY, endR);
     return UNDEFINED;
 }
 
@@ -1834,7 +1825,7 @@ jerry_value_t CanvasComponent::AddColorStop(const jerry_value_t func,
     ParseColor(component->colorStopValue_, color, alpha);
     ColorType colorStop = component->GetRGBColor(color);
     colorStop.alpha = alpha;
-    component->gradientControl_.addColorStop(stop, colorStop);
+    component->paint_.addColorStop(stop, colorStop);
     return UNDEFINED;
 }
 
@@ -1859,8 +1850,9 @@ jerry_value_t CanvasComponent::CreatePattern(const jerry_value_t func,
 
     ACE_FREE(component->patternPathValue_);
     ACE_FREE(component->patternRepeatTypeValue_);
+    uint16_t patternRepeatTypeLength = 0;
     component->patternPathValue_ = MallocStringOf(args[ArgsIndex::IDX_0]);
-    component->patternRepeatTypeValue_ = MallocStringOf(args[ArgsIndex::IDX_1]);
+    component->patternRepeatTypeValue_ = MallocStringOf(args[ArgsIndex::IDX_1], &patternRepeatTypeLength);
     if (component->patternPathValue_ == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: patternPath value error!");
         return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("patternPath value erro!"));
@@ -1869,12 +1861,23 @@ jerry_value_t CanvasComponent::CreatePattern(const jerry_value_t func,
         HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: patternRepeatType value error!");
         return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("patternRepeatType value erro!"));
     }
+    uint16_t patternRepeatTypeId = KeyParser::ParseKeyId(component->patternRepeatTypeValue_, patternRepeatTypeLength);
     if (IsFileExisted(component->patternPathValue_)) {
-        component->paint_.CreatePattern(component->patternPathValue_,component->patternRepeatTypeValue_);
-    } else {
-        component->canvas_.Stroke(component->paint_);
+        switch (patternRepeatTypeId) {
+        case K_NO_REPEAT:
+            component->paint_.CreatePattern(component->patternPathValue_,Paint::NO_REPEAT);
+            break;
+        case K_REPEAT:
+            component->paint_.CreatePattern(component->patternPathValue_,Paint::REPEAT);
+             break;
+        case K_REPEAT_X:
+            component->paint_.CreatePattern(component->patternPathValue_,Paint::REPEAT_X);
+             break;
+        case K_REPEAT_Y:
+            component->paint_.CreatePattern(component->patternPathValue_,Paint::REPEAT_Y);
+             break;
+        }
     }
-
     return UNDEFINED;
 }
 
@@ -1892,7 +1895,7 @@ jerry_value_t CanvasComponent::Fill(const jerry_value_t func,
         return jerry_create_error(JERRY_ERROR_TYPE,
                                   reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
     }
-    component->canvas_.Fill(component->paint_);
+    component->canvas_.FillPath(component->paint_);
     return UNDEFINED;
 }
 

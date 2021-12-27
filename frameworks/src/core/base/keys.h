@@ -182,6 +182,7 @@ enum {
 #endif // FEATURE_COMPONENT_VIDEO
     KEYWORD(NAME, name) // the attribute name
     KEYWORD(NONE, none) // animation fill value
+    KEYWORD(NO_REPEAT, no-repeat) // no-repeat pattern type
 #ifdef FEATURE_DATE_FORMAT
     KEYWORD(NUMERIC, numeric)
 #endif
@@ -214,6 +215,9 @@ enum {
     KEYWORD(PAUSE, pause) // video component pause event tag
 #endif // FEATURE_COMPONENT_VIDEO
     KEYWORD(REVERSE, reverse) // image-animator attribute
+    KEYWORD(REPEAT, repeat) // repeat pattern type
+    KEYWORD(REPEAT_X, repeat-x) // repeat-x pattern type
+    KEYWORD(REPEAT_Y, repeat-y) // repeat-y pattern type
     KEYWORD(RIGHT, right) // text align type
     KEYWORD(ROTATE, rotate) // animation rotate
     KEYWORD(ROW, row) // layout style
