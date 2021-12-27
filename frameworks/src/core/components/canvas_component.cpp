@@ -23,6 +23,7 @@
 #include "jerryscript.h"
 #include "modules/presets/image_module.h"
 #include "image_component.h"
+
 namespace OHOS {
 namespace ACELite {
 // default fill style color=black
@@ -178,7 +179,6 @@ CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, 
     CopyFontFamily(defaultFontName, ProductAdapter::GetDefaultFontFamilyName());
     fontStyle_.fontName = defaultFontName;
     fontStyle_.letterSpace = DEFAULT_FONT_LETTERSPACE;
-	canvas_.SetDrawGraphicsContext(paint_);
     RegisterNamedFunction(methodMap_[0].methodName, methodMap_[0].callbackName);
 }
 
@@ -822,7 +822,7 @@ jerry_value_t CanvasComponent::LineCapSetter(const jerry_value_t func, const jer
     }
 
     uint8_t lineCap = ParseLineCap(component->lineCapValue_);
-    component->paint_.SetLineCap((BaseGfxExtendEngine::LineCap)lineCap);
+    component->paint_.SetLineCap((LineCapEnum)lineCap);
     return UNDEFINED;
 }
 
@@ -872,7 +872,7 @@ jerry_value_t CanvasComponent::LineJoinSetter(const jerry_value_t func, const je
     }
 
     uint8_t lineJoin = ParseLineJoin(component->lineJoinValue_);
-    component->paint_.SetLineJoin((BaseGfxExtendEngine::LineJoin)lineJoin);
+    component->paint_.SetLineJoin((LineJoinEnum)lineJoin);
     return UNDEFINED;
 }
 
@@ -994,7 +994,7 @@ jerry_value_t CanvasComponent::GlobalAlphaSetter(const jerry_value_t func,
     }
 
     double globalAlpha = jerry_get_number_value(args[ArgsIndex::IDX_0]);
-    component->canvas_.GlobalAlpha(globalAlpha, component->paint_);
+    component->paint_.SetGlobalAlpha(globalAlpha);
     return UNDEFINED;
 }
 
@@ -1040,27 +1040,27 @@ jerry_value_t CanvasComponent::GlobalCompositeOperationSetter(const jerry_value_
     }
 
     if (strcmp(globalCompositeOperation, "source-over") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_SRC_OVER);
+        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::SOURCE_OVER);
     } else if (strcmp(globalCompositeOperation, "source-atop") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_SRC_ATOP);
+        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::SOURCE_ATOP);
     } else if (strcmp(globalCompositeOperation, "source-in") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_SRC_IN);
+        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::SOURCE_IN);
     } else if (strcmp(globalCompositeOperation, "source-out") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_SRC_OUT);
+        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::SOURCE_OUT);
     } else if (strcmp(globalCompositeOperation, "destination-over") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_DST_OVER);
+        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::DESTINATION_OVER);
     } else if (strcmp(globalCompositeOperation, "destination-atop") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_DST_ATOP);
+        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::DESTINATION_ATOP);
     } else if (strcmp(globalCompositeOperation, "destination-in") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_DST_IN);
+        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::DESTINATION_IN);
     } else if (strcmp(globalCompositeOperation, "destination-out") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_DST_OUT);
+        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::DESTINATION_OUT);
     } else if (strcmp(globalCompositeOperation, "lighter") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_LIGHTEN);
+        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::LIGHTER);
     } else if (strcmp(globalCompositeOperation, "copy") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_COPY);
+        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::COPY);
     } else if (strcmp(globalCompositeOperation, "xor") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::BlendMode::BLEND_XOR);
+        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::XOR);
     }
 
     ACE_FREE(globalCompositeOperation);
@@ -1279,7 +1279,7 @@ jerry_value_t CanvasComponent::Rotate(const jerry_value_t func,
     }
 
     double angle = jerry_get_number_value(args[ArgsIndex::IDX_0]);
-    component->canvas_.SetRotate(angle, component->paint_);
+    component->paint_.Rotate(angle);
     return UNDEFINED;
 }
 
@@ -1304,7 +1304,7 @@ jerry_value_t CanvasComponent::Scale(const jerry_value_t func,
 
     double scaleX = jerry_get_number_value(args[ArgsIndex::IDX_0]);
     double scaleY = jerry_get_number_value(args[ArgsIndex::IDX_1]);
-    component->canvas_.SetScale(scaleX, scaleY, component->paint_);
+    component->paint_.Scale(scaleX, scaleY);
     return UNDEFINED;
 }
 
@@ -1368,7 +1368,7 @@ jerry_value_t CanvasComponent::Translate(const jerry_value_t func,
     int16_t positionX = IntegerOf(args[ArgsIndex::IDX_0]);
     int16_t positionY = IntegerOf(args[ArgsIndex::IDX_1]);
 
-    component->canvas_.SetTranslate(positionX, positionY, component->paint_);
+    component->paint_.Translate(positionX, positionY);
     return UNDEFINED;
 }
 
@@ -1397,7 +1397,7 @@ jerry_value_t CanvasComponent::Transform(const jerry_value_t func,
     double scaleY = jerry_get_number_value(args[ArgsIndex::IDX_3]);
     double translateX = jerry_get_number_value(args[ArgsIndex::IDX_4]);
     double translateY = jerry_get_number_value(args[ArgsIndex::IDX_5]);
-    component->canvas_.Transform(scaleX, shearY, shearX, scaleY, translateX, translateY, component->paint_);
+    component->paint_.Transform(scaleX, shearY, shearX, scaleY, translateX, translateY);
     return UNDEFINED;
 }
 
@@ -1427,7 +1427,7 @@ jerry_value_t CanvasComponent::SetTransform(const jerry_value_t func,
     double scaleY = jerry_get_number_value(args[ArgsIndex::IDX_3]);
     double translateX = jerry_get_number_value(args[ArgsIndex::IDX_4]);
     double translateY = jerry_get_number_value(args[ArgsIndex::IDX_5]);
-    component->canvas_.SetTransform(scaleX, shearY, shearX, scaleY, translateX, translateY, component->paint_);
+    component->paint_.SetTransform(scaleX, shearY, shearX, scaleY, translateX, translateY);
     return UNDEFINED;
 }
 
@@ -1970,7 +1970,8 @@ jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_v
         height = IntegerOf(args[ArgsIndex::IDX_4]);
     }
     Point startLocat = {startX, startY};
-    component->canvas_.DrawImage(startLocat, imageName, component->paint_, width, height);
+    component->canvas_.DrawImage(startLocat, imageName, component->paint_);
+//    component->canvas_.DrawImage(startLocat, imageName, component->paint_, width, height);
     free(imageName);
     return UNDEFINED;
 }
