@@ -119,10 +119,107 @@ private:
                                          const jerry_length_t argsNum);
 
     static jerry_value_t TextAlignGetter(const jerry_value_t func,
-                                         const jerry_value_t dom,
+                                         const jerry_value_t contex,
                                          const jerry_value_t args[],
                                          const jerry_length_t argsNum);
 
+    static jerry_value_t LineCapSetter(const jerry_value_t func,
+                                       const jerry_value_t contex,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
+
+    static jerry_value_t LineCapGetter(const jerry_value_t func,
+                                       const jerry_value_t context,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
+
+    static jerry_value_t LineJoinSetter(const jerry_value_t func,
+                                       const jerry_value_t contex,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
+
+    static jerry_value_t LineJoinGetter(const jerry_value_t func,
+                                       const jerry_value_t contex,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
+
+    static jerry_value_t MiterLimitSetter(const jerry_value_t func,
+                                       const jerry_value_t contex,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
+
+    static jerry_value_t MiterLimitGetter(const jerry_value_t func,
+                                       const jerry_value_t contex,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
+
+    static jerry_value_t LineDashOffsetSetter(const jerry_value_t func,
+                                        const jerry_value_t contex,
+                                        const jerry_value_t args[],
+                                        const jerry_length_t argsNum);
+
+    static jerry_value_t LineDashOffsetGetter(const jerry_value_t func,
+                                        const jerry_value_t contex,
+                                        const jerry_value_t args[],
+                                        const jerry_length_t argsNum);
+										
+   static jerry_value_t GlobalAlphaSetter(const jerry_value_t func,
+                                           const jerry_value_t dom,
+                                           const jerry_value_t args[],
+                                           const jerry_length_t argsNum);
+
+    static jerry_value_t GlobalAlphaGetter(const jerry_value_t func,
+                                           const jerry_value_t dom,
+                                           const jerry_value_t args[],
+                                           const jerry_length_t argsNum);
+
+    static jerry_value_t GlobalCompositeOperationSetter(const jerry_value_t func,
+                                                        const jerry_value_t dom,
+                                                        const jerry_value_t args[],
+                                                        const jerry_length_t argsNum);
+
+    static jerry_value_t ShadowOffsetXSetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+
+    static jerry_value_t ShadowOffsetXGetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+    static jerry_value_t ShadowOffsetYSetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+
+    static jerry_value_t ShadowOffsetYGetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+    static jerry_value_t ShadowColorSetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+
+    static jerry_value_t ShadowColorGetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+    static jerry_value_t ShadowBlurSetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+
+    static jerry_value_t ShadowBlurGetter(const jerry_value_t func,
+                                             const jerry_value_t dom,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum);
+
+    static jerry_value_t GlobalCompositeOperationGetter(const jerry_value_t func,
+                                                        const jerry_value_t dom,
+                                                        const jerry_value_t args[],
+                                                        const jerry_length_t argsNum);
+														
     static jerry_value_t FillRect(const jerry_value_t func,
                                   const jerry_value_t dom,
                                   const jerry_value_t args[],
@@ -158,6 +255,11 @@ private:
                               const jerry_value_t args[],
                               const jerry_length_t argsNum);
 
+    static jerry_value_t CleanRect(const jerry_value_t func,
+                              const jerry_value_t context,
+                              const jerry_value_t args[],
+                              const jerry_length_t argsNum);
+
     static jerry_value_t Arc(const jerry_value_t func,
                              const jerry_value_t context,
                              const jerry_value_t args[],
@@ -173,18 +275,128 @@ private:
                                 const jerry_value_t args[],
                                 const jerry_length_t argsNum);
 
+    static jerry_value_t Fill(const jerry_value_t func,
+                                const jerry_value_t context,
+                                const jerry_value_t args[],
+                                const jerry_length_t argsNum);
+
+    static jerry_value_t DrawImage(const jerry_value_t func,
+                                const jerry_value_t context,
+                                const jerry_value_t args[],
+                                const jerry_length_t argsNum);
+    static jerry_value_t SetLineDash(const jerry_value_t func,
+                                 const jerry_value_t context,
+                                 const jerry_value_t args[],
+                                 const jerry_length_t argsNum);
+    static jerry_value_t GetLineDash(const jerry_value_t func,
+                                 const jerry_value_t context,
+                                 const jerry_value_t args[],
+                                 const jerry_length_t argsNum);
+								 
+    static jerry_value_t StrokeText(const jerry_value_t func,
+                                    const jerry_value_t context,
+                                    const jerry_value_t args[],
+                                    const jerry_length_t argsNum);
+
+    static jerry_value_t Rotate(const jerry_value_t func,
+                                const jerry_value_t context,
+                                const jerry_value_t args[],
+                                const jerry_length_t argsNum);
+
+    static jerry_value_t Scale(const jerry_value_t func,
+                               const jerry_value_t context,
+                               const jerry_value_t args[],
+                               const jerry_length_t argsNum);
+
+    static jerry_value_t MeasureText(const jerry_value_t func,
+                                     const jerry_value_t context,
+                                     const jerry_value_t args[],
+                                     const jerry_length_t argsNum);
+
+    static jerry_value_t Translate(const jerry_value_t func,
+                                   const jerry_value_t context,
+                                   const jerry_value_t args[],
+                                   const jerry_length_t argsNum);
+
+    static jerry_value_t Transform(const jerry_value_t func,
+                                   const jerry_value_t context,
+                                   const jerry_value_t args[],
+                                   const jerry_length_t argsNum);
+
+    static jerry_value_t SetTransform(const jerry_value_t func,
+                                      const jerry_value_t context,
+                                      const jerry_value_t args[],
+                                      const jerry_length_t argsNum);
+
+     static jerry_value_t CreateLInearGradient(const jerry_value_t func,
+                                              const jerry_value_t context,
+                                              const jerry_value_t args[],
+                                              const jerry_length_t argsNum);
+
+    static jerry_value_t CreateRadialGradient(const jerry_value_t func,
+                                              const jerry_value_t context,
+                                              const jerry_value_t args[],
+                                              const jerry_length_t argsNum);
+
+    static jerry_value_t AddColorStop(const jerry_value_t func,
+                                      const jerry_value_t context,
+                                      const jerry_value_t args[],
+                                      const jerry_length_t argsNum);
+
+    static jerry_value_t CreatePattern(const jerry_value_t func,
+                                       const jerry_value_t context,
+                                       const jerry_value_t args[],
+                                       const jerry_length_t argsNum);
+
+    static jerry_value_t Save(const jerry_value_t func,
+                               const jerry_value_t context,
+                               const jerry_value_t args[],
+                               const jerry_length_t argsNum);
+
+    static jerry_value_t Restore(const jerry_value_t func,
+                                 const jerry_value_t context,
+                                 const jerry_value_t args[],
+                                 const jerry_length_t argsNum);
+
+    static jerry_value_t DrawCircle(const jerry_value_t func,
+                                    const jerry_value_t context,
+                                    const jerry_value_t args[],
+                                    const jerry_length_t argsNum);
+
     UICanvas canvas_;
     jerry_value_t context_;
+    jerry_value_t dashArray_;
+    jerry_value_t measureTextObject_;
+    jerry_value_t measureTextWidthString_;
     Paint paint_;
     UICanvas::FontStyle fontStyle_;
     char *fillStyleValue_;
     char *strokeStyleValue_;
     char *fontValue_;
     char *textAlignValue_;
+    int16_t shadowOffsetXValue_;
+    int16_t shadowOffsetYValue_;
+    int16_t shadowBlurValue_;
+    char *shadowColorValue_;
     int16_t lineWidthValue_;
+
+    char *lineCapValue_;
+    char *lineJoinValue_;
+    double miterLimitValue_;
+    float lineDashOffsetValue_;
+
+    char *colorStopValue_;
+    char *patternPathValue_;
+    char *patternRepeatTypeValue_;
+
     static const char * const DEFAULT_FILLSTYLE;
     static const char * const DEFAULT_STROKESTYLE;
     static const char * const DEFAULT_TEXTALIGN;
+    static const char * const DEFAULT_LINECAP;
+    static const char * const DEFAULT_LINEJOIN;
+    static const int16_t DEFAULT_MITERLIMIT;
+    static const int16_t DEFAULT_LINEDASHOFFSET;
+
     static const AttrMap attrMap_[];
     static const MethodMap methodMap_[];
     static const char * const ATTR_FILLSTYLE;
@@ -192,6 +404,20 @@ private:
     static const char * const ATTR_LINEWIDTH;
     static const char * const ATTR_FONT;
     static const char * const ATTR_TEXTALIGN;
+
+    static const char * const ATTR_LINECAP;
+    static const char * const ATTR_LINEJOIN;
+    static const char * const ATTR_MITERLIMIT;
+    static const char * const ATTR_LINEDASHOFFSET;
+    static const char * const ATTR_GLOBALALPHA;
+    static const char * const ATTR_GLOBALCOMPOSITEOPERATION;
+
+
+    static const char * const ATTR_SHADOWOFFSETX;
+    static const char * const ATTR_SHADOWOFFSETY;
+    static const char * const ATTR_SHADOWBLUR;
+    static const char * const ATTR_SHADOWCOLOR;
+
     static const char * const FUNC_GETCONTEXT;
     static const char * const FUNC_FILLRECT;
     static const char * const FUNC_STROKERECT;
@@ -200,9 +426,28 @@ private:
     static const char * const FUNC_MOVETO;
     static const char * const FUNC_LINETO;
     static const char * const FUNC_RECT;
+    static const char * const FUNC_CLEANRECT;
     static const char * const FUNC_ARC;
     static const char * const FUNC_CLOSEPATH;
     static const char * const FUNC_STROKE;
+    static const char * const FUNC_FILL;
+    static const char * const FUNC_DRAWIMAGE;
+    static const char * const FUNC_SETLINEDASH;
+    static const char * const FUNC_GETLINEDASH;
+    static const char * const FUNC_STROKETEXT;
+    static const char * const FUNC_ROTATE;
+    static const char * const FUNC_SCALE;
+    static const char * const FUNC_MEASURETEXT;
+    static const char * const FUNC_TRANSLATE;
+    static const char * const FUNC_TRANFORM;
+    static const char * const FUNC_SETTRANFORM;
+    static const char * const FUNC_SAVE;
+    static const char * const FUNC_RESTORE;
+    static const char * const FUNC_DRAWCIRCLE;
+    static const char * const FUNC_CREATELINEARGRADIENT;
+    static const char * const FUNC_CREATERADIALGRADIENT;
+    static const char * const FUNC_ADDCOLORSTOP;
+    static const char * const FUNC_CREATEPATTERN;
 };
 } // namespace ACELite
 } // namespace OHOS
