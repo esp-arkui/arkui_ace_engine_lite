@@ -45,7 +45,7 @@ private:
 }
 }
 #endif // FEATURE_INTL_MODULE
-
+#include "image_module.h"
 namespace OHOS {
 namespace ACELite {
 class IntlControlModule final {
@@ -59,6 +59,13 @@ public:
         IntlModule *intlModule = IntlModule::GetInstance();
         intlModule->Init();
 #endif
+
+        jerry_value_t globalObj = jerry_get_global_object();
+        jerry_value_t baseObj = jerry_create_object();
+
+        ImageModule::Init(baseObj);
+        JerrySetNamedProperty(globalObj, "Intl", baseObj);
+        jerry_release_value(globalObj);
     }
 };
 }

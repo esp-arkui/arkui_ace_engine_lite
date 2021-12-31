@@ -284,6 +284,7 @@ void ExpandImagePathMem(char *&imagePath, const int16_t dotPos, const int16_t su
 void CureImagePath(char *&imagePath);
 #endif // OHOS_ACELITE_PRODUCT_WATCH
 const char *ParseImageSrc(jerry_value_t source);
+int16_t ParseImageSize(jerry_value_t width);
 
 /**
  * @brief ParseKeyIdFromJSString parse key ID from JS value
@@ -312,6 +313,21 @@ bool ParseHexColor(const char * const source, uint32_t &color, uint8_t &alpha);
 bool ParseRgbaColor(const char * const source, uint32_t &color, uint8_t &alpha);
 bool ParseColor(const char * const source, uint32_t &color, uint8_t &alpha);
 bool CopyFontFamily(char *&destination, const char * const fontFamily, uint32_t fontFamilyNameLen = 0);
+
+constexpr char* LINECAP_BUTT = "butt";
+constexpr char* LINECAP_SQUARE = "square";
+constexpr char* LINECAP_ROUND = "round";
+constexpr int16_t BUTT_VALUE = 0;
+constexpr int16_t SQUARE_VALUE = 1;
+constexpr int16_t ROUND_VALUE = 2;
+int8_t ParseLineCap(const char* lineCap);
+constexpr int16_t LINEJOIN_MITER_VALUE = 0;
+constexpr int16_t LINEJOIN_ROUND_VALUE = 1;
+constexpr int16_t LINEJOIN_BEVEL_VALUE = 2;
+constexpr char* LINEJOIN_MITER = "miter";
+constexpr char* LINEJOIN_ROUND = "round";
+constexpr char* LINEJOIN_BEVEL = "bevel";
+int8_t ParseLineJoin(const char* lineJoin);
 
 #if (defined(_WIN32) || defined(_WIN64))
 constexpr char PATH_SEPARATOR = '\\';
