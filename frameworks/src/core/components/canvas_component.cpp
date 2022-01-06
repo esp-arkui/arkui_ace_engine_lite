@@ -1062,27 +1062,27 @@ jerry_value_t CanvasComponent::GlobalCompositeOperationSetter(const jerry_value_
     }
 
     if (strcmp(globalCompositeOperation, "source-over") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::SOURCE_OVER);
+        component->paint_.SetGlobalCompositeOperation(OHOS::SOURCE_OVER);
     } else if (strcmp(globalCompositeOperation, "source-atop") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::SOURCE_ATOP);
+        component->paint_.SetGlobalCompositeOperation(OHOS::SOURCE_ATOP);
     } else if (strcmp(globalCompositeOperation, "source-in") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::SOURCE_IN);
+        component->paint_.SetGlobalCompositeOperation(OHOS::SOURCE_IN);
     } else if (strcmp(globalCompositeOperation, "source-out") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::SOURCE_OUT);
+        component->paint_.SetGlobalCompositeOperation(OHOS::SOURCE_OUT);
     } else if (strcmp(globalCompositeOperation, "destination-over") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::DESTINATION_OVER);
+        component->paint_.SetGlobalCompositeOperation(OHOS::DESTINATION_OVER);
     } else if (strcmp(globalCompositeOperation, "destination-atop") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::DESTINATION_ATOP);
+        component->paint_.SetGlobalCompositeOperation(OHOS::DESTINATION_ATOP);
     } else if (strcmp(globalCompositeOperation, "destination-in") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::DESTINATION_IN);
+        component->paint_.SetGlobalCompositeOperation(OHOS::DESTINATION_IN);
     } else if (strcmp(globalCompositeOperation, "destination-out") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::DESTINATION_OUT);
+        component->paint_.SetGlobalCompositeOperation(OHOS::DESTINATION_OUT);
     } else if (strcmp(globalCompositeOperation, "lighter") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::LIGHTER);
+        component->paint_.SetGlobalCompositeOperation(OHOS::LIGHTER);
     } else if (strcmp(globalCompositeOperation, "copy") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::COPY);
+        component->paint_.SetGlobalCompositeOperation(OHOS::COPY);
     } else if (strcmp(globalCompositeOperation, "xor") == 0) {
-        component->paint_.SetGlobalCompositeOperation(OHOS::Paint::XOR);
+        component->paint_.SetGlobalCompositeOperation(OHOS::XOR);
     }
 
     ACE_FREE(globalCompositeOperation);
