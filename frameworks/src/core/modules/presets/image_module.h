@@ -21,21 +21,24 @@
 #include "gfx_utils/list.h"
 #include "js_fwk_common.h"
 
-//#include "draw/draw_utils.h"
+enum ArgsCount : uint8_t { NUM_1 = 1, NUM_2, NUM_3, NUM_4, NUM_5, NUM_6 };
 namespace OHOS {
 namespace ACELite {
-class ImageModule final :public MemoryHeap {//public ImageComponent{//MemoryHeap {
+class ImageModule final :public MemoryHeap {// public ImageComponent{// MemoryHeap {
 public:
 
-    const char*  GetSrc(){
+    const char*  GetSrc()
+    {
         return src_;
     }
 
-    int16_t GetWidth(){
+    int16_t GetWidth()
+    {
         return width_;
     }
 
-    int16_t GetHeight(){
+    int16_t GetHeight()
+    {
         return height_;
     }
 
@@ -55,7 +58,7 @@ public:
      */
     static void DeleteImage(void *nativePointer);
 
-    static void OnCallBack(const jerry_value_t context,const ImageModule *imageModule,bool isSucess,const char* msg);
+    static void OnCallBack(const jerry_value_t context, const ImageModule *imageModule, bool isSucess,const char* msg);
     // the handle to release the native value when the js value number format object is not needed.
     static constexpr jerry_object_native_info_t gcCallback = {.free_cb = DeleteImage};
     static const char * const ATTR_ONLOAD;
@@ -66,12 +69,12 @@ public:
     static const char * const CLASS_NAME;
 private:
     ImageModule() :
-        src_(nullptr),
-        width_(-1),
-        height_(-1),
-        onLoadFunc_(UNDEFINED),
-        onErrorFunc_(UNDEFINED),
-        jerrySrc_(UNDEFINED){}
+    src_(nullptr),
+    width_(-1),
+    height_(-1),
+    onLoadFunc_(UNDEFINED),
+    onErrorFunc_(UNDEFINED),
+    jerrySrc_(UNDEFINED) {}
 
     ~ImageModule()
     {
@@ -133,7 +136,6 @@ private:
     jerry_value_t onLoadFunc_;
     jerry_value_t onErrorFunc_;
     jerry_value_t jerrySrc_;
-
 };
 }
 }
