@@ -38,7 +38,7 @@ const char * const CanvasComponent::DEFAULT_LINECAP = "butt";
 const char * const CanvasComponent::DEFAULT_LINEJOIN = "miter";
 // default line lineJoin
 const int16_t CanvasComponent::DEFAULT_MITERLIMIT = 10;
-//default lineDashOffset
+// default lineDashOffset
 const int16_t CanvasComponent::DEFAULT_LINEDASHOFFSET = 0;
 
 // API-attribute
@@ -99,10 +99,10 @@ const AttrMap CanvasComponent::attrMap_[] = {
     {ATTR_SHADOWOFFSETY, ShadowOffsetYSetter, ShadowOffsetYGetter},
     {ATTR_SHADOWCOLOR, ShadowColorSetter, ShadowColorGetter},
     {ATTR_SHADOWBLUR, ShadowBlurSetter, ShadowBlurGetter},
-    {ATTR_LINECAP,LineCapSetter,LineCapGetter},
-    {ATTR_LINEJOIN,LineJoinSetter,LineJoinGetter},
-    {ATTR_MITERLIMIT,MiterLimitSetter,MiterLimitGetter},
-    {ATTR_LINEDASHOFFSET,LineDashOffsetSetter,LineDashOffsetGetter},
+    {ATTR_LINECAP, LineCapSetter, LineCapGetter},
+    {ATTR_LINEJOIN, LineJoinSetter, LineJoinGetter},
+    {ATTR_MITERLIMIT, MiterLimitSetter, MiterLimitGetter},
+    {ATTR_LINEDASHOFFSET, LineDashOffsetSetter, LineDashOffsetGetter},
     {ATTR_GLOBALALPHA, GlobalAlphaSetter, GlobalAlphaGetter},
     {ATTR_GLOBALCOMPOSITEOPERATION, GlobalCompositeOperationSetter, GlobalCompositeOperationGetter}
 };
@@ -126,7 +126,7 @@ const MethodMap CanvasComponent::methodMap_[] = {
     {FUNC_ADDCOLORSTOP, AddColorStop},
     {FUNC_CREATEPATTERN, CreatePattern},
     {FUNC_FILL, Fill},
-    {FUNC_DRAWIMAGE,DrawImage},
+    {FUNC_DRAWIMAGE, DrawImage},
     {FUNC_SETLINEDASH, SetLineDash},
     {FUNC_GETLINEDASH, GetLineDash},
     {FUNC_STROKETEXT, StrokeText},
@@ -210,7 +210,7 @@ void CanvasComponent::ReleaseNativeViews()
 	}
     if (!IS_UNDEFINED(dashArray_)) {
         uint32_t length = jerry_get_array_length(dashArray_);
-        for (uint32_t i =0; i < length; i++) {
+        for (uint32_t i = 0; i < length; i++) {
             jerry_value_t val = jerry_get_property_by_index(dashArray_, i);
             jerry_release_value(val);
         }
@@ -224,9 +224,7 @@ void CanvasComponent::ReleaseNativeViews()
     }
     if (!IS_UNDEFINED(measureTextObject_)) {
         jerry_release_value(measureTextObject_);
-    }
-
-	
+    }	
 }
 
 UIView *CanvasComponent::GetComponentRootView() const
@@ -315,7 +313,7 @@ jerry_value_t CanvasComponent::FillStyleSetter(const jerry_value_t func,
     if (fillStyleId == K_CANVASGRADIENT) {
         component->paint_.SetStyle(Paint::PaintStyle::GRADIENT);
     }
-    if(ParseColor(component->fillStyleValue_, color, alpha)){
+    if (ParseColor(component->fillStyleValue_, color, alpha)) {
         component->paint_.SetFillColor(component->GetRGBColor(color));
         component->paint_.SetOpacity(alpha);
     }
@@ -641,9 +639,9 @@ jerry_value_t CanvasComponent::ShadowOffsetXSetter(const jerry_value_t func,
 }
 
 jerry_value_t CanvasComponent::ShadowOffsetXGetter(const jerry_value_t func,
-                                               const jerry_value_t dom,
-                                               const jerry_value_t args[],
-                                               const jerry_length_t argsNum)
+                                                   const jerry_value_t dom,
+                                                   const jerry_value_t args[],
+                                                   const jerry_length_t argsNum)
 {
     (void)func;
     (void)args;
@@ -681,9 +679,9 @@ jerry_value_t CanvasComponent::ShadowOffsetYSetter(const jerry_value_t func,
 }
 
 jerry_value_t CanvasComponent::ShadowOffsetYGetter(const jerry_value_t func,
-                                               const jerry_value_t dom,
-                                               const jerry_value_t args[],
-                                               const jerry_length_t argsNum)
+                                                   const jerry_value_t dom,
+                                                   const jerry_value_t args[],
+                                                   const jerry_length_t argsNum)
 {
     (void)func;
     (void)args;
@@ -698,9 +696,9 @@ jerry_value_t CanvasComponent::ShadowOffsetYGetter(const jerry_value_t func,
 }
 
 jerry_value_t CanvasComponent::ShadowBlurSetter(const jerry_value_t func,
-                                                   const jerry_value_t context,
-                                                   const jerry_value_t *args,
-                                                   const jerry_length_t argsNum)
+                                                const jerry_value_t context,
+                                                const jerry_value_t *args,
+                                                const jerry_length_t argsNum)
 {
     (void)func;
     if (argsNum != ArgsCount::NUM_1) {
@@ -721,9 +719,9 @@ jerry_value_t CanvasComponent::ShadowBlurSetter(const jerry_value_t func,
 }
 
 jerry_value_t CanvasComponent::ShadowBlurGetter(const jerry_value_t func,
-                                               const jerry_value_t dom,
-                                               const jerry_value_t args[],
-                                               const jerry_length_t argsNum)
+                                                const jerry_value_t dom,
+                                                const jerry_value_t args[],
+                                                const jerry_length_t argsNum)
 {
     (void)func;
     (void)args;
@@ -796,7 +794,10 @@ jerry_value_t CanvasComponent::ShadowColorGetter(const jerry_value_t func,
     }
     return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("shadowColor value error"));
 }
-jerry_value_t CanvasComponent::LineCapSetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+jerry_value_t CanvasComponent::LineCapSetter(const jerry_value_t func,
+                                             const jerry_value_t contex,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum)
 {
     (void)func;
     if (argsNum != ArgsCount::NUM_1) {
@@ -826,7 +827,10 @@ jerry_value_t CanvasComponent::LineCapSetter(const jerry_value_t func, const jer
     return UNDEFINED;
 }
 
-jerry_value_t CanvasComponent::LineCapGetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+jerry_value_t CanvasComponent::LineCapGetter(const jerry_value_t func,
+                                             const jerry_value_t contex,
+                                             const jerry_value_t args[],
+                                             const jerry_length_t argsNum)
 {
     (void)func;
     (void)args;
@@ -846,7 +850,10 @@ jerry_value_t CanvasComponent::LineCapGetter(const jerry_value_t func, const jer
     return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("lineCap value error"));
 }
 
-jerry_value_t CanvasComponent::LineJoinSetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+jerry_value_t CanvasComponent::LineJoinSetter(const jerry_value_t func,
+                                              const jerry_value_t contex,
+                                              const jerry_value_t args[],
+                                              const jerry_length_t argsNum)
 {
     (void)func;
     if (argsNum != ArgsCount::NUM_1) {
@@ -876,7 +883,10 @@ jerry_value_t CanvasComponent::LineJoinSetter(const jerry_value_t func, const je
     return UNDEFINED;
 }
 
-jerry_value_t CanvasComponent::LineJoinGetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+jerry_value_t CanvasComponent::LineJoinGetter(const jerry_value_t func,
+                                              const jerry_value_t contex,
+                                              const jerry_value_t args[],
+                                              const jerry_length_t argsNum)
 {
     (void)func;
     (void)args;
@@ -896,7 +906,10 @@ jerry_value_t CanvasComponent::LineJoinGetter(const jerry_value_t func, const je
     return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("lineJoin value error"));
 }
 
-jerry_value_t CanvasComponent::MiterLimitSetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+jerry_value_t CanvasComponent::MiterLimitSetter(const jerry_value_t func,
+                                                const jerry_value_t contex,
+                                                const jerry_value_t args[],
+                                                const jerry_length_t argsNum)
 {
     (void)func;
     if (argsNum != ArgsCount::NUM_1) {
@@ -910,9 +923,9 @@ jerry_value_t CanvasComponent::MiterLimitSetter(const jerry_value_t func, const 
         return jerry_create_error(JERRY_ERROR_TYPE,
                                   reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
     }
-    if(jerry_value_is_number(args[ArgsIndex::IDX_0])){
+    if (jerry_value_is_number(args[ArgsIndex::IDX_0])) {
         component->miterLimitValue_ = jerry_get_number_value(args[ArgsIndex::IDX_0]);
-    }else if(jerry_value_is_string(args[ArgsIndex::IDX_0])){
+    } else if (jerry_value_is_string(args[ArgsIndex::IDX_0])) {
         char* value = MallocStringOf(args[ArgsIndex::IDX_0]);
         component->miterLimitValue_ = atof(value);
         ACE_FREE(value);
@@ -921,7 +934,10 @@ jerry_value_t CanvasComponent::MiterLimitSetter(const jerry_value_t func, const 
     return UNDEFINED;
 }
 
-jerry_value_t CanvasComponent::MiterLimitGetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+jerry_value_t CanvasComponent::MiterLimitGetter(const jerry_value_t func,
+                                                const jerry_value_t contex,
+                                                const jerry_value_t args[],
+                                                const jerry_length_t argsNum)
 {
     (void)func;
     (void)args;
@@ -935,7 +951,10 @@ jerry_value_t CanvasComponent::MiterLimitGetter(const jerry_value_t func, const 
     return jerry_create_number(component->miterLimitValue_);
 }
 
-jerry_value_t CanvasComponent::LineDashOffsetSetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+jerry_value_t CanvasComponent::LineDashOffsetSetter(const jerry_value_t func,
+                                                    const jerry_value_t contex,
+                                                    const jerry_value_t args[],
+                                                    const jerry_length_t argsNum)
 {
     (void)func;
     if (argsNum != ArgsCount::NUM_1) {
@@ -949,9 +968,9 @@ jerry_value_t CanvasComponent::LineDashOffsetSetter(const jerry_value_t func, co
         return jerry_create_error(JERRY_ERROR_TYPE,
                                   reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
     }
-    if(jerry_value_is_number(args[ArgsIndex::IDX_0])){
+    if (jerry_value_is_number(args[ArgsIndex::IDX_0])) {
         component->lineDashOffsetValue_ = jerry_get_number_value(args[ArgsIndex::IDX_0]);
-    }else if(jerry_value_is_string(args[ArgsIndex::IDX_0])){
+    } else if (jerry_value_is_string(args[ArgsIndex::IDX_0])) {
         char* value = MallocStringOf(args[ArgsIndex::IDX_0]);
         component->lineDashOffsetValue_ = atof(value);
         ACE_FREE(value);
@@ -961,7 +980,10 @@ jerry_value_t CanvasComponent::LineDashOffsetSetter(const jerry_value_t func, co
     return UNDEFINED;
 }
 
-jerry_value_t CanvasComponent::LineDashOffsetGetter(const jerry_value_t func, const jerry_value_t contex, const jerry_value_t args[], const jerry_length_t argsNum)
+jerry_value_t CanvasComponent::LineDashOffsetGetter(const jerry_value_t func,
+                                                    const jerry_value_t contex,
+                                                    const jerry_value_t args[],
+                                                    const jerry_length_t argsNum)
 {
     (void)func;
     (void)args;
@@ -1084,7 +1106,6 @@ jerry_value_t CanvasComponent::GlobalCompositeOperationGetter(const jerry_value_
 
     int8_t globalCompositeOperation = component->paint_.GetGlobalCompositeOperation();
     return jerry_create_number(globalCompositeOperation);
-
 }
 
 jerry_value_t CanvasComponent::FillRect(const jerry_value_t func,
@@ -1151,7 +1172,6 @@ jerry_value_t CanvasComponent::StrokeRect(const jerry_value_t func,
     Point startPoint;
     startPoint.x = startX;
     startPoint.y = startY;
-    //component->canvas_.DrawRect(startPoint, height, width, component->paint_);
 	component->canvas_.StrokeRect(startPoint, height, width, component->paint_);
     return UNDEFINED;
 }
@@ -1347,9 +1367,9 @@ jerry_value_t CanvasComponent::MeasureText(const jerry_value_t func,
 }
 
 jerry_value_t CanvasComponent::Translate(const jerry_value_t func,
-                                          const jerry_value_t context,
-                                          const jerry_value_t args[],
-                                          const jerry_length_t argsNum)
+                                         const jerry_value_t context,
+                                         const jerry_value_t args[],
+                                         const jerry_length_t argsNum)
 {
     (void)func;
     if (argsNum != ArgsCount::NUM_2) {
@@ -1610,7 +1630,10 @@ jerry_value_t CanvasComponent::Rect(const jerry_value_t func,
 }
 
 
-jerry_value_t CanvasComponent::CleanRect(const jerry_value_t func, const jerry_value_t context, const jerry_value_t args[], const jerry_length_t argsNum)
+jerry_value_t CanvasComponent::CleanRect(const jerry_value_t func,
+                                         const jerry_value_t context,
+                                         const jerry_value_t args[],
+                                         const jerry_length_t argsNum)
 {
     (void)func;
     if (argsNum != ArgsCount::NUM_4) {
@@ -1756,8 +1779,6 @@ jerry_value_t CanvasComponent::CreateLInearGradient(const jerry_value_t func,
     double startY = jerry_get_number_value(args[ArgsIndex::IDX_1]);
     double endX = jerry_get_number_value(args[ArgsIndex::IDX_2]);
     double endY = jerry_get_number_value(args[ArgsIndex::IDX_3]);
-
-
     component->paint_.createLinearGradient(startX, startY, endX, endY);
     return UNDEFINED;
 }
@@ -1787,8 +1808,6 @@ jerry_value_t CanvasComponent::CreateRadialGradient(const jerry_value_t func,
     double endX = jerry_get_number_value(args[ArgsIndex::IDX_3]);
     double endY = jerry_get_number_value(args[ArgsIndex::IDX_4]);
     double endR = jerry_get_number_value(args[ArgsIndex::IDX_5]);
-
-
     component->paint_.createRadialGradient(startX, startY, startR, endX, endY, endR);
     return UNDEFINED;
 }
@@ -1859,32 +1878,33 @@ jerry_value_t CanvasComponent::CreatePattern(const jerry_value_t func,
     }
     if (component->patternRepeatTypeValue_ == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: patternRepeatType value error!");
-        return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("patternRepeatType value erro!"));
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("patternRepeatType value erro!"));
     }
     uint16_t patternRepeatTypeId = KeyParser::ParseKeyId(component->patternRepeatTypeValue_, patternRepeatTypeLength);
     if (IsFileExisted(component->patternPathValue_)) {
         switch (patternRepeatTypeId) {
-        case K_NO_REPEAT:
-            component->paint_.CreatePattern(component->patternPathValue_,Paint::NO_REPEAT);
-            break;
-        case K_REPEAT:
-            component->paint_.CreatePattern(component->patternPathValue_,Paint::REPEAT);
-             break;
-        case K_REPEAT_X:
-            component->paint_.CreatePattern(component->patternPathValue_,Paint::REPEAT_X);
-             break;
-        case K_REPEAT_Y:
-            component->paint_.CreatePattern(component->patternPathValue_,Paint::REPEAT_Y);
-             break;
+            case K_NO_REPEAT:
+                component->paint_.CreatePattern(component->patternPathValue_, Paint::NO_REPEAT);
+                break;
+            case K_REPEAT:
+                component->paint_.CreatePattern(component->patternPathValue_, Paint::REPEAT);
+                break;
+            case K_REPEAT_X:
+                component->paint_.CreatePattern(component->patternPathValue_, Paint::REPEAT_X);
+                break;
+            case K_REPEAT_Y:
+                component->paint_.CreatePattern(component->patternPathValue_, Paint::REPEAT_Y);
+                break;
         }
     }
     return UNDEFINED;
 }
 
 jerry_value_t CanvasComponent::Fill(const jerry_value_t func,
-                                      const jerry_value_t context,
-                                      const jerry_value_t args[],
-                                      const jerry_length_t argsNum)
+                                    const jerry_value_t context,
+                                    const jerry_value_t args[],
+                                    const jerry_length_t argsNum)
 {
     (void)func;
     (void)args;
@@ -1899,6 +1919,62 @@ jerry_value_t CanvasComponent::Fill(const jerry_value_t func,
     return UNDEFINED;
 }
 
+jerry_value_t CanvasComponent::ParseImagename(const jerry_value_t args[],
+                                              char *&imageName,
+                                              int16_t &width,
+                                              int16_t &height)
+{
+    ImageModule* imageModule = nullptr;
+    ImageComponent* imageCom = nullptr;
+    const char *src = nullptr;
+    if (jerry_value_is_string(args[ArgsIndex::IDX_0])) { // 参数是文件名
+        imageName = MallocStringOf(args[ArgsIndex::IDX_0]);
+        if (imageName == nullptr) {
+            HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imageName value failed");
+            return jerry_create_error(JERRY_ERROR_TYPE,
+                                      reinterpret_cast<const jerry_char_t *>("get imageName value failed"));
+        }
+    } else if (jerry_value_is_object(args[ArgsIndex::IDX_0])) { // 参数是从HTML获取到的对象
+        void *nativePtr = nullptr;
+        bool exist = jerry_get_object_native_pointer(args[ArgsIndex::IDX_0], &nativePtr, nullptr);
+        imageModule = reinterpret_cast<ImageModule*>(nativePtr);
+        imageCom = reinterpret_cast<ImageComponent*>(nativePtr);
+        if (imageCom) {
+            src = imageCom->GetSrc();
+            if (src == nullptr) {
+                HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imagePath value failed");
+                return jerry_create_error(JERRY_ERROR_TYPE,
+                                          reinterpret_cast<const jerry_char_t *>("get imagePath value failed"));
+            }
+            imageName = (char*)malloc(strlen(src) + 1);
+            strcpy_s(imageName, strlen(src) + 1, src);
+            errno_t err = strcpy_s(imageName, strlen(src) + 1, src);
+            if (err != 0) {
+                HILOG_ERROR(HILOG_MODULE_ACE, "use strcpy_s secure function error(%{public}d)", err);
+                ace_free(imageName);
+                imageName = nullptr;
+                ACE_FREE(imageName);
+                return jerry_create_error(JERRY_ERROR_TYPE,
+                                          reinterpret_cast<const jerry_char_t *>("use strcpy_s secure function error"));
+            }
+        } else { // 参数是通过 new Image()的对象  //Greate new Image
+            jerry_value_t src = jerryx_get_property_str(args[ArgsIndex::IDX_0], ImageModule::ATTR_SRC);
+            char* srcVal = MallocStringOf(src);
+            imageName = (char*)malloc(strlen(srcVal) + 1);
+            strcpy_s(imageName, strlen(srcVal) + 1, srcVal);
+            ACE_FREE(srcVal);
+            jerry_value_t jWidth = jerryx_get_property_str(args[ArgsIndex::IDX_0], ImageModule::ATTR_WIDTH);
+            jerry_value_t jHeight = jerryx_get_property_str(args[ArgsIndex::IDX_0], ImageModule::ATTR_HEIGHT);
+            width = IntegerOf(jWidth);
+            height = IntegerOf(jHeight);
+        }
+    } else {
+        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imageName value failed");
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("get imageName value failed"));
+    }
+    return UNDEFINED;
+}
 
 jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_value_t context,
                                          const jerry_value_t args[], const jerry_length_t argsNum)
@@ -1914,69 +1990,39 @@ jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_v
         return jerry_create_error(JERRY_ERROR_TYPE,
                                   reinterpret_cast<const jerry_char_t *>("canvas_component: DrawImage arg error!"));
     }
-    ImageModule* imageModule = nullptr;
-    ImageComponent* imageCom = nullptr;
     char *imageName = nullptr;
-    const char * src = nullptr;
+    ImageModule* imageModule = nullptr;
     int16_t startX = 0;
     int16_t startY = 0;
     int16_t width = -1;
     int16_t height = -1;
-    if(jerry_value_is_string(args[ArgsIndex::IDX_0])){// 参数是文件名
-        imageName = MallocStringOf(args[ArgsIndex::IDX_0]);
-        if (imageName == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imageName value failed");
-            return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("get imageName value failed"));
-        }
-    } else if(jerry_value_is_object(args[ArgsIndex::IDX_0])){// 参数是从HTML获取到的对象
-        void *nativePtr = nullptr;
-        bool exist = jerry_get_object_native_pointer(args[ArgsIndex::IDX_0], &nativePtr, nullptr);
-        imageModule = reinterpret_cast<ImageModule*>(nativePtr);//
-        imageCom = reinterpret_cast<ImageComponent*>(nativePtr);
-        if(imageCom){
-            src = imageCom->GetSrc();
-            if(src == nullptr){
-                HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imagePath value failed");
-                return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("get imagePath value failed"));
-            }
-            imageName = (char*)malloc(strlen(src) + 1);
-            strcpy_s(imageName, strlen(src) + 1, src);
-        }else{// 参数是通过 new Image()的对象
-            jerry_value_t src = jerryx_get_property_str(args[ArgsIndex::IDX_0],ImageModule::ATTR_SRC);
-            char* srcVal = MallocStringOf(src);
-            imageName = (char*)malloc(strlen(srcVal) + 1);
-            strcpy_s(imageName, strlen(srcVal) + 1, srcVal);
-            ACE_FREE(srcVal);
-            jerry_value_t jWidth = jerryx_get_property_str(args[ArgsIndex::IDX_0],ImageModule::ATTR_WIDTH);
-            jerry_value_t jHeight = jerryx_get_property_str(args[ArgsIndex::IDX_0],ImageModule::ATTR_HEIGHT);
-            width = IntegerOf(jWidth);
-            height = IntegerOf(jHeight);
-        }
-    } else{
-        HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imageName value failed");
-        return jerry_create_error(JERRY_ERROR_TYPE, reinterpret_cast<const jerry_char_t *>("get imageName value failed"));
+    if(ParseImagename(args,imageName,width,height) != UNDEFINED)
+    {
+        return jerry_create_error(JERRY_ERROR_TYPE,
+                                  reinterpret_cast<const jerry_char_t *>("parse Imagename function error"));
     }
-
-    if (argsNum >= ArgsCount::NUM_2){
+    if (argsNum >= ArgsCount::NUM_2) {
         startX = IntegerOf(args[ArgsIndex::IDX_1]);
     }
-    if (argsNum >= ArgsCount::NUM_3){
+    if (argsNum >= ArgsCount::NUM_3) {
         startY = IntegerOf(args[ArgsIndex::IDX_2]);
     }
-    if (argsNum >= ArgsCount::NUM_4){
+    if (argsNum >= ArgsCount::NUM_4) {
         width = IntegerOf(args[ArgsIndex::IDX_3]);
     }
-    if (argsNum >= ArgsCount::NUM_5){
+    if (argsNum >= ArgsCount::NUM_5) {
         height = IntegerOf(args[ArgsIndex::IDX_4]);
     }
     Point startLocat = {startX, startY};
     component->canvas_.DrawImage(startLocat, imageName, component->paint_);
-//    component->canvas_.DrawImage(startLocat, imageName, component->paint_, width, height);
     free(imageName);
     return UNDEFINED;
 }
 
-jerry_value_t CanvasComponent::SetLineDash(const jerry_value_t func, const jerry_value_t context, const jerry_value_t args[], const jerry_length_t argsNum)
+jerry_value_t CanvasComponent::SetLineDash(const jerry_value_t func,
+                                           const jerry_value_t context,
+                                           const jerry_value_t args[],
+                                           const jerry_length_t argsNum)
 {
     if (argsNum != ArgsCount::NUM_1) {
         HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: SetLineDash arg error!");
@@ -1991,7 +2037,7 @@ jerry_value_t CanvasComponent::SetLineDash(const jerry_value_t func, const jerry
                                   reinterpret_cast<const jerry_char_t *>("get canvas component from js object failed"));
     }
     jerry_value_t array = args[ArgsIndex::IDX_0];
-    if(!jerry_value_is_array(array)){
+    if (!jerry_value_is_array(array)) {
         HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: SetLineDash arg error!");
         return jerry_create_error(JERRY_ERROR_TYPE,
                                   reinterpret_cast<const jerry_char_t *>("canvas_component: DrawImage arg error!"));
@@ -2001,15 +2047,14 @@ jerry_value_t CanvasComponent::SetLineDash(const jerry_value_t func, const jerry
     for (uint32_t i = 0; i < len; i++) {
         jerry_value_t val = jerry_get_property_by_index(array, i);
         float num = 0;
-        if(jerry_value_is_number(val)){
+        if (jerry_value_is_number(val)) {
             num = jerry_get_number_value(val);
-        }
-        else if(jerry_value_is_string(val)){
+        } else if (jerry_value_is_string(val)) {
             char *value = MallocStringOf(val);
             num = atof(value);
             ACE_FREE(value);
-        }else{
-             HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: SetLineDash arg error!");
+        } else {
+            HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: SetLineDash arg error!");
         }
 
         buff[i] = num;
@@ -2021,7 +2066,10 @@ jerry_value_t CanvasComponent::SetLineDash(const jerry_value_t func, const jerry
     return UNDEFINED;
 }
 
-jerry_value_t CanvasComponent::GetLineDash(const jerry_value_t func, const jerry_value_t context, const jerry_value_t args[], const jerry_length_t argsNum)
+jerry_value_t CanvasComponent::GetLineDash(const jerry_value_t func,
+                                           const jerry_value_t context,
+                                           const jerry_value_t args[],
+                                           const jerry_length_t argsNum)
 {
     CanvasComponent *component = static_cast<CanvasComponent *>(ComponentUtils::GetComponentFromBindingObject(context));
     if (component == nullptr) {
@@ -2034,10 +2082,9 @@ jerry_value_t CanvasComponent::GetLineDash(const jerry_value_t func, const jerry
     jerry_release_value(component->dashArray_);
     component->dashArray_ = jerry_create_array(length);
     for (uint32_t i = 0; i < length; i++) {
-        jerry_set_property_by_index(component->dashArray_ ,i , jerry_create_number(pArr[i]));
+        jerry_set_property_by_index(component->dashArray_ , i , jerry_create_number(pArr[i]));
     }
     return component->dashArray_;
-
 }
 
 void CanvasComponent::GetSubFont(const char *font, const uint8_t index, char *&subFont) const

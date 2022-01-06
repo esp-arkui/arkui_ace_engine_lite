@@ -1316,16 +1316,16 @@ uint16_t ParseKeyIdFromJSString(const jerry_value_t str)
 
 int8_t ParseLineCap(const char *lineCap)
 {
-    if(lineCap == nullptr){
+    if (lineCap == nullptr) {
         return -1;
     }
-    if(strcasecmp(lineCap, LINECAP_BUTT) == 0){
+    if (strcasecmp(lineCap, LINECAP_BUTT) == 0) {
         return BUTT_VALUE;
     }
-    if(strcasecmp(lineCap, LINECAP_SQUARE) == 0){
+    if (strcasecmp(lineCap, LINECAP_SQUARE) == 0) {
         return SQUARE_VALUE;
     }
-    if(strcasecmp(lineCap, LINECAP_ROUND) == 0){
+    if (strcasecmp(lineCap, LINECAP_ROUND) == 0) {
         return ROUND_VALUE;
     }
     return -1;
@@ -1333,16 +1333,16 @@ int8_t ParseLineCap(const char *lineCap)
 
 int8_t ParseLineJoin(const char *lineJoin)
 {
-    if(lineJoin == nullptr){
+    if (lineJoin == nullptr) {
         return -1;
     }
-    if(strcasecmp(lineJoin, LINEJOIN_MITER) == 0){
+    if (strcasecmp(lineJoin, LINEJOIN_MITER) == 0) {
         return LINEJOIN_MITER_VALUE;
     }
-    if(strcasecmp(lineJoin, LINEJOIN_ROUND) == 0){
+    if (strcasecmp(lineJoin, LINEJOIN_ROUND) == 0) {
         return LINEJOIN_ROUND_VALUE;
     }
-    if(strcasecmp(lineJoin, LINEJOIN_BEVEL) == 0){
+    if (strcasecmp(lineJoin, LINEJOIN_BEVEL) == 0) {
         return LINEJOIN_BEVEL_VALUE;
     }
     return -1;
@@ -1351,15 +1351,14 @@ int8_t ParseLineJoin(const char *lineJoin)
 int16_t ParseImageSize(jerry_value_t value)
 {
     int16_t val = 0;
-    if(jerry_value_is_number(value)){
+    if (jerry_value_is_number(value)) {
         val = jerry_get_number_value(value);
-    }else if(jerry_value_is_string(value)){
+    } else if (jerry_value_is_string(value)) {
         char* str = MallocStringOf(value);
         val = atoi(str);
         ACE_FREE(str);
     }
     return val;
 }
-
 } // namespace ACELite
 } // namespace OHOS
