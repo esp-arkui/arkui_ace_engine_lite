@@ -23,7 +23,6 @@
 
 namespace OHOS {
 namespace ACELite {
-
 ImageComponent::ImageComponent(jerry_value_t options, jerry_value_t children, AppStyleManager *styleManager)
     : Component(options, children, styleManager),
       fitOriginalSize_(0),
@@ -31,11 +30,9 @@ ImageComponent::ImageComponent(jerry_value_t options, jerry_value_t children, Ap
       hasSetHeight_(false)
 {
     SetComponentName(K_IMAGE);
-
-
 }
 
-const char * ImageComponent::GetSrc()
+const char *ImageComponent::GetSrc()
 {
     return imageView_.GetPath();
 }
@@ -92,27 +89,6 @@ void ImageComponent::UpdateWidgetFitMode()
         imageView_.SetAutoEnable(false);
     }
     imageView_.SetResizeMode(resizeMode_);
-}
-
-jerry_value_t ImageComponent::OnLoadSetter(const jerry_value_t func, const jerry_value_t dom, const jerry_value_t args[], const jerry_length_t argsNum)
-{
-    int a = 1;
-    printf("%d",a);
-}
-
-jerry_value_t ImageComponent::OnLoadGetter(const jerry_value_t func, const jerry_value_t dom, const jerry_value_t args[], const jerry_length_t argsNum)
-{
-
-}
-
-jerry_value_t ImageComponent::OnErrorSetter(const jerry_value_t func, const jerry_value_t dom, const jerry_value_t args[], const jerry_length_t argsNum)
-{
-
-}
-
-jerry_value_t ImageComponent::OnErrorGetter(const jerry_value_t func, const jerry_value_t dom, const jerry_value_t args[], const jerry_length_t argsNum)
-{
-
 }
 
 bool ImageComponent::ApplyPrivateStyle(const AppStyleItem *style)
