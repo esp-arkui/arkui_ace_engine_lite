@@ -162,7 +162,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "anvasGradient")) {
                 return K_CANVASGRADIENT;
             }
-            if (!strcmp(s,"anvasPattern")) {
+            if (!strcmp(s, "anvasPattern")) {
                 return K_CANVASPATTERN;
             }
             if (!strcmp(s, "enter")) {
