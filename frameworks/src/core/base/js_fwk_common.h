@@ -315,19 +315,19 @@ bool CopyFontFamily(char *&destination, const char * const fontFamily, uint32_t 
 int8_t ParseLineCap(const char* lineCap);
 int8_t ParseLineJoin(const char* lineJoin);
 
-constexpr char* LINECAP_BUTT = "butt";
-constexpr char* LINECAP_SQUARE = "square";
-constexpr char* LINECAP_ROUND = "round";
+constexpr char LINECAP_BUTT[] = "butt";
+constexpr char LINECAP_SQUARE[] = "square";
+constexpr char LINECAP_ROUND[] = "round";
 constexpr int16_t BUTT_VALUE = 0;
 constexpr int16_t SQUARE_VALUE = 1;
 constexpr int16_t ROUND_VALUE = 2;
 constexpr int16_t LINEJOIN_MITER_VALUE = 0;
 constexpr int16_t LINEJOIN_ROUND_VALUE = 1;
 constexpr int16_t LINEJOIN_BEVEL_VALUE = 2;
-constexpr char* LINEJOIN_MITER = "miter";
-constexpr char* LINEJOIN_ROUND = "round";
-constexpr char* LINEJOIN_BEVEL = "bevel";
 
+constexpr char LINEJOIN_MITER[] = "miter";
+constexpr char LINEJOIN_ROUND[] = "round";
+constexpr char LINEJOIN_BEVEL[] = "bevel";
 
 #if (defined(_WIN32) || defined(_WIN64))
 constexpr char PATH_SEPARATOR = '\\';
