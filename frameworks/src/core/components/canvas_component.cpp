@@ -1412,12 +1412,12 @@ jerry_value_t CanvasComponent::Transform(const jerry_value_t func,
     }
 
     double scaleX = jerry_get_number_value(args[ArgsIndex::IDX_0]);
-    double shearY = jerry_get_number_value(args[ArgsIndex::IDX_1]);
-    double shearX = jerry_get_number_value(args[ArgsIndex::IDX_2]);
+    double shearX = jerry_get_number_value(args[ArgsIndex::IDX_1]);
+    double shearY = jerry_get_number_value(args[ArgsIndex::IDX_2]);
     double scaleY = jerry_get_number_value(args[ArgsIndex::IDX_3]);
     double translateX = jerry_get_number_value(args[ArgsIndex::IDX_4]);
     double translateY = jerry_get_number_value(args[ArgsIndex::IDX_5]);
-    component->paint_.Transform(scaleX, shearY, shearX, scaleY, translateX, translateY);
+    component->paint_.Transform(scaleX, shearX, shearY, scaleY, translateX, translateY);
     return UNDEFINED;
 }
 
@@ -1442,12 +1442,12 @@ jerry_value_t CanvasComponent::SetTransform(const jerry_value_t func,
     }
 
     double scaleX = jerry_get_number_value(args[ArgsIndex::IDX_0]);
-    double shearY = jerry_get_number_value(args[ArgsIndex::IDX_1]);
-    double shearX = jerry_get_number_value(args[ArgsIndex::IDX_2]);
+    double shearX = jerry_get_number_value(args[ArgsIndex::IDX_1]);
+    double shearY = jerry_get_number_value(args[ArgsIndex::IDX_2]);
     double scaleY = jerry_get_number_value(args[ArgsIndex::IDX_3]);
     double translateX = jerry_get_number_value(args[ArgsIndex::IDX_4]);
     double translateY = jerry_get_number_value(args[ArgsIndex::IDX_5]);
-    component->paint_.SetTransform(scaleX, shearY, shearX, scaleY, translateX, translateY);
+    component->paint_.SetTransform(scaleX, shearX, shearY, scaleY, translateX, translateY);
     return UNDEFINED;
 }
 
