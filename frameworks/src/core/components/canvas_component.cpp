@@ -1996,8 +1996,7 @@ jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_v
     int16_t startY = 0;
     int16_t width = -1;
     int16_t height = -1;
-    if(ParseImagename(args,imageName,width,height) != UNDEFINED)
-    {
+    if(ParseImagename(args,imageName,width,height) != UNDEFINED) {
         return jerry_create_error(JERRY_ERROR_TYPE,
                                   reinterpret_cast<const jerry_char_t *>("parse Imagename function error"));
     }
