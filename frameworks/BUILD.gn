@@ -64,7 +64,22 @@ shared_library("ace_lite") {
     "//utils/native/lite/timer_task:ace_kit_timer",
   ]
 
-  defines = []
+  defines = [
+      "GRAPHIC_ENABLE_LINECAP_FLAG=1",
+      "GRAPHIC_ENABLE_LINEJOIN_FLAG=1",
+      "GRAPHIC_ENABLE_ELLIPSE_FLAG=1",
+      "GRAPHIC_ENABLE_BEZIER_ARC_FLAG=1",
+      "GRAPHIC_ENABLE_ARC_FLAG=1",
+      "GRAPHIC_ENABLE_ROUNDEDRECT_FLAG=1",
+      "GRAPHIC_ENABLE_DASH_GENERATE_FLAG=1",
+      "GRAPHIC_ENABLE_BLUR_EFFECT_FLAG=1",
+      "GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG=1",
+      "GRAPHIC_ENABLE_GRADIENT_FILL_FLAG=1",
+      "GRAPHIC_ENABLE_PATTERN_FILL_FLAG=1",
+      "GRAPHIC_ENABLE_DRAW_IMAGE_FLAG=1",
+      "GRAPHIC_ENABLE_DRAW_TEXT_FLAG=1",
+      "ENABLED_DELETE_MODULE_IAMGE=1"
+  ]
 
   if (ohos_build_type == "debug") {
     defines += [ "JS_PROFILER=1" ]
