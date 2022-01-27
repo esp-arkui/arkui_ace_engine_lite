@@ -1360,7 +1360,7 @@ jerry_value_t CanvasComponent::MeasureText(const jerry_value_t func,
     if (IS_UNDEFINED(component->measureTextWidthString_)) {
         component->measureTextWidthString_ = jerry_create_string(reinterpret_cast<const jerry_char_t *>("width"));
     }
-    Point ponit = component->canvas_.MeasureText(textValue, component->fontStyle_, component->paint_);
+    Point ponit = component->canvas_.MeasureText(textValue, component->fontStyle_);
     jerry_set_property(component->measureTextObject_, component->measureTextWidthString_, ponit.x);
 
     ACE_FREE(textValue);
@@ -1657,7 +1657,7 @@ jerry_value_t CanvasComponent::CleanRect(const jerry_value_t func,
     Point point;
     point.x = x;
     point.y = y;
-    component->canvas_.ClearRect(point, height, width, component->paint_);
+    component->canvas_.ClearRect(point, height, width);
     return UNDEFINED;
 }
 jerry_value_t CanvasComponent::Arc(const jerry_value_t func,
