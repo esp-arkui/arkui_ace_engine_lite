@@ -1925,11 +1925,11 @@ jerry_value_t CanvasComponent::ParseImagename(const jerry_value_t args[],
                                               int16_t &width,
                                               int16_t &height)
 {
-    ImageModule* imageModule = nullptr;
     ImageComponent* imageCom = nullptr;
     const char *src = nullptr;
     char* imageNameBuf = nullptr;
-    if (jerry_value_is_string(args[ArgsIndex::IDX_0])) { // 参数是文件名
+    /* The parameter is the file name */
+    if (jerry_value_is_string(args[ArgsIndex::IDX_0])) {
         imageNameBuf = MallocStringOf(args[ArgsIndex::IDX_0]);
         if (imageNameBuf == nullptr) {
             HILOG_ERROR(HILOG_MODULE_ACE, "canvas_component: get imageName value failed");
@@ -1939,9 +1939,10 @@ jerry_value_t CanvasComponent::ParseImagename(const jerry_value_t args[],
         imageName = imageNameBuf;
         ACE_FREE(imageNameBuf);
         return UNDEFINED;
-    } else if (jerry_value_is_object(args[ArgsIndex::IDX_0])) { // 参数是从HTML获取到的对象
+    /* Parameters are objects retrieved from HTML */
+    } else if (jerry_value_is_object(args[ArgsIndex::IDX_0])) {
         void *nativePtr = nullptr;
-        imageModule = reinterpret_cast<ImageModule*>(nativePtr);
+        jerry_get_object_native_pointer(args[ArgsIndex::IDX_0], &nativePtr, nullptr);
         imageCom = reinterpret_cast<ImageComponent*>(nativePtr);
         if (imageCom) {
             src = imageCom->GetSrc();
@@ -1952,7 +1953,8 @@ jerry_value_t CanvasComponent::ParseImagename(const jerry_value_t args[],
             }
             imageName = src;
             return UNDEFINED;
-        } else { // 参数是通过 new Image()的对象  //Greate new Image
+        } else {
+            /* The argument is the object passed through the new Image() */
             imageName = GetImageObjectParam(args, width, height);
             if (imageName.length() < 1) {
                 return jerry_create_error(JERRY_ERROR_TYPE,
@@ -2017,7 +2019,11 @@ jerry_value_t CanvasComponent::DrawImage(const jerry_value_t func, const jerry_v
         height = IntegerOf(args[ArgsIndex::IDX_4]);
     }
     Point startLocat = {startX, startY};
-    component->canvas_.DrawImage(startLocat, imageName.c_str(), component->paint_);
+    if (width > 0 || height > 0) {
+        component->canvas_.DrawImage(startLocat, imageName.c_str(), component->paint_, width, height);
+    }else {
+        component->canvas_.DrawImage(startLocat, imageName.c_str(), component->paint_);
+    }
     return UNDEFINED;
 }
 
