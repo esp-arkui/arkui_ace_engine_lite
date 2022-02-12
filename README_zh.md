@@ -52,10 +52,6 @@ JS-UI框架子系统源代码在/foundation/ace/ace\_engine\_lite下，目录结
 └── test               # 测试用例目录
 ```
 
-## 接口<a name="section1096322014288"></a>
-
-API介绍请参考[《OpenHarmony Device开发API参考》](https://device.harmonyos.com/cn/docs/develop/apiref/js-framework-file-0000000000611396)
-
 ## 使用<a name="section1529834174016"></a>
 
 详见：

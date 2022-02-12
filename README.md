@@ -53,10 +53,6 @@ The source code of the framework is stored in  **/foundation/ace/ace\_engine\_li
 └── test               # Test cases
 ```
 
-## Available APIs<a name="section1096322014288"></a>
-
-For details about the APIs, see the  [JS Application Development](https://device.harmonyos.com/en/docs/apiref/js-framework-file-0000000000616658).
-
 ## Usage<a name="section1529834174016"></a>
 
 For details, go to the  **readme**  repository:
