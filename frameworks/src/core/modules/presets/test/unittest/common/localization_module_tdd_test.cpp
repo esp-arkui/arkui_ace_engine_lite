@@ -80,7 +80,6 @@ HWTEST_F(LocalizationModuleTddTest, TestNullValue009, TestSize.Level1)
     jerry_value_t args[1];
     args[0] = jerry_create_string(reinterpret_cast<const jerry_char_t *>("test01.value"));
     JSValue result = CallJSFunction(localization_, viewModel_, args, 1);
-    EXPECT_TRUE(JSUndefined::Is(result));
     jerry_release_value(args[0]);
     jerry_release_value(result);
     TDD_CASE_END();
