@@ -26,7 +26,7 @@ The JS UI framework consists of the JavaScript data binding framework, JavaScrip
     Supports parsing and execution of JavaScript code.
 
 
--   **JavaScript framework**
+-   **JavaScript  framework**
 
     Provides the framework mechanism of JavaScript APIs and components through the C++ language.
 
