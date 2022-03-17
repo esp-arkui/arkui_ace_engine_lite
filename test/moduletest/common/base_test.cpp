@@ -108,13 +108,13 @@ void BaseTest::UpdateCharAttributeOrStyleValue(Component *component,
 uint16_t BaseTest::SetCompnentNameId(const char *componentName)
 {
     if (componentName == nullptr) {
-        HILOG_WARN(HILOG_MODULE_ACE, "null component name\n");
+        HILOG_WARN(HILOG_MODULE_ACE, "null  component name\n");
         return K_UNKNOWN;
     }
     uint8_t maxLength = 9;
     char *tarComponentName = (char *)malloc(maxLength);
     if (tarComponentName == nullptr) {
-        HILOG_WARN(HILOG_MODULE_ACE, "alloc memory fail\n");
+        HILOG_WARN(HILOG_MODULE_ACE, "alloc  memory fail\n");
         return K_UNKNOWN;
     }
     tarComponentName[0] = '\0';
