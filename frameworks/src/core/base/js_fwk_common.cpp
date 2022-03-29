@@ -416,7 +416,7 @@ static size_t AppendTwoPath(char * const first, uint8_t startIndex, const char *
             if (memcpy_s(first + startIndex, (destSize - startIndex), (sec + 1), (secLength - 1)) != 0) {
                 HILOG_ERROR(HILOG_MODULE_ACE, "append path error");
                 return 0;
-            };
+            }
 
             copiedLength = copiedLength + (secLength - 1);
             startIndex = startIndex + (secLength - 1);
