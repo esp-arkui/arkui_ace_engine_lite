@@ -86,6 +86,11 @@
 #define FEATURE_TIMER_MODULE 1
 
 /**
+ * syscap module
+ */
+#define FEATURE_SYSCAP_MODULE 1
+
+/**
  * execute timer callback directly for previewer
  */
 #define SYNC_TIMER_CALLBACK
