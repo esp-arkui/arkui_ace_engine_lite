@@ -82,6 +82,13 @@
 #endif
 
 /**
+ * enable syscap JS API
+ */
+#ifndef FEATURE_SYSCAP_MODULE
+#define FEATURE_SYSCAP_MODULE 1
+#endif
+
+/**
  * enable localization feature
  */
 #ifndef FEATURE_LOCALIZATION_MODULE

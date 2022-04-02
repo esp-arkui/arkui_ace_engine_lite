@@ -32,6 +32,7 @@
 #include "presets/render_module.h"
 #include "presets/require_module.h"
 #include "presets/timer_module.h"
+#include "presets/syscap_module.h"
 #include "presets/version_module.h"
 #include "product_adapter.h"
 #include "system_info.h"
@@ -57,6 +58,7 @@ void JsAppEnvironment::LoadAceBuiltInModules() const
     FeaAbilityModule::Load();
     JsTestModule::Load();
     TimersModule::Load();
+    SyscapsModule::Load();
     PerformaceProfilerModule::Load();
     AceVersionModule::Load();
     IntlControlModule::Load();

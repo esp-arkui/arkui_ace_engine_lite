@@ -61,6 +61,7 @@ lite_library("ace_lite") {
     "$NATIVE_ENGINE_PATH:ace_native_engine_lite",
     "//base/global/i18n_lite/frameworks/i18n:global_i18n",
     "//base/global/resmgr_lite/frameworks/resmgr_lite:global_resmgr",
+    "//base/startup/init_lite/interfaces/innerkits/syscap:syscap",
     "//foundation/graphic/ui:lite_ui",
     "//utils/native/lite/timer_task:ace_kit_timer",
   ]
