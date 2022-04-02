@@ -78,6 +78,7 @@ ace_lite_include_dirs += [
   "//third_party/freetype/include",
   "//base/global/resmgr_lite/interfaces/innerkits/include",
   "//base/global/i18n_lite/interfaces/kits/i18n/include",
+  "//base/startup/init_lite/interfaces/innerkits/include",
 ]
 
 ace_lite_include_dirs_simulator = [
@@ -176,6 +177,7 @@ ace_lite_sources = [
   "$ACE_LITE_PATH/src/core/modules/presets/profiler_module.cpp",
   "$ACE_LITE_PATH/src/core/modules/presets/render_module.cpp",
   "$ACE_LITE_PATH/src/core/modules/presets/require_module.cpp",
+  "$ACE_LITE_PATH/src/core/modules/presets/syscap_module.cpp",
   "$ACE_LITE_PATH/src/core/modules/presets/timer_module.cpp",
   "$ACE_LITE_PATH/src/core/modules/presets/version_module.cpp",
   "$ACE_LITE_PATH/src/core/modules/router_module.cpp",
