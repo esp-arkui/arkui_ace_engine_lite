@@ -93,6 +93,11 @@
 #define FEATURE_TIMER_MODULE 1
 
 /**
+ * syscap module
+ */
+#define FEATURE_SYSCAP_MODULE 1
+
+/**
  * support lite ace dfx module
  */
 #define FEATURE_ACELITE_DFX_MODULE 1
