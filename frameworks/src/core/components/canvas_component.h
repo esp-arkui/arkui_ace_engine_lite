@@ -201,6 +201,7 @@ private:
     static const char * const FUNC_LINETO;
     static const char * const FUNC_RECT;
     static const char * const FUNC_ARC;
+    
     static const char * const FUNC_CLOSEPATH;
     static const char * const FUNC_STROKE;
 };
