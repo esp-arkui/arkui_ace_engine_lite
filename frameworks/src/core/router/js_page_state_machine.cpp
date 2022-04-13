@@ -80,7 +80,7 @@ StateMachine::~StateMachine()
 void StateMachine::SetCurrentState(int8_t newState)
 {
     if (newState <= UNDEFINED_STATE || newState >= END_STATE) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "error input state:%d", newState);
+        HILOG_ERROR(HILOG_MODULE_ACE, "error input state:%{public}d", newState);
         return;
     }
     currentState_ = newState;
@@ -199,8 +199,8 @@ bool StateMachine::BindUri(jerry_value_t &jsRes)
         ace_free(uri_);
         uri_ = nullptr;
         HILOG_ERROR(HILOG_MODULE_ACE, "statemachine init failed as uri is empty.");
-        jsRes = jerry_create_error(JERRY_ERROR_URI,
-                                   reinterpret_cast<const jerry_char_t *>("uri value can't be empty."));
+        jsRes =
+            jerry_create_error(JERRY_ERROR_URI, reinterpret_cast<const jerry_char_t *>("uri value can't be empty."));
         return false;
     }
     int result = GenerateJsPagePath(uri_);
@@ -275,7 +275,7 @@ void StateMachine::BindParameters()
 void StateMachine::ChangeState(int newState)
 {
     if ((newState <= UNDEFINED_STATE) || (newState >= END_STATE)) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "error input state:%d", newState);
+        HILOG_ERROR(HILOG_MODULE_ACE, "error input state:%{public}d", newState);
         return;
     }
     // jump to new State
@@ -324,13 +324,13 @@ static void ForceGC(void *data)
 {
     static_cast<void>(data);
     jerry_gc(jerry_gc_mode_t::JERRY_GC_PRESSURE_HIGH);
-#if ENABLED(JS_PROFILER)
+#if IS_ENABLED(JS_PROFILER)
     if (JSProfiler::GetInstance()->IsEnabled()) {
         // dump the JS heap status
         JSHeapStatus heapStatus;
         if (JSI::GetJSHeapStatus(heapStatus)) {
-            HILOG_DEBUG(HILOG_MODULE_ACE, "JS Heap allocBytes[%d], peakAllocBytes[%d]", heapStatus.allocBytes,
-                        heapStatus.peakAllocBytes);
+            HILOG_DEBUG(HILOG_MODULE_ACE, "JS Heap allocBytes[%{public}d], peakAllocBytes[%{public}d]",
+                        heapStatus.allocBytes, heapStatus.peakAllocBytes);
         }
     }
 #endif
@@ -340,7 +340,7 @@ void StateMachine::RenderPage()
 {
     START_TRACING(RENDER);
     // if not in init state, reset all watchers of previous page at first
-    LazyLoadManager* lazy = const_cast<LazyLoadManager *>(appContext_->GetLazyLoadManager());
+    LazyLoadManager *lazy = const_cast<LazyLoadManager *>(appContext_->GetLazyLoadManager());
     if (lazy != nullptr) {
         lazy->ResetWatchers();
     }
@@ -468,6 +468,11 @@ void StateMachine::ReleaseHistoryPageResource()
 
     // clean up native module objects required
     ModuleManager::GetInstance()->CleanUpModule();
+    // check components leak
+    uint16_t remainComponentCount = FatalHandler::GetInstance().GetComponentCount();
+    if (remainComponentCount != 0) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "[%{public}d] components leaked!", remainComponentCount);
+    }
 }
 
 void StateMachine::DeleteViewModelProperties() const

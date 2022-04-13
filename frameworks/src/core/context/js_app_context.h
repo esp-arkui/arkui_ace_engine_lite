@@ -96,6 +96,11 @@ public:
     {
         topJSAbilityImpl_ = object;
     }
+    void LoadApiVersion();
+    int32_t GetCompatibleApi() const;
+    void SetCompatibleApi(int32_t compatibleApi);
+    int32_t GetTargetApi() const;
+    void SetTargetApi(int32_t targetApi);
 
     const AppStyleManager *GetStyleManager()
     {
@@ -159,6 +164,8 @@ private:
      * @return the target mode file content or nullptr for reading failure
      */
     char *EvaluateFile(bool &isSnapshotMode, uint32_t &outLength, char *fullPathPath, size_t fullPathLength) const;
+    void CheckSnapshotVersion(const char *bcFileContent, uint32_t contentLength) const;
+    char *ProcessResourcePathByConfiguration(size_t origUriLength, const char *filePath) const;
     char *currentBundleName_ = nullptr;
     char *currentAbilityPath_ = nullptr;
     char *currentJsPath_ = nullptr;
@@ -167,6 +174,8 @@ private:
     LazyLoadManager *lazyLoadManager_ = nullptr;
     // record current running ability's uuid && ability path, will be release during app-cleanup
     uint16_t currentToken_ = 0;
+    int32_t compatibleApi_ = 0;
+    int32_t targetApi_ = 0;
 };
 } // namespace ACELite
 } // namespace OHOS

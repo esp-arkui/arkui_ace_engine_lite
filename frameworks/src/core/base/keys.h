@@ -38,7 +38,7 @@ enum {
     // Reused by the struct begin
     // Sample:KEYWORD(enum_string, real-key-string)
     KEYWORD(ALIGN_ITEMS, alignItems) // layout style
-#ifdef FEATURE_COMPONENT_ANALOG_CLOCK
+#if (FEATURE_COMPONENT_ANALOG_CLOCK == 1)
     KEYWORD(ANALOG_CLOCK, analog-clock) // tag name
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
     KEYWORD(ANIMATION_DELAY, animationDelay) // animation delay
@@ -48,7 +48,7 @@ enum {
     KEYWORD(ANIMATION_NAME, animationName) // animation name
     KEYWORD(ANIMATION_TIMING_FUNCTION, animationTimingFunction) // animation timing function
     KEYWORD(ARC, arc) // circle progress
-#ifdef FEATURE_COMPONENT_VIDEO
+#if (FEATURE_COMPONENT_VIDEO == 1)
     KEYWORD(AUTOPLAY, autoplay) // video component autoplay attribute
 #endif // FEATURE_COMPONENT_VIDEO
     KEYWORD(BACKGROUND_COLOR, backgroundColor) // chart line color
@@ -66,10 +66,10 @@ enum {
     KEYWORD(BORDER_TOP_WIDTH, borderTopWidth) // common style border top width
     KEYWORD(BORDER_WIDTH, borderWidth) // common style, horizon progress style
     KEYWORD(BREAK, break) // text overflow type
-#ifdef FEATURE_COMPONENT_CAMERA
+#if (FEATURE_COMPONENT_CAMERA == 1)
     KEYWORD(CAMERA, camera) // camera component
 #endif // FEATURE_COMPONENT_CAMERA
-#ifdef FEATURE_COMPONENT_CANVAS
+#if (FEATURE_COMPONENT_CANVAS == 1)
     KEYWORD(CANVAS, canvas) // tag name
 #endif // FEATURE_COMPONENT_CANVAS
     KEYWORD(CENTER, center) // text align type
@@ -81,20 +81,22 @@ enum {
     KEYWORD(CLICK, click) // click event listener
     KEYWORD(CLIP, clip) // text overflow type
     KEYWORD(CHART, chart) // tag name
-#ifdef FEATURE_COMPONENT_ANALOG_CLOCK
+#if (FEATURE_COMPONENT_ANALOG_CLOCK == 1)
     KEYWORD(CLOCK_HAND, clock-hand) // tag name
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
     KEYWORD(COLOR, color) // text style type, rectangular clock-hand fill color, horizon progress style
     KEYWORD(COLUMN, column) // layout style
     KEYWORD(COLUMN_REVERSE, column-reverse) // layout style
-#ifdef FEATURE_COMPONENT_VIDEO
+    KEYWORD(CONTAIN, contain) // image component contain
+#if (FEATURE_COMPONENT_VIDEO == 1)
     KEYWORD(CONTROLS, controls) // video component controls attribute
 #endif // FEATURE_COMPONENT_VIDEO
+    KEYWORD(COVER, cover) // image component cover
     KEYWORD(DATASETS, datasets) // chart data
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
     KEYWORD(DATE, date) // picker-view attr value
 #endif // FEATURE_COMPONENT_DATE_PICKER
-#ifdef FEATURE_DATE_FORMAT
+#if (FEATURE_DATE_FORMAT == 1)
     KEYWORD(DAY, day)
     KEYWORD(DIGIT2, digit2)
 #endif
@@ -107,18 +109,20 @@ enum {
     KEYWORD(EASE_IN_OUT, ease-in-out) // animation time function value
     KEYWORD(EASE_OUT, ease-out) // animation time function value
     KEYWORD(ELLIPSIS, ellipsis) // text overflow type
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
     KEYWORD(END, end) // date picker-view attr
 #endif // FEATURE_COMPONENT_DATE_PICKER
-#if (defined(FEATURE_COMPONENT_CAMERA) || defined(FEATURE_COMPONENT_VIDEO))
+#if ((FEATURE_COMPONENT_CAMERA == 1) || (FEATURE_COMPONENT_VIDEO == 1))
     KEYWORD(ERROR, error) // camera component error event
 #endif // FEATURE_COMPONENT_CAMERA
     KEYWORD(EXPAND, expand) // text overflow type
     KEYWORD(FALSE, false) // common attributes
-#ifdef FEATURE_COMPONENT_VIDEO
+#if (FEATURE_COMPONENT_VIDEO == 1)
     KEYWORD(FINISH, finish) // video component finish event tag
 #endif // FEATURE_COMPONENT_VIDEO
+    KEYWORD(FILL, fill) // image component fill
     KEYWORD(FILL_MODE, fillmode) // image-animator attribtue
+    KEYWORD(FIT_ORIGINAL_SIZE, fitOriginalSize) // image component fit original size
     KEYWORD(FIXED_SIZE, fixedsize) // image-animator attribute
     KEYWORD(FLEX_DIRECTION, flexDirection) // layout style
     KEYWORD(FLEX_END, flex-end) // layout style
@@ -128,10 +132,10 @@ enum {
     KEYWORD(FONT_FAMILY, fontFamily) // text style type
     KEYWORD(FORWARDS, forwards) // animation fill value
     KEYWORD(HEIGHT, height) // common attributes
-#if (defined(FEATURE_COMPONENT_ANALOG_CLOCK)) || (defined(FEATURE_DATE_FORMAT))
+#if ((FEATURE_COMPONENT_ANALOG_CLOCK == 1) || (FEATURE_DATE_FORMAT == 1))
     KEYWORD(HOUR, hour) // analog-clock hour
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK FEATURE_DATE_FORMAT
-#ifdef FEATURE_DATE_FORMAT
+#if (FEATURE_DATE_FORMAT == 1)
     KEYWORD(HOUR12, hour12)
 #endif
     KEYWORD(ID, id) // common attributes
@@ -143,7 +147,7 @@ enum {
     KEYWORD(ITEM_SELECTED, itemselected) // scroll item selected event listener
     KEYWORD(ITERATION, iteration) // image-animator attribute
     KEYWORD(JUSTIFY_CONTENT, justifyContent) // layout style
-#ifdef JS_TOUCH_EVENT_SUPPORT
+#ifdef JS_EXTRA_EVENT_SUPPORT
     KEYWORD(KEY, key) // onkey event
 #endif
     KEYWORD(LABELS, labels) // chart labels
@@ -153,7 +157,7 @@ enum {
     KEYWORD(LINE_HEIGHT, lineHeight) // text style type
     KEYWORD(LIST, list) // list tag name
     KEYWORD(LIST_ITEM, list-item) // list-item tag name
-#ifdef FEATURE_DATE_FORMAT
+#if (FEATURE_DATE_FORMAT == 1)
     KEYWORD(LONG, long)
 #endif
     KEYWORD(LONGPRESS, longpress) // long progress event listener
@@ -167,18 +171,19 @@ enum {
     KEYWORD(MAX, max) // common attributes
     KEYWORD(MIN, min) // common attributes, analog-clock minute
     KEYWORD(MINI, mini) // text font size type
-#ifdef FEATURE_DATE_FORMAT
+#if (FEATURE_DATE_FORMAT == 1)
     KEYWORD(MINUTE, minute)
     KEYWORD(MONTH, month)
 #endif
-#ifdef FEATURE_COMPONENT_VIDEO
+#if (FEATURE_COMPONENT_VIDEO == 1)
     KEYWORD(MUTED, muted) // video component muted attribute
 #endif // FEATURE_COMPONENT_VIDEO
     KEYWORD(NAME, name) // the attribute name
     KEYWORD(NONE, none) // animation fill value
-#ifdef FEATURE_DATE_FORMAT
+#if (FEATURE_DATE_FORMAT == 1)
     KEYWORD(NUMERIC, numeric)
 #endif
+    KEYWORD(OBJECT_FIT, objectFit) // image component object-fit
     KEYWORD(OPACITY, opacity) // common style opacity
     KEYWORD(OPTIONS, options) // chart options
     KEYWORD(PADDING, padding)
@@ -189,21 +194,21 @@ enum {
     KEYWORD(PERCENT, percent)
     KEYWORD(PICKER_VIEW, picker-view) // tag name
     KEYWORD(REF, ref) // common attribute
-#ifdef FEATURE_COMPONENT_VIDEO
+#if (FEATURE_COMPONENT_VIDEO == 1)
     KEYWORD(PREPARED, prepared) // video component prepared event
 #endif // FEATURE_COMPONENT_VIDEO
-#ifdef FEATURE_COMPONENT_ANALOG_CLOCK
+#if (FEATURE_COMPONENT_ANALOG_CLOCK == 1)
     KEYWORD(PIVOT_X, pivotX) // clock-hand pivot-x
     KEYWORD(PIVOT_Y, pivotY) // clock-hand pivot-y
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
     KEYWORD(PROGRESS, progress) // progress tag name
-#ifdef FEATURE_COMPONENT_QRCODE
+#if (FEATURE_COMPONENT_QRCODE == 1)
     KEYWORD(QRCODE, qrcode) // qrcode tag name
 #endif
     KEYWORD(RADIO, radio) // the type in input
     KEYWORD(RADIUS, radius) // circle progress radius
     KEYWORD(RANGE, range) // picker-view attr
-#ifdef FEATURE_COMPONENT_VIDEO
+#if (FEATURE_COMPONENT_VIDEO == 1)
     KEYWORD(PAUSE, pause) // video component pause event tag
 #endif // FEATURE_COMPONENT_VIDEO
     KEYWORD(REVERSE, reverse) // image-animator attribute
@@ -211,16 +216,20 @@ enum {
     KEYWORD(ROTATE, rotate) // animation rotate
     KEYWORD(ROW, row) // layout style
     KEYWORD(ROW_REVERSE, row-reverse) // layout style
+    KEYWORD(SCALE_DOWN, scaleDown) // image component scale down
     KEYWORD(SCROLLAMOUNT, scrollamount) // marquee scroll speed
+    KEYWORD(SCROLLBOTTOM, scrollbottom) // scroll bottom event listener
+    KEYWORD(SCROLLDELAY, scrolldelay) // marquee scroll delay
     KEYWORD(SCROLLEND, scrollend) // scroll end event listener
     KEYWORD(SCROLLSTART, scrollstart) // scroll start event listener
-#ifdef FEATURE_COMPONENT_ANALOG_CLOCK
+    KEYWORD(SCROLLTOP, scrolltop) // scroll top event listener
+#if (FEATURE_COMPONENT_ANALOG_CLOCK == 1)
     KEYWORD(SEC, sec) // analog-clock second
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
-#ifdef FEATURE_DATE_FORMAT
+#if (FEATURE_DATE_FORMAT == 1)
     KEYWORD(SECOND, second)
 #endif
-#ifdef FEATURE_COMPONENT_VIDEO
+#if (FEATURE_COMPONENT_VIDEO == 1)
     KEYWORD(SEEKING, seeking) // // video component seeking event tag
     KEYWORD(SEEKED, seeked) // // video component seeked event tag
 #endif // FEATURE_COMPONENT_VIDEO
@@ -228,7 +237,7 @@ enum {
     KEYWORD(SELECTED_COLOR, selectedColor) // picker-view style
     KEYWORD(SELECTED_FONT_FAMILY, selectedFontFamily) // picker-view style
     KEYWORD(SELECTED_FONT_SIZE, selectedFontSize) // picker-view style
-#ifdef FEATURE_DATE_FORMAT
+#if (FEATURE_DATE_FORMAT == 1)
     KEYWORD(SHORT, short)
 #endif
     KEYWORD(SHOW, show)
@@ -240,16 +249,16 @@ enum {
     KEYWORD(STACK, stack) // tag name
     KEYWORD(STANDARD, standard) // text font size type
     KEYWORD(STOP, stop) // image-animator stop event, video component end event tag
-#if (defined(FEATURE_COMPONENT_DATE_PICKER) || defined(FEATURE_COMPONENT_VIDEO))
+#if ((FEATURE_COMPONENT_DATE_PICKER == 1) || (FEATURE_COMPONENT_VIDEO == 1))
     KEYWORD(START, start) // date picker-view attr, video component start event tag
-#endif // (defined(FEATURE_COMPONENT_DATE_PICKER) || defined(FEATURE_COMPONENT_VIDEO)
+#endif // ((FEATURE_COMPONENT_DATE_PICKER == 1) || (FEATURE_COMPONENT_VIDEO == 1))
     KEYWORD(START_ANGLE, startAngle) // circle progress start angle
     KEYWORD(STEP, step)
     KEYWORD(STROKE_WIDTH, strokeWidth) // horizon/arc progress style
     KEYWORD(SWIPE, swipe)  // swipe event listener
     KEYWORD(SWIPER, swiper) // tag name
     KEYWORD(SWITCH, switch) // tag name
-#ifdef FEATURE_COMPONENT_TABS
+#if (FEATURE_COMPONENT_TABS == 1)
     KEYWORD(TAB_BAR, tab-bar) // tag name
     KEYWORD(TAB_CONTENT, tab-content) // tag name
     KEYWORD(TABS, tabs) // tag name
@@ -258,35 +267,35 @@ enum {
     KEYWORD(TEXT_ALIGN, textAlign) // text style type
     KEYWORD(TEXT_OVERFLOW, textOverflow) // text style type
     KEYWORD(TIME, time) // picker-view attr value
-#ifdef FEATURE_COMPONENT_VIDEO
+#if (FEATURE_COMPONENT_VIDEO == 1)
     KEYWORD(TIME_UPDATE, timeupdate) // video component timeupdate event tag
 #endif // FEATURE_COMPONENT_VIDEO
     KEYWORD(TOP, top)
     KEYWORD(TOTAL_ANGLE, total-angle) // circle progress style
-#ifdef JS_TOUCH_EVENT_SUPPORT
+    KEYWORD(TOUCHSTART, touchStart) // touch event listener
+    KEYWORD(TOUCHMOVE, touchmove) // touchmove event listener
+    KEYWORD(TOUCHEND, touchEnd) // touchend event listener
+#ifdef JS_EXTRA_EVENT_SUPPORT
     KEYWORD(TOUCHCANCEL, touchcancel) // ontouchcancel event
-    KEYWORD(TOUCHEND, touchend) // ontouchend event
-    KEYWORD(TOUCHMOVE, touchmove) // ontouchmove event
-    KEYWORD(TOUCHSTART, touchstart) // ontouchstart event
 #endif
     KEYWORD(TRANSLATE_X, translateX) // animation transform x
     KEYWORD(TRANSLATE_Y, translateY) // animation transform y
     KEYWORD(TRUE, true) // common attributes
-#ifdef FEATURE_COMPONENT_ANALOG_CLOCK
+#if (FEATURE_COMPONENT_ANALOG_CLOCK == 1)
     KEYWORD(TYPE, type) // clock-hand type
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
     KEYWORD(VALUE, value) // common attributes
     KEYWORD(VERTICAL, vertical) // swiper attr vertical
-#ifdef FEATURE_COMPONENT_VIDEO
+#if (FEATURE_COMPONENT_VIDEO == 1)
     KEYWORD(VIDEO, video) // video tag name
 #endif // FEATURE_COMPONENT_VIDEO
     KEYWORD(WIDTH, width) // common attributes
     KEYWORD(WRAP, wrap) // flex wrap
-#ifdef FEATURE_DATE_FORMAT
+#if (FEATURE_DATE_FORMAT == 1)
     KEYWORD(WEEKDAY, weekday)
     KEYWORD(YEAR, year)
 #endif
-#ifdef FEATURE_NUMBER_FORMAT
+#if (FEATURE_NUMBER_FORMAT == 1)
     KEYWORD(STYLE, style)
     KEYWORD(USEGROUP, useGroup)
     KEYWORD(MINIMUMFRACTIONDIGITS, minimumFractionDigits)

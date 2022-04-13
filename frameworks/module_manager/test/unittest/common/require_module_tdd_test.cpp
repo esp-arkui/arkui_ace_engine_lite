@@ -42,7 +42,7 @@ void RequireModuleTddTest::RequireModuleTest001()
     /**
      * @tc.steps: step1. require a module with module name registered
      */
-    constexpr char *moduleName = "system.app";
+    const char *moduleName = "system.app";
     JSIValue moduleRequired = moduleManager_->RequireModule(moduleName);
     /**
      * @tc.expected: step1. moduleRequired is not undefined
@@ -58,7 +58,7 @@ void RequireModuleTddTest::RequireModuleTest002()
     /**
      * @tc.steps: step1. require a module with module name unregistered
      */
-    constexpr char *moduleName = "system.unregistered";
+    const char *moduleName = "system.unregistered";
     JSIValue moduleRequired = moduleManager_->RequireModule(moduleName);
     /**
      * @tc.expected: step1. moduleRequired is undefined
@@ -74,7 +74,7 @@ void RequireModuleTddTest::RequireModuleTest003()
     /**
      * @tc.steps: step1. require a module with incorrect category
      */
-    constexpr char *moduleName = "service.app";
+    const char *moduleName = "service.app";
     JSIValue moduleRequired = moduleManager_->RequireModule(moduleName);
     /**
      * @tc.expected: step1. moduleRequired is undefined
@@ -90,7 +90,7 @@ void RequireModuleTddTest::RequireModuleTest004()
     /**
      * @tc.steps: step1. require a module with illegal module name
      */
-    constexpr char *moduleName = "illegal";
+    const char *moduleName = "illegal";
     JSIValue moduleRequired = moduleManager_->RequireModule(moduleName);
     /**
      * @tc.expected: step1. moduleRequired is undefined
@@ -106,7 +106,7 @@ void RequireModuleTddTest::RequireModuleTest005()
     /**
      * @tc.steps: step1. require app module
      */
-    constexpr char *moduleName = "system.app";
+    const char *moduleName = "system.app";
     JSIValue moduleRequired = moduleManager_->RequireModule(moduleName);
     /**
      * @tc.expected: step1. moduleRequired is not undefined
@@ -115,7 +115,7 @@ void RequireModuleTddTest::RequireModuleTest005()
     /**
      * @tc.steps: step2. get "getInfo" property of moduleRequired
      */
-    constexpr char *funcName = "getInfo";
+    const char *funcName = "getInfo";
     JSIValue jFunc = JSI::GetNamedProperty(moduleRequired, funcName);
     /**
      * @tc.expected: step2. jFunc is not undefined
@@ -140,7 +140,7 @@ void RequireModuleTddTest::RequireModuleTest006()
     /**
      * @tc.steps: step1. require app module
      */
-    constexpr char *moduleName = "system.app";
+    const char *moduleName = "system.app";
     JSIValue moduleRequired = moduleManager_->RequireModule(moduleName);
     /**
      * @tc.expected: step1. moduleRequired is not undefined
@@ -149,7 +149,7 @@ void RequireModuleTddTest::RequireModuleTest006()
     /**
      * @tc.steps: step2. get "terminate" property of moduleRequired
      */
-    constexpr char *funcName = "terminate";
+    const char *funcName = "terminate";
     JSIValue jFunc = JSI::GetNamedProperty(moduleRequired, funcName);
     /**
      * @tc.expected: step2. jFunc is not undefined
@@ -174,7 +174,7 @@ void RequireModuleTddTest::RequireModuleTest007()
     /**
      * @tc.steps: step1. require router module
      */
-    constexpr char *moduleName = "system.router";
+    const char *moduleName = "system.router";
     JSIValue moduleRequired = moduleManager_->RequireModule(moduleName);
     /**
      * @tc.expected: step1. moduleRequired is not undefined
@@ -183,7 +183,7 @@ void RequireModuleTddTest::RequireModuleTest007()
     /**
      * @tc.steps: step2. get "replace" property of moduleRequired
      */
-    constexpr char *funcName = "replace";
+    const char *funcName = "replace";
     JSIValue jFunc = JSI::GetNamedProperty(moduleRequired, funcName);
     /**
      * @tc.expected: step2. jFunc is not undefined
@@ -202,6 +202,22 @@ void RequireModuleTddTest::RequireModuleTest007()
     TDD_CASE_END();
 }
 
+void RequireModuleTddTest::RequireModuleTest008()
+{
+    TDD_CASE_BEGIN();
+    /**
+     * @tc.steps: step1. require a module with module name registered which is ohos
+     */
+    const char *moduleName = "ohos.app";
+    JSIValue module = moduleManager_->RequireModule(moduleName);
+    /**
+     * @tc.expected: step1. module is not undefined
+     */
+    EXPECT_FALSE(JSI::ValueIsUndefined(module));
+    JSI::ReleaseValue(module);
+    TDD_CASE_END();
+}
+
 void RequireModuleTddTest::RunTests()
 {
     RequireModuleTest001();
@@ -211,13 +227,13 @@ void RequireModuleTddTest::RunTests()
     RequireModuleTest005();
     RequireModuleTest006();
     RequireModuleTest007();
+    RequireModuleTest008();
 }
 
 #ifdef TDD_ASSERTIONS
 /**
  * @tc.name: RequireModuleTest001
  * @tc.desc: Verify require a registered module.
- * @tc.require: AR000DSEHC
  */
 HWTEST_F(RequireModuleTddTest, test001, TestSize.Level1)
 {
@@ -227,7 +243,6 @@ HWTEST_F(RequireModuleTddTest, test001, TestSize.Level1)
 /**
  * @tc.name: RequireModuleTest002
  * @tc.desc: Verify require an unregistered module.
- * @tc.require: AR000DSEHC
  */
 HWTEST_F(RequireModuleTddTest, test002, TestSize.Level1)
 {
@@ -237,7 +252,6 @@ HWTEST_F(RequireModuleTddTest, test002, TestSize.Level1)
 /**
  * @tc.name: RequireModuleTest003
  * @tc.desc: Verify require a module with incorrect category.
- * @tc.require: AR000DSEHC
  */
 HWTEST_F(RequireModuleTddTest, test003, TestSize.Level1)
 {
@@ -247,7 +261,6 @@ HWTEST_F(RequireModuleTddTest, test003, TestSize.Level1)
 /**
  * @tc.name: RequireModuleTest004
  * @tc.desc: Verify require a module with illegal module name.
- * @tc.require: AR000DSEHC
  */
 HWTEST_F(RequireModuleTddTest, test004, TestSize.Level1)
 {
@@ -257,7 +270,6 @@ HWTEST_F(RequireModuleTddTest, test004, TestSize.Level1)
 /**
  * @tc.name: RequireModuleTest005
  * @tc.desc: Verify require app module, and call it's getInfo().
- * @tc.require: AR000DSEHC
  */
 HWTEST_F(RequireModuleTddTest, test005, TestSize.Level1)
 {
@@ -267,7 +279,6 @@ HWTEST_F(RequireModuleTddTest, test005, TestSize.Level1)
 /**
  * @tc.name: RequireModuleTest006
  * @tc.desc: Verify require app module, and call it's terminate().
- * @tc.require: AR000DSEHC
  */
 HWTEST_F(RequireModuleTddTest, test006, TestSize.Level1)
 {
@@ -277,11 +288,19 @@ HWTEST_F(RequireModuleTddTest, test006, TestSize.Level1)
 /**
  * @tc.name: RequireModuleTest007
  * @tc.desc: Verify require router module, and call it's replace().
- * @tc.require: AR000DSEHC
  */
 HWTEST_F(RequireModuleTddTest, test007, TestSize.Level1)
 {
     RequireModuleTddTest::RequireModuleTest007();
+}
+
+/**
+ * @tc.name: RequireModuleTest008
+ * @tc.desc: Verify the ohos module importing process.
+ */
+HWTEST_F(RequireModuleTddTest, test008, TestSize.Level1)
+{
+    RequireModuleTddTest::RequireModuleTest008();
 }
 #endif
 } // namespace ACELite

@@ -36,7 +36,7 @@ class RequireModuleTddTest {
 #endif
 public:
     RequireModuleTddTest();
-    ~RequireModuleTddTest(){};
+    ~RequireModuleTddTest(){}
     void SetUp();
     void TearDown();
     void RequireModuleTest001();
@@ -46,6 +46,7 @@ public:
     void RequireModuleTest005();
     void RequireModuleTest006();
     void RequireModuleTest007();
+    void RequireModuleTest008();
     void RunTests();
 
 private:

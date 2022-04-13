@@ -9,11 +9,11 @@ DESTDIR = ../libs
 
 DEFINES  -= UNICODE
 DEFINES  -= FEATURE_TIMER_MODULE
-DEFINES += TARGET_SIMULATOR
-DEFINES += JS_ENGINE_EXTERNAL_CONTEXT
-DEFINES += SCREENSIZE_SPECIFIED
+DEFINES += TARGET_SIMULATOR=1
+DEFINES += JS_ENGINE_EXTERNAL_CONTEXT=1
+DEFINES += SCREENSIZE_SPECIFIED=1
 DEFINES += JS_PROFILER=0
-DEFINES += QT_SIMULATOR
+DEFINES += QT_SIMULATOR=1
 
 # Following defines are copied from libui.pro, as jsfwk depends the ui defines, and there is no way to
 # share those macros. But graphic module might consider to setup them in one C header file, which can
@@ -24,6 +24,19 @@ DEFINES += "ENABLE_SHAPING=0" \
     "ENABLE_BITMAP_FONT=0" \
     "ENABLE_MULTI_FONT=0" \
     "ENABLE_STATIC_FONT=0" \
+    "GRAPHIC_ENABLE_LINECAP_FLAG=1" \
+    "GRAPHIC_ENABLE_LINEJOIN_FLAG=1" \
+    "GRAPHIC_ENABLE_ELLIPSE_FLAG=1" \
+    "GRAPHIC_ENABLE_BEZIER_ARC_FLAG=1" \
+    "GRAPHIC_ENABLE_ARC_FLAG=1" \
+    "GRAPHIC_ENABLE_ROUNDEDRECT_FLAG=1" \
+    "GRAPHIC_ENABLE_DASH_GENERATE_FLAG=1" \
+    "GRAPHIC_ENABLE_BLUR_EFFECT_FLAG=1" \
+    "GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG=1" \
+    "GRAPHIC_ENABLE_GRADIENT_FILL_FLAG=1" \
+    "GRAPHIC_ENABLE_PATTERN_FILL_FLAG=1" \
+    "GRAPHIC_ENABLE_DRAW_IMAGE_FLAG=1" \
+    "GRAPHIC_ENABLE_DRAW_TEXT_FLAG=1" \
     "DEFAULT_ANIMATION=1"
 
 eval(is_debug == release) {
@@ -31,7 +44,7 @@ eval(is_debug == release) {
 }
 
 LOSCFG_TEST_JS_BUILD {
-    DEFINES += JSFWK_TEST
+    DEFINES += JSFWK_TEST=1
 }
 
 ROOT_PATH = ../../../../../../../..
@@ -63,6 +76,7 @@ SOURCES += \
         $${ACELITE_CORE_PATH}/base/number_parser.cpp \
         $${ACELITE_CORE_PATH}/base/product_adapter.cpp \
         $${ACELITE_CORE_PATH}/base/string_util.cpp \
+        $${ACELITE_CORE_PATH}/base/system_info.cpp \
         $${ACELITE_CORE_PATH}/base/time_util.cpp \
         $${ACELITE_CORE_PATH}/components/analog_clock_component.cpp \
         $${ACELITE_CORE_PATH}/components/camera_component.cpp \
@@ -122,6 +136,7 @@ SOURCES += \
         $${ACELITE_CORE_PATH}/modules/presets/intl_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/localization_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/number_format_module.cpp \
+        $${ACELITE_CORE_PATH}/modules/presets/image_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/preset_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/profiler_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/render_module.cpp \
@@ -140,6 +155,7 @@ SOURCES += \
         $${ACELITE_CORE_PATH}/stylemgr/app_style_list.cpp \
         $${ACELITE_CORE_PATH}/stylemgr/app_style_manager.cpp \
         $${ACELITE_CORE_PATH}/stylemgr/app_style_sheet.cpp \
+        $${ACELITE_CORE_PATH}/stylemgr/condition_arbitrator.cpp \
         $${ACELITE_CORE_PATH}/wrapper/js.cpp \
         $${ACELITE_FRAMEWORK_PATH}/targets/platform_adapter.cpp \
         targets/simulator/utils/js_heap_stats_dumper.cpp \
@@ -147,6 +163,7 @@ SOURCES += \
         targets/simulator/mock/hal_sys_param.cpp \
         targets/simulator/mock/message_queue_utils.cpp \ # the mocked message queue
         targets/simulator/mock/mock_services.cpp \ # the mocked message queue
+        targets/simulator/mock/bms_interfaces/bundle_manager_mock.cpp \ # mock some BMS interfaces
         targets/simulator/mock/jsthread/js_thread.cpp \
         targets/simulator/mock/vsyncthread/vsync_dispatch_manager.cpp \
         targets/simulator/mock/vsyncthread/vsync_thread.cpp \
@@ -156,7 +173,6 @@ SOURCES += \
 
 HEADERS += \
         $${ROOT_PATH}/foundation/graphic/ui/interfaces/kits/components/ui_view.h
-
 
 INCLUDEPATH += \
             $${ROOT_PATH}/foundation/graphic/ui/interfaces/innerkits \
@@ -172,6 +188,7 @@ INCLUDEPATH += \
             $${ROOT_PATH}/foundation/graphic/ui/interfaces/kits/font \
             $${ROOT_PATH}/foundation/graphic/ui/interfaces/kits/layout \
             $${ROOT_PATH}/foundation/graphic/ui/interfaces/kits/themes \
+            $${ROOT_PATH}/foundation/graphic/ui/frameworks \
             $${ROOT_PATH}/foundation/graphic/utils/frameworks/windows \
             $${ROOT_PATH}/foundation/graphic/utils/interfaces/innerkits \
             $${ROOT_PATH}/foundation/graphic/utils/interfaces/kits \
@@ -181,8 +198,6 @@ INCLUDEPATH += \
             $${ROOT_PATH}/foundation/aafwk/aafwk_lite/interfaces/kits/ability_lite \
             $${ROOT_PATH}/foundation/aafwk/aafwk_lite/interfaces/kits/want_lite \
             $${ROOT_PATH}/foundation/aafwk/aafwk_lite/interfaces/innerkits/abilitymgr_lite \
-            $${ROOT_PATH}/foundation/appexecfwk/appexecfwk_lite/interfaces/kits/bundle_lite \
-            $${ROOT_PATH}/foundation/appexecfwk/appexecfwk_lite/utils/bundle_lite \
             $${ROOT_PATH}/foundation/communication/ipc_lite/liteipc/include \
             $${ROOT_PATH}/third_party/bounds_checking_function/include \
             $${ROOT_PATH}/foundation/ace/ace_engine_lite/interfaces/innerkits/builtin/async \
@@ -218,10 +233,12 @@ INCLUDEPATH += \
             targets/simulator/mock/vsyncthread \
             targets/simulator/mock/amsthread \
             targets/simulator/mock/timerthread \
+            targets/simulator/mock/bms_interfaces \
             $${ROOT_PATH}/third_party/jerryscript/jerry-core/include \
             $${ROOT_PATH}/third_party/jerryscript/jerry-ext/include/jerryscript-ext \
             $${ROOT_PATH}//third_party/jerryscript/jerry-port/default/include \
             $${ROOT_PATH}/third_party/cJSON \
+            $${ROOT_PATH}/third_party/giflib \
             $${ROOT_PATH}/utils/native/lite/timer_task/include/ \
             $${ROOT_PATH}/third_party/freetype/include \
             $${ROOT_PATH}/base/global/resmgr_lite/interfaces/innerkits/include \

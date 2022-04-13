@@ -20,7 +20,7 @@
 #include "root_view.h"
 #include "stylemgr/app_style_item.h"
 #include "stylemgr/app_style_manager.h"
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
 #include "ui_date_picker.h"
 #endif
 #include "ui_picker.h"
@@ -137,7 +137,7 @@ void PickerViewTddTest::ComponentPickerviewAttributeSetTest001()
     EXPECT_TRUE(pickerComponent != nullptr);
     UIPicker* textPicker = reinterpret_cast<UIPicker *>(pickerComponent->GetComponentRootView());
     UITimePicker* timePicker = reinterpret_cast<UITimePicker *>(pickerComponent->GetComponentRootView());
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
     UIDatePicker* datePicker = reinterpret_cast<UIDatePicker *>(pickerComponent->GetComponentRootView());
 #endif
 
@@ -145,7 +145,7 @@ void PickerViewTddTest::ComponentPickerviewAttributeSetTest001()
      * @tc.expected: step1. native picker object is nullptr
      */
     if (!textPicker && !timePicker
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
         && !datePicker
 #endif
         ) {
@@ -154,7 +154,7 @@ void PickerViewTddTest::ComponentPickerviewAttributeSetTest001()
         printf("ComponentPickerviewAttributeSetTest001 fail\n");
     }
     EXPECT_TRUE((textPicker == nullptr) && (timePicker == nullptr)
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
     && (datePicker != nullptr)
 #endif
     );
@@ -419,7 +419,6 @@ void PickerViewTddTest::RunTests()
 /**
  * @tc.name: ComponentPickerviewAttributeSetTest001
  * @tc.desc: Verify picker-view invalid type attribute.
- * @tc.require: AR000DSEFD
  */
 HWTEST_F(PickerViewTddTest, PickerviewAttr001, TestSize.Level1)
 {
@@ -429,7 +428,6 @@ HWTEST_F(PickerViewTddTest, PickerviewAttr001, TestSize.Level1)
 /**
  * @tc.name: ComponentPickerviewAttributeSetTest002
  * @tc.desc: Verify text picker-view valid attributes.
- * @tc.require: AR000DSEFD
  */
 HWTEST_F(PickerViewTddTest, PickerviewAttr002, TestSize.Level0)
 {
@@ -439,7 +437,6 @@ HWTEST_F(PickerViewTddTest, PickerviewAttr002, TestSize.Level0)
 /**
  * @tc.name: ComponentPickerviewAttributeSetTest003
  * @tc.desc: Verify text picker-view invalid range attribute.
- * @tc.require: AR000DSEFD
  */
 HWTEST_F(PickerViewTddTest, PickerviewAttr003, TestSize.Level1)
 {
@@ -449,7 +446,6 @@ HWTEST_F(PickerViewTddTest, PickerviewAttr003, TestSize.Level1)
 /**
  * @tc.name: ComponentPickerviewAttributeSetTest004
  * @tc.desc: Verify text picker-view invalid selected attribute.
- * @tc.require: AR000DSEFD
  */
 HWTEST_F(PickerViewTddTest, PickerviewAttr004, TestSize.Level1)
 {
@@ -459,7 +455,6 @@ HWTEST_F(PickerViewTddTest, PickerviewAttr004, TestSize.Level1)
 /**
  * @tc.name: ComponentPickerviewAttributeSetTest005
  * @tc.desc: Verify text picker-view with out of bound selected attribute.
- * @tc.require: AR000DSEFD
  */
 HWTEST_F(PickerViewTddTest, PickerviewAttr005, TestSize.Level1)
 {

@@ -71,12 +71,9 @@ Component::Component(jerry_value_t options, jerry_value_t children, AppStyleMana
       children_(UNDEFINED),
       onClickListener_(nullptr),
       onLongPressListener_(nullptr),
-      onSwipeListener_(nullptr),
-#ifdef JS_TOUCH_EVENT_SUPPORT
-      onTouchStartListener_(nullptr),
-      onTouchMoveListener_(nullptr),
+      onTouchListener_(nullptr),
+#ifdef JS_EXTRA_EVENT_SUPPORT
       onTouchCancelListener_(nullptr),
-      onTouchEndListener_(nullptr),
       keyBoardEventListener_(nullptr),
 #endif
       viewId_(nullptr),
@@ -137,6 +134,18 @@ bool Component::Render()
     }
     STOP_TRACING();
 
+    // The event bubbling mechanism is supported from API version 5, and events are bubbled by default.
+    // However, it should be compatible with the migrated old application (API version 4)
+    // so that it does not bubble by default.
+    const int32_t supportEventBubbleApiVersion = 5;
+    if (JsAppContext::GetInstance()->GetTargetApi() < supportEventBubbleApiVersion) {
+        UIView *view = GetComponentRootView();
+        if (view != nullptr) {
+            // make events non bubbling by default.
+            view->SetIntercept(true);
+        }
+    }
+
     SetViewExtraMsg();
 
     // step2: binding js object with this component
@@ -144,12 +153,8 @@ bool Component::Render()
 
     // step3: parse options for attributes and events, will call child class's according methods
     ParseOptions();
-    // step4: apply styles
-    START_TRACING_WITH_COMPONENT_NAME(RENDER_APPLY_STYLE, componentName_);
-    ApplyStyles(options_, *this);
-    STOP_TRACING();
 
-    // step5:process this component's children
+    // step4:process this component's children
     START_TRACING_WITH_COMPONENT_NAME(RENDER_PROCESS_CHILDREN, componentName_);
     renderResult = ProcessChildren();
     STOP_TRACING();
@@ -175,7 +180,7 @@ void Component::SetViewExtraMsg()
         HILOG_ERROR(HILOG_MODULE_ACE, "Failed to mapping native view with DOM element.");
         return;
     }
-    extraMsg->elementPtr = (void *)&nativeElement_;
+    extraMsg->elementPtr = reinterpret_cast<void *>(&nativeElement_);
     view->SetExtraMsg(extraMsg);
 }
 
@@ -194,6 +199,12 @@ void Component::Release()
 {
     // detach self from fatal handler monitoring
     FatalHandler::GetInstance().DetachComponentNode(this);
+#if (FEATURE_LAZY_LOADING_MODULE == 1)
+    // detach from lazy pending list
+    JsAppContext *context = JsAppContext::GetInstance();
+    LazyLoadManager *lazyLoadManager = const_cast<LazyLoadManager *>(context->GetLazyLoadManager());
+    lazyLoadManager->RemoveLazyWatcher(nativeElement_);
+#endif // FEATURE_LAZY_LOADING_MODULE
     if (parent_ != nullptr) {
         parent_->RemoveChild(this);
     }
@@ -410,8 +421,8 @@ void Component::AlignDimensions(const ConstrainedParameter &param)
 
 void Component::EnableTransmitSwipe()
 {
-    if (onSwipeListener_ != nullptr) {
-        onSwipeListener_->SetStopPropagation(false);
+    if (onTouchListener_ != nullptr) {
+        onTouchListener_->SetStopPropagation(false);
     }
 }
 
@@ -705,9 +716,13 @@ void Component::ParseOptions()
     }
 
     if (!JSObject::Is(options_)) {
-        HILOG_WARN(HILOG_MODULE_ACE, "options is not a object type.");
+        HILOG_WARN(HILOG_MODULE_ACE, "options is not an object type.");
         return;
     }
+
+    START_TRACING_WITH_COMPONENT_NAME(RENDER_APPLY_STYLE, componentName_);
+    ApplyStyles(options_, *this);
+    STOP_TRACING();
 
     START_TRACING(RENDER_PARSE_ATTR);
     ParseAttrs();
@@ -1025,7 +1040,8 @@ int32_t Component::GetAnimatorValue(char *animatorValue, const int8_t index, boo
         return 0;
     }
 
-    long convertedValue = isOpacity ? (long)((strtod(value, nullptr) * ALPHA_MAX)) : strtol(value, nullptr, DEC);
+    int32_t convertedValue =
+        isOpacity ? (strtod(value, nullptr) * ALPHA_MAX) : static_cast<int32_t>(strtol(value, nullptr, DEC));
     if (TransitionImpl::IsEndWith(value, "rad")) {
         uint8_t degConversionRate = 57;
         convertedValue = convertedValue * degConversionRate;
@@ -1079,7 +1095,7 @@ void Component::ParseAttrs()
             if (freeze_) {
                 newAttrValue = JSFunction::Call(attrValue, viewModel_, nullptr, 0);
             } else {
-#ifdef FEATURE_LAZY_LOADING_MODULE
+#if (FEATURE_LAZY_LOADING_MODULE == 1)
                 newAttrValue = CallJSFunction(attrValue, viewModel_, nullptr, 0);
                 JsAppContext *context = JsAppContext::GetInstance();
                 LazyLoadManager *lazyLoadManager = const_cast<LazyLoadManager *>(context->GetLazyLoadManager());
@@ -1108,7 +1124,7 @@ void Component::ParseAttrs()
 
 void Component::SetClickEventListener(UIView &view, const jerry_value_t eventFunc, bool isStopPropagation)
 {
-    onClickListener_ = new ViewOnClickListener(eventFunc, isStopPropagation);
+    onClickListener_ = new ViewOnClickListener(viewModel_, eventFunc, isStopPropagation);
     if (onClickListener_ == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "click listener create failed");
         return;
@@ -1118,32 +1134,7 @@ void Component::SetClickEventListener(UIView &view, const jerry_value_t eventFun
     view.SetTouchable(true);
 }
 
-#ifdef JS_TOUCH_EVENT_SUPPORT
-void Component::SetTouchStartEventListener(UIView &view, jerry_value_t eventFunc, uint16_t eventTypeId)
-{
-    onTouchStartListener_ = new ViewOnTouchStartListener(eventFunc, eventTypeId);
-    if (onTouchStartListener_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "touch move event listener create failed");
-        return;
-    }
-
-    view.SetOnTouchListener(onTouchStartListener_);
-    view.SetTouchable(true);
-}
-
-void Component::SetTouchMoveEventListener(UIView &view, jerry_value_t eventFunc, uint16_t eventTypeId)
-{
-    onTouchMoveListener_ = new ViewOnTouchMoveListener(eventFunc, eventTypeId);
-    if (onTouchMoveListener_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "touch start event listener create failed");
-        return;
-    }
-
-    view.SetOnDragListener(onTouchMoveListener_);
-    view.SetTouchable(true);
-    view.SetDraggable(true);
-}
-
+#ifdef JS_EXTRA_EVENT_SUPPORT
 void Component::SetTouchCancelEventListener(UIView &view, jerry_value_t eventFunc, uint16_t eventTypeId)
 {
     onTouchCancelListener_ = new ViewOnTouchCancelListener(eventFunc, eventTypeId);
@@ -1155,18 +1146,6 @@ void Component::SetTouchCancelEventListener(UIView &view, jerry_value_t eventFun
     view.SetOnTouchListener(onTouchCancelListener_);
     view.SetTouchable(true);
     view.SetDraggable(true);
-}
-
-void Component::SetTouchEndEventListener(UIView &view, jerry_value_t eventFunc, uint16_t eventTypeId)
-{
-    onTouchEndListener_ = new ViewOnTouchEndListener(eventFunc, eventTypeId);
-    if (onTouchEndListener_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "touch end event listener create failed");
-        return;
-    }
-
-    view.SetOnTouchListener(onTouchEndListener_);
-    view.SetTouchable(true);
 }
 
 void Component::SetKeyBoardEventListener(jerry_value_t eventFunc, uint16_t eventTypeId)
@@ -1187,7 +1166,7 @@ void Component::SetKeyBoardEventListener(jerry_value_t eventFunc, uint16_t event
 
 void Component::SetLongPressEventListener(UIView &view, const jerry_value_t eventFunc, bool isStopPropagation)
 {
-    onLongPressListener_ = new ViewOnLongPressListener(eventFunc, isStopPropagation);
+    onLongPressListener_ = new ViewOnLongPressListener(viewModel_, eventFunc, isStopPropagation);
     if (onLongPressListener_ == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "long press listener create failed");
         return;
@@ -1199,15 +1178,71 @@ void Component::SetLongPressEventListener(UIView &view, const jerry_value_t even
 
 void Component::SetSwipeEventListener(UIView &view, jerry_value_t eventFunc, bool isStopPropagation)
 {
-    onSwipeListener_ = new ViewOnSwipeListener(eventFunc, isStopPropagation);
-    if (onSwipeListener_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "swipe listener create failed");
+    if (onTouchListener_ == nullptr) {
+        onTouchListener_ = new ViewOnTouchListener(viewModel_, isStopPropagation);
+    }
+    if (onTouchListener_ == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "DragEnd listener create failed");
         return;
     }
 
-    view.SetOnDragListener(onSwipeListener_);
+    view.SetOnDragListener(onTouchListener_);
     view.SetDraggable(true);
     view.SetTouchable(true);
+
+    onTouchListener_->SetBindSwipeFuncName(eventFunc);
+}
+
+void Component::SetTouchStartEventListener(UIView &view, jerry_value_t eventFunc, bool isStopPropagation)
+{
+    if (onTouchListener_ == nullptr) {
+        onTouchListener_ = new ViewOnTouchListener(viewModel_, isStopPropagation);
+    }
+    if (onTouchListener_ == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "DragStart listener create failed");
+        return;
+    }
+
+    view.SetOnDragListener(onTouchListener_);
+
+    view.SetDraggable(true);
+    view.SetTouchable(true);
+
+    onTouchListener_->SetBindTouchStartFuncName(eventFunc);
+}
+
+void Component::SetTouchMoveEventListener(UIView &view, jerry_value_t eventFunc, bool isStopPropagation)
+{
+    if (onTouchListener_ == nullptr) {
+        onTouchListener_ = new ViewOnTouchListener(viewModel_, isStopPropagation);
+    }
+    if (onTouchListener_ == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "Drag listener create failed");
+        return;
+    }
+
+    view.SetOnDragListener(onTouchListener_);
+    view.SetDraggable(true);
+    view.SetTouchable(true);
+
+    onTouchListener_->SetBindTouchMoveFuncName(eventFunc);
+}
+
+void Component::SetTouchEndEventListener(UIView &view, jerry_value_t eventFunc, bool isStopPropagation)
+{
+    if (onTouchListener_ == nullptr) {
+        onTouchListener_ = new ViewOnTouchListener(viewModel_, isStopPropagation);
+    }
+    if (onTouchListener_ == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "DragEnd listener create failed");
+        return;
+    }
+
+    view.SetOnDragListener(onTouchListener_);
+    view.SetDraggable(true);
+    view.SetTouchable(true);
+
+    onTouchListener_->SetBindTouchEndFuncName(eventFunc);
 }
 
 // default implementation
@@ -1250,25 +1285,26 @@ bool Component::RegisterCommonEventListener(UIView &view,
             SetSwipeEventListener(view, funcValue, isStopPropagation);
             break;
         }
-#ifdef JS_TOUCH_EVENT_SUPPORT
+        case K_TOUCHSTART: {
+            SetTouchStartEventListener(view, funcValue, isStopPropagation);
+            break;
+        }
+        case K_TOUCHMOVE: {
+            SetTouchMoveEventListener(view, funcValue, isStopPropagation);
+            break;
+        }
+        case K_TOUCHEND: {
+            SetTouchEndEventListener(view, funcValue, isStopPropagation);
+            break;
+        }
+
+#ifdef JS_EXTRA_EVENT_SUPPORT
         case K_KEY: {
             SetKeyBoardEventListener(funcValue, eventTypeId);
             break;
         }
-        case K_TOUCHSTART: {
-            SetTouchStartEventListener(view, funcValue, eventTypeId);
-            break;
-        }
         case K_TOUCHCANCEL: {
             SetTouchCancelEventListener(view, funcValue, eventTypeId);
-            break;
-        }
-        case K_TOUCHMOVE: {
-            SetTouchMoveEventListener(view, funcValue, eventTypeId);
-            break;
-        }
-        case K_TOUCHEND: {
-            SetTouchEndEventListener(view, funcValue, eventTypeId);
             break;
         }
 #endif
@@ -1283,14 +1319,11 @@ void Component::ReleaseCommonEventListeners()
 {
     ACE_DELETE(onClickListener_);
     ACE_DELETE(onLongPressListener_);
-#ifdef JS_TOUCH_EVENT_SUPPORT
+#ifdef JS_EXTRA_EVENT_SUPPORT
     ACE_DELETE(keyBoardEventListener_);
-    ACE_DELETE(onTouchStartListener_);
     ACE_DELETE(onTouchCancelListener_);
-    ACE_DELETE(onTouchMoveListener_);
-    ACE_DELETE(onTouchEndListener_);
 #endif
-    ACE_DELETE(onSwipeListener_);
+    ACE_DELETE(onTouchListener_);
 }
 
 void Component::AppendDescriptorOrElements(Component *parent, const JSValue descriptorOrElements)
@@ -1433,7 +1466,7 @@ void Component::SetOpacity(UIView &view, const AppStyleItem &styleItem) const
     } else if (opacity > opacityMax) {
         opacity = opacityMax;
     }
-    view.SetOpaScale(opacity * OPA_OPAQUE);
+    view.SetOpaScale(static_cast<uint8_t>(opacity * OPA_OPAQUE));
 }
 
 void Component::SetMargin(UIView &view) const
@@ -1904,7 +1937,7 @@ bool Component::HandleBackgroundImg(const AppStyleItem &styleItem, char *&presse
                 filePath = nullptr;
                 return result;
             }
-#ifdef OHOS_ACELITE_PRODUCT_WATCH
+#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
             // convert .png/jpeg/bmp to .bin subfix
             CureImagePath(imagePath);
 #endif // OHOS_ACELITE_PRODUCT_WATCH
@@ -1926,7 +1959,7 @@ bool Component::HandleBackgroundImg(const AppStyleItem &styleItem, char *&presse
     return result;
 }
 
-#ifdef FEATURE_ROTATION_API
+#if (FEATURE_ROTATION_API == 1)
 jerry_value_t Component::HandleRotationRequest(const jerry_value_t func,
                                                const jerry_value_t dom,
                                                const jerry_value_t args[],

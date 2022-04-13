@@ -24,13 +24,13 @@
 
 namespace OHOS {
 namespace ACELite {
-JSfwkTddTest::JSfwkTddTest(){}
+JSfwkTddTest::JSfwkTddTest() {}
 
-static JSAbility* g_targetJSAbility = nullptr;
-static char* g_currentTestCaseName = nullptr;
+static JSAbility *g_targetJSAbility = nullptr;
+static char *g_currentTestCaseName = nullptr;
 static uint8_t g_assertRecord = 0;
 
-void JSfwkTddTest::TestCaseB(const char* name) const
+void JSfwkTddTest::TestCaseB(const char *name) const
 {
     g_assertRecord = 0;
     g_currentTestCaseName = const_cast<char *>(name);
@@ -88,7 +88,7 @@ void JSfwkTddTest::ACELiteFrameworkInitialization001()
     /**
      * @tc.steps: step3. check if the top JS ability is initialized
      */
-    JSAbilityImpl* jsAbilityImpl = const_cast<JSAbilityImpl *>(JsAppContext::GetInstance()->GetTopJSAbilityImpl());
+    JSAbilityImpl *jsAbilityImpl = const_cast<JSAbilityImpl *>(JsAppContext::GetInstance()->GetTopJSAbilityImpl());
     EXPECT_TRUE(jsAbilityImpl == nullptr);
     /**
      * @tc.steps: step4. clean up test environment
@@ -111,7 +111,7 @@ void JSfwkTddTest::ACELiteFrameworkInitialization002()
     /**
      * @tc.steps: step3. check if the top JS ability is initialized
      */
-    JSAbilityImpl* jsAbilityImpl = const_cast<JSAbilityImpl *>(JsAppContext::GetInstance()->GetTopJSAbilityImpl());
+    JSAbilityImpl *jsAbilityImpl = const_cast<JSAbilityImpl *>(JsAppContext::GetInstance()->GetTopJSAbilityImpl());
     EXPECT_TRUE(jsAbilityImpl == nullptr);
     /**
      * @tc.steps: step4. clean up test environment
@@ -135,7 +135,7 @@ void JSfwkTddTest::ACELiteFrameworkInitialization003()
     /**
      * @tc.steps: step3. check if the top JS ability is initialized
      */
-    JSAbilityImpl* jsAbilityImpl = const_cast<JSAbilityImpl *>(JsAppContext::GetInstance()->GetTopJSAbilityImpl());
+    JSAbilityImpl *jsAbilityImpl = const_cast<JSAbilityImpl *>(JsAppContext::GetInstance()->GetTopJSAbilityImpl());
     EXPECT_TRUE(jsAbilityImpl != nullptr);
 
     /**
@@ -166,7 +166,7 @@ void JSfwkTddTest::ACELiteFrameworkInitialization009()
      * @tc.steps: step1. init test environment
      */
     TDD_CASE_BEGIN();
-#if ENABLED(ACE_LITE_VERSION_JS_API)
+#if IS_ENABLED(ACE_LITE_VERSION_JS_API)
     /**
      * @tc.steps: step2. check version code
      */
@@ -178,7 +178,7 @@ void JSfwkTddTest::ACELiteFrameworkInitialization009()
     /**
      * @tc.steps: step4. check build timestamp
      */
-    const char* buildStamp = ACEVersion::GetTimeStamp();
+    const char *buildStamp = ACEVersion::GetTimeStamp();
     EXPECT_TRUE(buildStamp != nullptr);
     constexpr char firstVersionBuildStamp[] = "2020-05-09 16:31:41";
     if (strcmp(buildStamp, firstVersionBuildStamp) == 0) {
@@ -200,7 +200,7 @@ void JSfwkTddTest::ACELiteFrameworkInitialization011()
     /**
      * @tc.steps: step2. call launch
      */
-    constexpr char packageName[] = "com.huawei.test";
+    constexpr char packageName[] = "com.example.test";
     g_targetJSAbility->Launch("user/data/test/", packageName, 0);
 
     /**
@@ -228,7 +228,7 @@ void JSfwkTddTest::ACELiteFrameworkInitialization012()
     /**
      * @tc.steps: step2. call launch
      */
-    constexpr char packageName[] = "com.huawei.test";
+    constexpr char packageName[] = "com.example.test";
     g_targetJSAbility->Launch("user/data/test/", packageName, 0);
 
     /**
@@ -353,7 +353,6 @@ void JSfwkTddTest::RunTests()
 /**
  * @tc.name: ACELiteFrameworkInitialization001
  * @tc.desc: Verify if the invalid input will lead exception .
- * @tc.require: AR000DSEEU
  */
 HWTEST_F(JSfwkTddTest, init001, TestSize.Level1)
 {
@@ -363,7 +362,6 @@ HWTEST_F(JSfwkTddTest, init001, TestSize.Level1)
 /**
  * @tc.name: ACELiteFrameworkInitialization002
  * @tc.desc: Verify if the invalid input will lead exception .
- * @tc.require: AR000DSEEU
  */
 HWTEST_F(JSfwkTddTest, init002, TestSize.Level1)
 {
@@ -373,7 +371,6 @@ HWTEST_F(JSfwkTddTest, init002, TestSize.Level1)
 /**
  * @tc.name: ACELiteFrameworkInitialization003
  * @tc.desc: Verify if the invalid input will lead exception .
- * @tc.require: AR000DSEEU
  */
 HWTEST_F(JSfwkTddTest, init003, TestSize.Level1)
 {
@@ -383,7 +380,6 @@ HWTEST_F(JSfwkTddTest, init003, TestSize.Level1)
 /**
  * @tc.name: ACELiteFrameworkInitialization009
  * @tc.desc: Verify the version API.
- * @tc.require: AR000DSEEU
  */
 HWTEST_F(JSfwkTddTest, init009, TestSize.Level1)
 {
@@ -393,7 +389,6 @@ HWTEST_F(JSfwkTddTest, init009, TestSize.Level1)
 /**
  * @tc.name: ACELiteFrameworkInitialization011
  * @tc.desc: Verify hide and show.
- * @tc.require: AR000DSEEU
  */
 HWTEST_F(JSfwkTddTest, init011, TestSize.Level1)
 {
@@ -403,7 +398,6 @@ HWTEST_F(JSfwkTddTest, init011, TestSize.Level1)
 /**
  * @tc.name: ACELiteFrameworkInitialization012
  * @tc.desc: Verify hide and show.
- * @tc.require: AR000DSEEU
  */
 HWTEST_F(JSfwkTddTest, init012, TestSize.Level1)
 {
@@ -413,7 +407,6 @@ HWTEST_F(JSfwkTddTest, init012, TestSize.Level1)
 /**
  * @tc.name: AceliteFrameworkEngineIntegrating01
  * @tc.desc: Verify the configuration of jerry engine.
- * @tc.require: AR000DT7BN
  */
 HWTEST_F(JSfwkTddTest, engineIntegrating001, TestSize.Level1)
 {
@@ -423,7 +416,6 @@ HWTEST_F(JSfwkTddTest, engineIntegrating001, TestSize.Level1)
 /**
  * @tc.name: AceliteFrameworkEngineIntegrating02
  * @tc.desc: Verify the configuration of jerry engine.
- * @tc.require: AR000DT7BN
  */
 HWTEST_F(JSfwkTddTest, engineIntegrating002, TestSize.Level1)
 {
@@ -433,7 +425,6 @@ HWTEST_F(JSfwkTddTest, engineIntegrating002, TestSize.Level1)
 /**
  * @tc.name: AceliteFrameworkEngineIntegrating03
  * @tc.desc: Verify the configuration of jerry engine.
- * @tc.require: AR000DT7BN
  */
 HWTEST_F(JSfwkTddTest, engineIntegrating003, TestSize.Level1)
 {
@@ -443,12 +434,11 @@ HWTEST_F(JSfwkTddTest, engineIntegrating003, TestSize.Level1)
 /**
  * @tc.name: AceliteFrameworkEngineIntegrating04
  * @tc.desc: Verify the configuration of jerry engine.
- * @tc.require: AR000DT7BN
  */
 HWTEST_F(JSfwkTddTest, engineIntegrating004, TestSize.Level1)
 {
     JSfwkTddTest::AceliteFrameworkEngineIntegrating04();
 }
 #endif
-}
-}
+} // namespace ACELite
+} // namespace OHOS

@@ -17,6 +17,7 @@ export default {
   ...backPage("pages/index/index"),
   changeDiv: routePage("pages/component/div/index/index").changePage,
   changeList: routePage("pages/component/list/index/index").changePage,
+  changeListItem: routePage("pages/component/list/list-item/index/index").changePage,
   changeStack: routePage("pages/component/stack/index/index").changePage,
   changeSwiper: routePage("pages/component/swiper/index/index").changePage
 };

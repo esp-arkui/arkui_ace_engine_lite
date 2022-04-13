@@ -113,6 +113,7 @@ public:
     static void InitNativeMemPoolHook(NativeMemInfoGetter getter);
     static void InitExtraModulesGetter(ProductModulesGetter productModuleGetter,
                                        PrivateModulesGetter privateModuleGetter);
+    static void InitDeviceInfo(const char *deviceType);
     static void RegTerminatingHandler(TerminateAbilityHandler handler);
     static void RegTEHandlers(const TEHandlingHooks &teHandlingHooks);
     static TEDispatchingResult DispatchTEMessage();
@@ -120,6 +121,7 @@ public:
     static void SetScreenSize(uint16_t width, uint16_t height);
     static void RegSetScreenOnVisibleHandler(SetScreenOnVisibleHandler handler);
     static void RegExtraPresetModulesHook(ExtraPresetModulesHook hook);
+    static void ConfigPrivateDataRootPath(const char *appDataRoot);
 
     // wrapper functions, for ace internal calling
     static void PrintEventTrace(uint8_t info2, uint8_t info3, uint8_t info4);
@@ -134,9 +136,11 @@ public:
     static uint8_t GetDefaultFontSize();
     static void UpdateRenderTickAcceptable(bool acceptable);
     static void GetScreenSize(uint16_t &width, uint16_t &height);
+    static const char *GetDeviceType();
     static bool SetScreenOnVisible(bool visible);
     static void LoadExtraPresetModules();
     static void UnloadExtraPresetModules();
+    static const char *GetPrivateDataRootPath();
 };
 } // namespace ACELite
 } // namespace OHOS

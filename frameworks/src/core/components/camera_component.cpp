@@ -14,7 +14,7 @@
  */
 
 #include "acelite_config.h"
-#ifdef FEATURE_COMPONENT_CAMERA
+#if (FEATURE_COMPONENT_CAMERA == 1)
 
 #include "camera_component.h"
 #include <climits>
@@ -246,7 +246,8 @@ void CameraCallback::OnCreated(Media::Camera &camera)
 
 void CameraCallback::OnCreateFailed(const string cameraId, int32_t errorCode)
 {
-    HILOG_ERROR(HILOG_MODULE_ACE, "CameraCallback: camera:%s unavailable, errorCode:%d", cameraId.c_str(), errorCode);
+    HILOG_ERROR(HILOG_MODULE_ACE, "CameraCallback: camera:%{public}s unavailable, errorCode:%{public}d",
+                cameraId.c_str(), errorCode);
     if (jerry_value_is_function(errorCallback_)) {
         const char * const detailKey = "detail";
         const char * const detailValue = "camera unavailable";
@@ -290,7 +291,7 @@ void CameraComponent::ReleaseNativeViews()
     if (cameraCallback_ != nullptr) {
         Media::Camera *camera = const_cast<Media::Camera *>(cameraCallback_->GetCameraInstance());
         if (camera != nullptr) {
-            camera->StopLoopingCapture();
+            camera->StopLoopingCapture(-1);
         }
         cameraCallback_.reset();
     }

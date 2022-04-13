@@ -16,7 +16,7 @@
 #define OHOS_ACELITE_CJSON_PARSER_H
 #include "acelite_config.h"
 
-#ifdef FEATURE_LOCALIZATION_MODULE
+#if (FEATURE_LOCALIZATION_MODULE == 1)
 #include <cJSON.h>
 #include <jerryscript.h>
 #ifdef __LITEOS_A__
@@ -166,11 +166,17 @@ private:
 
     /**
      * @brief get value from file in fileList
-     * @param key JSON path, args: the value to replace the placeholder, argsNum: the num of args
-     * @param fileJSON the jsonObject convert from file
-     * @return the js value of target key
+     * @param key JSON path
+     * @param args the value to replace the placeholder
+     * @param argsNum the num of args
+     * @param languageFile the target json file name
+     * @return the js value of target value
      */
-    jerry_value_t GetValueFromFile(const char *key, jerry_value_t args, jerry_size_t argsNum);
+    jerry_value_t GetValueFromFile(const char *key,
+                                   jerry_value_t args,
+                                   jerry_size_t argsNum,
+                                   const char *languageFile,
+                                   bool &nullValueFlag);
 
     /**
      * @brief get 4-byte aligned offset

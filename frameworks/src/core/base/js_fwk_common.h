@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,12 +19,11 @@
 #include "handler.h"
 #include "js_config.h"
 #include "non_copyable.h"
-#ifdef JS_TOUCH_EVENT_SUPPORT
+#ifdef JS_EXTRA_EVENT_SUPPORT
 #include "root_view.h"
 #endif
 #include "graphic_config.h"
 #include "wrapper/js.h"
-
 namespace OHOS {
 namespace ACELite {
 struct Watcher : public MemoryHeap {
@@ -70,7 +69,7 @@ struct Watcher : public MemoryHeap {
 
 void ThrowError();
 
-#if ENABLED(JS_PROFILER)
+#if IS_ENABLED(JS_PROFILER)
 #ifndef LOG_PROFILER_TRACE
 #define LOG_PROFILER(format, ...) printf(format "\n", ##__VA_ARGS__)
 #define LOG_PROFILER_TRACE(format, ...) printf("[PERFORMANCE]:" format "\n", ##__VA_ARGS__)
@@ -85,7 +84,7 @@ void ThrowError();
 constexpr uint16_t PATH_LENGTH_MAX = 1024;
 constexpr uint8_t NAME_LENGTH_MAX = 255;
 constexpr uint8_t DEVICE_ID_LENGTH_MAX = 65;
-constexpr uint16_t FILE_CONTENT_LENGTH_MAX = 1024 * 30;
+constexpr uint16_t FILE_CONTENT_LENGTH_MAX = 1024 * 48;
 
 // hex code
 constexpr uint8_t DEC = 10;
@@ -105,13 +104,13 @@ constexpr uint32_t TEXT_BLUE_COLOR_MASK = 0x0000ff;
 constexpr int RED_COLOR_START_BIT = 16;
 constexpr int GREEN_COLOR_START_BIT = 8;
 constexpr char ATTR_SRC[] = "src"; // image-animator
-#ifdef FEATURE_COMPONENT_ANALOG_CLOCK
+#if (FEATURE_COMPONENT_ANALOG_CLOCK == 1)
 constexpr char CLOCK_HAND_IS_IMAGE[] = "isImage";
 constexpr char COMMON_STYLE_OPACITY[] = "opacity";
 constexpr char COMMON_STYLE_COLOR[] = "color";
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
 constexpr uint8_t DEFAULT_FONT_SIZE = 30;
-#ifdef FEATURE_COMPONENT_CANVAS
+#if (FEATURE_COMPONENT_CANVAS == 1)
 constexpr uint8_t DEFAULT_FONT_LETTERSPACE = 2;
 #endif // FEATURE_COMPONENT_CANVAS
 constexpr char DEFAULT_FONT_FAMILY[] = DEFAULT_VECTOR_FONT_FILENAME;
@@ -158,7 +157,7 @@ constexpr char TRANSITION_TRANSFORM_Y[] = "translateY";
 constexpr char CONSTRUCTOR_VIEW_MODEL[] = "ViewModel";
 constexpr char CONSTRUCTOR_ABILITY_SLICE[] = "AbilitySlice";
 
-#ifdef FEATURE_ROTATION_API
+#if (FEATURE_ROTATION_API == 1)
 constexpr char FUNC_ROTATION_NAME[] = "rotation";
 constexpr char ATTR_NAME_FOCUS[] = "focus";
 #endif // FEATURE_ROTATION_API
@@ -267,7 +266,7 @@ jerry_value_t ListForWatcherCallbackFunc(const jerry_value_t func,
                                          const jerry_value_t context,
                                          const jerry_value_t *args,
                                          const jerry_length_t argsLength);
-#ifdef JS_TOUCH_EVENT_SUPPORT
+#ifdef JS_EXTRA_EVENT_SUPPORT
 jerry_value_t *ConvertBaseEventInfo(const Event &event, const uint16_t id);
 bool CallBaseEvent(const jerry_value_t func, const Event &event, const uint16_t id);
 jerry_value_t *ConvertDragEventInfo(const DragEvent &event, const uint16_t id);
@@ -280,7 +279,7 @@ JSValue CallWithRootAbilitySlice(JSValue func);
 JSValue CreateWatcher(JSValue getter, JSHandler handler, JSValue options);
 
 void ExpandImagePathMem(char *&imagePath, const int16_t dotPos, const int16_t suffixLen, const int16_t imagePathLen);
-#ifdef OHOS_ACELITE_PRODUCT_WATCH
+#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
 void CureImagePath(char *&imagePath);
 #endif // OHOS_ACELITE_PRODUCT_WATCH
 const char *ParseImageSrc(jerry_value_t source);
@@ -312,6 +311,13 @@ bool ParseHexColor(const char * const source, uint32_t &color, uint8_t &alpha);
 bool ParseRgbaColor(const char * const source, uint32_t &color, uint8_t &alpha);
 bool ParseColor(const char * const source, uint32_t &color, uint8_t &alpha);
 bool CopyFontFamily(char *&destination, const char * const fontFamily, uint32_t fontFamilyNameLen = 0);
+
+constexpr int16_t BUTT_VALUE = 0;
+constexpr int16_t SQUARE_VALUE = 1;
+constexpr int16_t ROUND_VALUE = 2;
+constexpr int16_t LINEJOIN_MITER_VALUE = 0;
+constexpr int16_t LINEJOIN_ROUND_VALUE = 1;
+constexpr int16_t LINEJOIN_BEVEL_VALUE = 2;
 
 #if (defined(_WIN32) || defined(_WIN64))
 constexpr char PATH_SEPARATOR = '\\';

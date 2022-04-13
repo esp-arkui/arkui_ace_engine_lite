@@ -14,7 +14,7 @@
  */
 
 #include "acelite_config.h"
-#ifdef FEATURE_MODULE_DIALOG
+#if (FEATURE_MODULE_DIALOG == 1)
 #include "ace_log.h"
 #include "js_async_work.h"
 #include "js_dialog.h"
@@ -119,7 +119,7 @@ bool JSDialog::ParseButton(JSDialog *jsDialog,
     const char * const buttonTextKey = "text";
     const char * const buttonColorKey = "color";
     // support up to 3 buttons
-    for (uint16_t index = 0; index < len; index++) {
+    for (uint32_t index = 0; index < len; index++) {
         if (index >= maxButtonNum) {
             HILOG_WARN(HILOG_MODULE_ACE, "dialog support up to 3 buttons, please check dialog button num");
             break;
@@ -157,7 +157,7 @@ ColorType JSDialog::ParseButtonColor(const char * const buttonColorText)
         HILOG_ERROR(HILOG_MODULE_ACE, "input dialog button color error, please check. default color instead");
         return Color::GetColorFromRGB(0, 0, 0);
     }
-    HILOG_INFO(HILOG_MODULE_ACE, "dialog buttonColorText = %s, colorVal = %d", buttonColorText, color);
+    HILOG_INFO(HILOG_MODULE_ACE, "dialog buttonColorText = %{public}s, colorVal = %{public}d", buttonColorText, color);
     uint8_t red8 = uint8_t((color & TEXT_RED_COLOR_MASK) >> RED_COLOR_START_BIT);
     uint8_t green8 = uint8_t((color & TEXT_GREEN_COLOR_MASK) >> GREEN_COLOR_START_BIT);
     uint8_t blue8 = uint8_t((color & TEXT_BLUE_COLOR_MASK));

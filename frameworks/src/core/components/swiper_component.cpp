@@ -29,7 +29,7 @@ SwiperComponent::SwiperComponent(jerry_value_t options, jerry_value_t children, 
 {
     SetComponentName(K_SWIPER);
     swiperView_.SetLoopState(true);
-#ifdef FEATURE_ROTATION_API
+#if (FEATURE_ROTATION_API == 1)
     RegisterNamedFunction(FUNC_ROTATION_NAME, HandleRotationRequest);
 #endif // FEATURE_ROTATION_API
 }
@@ -105,6 +105,22 @@ void SwiperComponent::AttachView(const Component *child)
     SetPageIndex();
 }
 
+void SwiperComponent::OnVisibilityChanged(bool isVisible)
+{
+    if (changeListener_ == nullptr) {
+        return;
+    }
+    if (!isVisible) {
+        swiperView_.SetOnSwipeListener(nullptr);
+        return;
+    }
+    // component will be visible
+    if (swiperView_.GetOnSwipeListener() != nullptr) {
+        return;
+    }
+    swiperView_.SetOnSwipeListener(changeListener_);
+}
+
 bool SwiperComponent::RegisterPrivateEventListener(uint16_t eventTypeId,
                                                    jerry_value_t funcValue,
                                                    bool isStopPropagation)
@@ -148,7 +164,7 @@ void SwiperComponent::ChangeListener::OnSwipe(UISwipeView &view)
     if (swipeView == nullptr) {
         return;
     }
-    const uint8_t argsNum = 1;
+    constexpr uint8_t argsNum = 1;
     jerry_value_t args[argsNum];
     args[0] = jerry_create_object();
     jerry_value_t indexValHandler = jerry_create_number(swipeView->GetCurrentPage());

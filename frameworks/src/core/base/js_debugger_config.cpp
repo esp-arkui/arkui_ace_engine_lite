@@ -29,7 +29,7 @@ Debugger &Debugger::GetInstance()
     return instance;
 }
 
-#if ENABLED(ENGINE_DEBUGGER)
+#if IS_ENABLED(ENGINE_DEBUGGER)
 bool Debugger::IsDebuggerEnabled()
 {
     return debuggerConfig_.startDebuggerServer;
@@ -53,7 +53,7 @@ void Debugger::StartDebugger()
     // increase jerry log level to see the Waiting for client connection message
     jerry_port_default_set_log_level(JERRY_LOG_LEVEL_DEBUG);
     // currently, only support tcp::websocket
-    HILOG_INFO(HILOG_MODULE_ACE, "please connect to debugger server with localhost:%d", debuggerConfig_.port);
+    HILOG_INFO(HILOG_MODULE_ACE, "please connect to debugger server with localhost:%{public}d", debuggerConfig_.port);
     bool protocol = jerryx_debugger_tcp_create(debuggerConfig_.port);
     bool connected = jerryx_debugger_ws_create();
     jerryx_debugger_after_connect(protocol && connected);
@@ -81,7 +81,7 @@ void Debugger::FlushOutput()
     fflush(stdout);
 }
 
-#ifdef JS_ENGINE_EXTERNAL_CONTEXT
+#if (JS_ENGINE_EXTERNAL_CONTEXT == 1)
 static void *AllocEngineContext(size_t size, void *cbDataP)
 {
     (void)(cbDataP);
@@ -91,7 +91,7 @@ static void *AllocEngineContext(size_t size, void *cbDataP)
 
 void Debugger::SetupJSContext()
 {
-#ifdef JS_ENGINE_EXTERNAL_CONTEXT
+#if (JS_ENGINE_EXTERNAL_CONTEXT == 1)
     if (engineContext_ != nullptr) {
         // do not repeat the setup process
         return;
@@ -112,7 +112,7 @@ void Debugger::SetupJSContext()
 
 void Debugger::ReleaseJSContext()
 {
-#ifdef JS_ENGINE_EXTERNAL_CONTEXT
+#if (JS_ENGINE_EXTERNAL_CONTEXT == 1)
     if (engineContext_ == nullptr) {
         return;
     }
@@ -120,7 +120,7 @@ void Debugger::ReleaseJSContext()
     engineContext_ = nullptr;
 #endif // JS_ENGINE_EXTERNAL_CONTEXT
 }
-#else // ENABLED(ENGINE_DEBUGGER)
+#else  // ENABLED(ENGINE_DEBUGGER)
 bool Debugger::IsDebuggerEnabled()
 {
     return true;
@@ -131,30 +131,20 @@ void Debugger::ConfigEngineDebugger(DebuggerConfig &config)
     UNUSED(config);
 }
 
-void Debugger::StartDebugger()
-{
-}
+void Debugger::StartDebugger() {}
 
-void Debugger::TearDownDebugger()
-{
-}
+void Debugger::TearDownDebugger() {}
 
 void Debugger::Output(const char * const str)
 {
     UNUSED(str);
 }
 
-void Debugger::FlushOutput()
-{
-}
+void Debugger::FlushOutput() {}
 
-void Debugger::SetupJSContext()
-{
-}
+void Debugger::SetupJSContext() {}
 
-void Debugger::ReleaseJSContext()
-{
-}
+void Debugger::ReleaseJSContext() {}
 #endif // ENABLED(ENGINE_DEBUGGER)
 } // namespace ACELite
 } // namespace OHOS

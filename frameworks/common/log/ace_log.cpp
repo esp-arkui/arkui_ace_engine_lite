@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,13 +16,33 @@
 #include "ace_log.h"
 #include <stdarg.h>
 #include <stdio.h>
+#if (TARGET_SIMULATOR == 1)
+#include <string>
 
-#ifdef TARGET_SIMULATOR
 namespace OHOS {
 namespace ACELite {
+using namespace std;
+void ReplaceHiLogPrivaceKeyWords(string &original, const string &toBeReplaced, const string &targetStr)
+{
+    string::size_type toBeReplacedLen = toBeReplaced.length();
+    do {
+        string::size_type foundPos = original.find(toBeReplaced);
+        if (foundPos == string::npos) {
+            // replace all end
+            break;
+        }
+        // replace to target
+        original.replace(foundPos, toBeReplacedLen, targetStr);
+    } while (1);
+}
+
 void PrintInfo(const char *format, va_list args)
 {
-    vprintf(format, args);
+    string originalStr(format);
+    string toBeReplacedStr("{public}");
+    string emptyStr("");
+    ReplaceHiLogPrivaceKeyWords(originalStr, toBeReplacedStr, emptyStr);
+    vprintf(originalStr.c_str(), args);
     printf("\n");
 }
 

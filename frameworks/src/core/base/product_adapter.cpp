@@ -20,6 +20,7 @@
 #include "js_async_work.h"
 #include "message_queue_utils.h"
 #include "module_manager.h"
+#include "securec.h"
 
 namespace OHOS {
 namespace ACELite {
@@ -58,6 +59,16 @@ static char *g_defaultFontFamilyName = nullptr;
 static uint8_t g_defaultFontSize = 30;
 static uint16_t g_screenWidth = 454;
 static uint16_t g_screenHeight = 454;
+
+// default app private data root path
+const static char *DEFAULT_APP_DATA_PATH = "user/ace/data/";
+static const char *g_defaultDataRootPath = DEFAULT_APP_DATA_PATH;
+
+// default device info
+const static uint8_t DEVICE_TYPE_STR_LEN = 24;
+const static char *DEFAULT_DEVICE_TYPE_NAME = "smartVision";
+// smartVision as default
+static const char *g_deviceType = DEFAULT_DEVICE_TYPE_NAME;
 
 // indicating if the ace application is on forground
 static bool g_isRenderTickAcceptable = false;
@@ -150,7 +161,7 @@ void ProductAdapter::RegTEHandlers(const TEHandlingHooks &teHandlingHooks)
 // read the global value directly here.
 TEDispatchingResult ProductAdapter::DispatchTEMessage()
 {
-#ifdef OHOS_ACELITE_PRODUCT_WATCH // only some specific products support TE dispatching
+#if (OHOS_ACELITE_PRODUCT_WATCH == 1) // only some specific products support TE dispatching
     if (!g_isRenderTickAcceptable) {
         return TEDispatchingResult::REFUSED;
     }
@@ -252,6 +263,36 @@ void ProductAdapter::UnloadExtraPresetModules()
     if (g_extraPresetModulesHooks.unloadingHandler != nullptr) {
         g_extraPresetModulesHooks.unloadingHandler();
     }
+}
+
+void ProductAdapter::ConfigPrivateDataRootPath(const char *appDataRoot)
+{
+    if (appDataRoot == nullptr) {
+        return;
+    }
+    size_t pathLen = strlen(appDataRoot);
+    if (pathLen == 0 || pathLen >= UINT8_MAX) {
+        return;
+    }
+    g_defaultDataRootPath = appDataRoot;
+}
+
+const char *ProductAdapter::GetPrivateDataRootPath()
+{
+    return g_defaultDataRootPath;
+}
+
+void ProductAdapter::InitDeviceInfo(const char *deviceType)
+{
+    if (deviceType == nullptr || (strlen(deviceType) == 0) || strlen(deviceType) >= DEVICE_TYPE_STR_LEN) {
+        return;
+    }
+    g_deviceType = deviceType;
+}
+
+const char *ProductAdapter::GetDeviceType()
+{
+    return g_deviceType;
 }
 } // namespace ACELite
 } // namespace OHOS

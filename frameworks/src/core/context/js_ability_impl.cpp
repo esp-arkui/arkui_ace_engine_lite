@@ -49,6 +49,7 @@ void JSAbilityImpl::InitEnvironment(const char * const abilityPath, const char *
     appContext_->SetCurrentAbilityInfo(abilityPath, bundleName, token);
     appContext_->SetTopJSAbilityImpl(this);
     appJsEnv->InitJsFramework();
+    appContext_->LoadApiVersion();
 
     // initialize js object after engine started up
     abilityModel_ = UNDEFINED;
@@ -136,6 +137,7 @@ void JSAbilityImpl::Show() const
         return;
     }
     router_->Show();
+    FatalHandler::GetInstance().NotifyVisibleStatusChange(true);
 }
 
 void JSAbilityImpl::Hide() const
@@ -145,6 +147,7 @@ void JSAbilityImpl::Hide() const
         return;
     }
     router_->Hide();
+    FatalHandler::GetInstance().NotifyVisibleStatusChange(false);
 }
 
 void JSAbilityImpl::NotifyBackPressed() const

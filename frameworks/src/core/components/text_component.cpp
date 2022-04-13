@@ -18,6 +18,7 @@
 #include <string.h>
 #include "ace_log.h"
 #include "font/ui_font_header.h"
+#include "js_app_context.h"
 #include "key_parser.h"
 #include "keys.h"
 #include "product_adapter.h"
@@ -31,7 +32,8 @@ TextComponent::TextComponent(jerry_value_t options, jerry_value_t children, AppS
       fontSize_(DEFAULT_FONT_SIZE),
       fontFamily_(nullptr),
       textValue_(nullptr),
-      overflowMode_(UILabel::LINE_BREAK_CLIP)
+      overflowMode_(UILabel::LINE_BREAK_CLIP),
+      horizontalAlign_(UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT)
 {
     SetComponentName(K_TEXT);
     fontSize_ = ProductAdapter::GetDefaultFontSize();
@@ -41,7 +43,14 @@ bool TextComponent::CreateNativeViews()
 {
     /* set default text OverFlow clip */
     uiLabel_.SetLineBreakMode(overflowMode_);
-    uiLabel_.SetAlign(UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT, UITextLanguageAlignment::TEXT_ALIGNMENT_CENTER);
+    const int32_t supportBaseLineApiVersion = 5;
+    if (JsAppContext::GetInstance()->GetTargetApi() < supportBaseLineApiVersion) {
+        uiLabel_.SetAlign(UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT, UITextLanguageAlignment::TEXT_ALIGNMENT_TOP);
+        uiLabel_.SetSupportBaseLine(false);
+    } else {
+        uiLabel_.SetAlign(UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT, UITextLanguageAlignment::TEXT_ALIGNMENT_CENTER);
+        uiLabel_.SetSupportBaseLine(true);
+    }
     return CopyFontFamily(fontFamily_, ProductAdapter::GetDefaultFontFamilyName());
 }
 
@@ -53,12 +62,12 @@ void TextComponent::ReleaseNativeViews()
 
 inline UIView *TextComponent::GetComponentRootView() const
 {
-    return const_cast<UILabel *>(&uiLabel_);
+    return const_cast<UILabelTypeWrapper *>(&uiLabel_);
 }
 
-UILabel *TextComponent::GetUILabelView() const
+UILabelTypeWrapper *TextComponent::GetUILabelView() const
 {
-    return const_cast<UILabel *>(&uiLabel_);
+    return const_cast<UILabelTypeWrapper *>(&uiLabel_);
 }
 
 bool TextComponent::SetPrivateAttribute(uint16_t attrKeyId, jerry_value_t attrValue)
@@ -67,18 +76,6 @@ bool TextComponent::SetPrivateAttribute(uint16_t attrKeyId, jerry_value_t attrVa
         case K_VALUE: {
             ACE_FREE(textValue_);
             textValue_ = MallocStringOf(attrValue);
-            break;
-        }
-        case K_SCROLLAMOUNT: {
-            const uint16_t scrollAmount = IntegerOf(attrValue);
-            const uint16_t thousand = 1000;
-            if (scrollAmount > (UINT16_MAX / thousand)) {
-                HILOG_ERROR(HILOG_MODULE_ACE, "marquee speed is overflow");
-                break;
-            }
-            const uint8_t rate = 85;
-            uint16_t speed = scrollAmount * thousand / rate;
-            uiLabel_.SetRollSpeed(speed);
             break;
         }
         default: {
@@ -124,17 +121,17 @@ bool TextComponent::ApplyPrivateStyle(const AppStyleItem *styleItem)
     return true;
 }
 
-void TextComponent::SetTextLetterSpace(UILabel &label, const AppStyleItem *styleItem) const
+void TextComponent::SetTextLetterSpace(UILabelTypeWrapper &label, const AppStyleItem *styleItem) const
 {
     label.SetStyle(STYLE_LETTER_SPACE, (int16_t)GetStylePixelValue(styleItem));
 }
 
-void TextComponent::SetTextLineHeight(UILabel &label, const AppStyleItem *styleItem) const
+void TextComponent::SetTextLineHeight(UILabelTypeWrapper &label, const AppStyleItem *styleItem) const
 {
     label.SetStyle(STYLE_LINE_HEIGHT, (int16_t)GetStylePixelValue(styleItem));
 }
 
-void TextComponent::SetTextOverflow(UILabel &label, const AppStyleItem *styleItem)
+void TextComponent::SetTextOverflow(UILabelTypeWrapper &label, const AppStyleItem *styleItem)
 {
     if (!IsStyleValueTypeString(styleItem)) {
         HILOG_ERROR(HILOG_MODULE_ACE, "text overflow style value is invalid!");
@@ -157,13 +154,13 @@ void TextComponent::SetTextOverflow(UILabel &label, const AppStyleItem *styleIte
             overflowMode_ = UILabel::LINE_BREAK_WRAP;
             break;
         default:
-            HILOG_WARN(HILOG_MODULE_ACE, "TextOverFlow id=%d is invalid, using default instead", propNameId);
+            HILOG_WARN(HILOG_MODULE_ACE, "TextOverFlow id=%{public}d is invalid, using default instead", propNameId);
             break;
     }
     label.SetLineBreakMode(overflowMode_);
 }
 
-void TextComponent::SetTextColor(UILabel &label, const AppStyleItem *styleItem) const
+void TextComponent::SetTextColor(UILabelTypeWrapper &label, const AppStyleItem *styleItem) const
 {
     uint32_t color = 0;
     uint8_t alpha = OPA_OPAQUE;
@@ -193,6 +190,7 @@ void TextComponent::OnViewAttached()
     if (textValue_ != nullptr && fontFamily_ != nullptr) {
         uiLabel_.SetFont(fontFamily_, fontSize_);
         uiLabel_.SetText(textValue_);
+        UpdateTextAlignToLabel(uiLabel_);
     }
 }
 
@@ -207,6 +205,7 @@ void TextComponent::PostUpdate(uint16_t attrKeyId)
         case K_VALUE:
             if (textValue_ != nullptr) {
                 uiLabel_.SetText(textValue_);
+                UpdateTextAlignToLabel(uiLabel_);
             }
             break;
         case K_FONT_SIZE:
@@ -224,7 +223,7 @@ void TextComponent::PostUpdate(uint16_t attrKeyId)
     }
 }
 
-void TextComponent::SetTextAlign(UILabel &label, const AppStyleItem *styleItem) const
+void TextComponent::SetTextAlign(UILabelTypeWrapper &label, const AppStyleItem *styleItem)
 {
     if (!IsStyleValueTypeString(styleItem)) {
         HILOG_ERROR(HILOG_MODULE_ACE, "text text align style value is invalid!");
@@ -233,23 +232,32 @@ void TextComponent::SetTextAlign(UILabel &label, const AppStyleItem *styleItem) 
     // set ui label text align, ALIGN_LEFT, ALIGN_RIGHT, ALIGN_CENTER are support.
     const char * const stylePropValue = GetStyleStrValue(styleItem);
     uint16_t alignId = KeyParser::ParseKeyId(stylePropValue, GetStyleStrValueLen(styleItem));
-    UITextLanguageAlignment align = UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT;
     switch (alignId) {
         case K_LEFT:
-            align = UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT;
+            horizontalAlign_ = UITextLanguageAlignment::TEXT_ALIGNMENT_LEFT;
             break;
         case K_RIGHT:
-            align = UITextLanguageAlignment::TEXT_ALIGNMENT_RIGHT;
+            horizontalAlign_ = UITextLanguageAlignment::TEXT_ALIGNMENT_RIGHT;
             break;
         case K_CENTER:
-            align = UITextLanguageAlignment::TEXT_ALIGNMENT_CENTER;
+            horizontalAlign_ = UITextLanguageAlignment::TEXT_ALIGNMENT_CENTER;
             break;
         default:
-            HILOG_WARN(HILOG_MODULE_ACE, "text textAlign style value =%s is invalid, using default instead",
+            HILOG_WARN(HILOG_MODULE_ACE, "text textAlign style value =%{public}s is invalid, using default instead",
                        stylePropValue);
             break;
     }
-    label.SetAlign(align, UITextLanguageAlignment::TEXT_ALIGNMENT_CENTER);
+    UpdateTextAlignToLabel(label);
+}
+
+void TextComponent::UpdateTextAlignToLabel(UILabelTypeWrapper& label)
+{
+    const int32_t defaultVerticalAlignCenterApiVersion = 5;
+    if (JsAppContext::GetInstance()->GetTargetApi() < defaultVerticalAlignCenterApiVersion) {
+        label.SetAlign(horizontalAlign_, UITextLanguageAlignment::TEXT_ALIGNMENT_TOP);
+    } else {
+        label.SetAlign(horizontalAlign_, UITextLanguageAlignment::TEXT_ALIGNMENT_CENTER);
+    }
 }
 } // namespace ACELite
 } // namespace OHOS

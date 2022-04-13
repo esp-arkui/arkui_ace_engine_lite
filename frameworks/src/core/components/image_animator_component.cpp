@@ -91,7 +91,7 @@ void ImageAnimatorComponent::SetViewExtraMsg()
         HILOG_ERROR(HILOG_MODULE_ACE, "Failed to mapping native view with DOM element.");
         return;
     }
-    extraMsg->elementPtr = (void *)elementPtr;
+    extraMsg->elementPtr = reinterpret_cast<void *>(elementPtr);
     viewGroup_->SetExtraMsg(extraMsg);
     imageAnimator_->SetExtraMsg(extraMsg);
 }
@@ -200,7 +200,7 @@ bool ImageAnimatorComponent::ParseToFrames(jerry_value_t value)
 {
     ReleaseFrame();
     if (!jerry_value_is_array(value)) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "images is not a array value.");
+        HILOG_ERROR(HILOG_MODULE_ACE, "images is not an array value.");
         return false;
     }
     framesSize_ = jerry_get_array_length(value);
@@ -208,26 +208,23 @@ bool ImageAnimatorComponent::ParseToFrames(jerry_value_t value)
         HILOG_ERROR(HILOG_MODULE_ACE, "images is empty.");
         return false;
     }
-    if (framesSize_ > UINT8_MAX) {
-        framesSize_ = UINT8_MAX;
-    }
 
     frames_ = static_cast<ImageAnimatorInfo *>(ace_malloc(sizeof(ImageAnimatorInfo) * framesSize_));
     if (frames_ == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "fail to set images cause by out of memory.");
         return false;
     }
-    for (uint16_t idx = 0; idx < framesSize_; ++idx) {
+    for (uint8_t idx = 0; idx < framesSize_; ++idx) {
         jerry_value_t image = jerry_get_property_by_index(value, idx);
         if (jerry_value_is_undefined(image) || !jerry_value_is_object(image)) {
-            HILOG_WARN(HILOG_MODULE_ACE, "the %d frame is null or not a object.", idx);
+            HILOG_WARN(HILOG_MODULE_ACE, "the %{public}d frame is null or not an object.", idx);
             continue;
         }
 
         jerry_value_t src = jerryx_get_property_str(image, ATTR_SRC);
         if (jerry_value_is_undefined(src)) {
             jerry_release_value(image);
-            HILOG_WARN(HILOG_MODULE_ACE, "the src of %d frame is null.", src);
+            HILOG_WARN(HILOG_MODULE_ACE, "the src of %{public}d frame is null.", src);
             continue;
         }
 

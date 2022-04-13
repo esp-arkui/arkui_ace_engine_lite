@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,6 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #include "module_manager.h"
 #include <stdlib.h>
 #include <string.h>
@@ -36,17 +37,17 @@ JSIValue ModuleManager::RequireModule(const char * const moduleName)
     }
 
     JSIValue moduleObj;
-    if (!strcmp(category, CATEGORY_SYSTEM)) {
+    if (!strcmp(category, CATEGORY_SYSTEM) || !strcmp(category, CATEGORY_OHOS)) {
         uint16_t moduleCount = sizeof(OHOS_MODULES) / sizeof(Module);
         moduleObj = GetModuleObject(name, OHOS_MODULES, moduleCount, requiredSystemModules);
-#ifdef FEATURE_PRODUCT_MODULE
+#if (FEATURE_PRODUCT_MODULE == 1)
         if ((JSI::ValueIsUndefined(moduleObj)) && (productModulesGetter_ != nullptr)) {
             uint16_t prodModCount;
             const Module* prodModules = productModulesGetter_(prodModCount);
             moduleObj = GetModuleObject(name, prodModules, prodModCount, requiredSystemModules);
         }
 #endif // FEATURE_PRODUCT_MODULE
-#ifdef FEATURE_PRIVATE_MODULE
+#if (FEATURE_PRIVATE_MODULE == 1)
         if ((JSI::ValueIsUndefined(moduleObj)) && (privateModulesGetter_ != nullptr)) {
             const char * const bundleName = (bundleNameGetter_ != nullptr) ? bundleNameGetter_() : nullptr;
             moduleObj = GetModuleObject(name, nullptr, 0, requiredSystemModules, bundleName);
@@ -54,7 +55,7 @@ JSIValue ModuleManager::RequireModule(const char * const moduleName)
 #endif // FEATURE_PRIVATE_MODULE
     } else {
         moduleObj = JSI::CreateUndefined();
-        HILOG_ERROR(HILOG_MODULE_ACE, "ModuleManager:RequireModule category %s does not exists!", category);
+        HILOG_ERROR(HILOG_MODULE_ACE, "ModuleManager:RequireModule category %{public}s does not exists!", category);
     }
 
     ace_free(category);
@@ -93,9 +94,8 @@ bool ModuleManager::ParseModuleName(const char * const moduleName, char** catego
         return false;
     }
 
-    // Get name
-    tokenStr = strtok_s(nullptr, ".", &next);
-    if (!CreateString(tokenStr, name)) {
+    // Get the rest as name
+    if (!CreateString(next, name)) {
         ace_free(str);
         str = nullptr;
         ace_free(*category);
@@ -150,7 +150,7 @@ JSIValue ModuleManager::GetModuleObject(const char * const moduleName, const Mod
             }
         }
     }
-#ifdef FEATURE_PRIVATE_MODULE
+#if (FEATURE_PRIVATE_MODULE == 1)
     else {
         uint16_t count;
         const PrivateModule *privateModules =
@@ -167,7 +167,7 @@ JSIValue ModuleManager::GetModuleObject(const char * const moduleName, const Mod
                 return InitModuleObject(moduleName, privateModules[i].module, categoryObj);
             }
         }
-        HILOG_WARN(HILOG_MODULE_ACE, "ModuleManager:module %s does not exists!", moduleName);
+        HILOG_WARN(HILOG_MODULE_ACE, "ModuleManager:module %{public}s does not exists!", moduleName);
     }
 #endif
     return JSI::CreateUndefined();

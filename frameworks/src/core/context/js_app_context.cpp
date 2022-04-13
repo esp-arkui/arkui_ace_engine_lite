@@ -16,20 +16,24 @@
 #include "js_app_context.h"
 #include "ace_event_error_code.h"
 #include "ace_log.h"
-#if (defined(__LINUX__) || defined(__LITEOS__))
+#if (defined(__LINUX__) || defined(__LITEOS_A__))
 #include "ace_ability.h"
 #endif
+#if (FEATURE_API_VERSION == 1)
+#include "bundle_manager.h"
+#endif // FEATURE_API_VERSION
 #include "component_factory.h"
 #include "component_utils.h"
 #include "fatal_handler.h"
 #include "js_app_environment.h"
 #include "js_profiler.h"
 #include "platform_adapter.h"
+#include "product_adapter.h"
 #include "securec.h"
 #include "string_util.h"
 #include "task_manager.h"
 #include "ui_view_group.h"
-#ifndef OHOS_ACELITE_PRODUCT_WATCH
+#if (OHOS_ACELITE_PRODUCT_WATCH != 1)
 #include "ability_env.h"
 #endif
 
@@ -37,14 +41,29 @@ namespace OHOS {
 namespace ACELite {
 constexpr char URI_PREFIX_DATA[] = "internal://app";
 constexpr uint8_t URI_PREFIX_DATA_LENGTH = 14;
-#ifdef OHOS_ACELITE_PRODUCT_WATCH
-constexpr char APP_DATA_DIR_PATH[] = "app/ace/data/";
-constexpr uint8_t APP_DATA_DIR_PATH_LENGTH = 13;
-#endif
 void JsAppContext::ClearContext()
 {
     // reset current ability path and uuid
     ReleaseAbilityInfo();
+}
+
+// check byte code file snapshot version is OK with the current
+void JsAppContext::CheckSnapshotVersion(const char *bcFileContent, uint32_t contentLength) const
+{
+    // this is part of engine struct definations
+    typedef struct {
+        uint32_t magic; // four byte magic number
+        uint32_t version; // version number
+    } JerrySnapshotHeaderT;
+    if ((bcFileContent == nullptr) || (contentLength == 0) || (contentLength <= sizeof(JerrySnapshotHeaderT))) {
+        return;
+    }
+    const uint8_t *snapshotData = reinterpret_cast<const uint8_t *>(bcFileContent);
+    const JerrySnapshotHeaderT *headerP = reinterpret_cast<const JerrySnapshotHeaderT *>(snapshotData);
+    // JERRY_SNAPSHOT_VERSION is defined in jerryscript-snapshot.h
+    if (headerP->version != JERRY_SNAPSHOT_VERSION) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "invalid snapshot version[%{public}d]", headerP->version);
+    }
 }
 
 /**
@@ -73,6 +92,7 @@ jerry_value_t JsAppContext::Eval(char *fullPath, size_t fullPathLength, bool isA
     START_TRACING(PAGE_CODE_EVAL);
     jerry_value_t viewModel = UNDEFINED;
     if (isSnapshotMode) {
+        CheckSnapshotVersion(jsCode, contentLength);
         const uint32_t *snapshotContent = reinterpret_cast<const uint32_t *>(jsCode);
         viewModel = jerry_exec_snapshot(snapshotContent, contentLength, 0, 1);
     } else {
@@ -128,7 +148,7 @@ char *JsAppContext::EvaluateFile(bool &isSnapshotMode,
         // read successfully
         return jsCode;
     }
-    // make sure the memory is freeed
+    // make sure the memory is freed
     ACE_FREE(jsCode);
 
     const char * const anotherSuffx = isSnapshotMode ? ".js" : ".bc";
@@ -138,7 +158,7 @@ char *JsAppContext::EvaluateFile(bool &isSnapshotMode,
     }
     // snapshot mode changed to another
     isSnapshotMode = !isSnapshotMode;
-    HILOG_ERROR(HILOG_MODULE_ACE, "JS mode changed unexpected [%d]", isSnapshotMode);
+    HILOG_ERROR(HILOG_MODULE_ACE, "JS mode changed unexpected [%{public}d]", isSnapshotMode);
     jsCode = ReadFile(fullPath, outLength, isSnapshotMode);
     return jsCode;
 }
@@ -276,6 +296,7 @@ void JsAppContext::ReleaseAbilityInfo()
         currentJsPath_ = nullptr;
     }
 }
+
 char *JsAppContext::GetResourcePath(const char *uri) const
 {
     if (uri == nullptr) {
@@ -293,31 +314,88 @@ char *JsAppContext::GetResourcePath(const char *uri) const
             HILOG_ERROR(HILOG_MODULE_ACE, "fail to get resource path.");
             return nullptr;
         }
-#ifdef OHOS_ACELITE_PRODUCT_WATCH
-        uint16_t dataPathSize = APP_DATA_DIR_PATH_LENGTH + strlen(currentBundleName_) + size - URI_PREFIX_DATA_LENGTH;
-        char *dataPath = StringUtil::Malloc(dataPathSize);
-        if (dataPath == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_ACE, "fail to get resource path.");
-            ACE_FREE(path);
-            return nullptr;
-        }
-        if (sprintf_s(dataPath, dataPathSize + 1, "%s%s%s", APP_DATA_DIR_PATH, currentBundleName_, path) < 0) {
-            HILOG_ERROR(HILOG_MODULE_ACE, "fail to get resource path.");
-            ACE_FREE(path);
-            ACE_FREE(dataPath);
-            return nullptr;
-        }
+#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
+        // no GetDataPath API provided on watch, contact the path by the product configuration insteadly
+        char *relocatedPath = ProcessResourcePathByConfiguration(size, path);
 #else
         const char *dataPath = GetDataPath();
-#endif
+        if (dataPath == nullptr || strlen(dataPath) == 0) {
+            dataPath = currentBundleName_;
+        }
         char *relocatedPath = RelocateResourceFilePath(dataPath, path);
-#ifdef OHOS_ACELITE_PRODUCT_WATCH
-        ACE_FREE(dataPath);
 #endif
         ACE_FREE(path);
         return relocatedPath;
     }
     return RelocateResourceFilePath(currentAbilityPath_, uri);
+}
+
+char *JsAppContext::ProcessResourcePathByConfiguration(size_t origUriLength, const char *slicedFilePath) const
+{
+    const char *appDataRoot = ProductAdapter::GetPrivateDataRootPath();
+    if (appDataRoot == nullptr || origUriLength == 0 || slicedFilePath == nullptr) {
+        return nullptr;
+    }
+    size_t rootPathLen = strlen(appDataRoot);
+    if (rootPathLen == 0) {
+        return nullptr;
+    }
+    size_t dataPathSize = rootPathLen + strlen(currentBundleName_) + origUriLength - URI_PREFIX_DATA_LENGTH + 1;
+    char *dataPath = StringUtil::Malloc(dataPathSize);
+    if (dataPath == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "fail to malloc data path buffer.");
+        return nullptr;
+    }
+    const char *fmtStr = "%s%s";
+    if (appDataRoot[rootPathLen - 1] != RESOURCE_SEPARATOR) {
+        fmtStr = "%s/%s";
+    }
+    if (sprintf_s(dataPath, dataPathSize + 1, fmtStr, appDataRoot, currentBundleName_) < 0) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "fail to get resource path.");
+        ACE_FREE(dataPath);
+        return nullptr;
+    }
+    char *relocatedPath = RelocateResourceFilePath(dataPath, slicedFilePath);
+    ACE_FREE(dataPath);
+    return relocatedPath;
+}
+
+void JsAppContext::LoadApiVersion()
+{
+#if (FEATURE_API_VERSION == 1)
+    BundleInfo bundle = {0};
+    uint8_t retCode = GetBundleInfo(currentBundleName_, false, &bundle);
+    if (retCode != 0) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "fail to get api version.");
+        return;
+    }
+    compatibleApi_ = bundle.compatibleApi;
+    targetApi_ = bundle.targetApi;
+#else
+    const int32_t currentApiVersion = 6;
+    compatibleApi_ = currentApiVersion;
+    targetApi_ = currentApiVersion;
+#endif
+}
+
+int32_t JsAppContext::GetCompatibleApi() const
+{
+    return compatibleApi_;
+}
+
+void JsAppContext::SetCompatibleApi(int32_t compatibleApi)
+{
+    compatibleApi_ = compatibleApi;
+}
+
+int32_t JsAppContext::GetTargetApi() const
+{
+    return targetApi_;
+}
+
+void JsAppContext::SetTargetApi(int32_t targetApi)
+{
+    targetApi_ = targetApi;
 }
 } // namespace ACELite
 } // namespace OHOS

@@ -20,6 +20,7 @@
 #include "root_view.h"
 #include "text_component.h"
 #include "ui_label.h"
+#include "ui_font.h"
 
 namespace OHOS {
 namespace ACELite {
@@ -395,7 +396,6 @@ void TextTddTest::RunTests()
 /**
  * @tc.name:ComponentTextAttributeSetValueTest001
  * @tc.desc: Verify text value can set normally.
- * @tc.require: AR000DSEFN
  */
 HWTEST_F(TextTddTest, textAttr001, TestSize.Level1)
 {
@@ -405,7 +405,6 @@ HWTEST_F(TextTddTest, textAttr001, TestSize.Level1)
 /**
  * @tc.name:ComponentTextStyleSetColorTest002
  * @tc.desc: Verify text color value.
- * @tc.require: AR000DSEFN
  */
 HWTEST_F(TextTddTest, textStyle002, TestSize.Level1)
 {
@@ -415,7 +414,6 @@ HWTEST_F(TextTddTest, textStyle002, TestSize.Level1)
 /**
  * @tc.name:ComponentTextStyleSetOverflowTest003
  * @tc.desc: Verify text color value.
- * @tc.require: AR000DSEFN
  */
 HWTEST_F(TextTddTest, textStyle003, TestSize.Level0)
 {
@@ -425,7 +423,6 @@ HWTEST_F(TextTddTest, textStyle003, TestSize.Level0)
 /**
  * @tc.name:ComponentTextStyleSetLetterSpacingTest004
  * @tc.desc: Verify text letterSpacing value.
- * @tc.require: AR000DSEFN
  */
 HWTEST_F(TextTddTest, textStyle004, TestSize.Level1)
 {
@@ -435,7 +432,6 @@ HWTEST_F(TextTddTest, textStyle004, TestSize.Level1)
 /**
  * @tc.name:ComponentTextStyleSetAlignTest005
  * @tc.desc: Verify text color value.
- * @tc.require: AR000DSEFN
  */
 HWTEST_F(TextTddTest, textStyle005, TestSize.Level1)
 {

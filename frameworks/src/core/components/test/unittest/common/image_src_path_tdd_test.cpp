@@ -23,7 +23,6 @@ namespace ACELite {
 /**
  * @tc.name: ImageSrcPrivateDataPathSupport001
  * @tc.desc: Verify the path contact processing
- * @tc.require: AR000F3PE1
  */
 HWTEST_F(ImageSrcPathTddTest, PrivateDataPathSupport001, TestSize.Level0)
 {
@@ -40,7 +39,6 @@ HWTEST_F(ImageSrcPathTddTest, PrivateDataPathSupport001, TestSize.Level0)
 /**
  * @tc.name: ImageSrcPrivateDataPathSupport002
  * @tc.desc: Verify the path contact processing
- * @tc.require: AR000F3PE1
  */
 HWTEST_F(ImageSrcPathTddTest, PrivateDataPathSupport002, TestSize.Level0)
 {
@@ -57,14 +55,13 @@ HWTEST_F(ImageSrcPathTddTest, PrivateDataPathSupport002, TestSize.Level0)
 /**
  * @tc.name: ImageSrcPrivateDataPathSupport003
  * @tc.desc: Verify the path contact processing
- * @tc.require: AR000F3PE1
  */
 HWTEST_F(ImageSrcPathTddTest, PrivateDataPathSupport003, TestSize.Level0)
 {
     /**
      * @tc.steps: step1. pass empty string for handling
      */
-    JsAppContext::GetInstance()->SetCurrentAbilityInfo("app/run/", "com.huawei.test", 0);
+    JsAppContext::GetInstance()->SetCurrentAbilityInfo("app/run/", "com.example.test", 0);
     char *resourcePath = JsAppContext::GetInstance()->GetResourcePath("abc.png");
     /**
      * @tc.steps: step2. check if handling failed
@@ -76,41 +73,40 @@ HWTEST_F(ImageSrcPathTddTest, PrivateDataPathSupport003, TestSize.Level0)
 /**
  * @tc.name: ImageSrcPrivateDataPathSupport004
  * @tc.desc: Verify the path contact processing
- * @tc.require: AR000F3PE1
  */
 HWTEST_F(ImageSrcPathTddTest, PrivateDataPathSupport004, TestSize.Level0)
 {
     /**
      * @tc.steps: step1. pass empty string for handling
      */
+    JsAppContext::GetInstance()->SetCurrentAbilityInfo("", "com.example.test", 0);
     char *resourcePath = JsAppContext::GetInstance()->GetResourcePath("internal://app/abc.png");
     /**
      * @tc.steps: step2. check if handling failed
      */
-    EXPECT_EQ(resourcePath, nullptr);
+    EXPECT_STREQ(resourcePath, "com.example.test/abc.png");
 }
 
 /**
  * @tc.name: ImageSrcPrivateDataPathSupport005
  * @tc.desc: Verify the path contact processing
- * @tc.require: AR000F3PE1
  */
 HWTEST_F(ImageSrcPathTddTest, PrivateDataPathSupport005, TestSize.Level0)
 {
     /**
      * @tc.steps: step1. pass empty string for handling
      */
+    JsAppContext::GetInstance()->SetCurrentAbilityInfo("", "com.example.test", 0);
     char *resourcePath = JsAppContext::GetInstance()->GetResourcePath("internal://app/testa/testb/testc/abc.png");
     /**
      * @tc.steps: step2. check if handling failed
      */
-    EXPECT_EQ(resourcePath, nullptr);
+    EXPECT_STREQ(resourcePath, "com.example.test/testa/testb/testc/abc.png");
 }
 
 /**
  * @tc.name: ImageSrcPrivateDataPathSupport006
  * @tc.desc: Verify the path contact processing
- * @tc.require: AR000F3PE1
  */
 HWTEST_F(ImageSrcPathTddTest, PrivateDataPathSupport006, TestSize.Level0)
 {

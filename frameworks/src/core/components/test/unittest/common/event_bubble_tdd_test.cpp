@@ -1001,7 +1001,7 @@ void EventBubbleTddTest::EventBubbleTest001()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_CLICK_BUBBBLE, strlen(BUNDLE_CLICK_BUBBBLE));
-    constexpr char *propLogs = "logs";
+    const char *propLogs = "logs";
     JSValue logs = JSObject::Get(page, propLogs);
     EXPECT_EQ(JSArray::Length(logs), 0);
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
@@ -1028,7 +1028,7 @@ void EventBubbleTddTest::EventBubbleTest002()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_LONG_PRESS_BUBBLE, strlen(BUNDLE_LONG_PRESS_BUBBLE));
-    constexpr char *propLogs = "logs";
+    const char *propLogs = "logs";
     JSValue logs = JSObject::Get(page, propLogs);
     EXPECT_EQ(JSArray::Length(logs), 0);
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
@@ -1055,7 +1055,7 @@ void EventBubbleTddTest::EventBubbleTest003()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_SWIPE_BUBBLE, strlen(BUNDLE_SWIPE_BUBBLE));
-    constexpr char *propLogs = "logs";
+    const char *propLogs = "logs";
     JSValue logs = JSObject::Get(page, propLogs);
     EXPECT_EQ(JSArray::Length(logs), 0);
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
@@ -1085,7 +1085,7 @@ void EventBubbleTddTest::EventBubbleTest004()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_CLICK_DEFAULT_BUBBLE, strlen(BUNDLE_CLICK_DEFAULT_BUBBLE));
-    constexpr char *propLogs = "logs";
+    const char *propLogs = "logs";
     JSValue logs = JSObject::Get(page, propLogs);
     EXPECT_EQ(JSArray::Length(logs), 0);
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
@@ -1108,7 +1108,7 @@ void EventBubbleTddTest::EventBubbleTest005()
 {
     TDD_CASE_BEGIN();
     JSValue page = CreatePage(BUNDLE_LONG_PRESS_DEFAULT_BUBBLE, strlen(BUNDLE_LONG_PRESS_DEFAULT_BUBBLE));
-    constexpr char *propLogs = "logs";
+    const char *propLogs = "logs";
     JSValue logs = JSObject::Get(page, propLogs);
     EXPECT_EQ(JSArray::Length(logs), 0);
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
@@ -1132,7 +1132,7 @@ void EventBubbleTddTest::EventBubbleTest006()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_SWIPE_DEFAULT_BUBBLE, strlen(BUNDLE_SWIPE_DEFAULT_BUBBLE));
-    constexpr char *propLogs = "logs";
+    const char *propLogs = "logs";
     JSValue logs = JSObject::Get(page, propLogs);
     EXPECT_EQ(JSArray::Length(logs), 0);
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
@@ -1159,7 +1159,7 @@ void EventBubbleTddTest::EventBubbleTest007()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_CLICK_STOP_PROPAGATION, strlen(BUNDLE_CLICK_STOP_PROPAGATION));
-    constexpr char *propLogs = "logs";
+    const char *propLogs = "logs";
     JSValue logs = JSObject::Get(page, propLogs);
     EXPECT_EQ(JSArray::Length(logs), 0);
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
@@ -1183,7 +1183,7 @@ void EventBubbleTddTest::EventBubbleTest008()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_LONG_PRESS_STOP_PROPAGATION, strlen(BUNDLE_LONG_PRESS_STOP_PROPAGATION));
-    constexpr char *propLogs = "logs";
+    const char *propLogs = "logs";
     JSValue logs = JSObject::Get(page, propLogs);
     EXPECT_EQ(JSArray::Length(logs), 0);
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
@@ -1207,7 +1207,7 @@ void EventBubbleTddTest::EventBubbleTest009()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_SWIPE_STOP_PROPAGATION, strlen(BUNDLE_SWIPE_STOP_PROPAGATION));
-    constexpr char *propLogs = "logs";
+    const char *propLogs = "logs";
     JSValue logs = JSObject::Get(page, propLogs);
     EXPECT_EQ(JSArray::Length(logs), 0);
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
@@ -1234,10 +1234,10 @@ void EventBubbleTddTest::EventBubbleTest010()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_CLICK_DELEGATION, strlen(BUNDLE_CLICK_DELEGATION));
-    constexpr char *propBgColor = "bgColor";
-    constexpr char *bgRed = "#f00";
-    constexpr char *bgGreen = "#0f0";
-    constexpr char *bgBlue = "#00f";
+    const char *propBgColor = "bgColor";
+    const char *bgRed = "#f00";
+    const char *bgGreen = "#0f0";
+    const char *bgBlue = "#00f";
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
     const uint16_t centerY = GetVerticalResolution() / NUM_TWO;
     constexpr uint16_t distance = 100;
@@ -1271,7 +1271,7 @@ void EventBubbleTddTest::EventBubbleTest011()
     const uint16_t centerY = GetVerticalResolution() / NUM_TWO;
     constexpr uint16_t distance = 100;
     LongPress(centerX, centerY);
-    constexpr char *propBgColor = "bgColor";
+    const char *propBgColor = "bgColor";
     char *content = JSObject::GetString(page, propBgColor);
     EXPECT_STREQ(content, "#0f0");
     free(content);
@@ -1295,10 +1295,10 @@ void EventBubbleTddTest::EventBubbleTest012()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_SWIPE_DELEGATION, strlen(BUNDLE_SWIPE_DELEGATION));
-    constexpr char *propText = "text";
-    constexpr char *textRed = "red";
-    constexpr char *textGreen = "green";
-    constexpr char *textBlue = "blue";
+    const char *propText = "text";
+    const char *textRed = "red";
+    const char *textGreen = "green";
+    const char *textBlue = "blue";
     const uint16_t greenX = GetHorizontalResolution() / NUM_TWO;
     const uint16_t greenY = GetVerticalResolution() / NUM_TWO;
     constexpr uint16_t boxHeight = 100;
@@ -1329,7 +1329,7 @@ void EventBubbleTddTest::EventBubbleTest013()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_CLICK_PRESSURE, strlen(BUNDLE_CLICK_PRESSURE));
-    constexpr char *propCount = "count";
+    const char *propCount = "count";
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
     const uint16_t centerY = GetVerticalResolution() / NUM_TWO;
     constexpr uint8_t diffCount = 20;
@@ -1351,7 +1351,7 @@ void EventBubbleTddTest::EventBubbleTest014()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_LONG_PRESS_PRESSURE, strlen(BUNDLE_LONG_PRESS_PRESSURE));
-    constexpr char *propCount = "count";
+    const char *propCount = "count";
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
     const uint16_t centerY = GetVerticalResolution() / NUM_TWO;
     constexpr uint8_t diffCount = 20;
@@ -1370,7 +1370,7 @@ void EventBubbleTddTest::EventBubbleTest015()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_SWIPE_PRESSURE, strlen(BUNDLE_SWIPE_PRESSURE));
-    constexpr char *propCount = "count";
+    const char *propCount = "count";
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
     const uint16_t centerY = GetVerticalResolution() / NUM_TWO;
     constexpr uint16_t halfDistance = 50;
@@ -1395,7 +1395,7 @@ void EventBubbleTddTest::EventBubbleTest016()
     TDD_CASE_BEGIN();
 
     JSValue page = CreatePage(BUNDLE_CLICK_PRESSURE2, strlen(BUNDLE_CLICK_PRESSURE2));
-    constexpr char *propCount = "count";
+    const char *propCount = "count";
     const uint16_t centerX = GetHorizontalResolution() / NUM_TWO;
     const uint16_t centerY = GetVerticalResolution() / NUM_TWO;
     constexpr uint8_t times = 10;
@@ -1461,7 +1461,6 @@ void EventBubbleTddTest::RunTests()
 /* *
  * @tc.name: EventBubbleTest001
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest001, TestSize.Level0)
 {
@@ -1471,7 +1470,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest001, TestSize.Level0)
 /* *
  * @tc.name: EventBubbleTest002
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest002, TestSize.Level0)
 {
@@ -1481,7 +1479,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest002, TestSize.Level0)
 /* *
  * @tc.name: EventBubbleTest003
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest003, TestSize.Level1)
 {
@@ -1491,7 +1488,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest003, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest004
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest004, TestSize.Level1)
 {
@@ -1501,7 +1497,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest004, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest005
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest005, TestSize.Level1)
 {
@@ -1511,7 +1506,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest005, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest006
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest006, TestSize.Level1)
 {
@@ -1521,7 +1515,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest006, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest007
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest007, TestSize.Level1)
 {
@@ -1531,7 +1524,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest007, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest008
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest008, TestSize.Level1)
 {
@@ -1541,7 +1533,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest008, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest009
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest009, TestSize.Level1)
 {
@@ -1551,7 +1542,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest009, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest010
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest010, TestSize.Level1)
 {
@@ -1561,7 +1551,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest010, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest011
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest011, TestSize.Level1)
 {
@@ -1571,7 +1560,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest011, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest012
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest012, TestSize.Level1)
 {
@@ -1581,7 +1569,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest012, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest013
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest013, TestSize.Level1)
 {
@@ -1591,7 +1578,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest013, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest014
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest014, TestSize.Level1)
 {
@@ -1601,7 +1587,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest014, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest015
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest015, TestSize.Level1)
 {
@@ -1611,7 +1596,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest015, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest016
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest016, TestSize.Level1)
 {
@@ -1621,7 +1605,6 @@ HWTEST_F(EventBubbleTddTest, EventBubbleTest016, TestSize.Level1)
 /* *
  * @tc.name: EventBubbleTest017
  * @tc.desc: Verify event bubble.
- * @tc.require: AR000F3PDN
  */
 HWTEST_F(EventBubbleTddTest, EventBubbleTest017, TestSize.Level1)
 {

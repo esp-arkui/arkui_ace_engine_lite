@@ -18,7 +18,7 @@
 #include "ui_dump_dom_tree.h"
 #ifdef FEATURE_ACELITE_MC_DFX_MODULE
 #include "ui_snapshot.h"
-#elif defined(FEATURE_ACELITE_LITE_DFX_MODULE)
+#elif (FEATURE_ACELITE_LITE_DFX_MODULE == 1)
 #ifdef __LITEOS_A__
 #include "ability_env.h"
 #endif
@@ -39,7 +39,7 @@ const char * const DfxModule::SCREEN_SNAP_PATH = "screensnap.bin";
 bool DfxModule::PreCheck(uint8_t argsNum)
 {
     if (argsNum > 1) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "Dfx Module args num(%d) is invalid, at most one parameter", argsNum);
+        HILOG_ERROR(HILOG_MODULE_ACE, "Dfx Module args num(%{public}d) is invalid, at most one parameter", argsNum);
         return false;
     }
     return true;
@@ -77,7 +77,7 @@ bool DfxModule::IsEventInjectorRegistered(EventDataType type)
     return true;
 }
 
-#ifdef FEATURE_ACELITE_DFX_MODULE
+#if (FEATURE_ACELITE_DFX_MODULE == 1)
 JSIValue DfxModule::Screenshot(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum)
 {
 #ifdef FEATURE_ACELITE_MC_DFX_MODULE
@@ -88,7 +88,7 @@ JSIValue DfxModule::Screenshot(const JSIValue thisVal, const JSIValue *args, uin
         retVal = JSI::CreateBoolean(false);
     }
     return retVal;
-#elif defined(FEATURE_ACELITE_LITE_DFX_MODULE)
+#elif (FEATURE_ACELITE_LITE_DFX_MODULE == 1)
     JSIValue retVal = JSI::CreateBoolean(true);
 #ifdef __LITEOS_A__
     const char * const savingPath = GetDataPath();
@@ -120,7 +120,7 @@ JSIValue DfxModule::DumpDomTree(const JSIValue thisVal, const JSIValue *args, ui
     }
 
     char *viewId = GetDomViewId(args);
-#ifdef FEATURE_ACELITE_LITE_DFX_MODULE
+#if (FEATURE_ACELITE_LITE_DFX_MODULE == 1)
 #ifdef __LITEOS_A__
     const char * const savingPath = GetDataPath();
 #else
@@ -136,7 +136,7 @@ JSIValue DfxModule::DumpDomTree(const JSIValue thisVal, const JSIValue *args, ui
         retVal = JSI::CreateBoolean(true);
     }
 
-#ifdef FEATURE_ACELITE_LITE_DFX_MODULE
+#if (FEATURE_ACELITE_LITE_DFX_MODULE == 1)
     if (path != nullptr) {
         ace_free(path);
     }
@@ -218,7 +218,7 @@ JSIValue DfxModule::InjectEvent(const JSIValue thisVal, const JSIValue *args, ui
     // pre check
     const uint8_t num = 2;
     if (argsNum != num) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "Dfx Module args num(%d) is invalid, only one parameter", argsNum);
+        HILOG_ERROR(HILOG_MODULE_ACE, "Dfx Module args num(%{public}d) is invalid, only one parameter", argsNum);
         return JSI::CreateBoolean(false);
     }
 

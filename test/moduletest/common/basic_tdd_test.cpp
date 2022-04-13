@@ -87,6 +87,10 @@ void BasicTddTest::TearDownTestCase(void)
 
 void BasicTddTest::SetUp()
 {
+    JsAppContext *appContext = JsAppContext::GetInstance();
+    const int32_t apiVersion = 6;
+    appContext->SetCompatibleApi(apiVersion);
+    appContext->SetTargetApi(apiVersion);
     JsAppEnvironment::GetInstance()->InitJsFramework();
     EventInjector *injector = EventInjector::GetInstance();
     if (!injector->IsEventInjectorRegistered(EventDataType::POINT_TYPE)) {
@@ -227,9 +231,11 @@ void BasicTddTest::Click(int16_t x, int16_t y, uint8_t sleepTicks) const
     Point point = {x, y};
     EventInjector *injector = EventInjector::GetInstance();
     if (injector->SetClickEvent(point)) {
-        HILOG_DEBUG(HILOG_MODULE_ACE, "[BasicTddTest::Click]: Success to inject CLICK event on (%d, %d)\n", x, y);
+        HILOG_DEBUG(HILOG_MODULE_ACE,
+                    "[BasicTddTest::Click]: Success to inject CLICK event on (%{public}d, %{public}d)\n", x, y);
     } else {
-        HILOG_ERROR(HILOG_MODULE_ACE, "[BasicTddTest::Click]: Failed to inject CLICK event on (%d, %d)\n", x, y);
+        HILOG_ERROR(HILOG_MODULE_ACE,
+                    "[BasicTddTest::Click]: Failed to inject CLICK event on (%{public}d, %{public}d)\n", x, y);
     }
     // Waiting for tick breath.
     usleep(sleepTicks * TICK);
@@ -240,11 +246,11 @@ void BasicTddTest::LongPress(int16_t x, int16_t y, uint8_t sleepTicks) const
     Point point = {x, y};
     EventInjector *injector = EventInjector::GetInstance();
     if (injector->SetLongPressEvent(point)) {
-        HILOG_DEBUG(HILOG_MODULE_ACE, "[BasicTddTest::LongPress]: Success to inject LONGPRESS event on (%d, %d)\n", x,
-                    y);
+        HILOG_DEBUG(HILOG_MODULE_ACE,
+                    "[BasicTddTest::LongPress]: Success to inject LONGPRESS event on (%{public}d, %{public}d)\n", x, y);
     } else {
-        HILOG_ERROR(HILOG_MODULE_ACE, "[BasicTddTest::LongPress]: Failed to inject LONGPRESS event on (%d, %d)\n", x,
-                    y);
+        HILOG_ERROR(HILOG_MODULE_ACE,
+                    "[BasicTddTest::LongPress]: Failed to inject LONGPRESS event on (%{public}d, %{public}d)\n", x, y);
     }
     // Waiting for tick breath.
     usleep(sleepTicks * TICK);
@@ -257,11 +263,14 @@ void BasicTddTest::Swipe(int16_t startX, int16_t startY, int16_t endX, int16_t e
     EventInjector *injector = EventInjector::GetInstance();
     if (injector->SetDragEvent(startPoint, endPoint, SWIPE_TIME)) {
         HILOG_DEBUG(HILOG_MODULE_ACE,
-                    "[BasicTddTest::Swipe]: Success to inject SWIPE event from (%d, %d) to (%d, %d)\n", startX, startY,
-                    endX, endY);
-    } else {
-        HILOG_ERROR(HILOG_MODULE_ACE, "[BasicTddTest::Swipe]: Failed to inject SWIPE from (%d, %d) to (%d, %d)\n",
+                    "[BasicTddTest::Swipe]: Success to inject SWIPE event from (%{public}d, %{public}d) to "
+                    "(%{public}d, %{public}d)\n",
                     startX, startY, endX, endY);
+    } else {
+        HILOG_ERROR(
+            HILOG_MODULE_ACE,
+            "[BasicTddTest::Swipe]: Failed to inject SWIPE from (%{public}d, %{public}d) to (%{public}d, %{public}d)\n",
+            startX, startY, endX, endY);
     }
 
     // Waiting for tick breath.
@@ -281,6 +290,7 @@ uint8_t BasicTddTest::GetChildrenSize(const UIViewGroup &grop) const
 
 void *BasicTddTest::TickHandler(void *args)
 {
+    (void)args;
     prctl(PR_SET_NAME, "TickTask");
     while (isTickTaskRunning_) {
         // Periodically call TaskHandler(). It could be done in a timer interrupt or an OS task too.

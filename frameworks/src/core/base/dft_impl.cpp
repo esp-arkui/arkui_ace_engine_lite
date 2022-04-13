@@ -15,7 +15,7 @@
 
 #include "dft_impl.h"
 
-#if (defined(OHOS_ACELITE_PRODUCT_WATCH)||(defined(FEATURE_CUSTOM_ENTRY_PAGE)))
+#if ((OHOS_ACELITE_PRODUCT_WATCH == 1) || (FEATURE_CUSTOM_ENTRY_PAGE == 1))
 #include "ace_log.h"
 #include "js_app_context.h"
 
@@ -43,7 +43,7 @@ char *DftImpl::GetPagePath()
         HILOG_ERROR(HILOG_MODULE_ACE, "malloc buffer for path failed.");
         return nullptr;
     }
-    if (memcpy_s(path, len, pagePath, len) != 0) {
+    if (memcpy_s(path, len, pagePath, len) != EOK) {
         ace_free(path);
         path = nullptr;
         return nullptr;

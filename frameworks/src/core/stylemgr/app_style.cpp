@@ -29,7 +29,7 @@ void AppStyle::SetStyleName(const char * const name, size_t nameLen)
         HILOG_ERROR(HILOG_MODULE_ACE, "create style_name failed.");
         return;
     }
-    if (memcpy_s(styleName_, nameLen, name, nameLen) != 0) {
+    if (memcpy_s(styleName_, nameLen, name, nameLen) != EOK) {
         HILOG_ERROR(HILOG_MODULE_ACE, "style_name set string value error");
         ace_free(styleName_);
         styleName_ = nullptr;
@@ -325,6 +325,29 @@ AppStyle *AppStyle::GenerateFromJS(jerry_value_t styleKey, jerry_value_t styleVa
     }
 
     return newStyle;
+}
+
+void AppStyle::CombineStyles(AppStyle &dest, const AppStyle &source, bool overwrite)
+{
+    const AppStyleItem *styleItem = source.GetFirst();
+    while (styleItem != nullptr) {
+        const AppStyleItem *currentStyleItemInSource = styleItem;
+        styleItem = styleItem->GetNext();
+        const AppStyleItem *existOneInDest = dest.GetStyleItemByNameId(currentStyleItemInSource->GetPropNameId());
+
+        if (existOneInDest == nullptr) {
+            dest.AddStyleItem(AppStyleItem::CopyFrom(currentStyleItemInSource));
+            continue;
+        }
+
+        if (!overwrite) {
+            // exist one has higher priority
+            continue;
+        }
+
+        // the new one has higher priority, to over wirte exist one
+        const_cast<AppStyleItem *>(existOneInDest)->UpdateValueFrom(*currentStyleItemInSource);
+    }
 }
 } // namespace ACELite
 } // namespace OHOS

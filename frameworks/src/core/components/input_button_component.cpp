@@ -55,6 +55,7 @@ void InputButtonComponent::ReleaseNativeViews()
     ACE_FREE(normalBackGroundImg_);
     ACE_FREE(pressedBackGroundImg_);
 }
+
 bool InputButtonComponent::SetPrivateAttribute(uint16_t attrKeyId, jerry_value_t attrValue)
 {
     switch (attrKeyId) {
@@ -201,6 +202,7 @@ bool InputButtonComponent::SetFontSize(const AppStyleItem *style)
     fontSize_ = GetStylePixelValue(style);
     return true;
 }
+
 void InputButtonComponent::PostRender()
 {
     if (textValue_ != nullptr && fontFamily_ != nullptr) {

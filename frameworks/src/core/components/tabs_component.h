@@ -18,7 +18,7 @@
 
 #include "acelite_config.h"
 
-#ifdef FEATURE_COMPONENT_TABS
+#if (FEATURE_COMPONENT_TABS == 1)
 
 #include "component.h"
 #include "non_copyable.h"
@@ -57,7 +57,7 @@ private:
     public:
         ACE_DISALLOW_COPY_AND_MOVE(ChangeListener);
         ChangeListener() = delete;
-        explicit ChangeListener(jerry_value_t fn) : fn_(jerry_acquire_value(fn)) {};
+        explicit ChangeListener(jerry_value_t fn) : fn_(jerry_acquire_value(fn)) {}
         ~ChangeListener()
         {
             jerry_release_value(fn_);

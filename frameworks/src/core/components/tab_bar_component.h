@@ -18,7 +18,7 @@
 
 #include "acelite_config.h"
 
-#ifdef FEATURE_COMPONENT_TABS
+#if (FEATURE_COMPONENT_TABS == 1)
 
 #include "component.h"
 #include "non_copyable.h"
@@ -30,7 +30,7 @@ public:
     ACE_DISALLOW_COPY_AND_MOVE(TabBarComponent);
     TabBarComponent() = delete;
     TabBarComponent(jerry_value_t options, jerry_value_t children, AppStyleManager* styleManager);
-    ~TabBarComponent(){};
+    ~TabBarComponent(){}
     int16_t GetWidth() const
     {
         return width_;

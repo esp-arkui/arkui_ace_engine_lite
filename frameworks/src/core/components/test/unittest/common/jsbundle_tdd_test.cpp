@@ -16,6 +16,7 @@
 #include "jsbundle_tdd_test.h"
 #include "component.h"
 #include "component_utils.h"
+#include "js_app_context.h"
 #include "js_app_environment.h"
 #include "js_fwk_common.h"
 #include "ui_label.h"
@@ -51,6 +52,7 @@ void JsbundleTddTest::SetUp()
 
 void JsbundleTddTest::TearDown()
 {
+    JsAppContext::GetInstance()->ReleaseStyles();
     JsAppEnvironment *env = JsAppEnvironment::GetInstance();
     env->Cleanup();
 }
@@ -365,7 +367,6 @@ void JsbundleTddTest::RunTests()
 /**
  * @tc.name: CreateElement_Attribute_Length_001
  * @tc.desc: Verify the _c function support analysising UIView attribute.
- * @tc.require: AR000DT0D4
  */
 HWTEST_F(JsbundleTddTest, attrlen001, TestSize.Level1)
 {
@@ -375,7 +376,6 @@ HWTEST_F(JsbundleTddTest, attrlen001, TestSize.Level1)
 /**
  * @tc.name: CreateElement_Attribute_Length_002
  * @tc.desc: Verify the _c function support analysising UILabel attribute.
- * @tc.require: AR000DT0D4
  */
 HWTEST_F(JsbundleTddTest, attrlen002, TestSize.Level1)
 {
@@ -385,7 +385,6 @@ HWTEST_F(JsbundleTddTest, attrlen002, TestSize.Level1)
 /**
  * @tc.name: CreateElement_Attribute_Length_003
  * @tc.desc: Verify the _c function support analysising simple UIViewGroup attribute.
- * @tc.require: AR000DT0D4
  */
 HWTEST_F(JsbundleTddTest, attrlen003, TestSize.Level1)
 {
@@ -395,7 +394,6 @@ HWTEST_F(JsbundleTddTest, attrlen003, TestSize.Level1)
 /**
  * @tc.name: CreateElement_Attribute_Length_004
  * @tc.desc: Verify the _c function support analysising complex UIViewGroup attribute.
- * @tc.require: AR000DT0D4
  */
 HWTEST_F(JsbundleTddTest, attrlen004, TestSize.Level0)
 {
@@ -405,7 +403,6 @@ HWTEST_F(JsbundleTddTest, attrlen004, TestSize.Level0)
 /**
  * @tc.name: CreateElement_Tag_Validation_005
  * @tc.desc: Verify the _c function support handling error parameter(-1).
- * @tc.require: AR000DT0D4
  */
 HWTEST_F(JsbundleTddTest, tagViali005, TestSize.Level1)
 {
@@ -415,7 +412,6 @@ HWTEST_F(JsbundleTddTest, tagViali005, TestSize.Level1)
 /**
  * @tc.name: CreateElement_Tag_Validation_006
  * @tc.desc: Verify the _c function support handling error parameter('customized-component').
- * @tc.require: AR000DT0D4
  */
 HWTEST_F(JsbundleTddTest, tagViali006, TestSize.Level1)
 {
@@ -425,7 +421,6 @@ HWTEST_F(JsbundleTddTest, tagViali006, TestSize.Level1)
 /**
  * @tc.name: CreateElement_Tag_Validation_007
  * @tc.desc: Verify the _c function support handling legal parameter('div').
- * @tc.require: AR000DT0D4
  */
 HWTEST_F(JsbundleTddTest, tagViali007, TestSize.Level1)
 {
@@ -435,7 +430,6 @@ HWTEST_F(JsbundleTddTest, tagViali007, TestSize.Level1)
 /**
  * @tc.name: CreateElement_2ndAttribute_Validation_008
  * @tc.desc: Verify the _c function support handling legal parameter('text', 1).
- * @tc.require: AR000DT0D4
  */
 HWTEST_F(JsbundleTddTest, attrVali008, TestSize.Level1)
 {
@@ -445,7 +439,6 @@ HWTEST_F(JsbundleTddTest, attrVali008, TestSize.Level1)
 /**
  * @tc.name: CreateElement_2ndAttribute_Validation_009
  * @tc.desc: Verify the _c function support handling legal parameter('text', { attrs: { value: 'Hello world' } }).
- * @tc.require: AR000DT0D4
  */
 HWTEST_F(JsbundleTddTest, attrVali009, TestSize.Level0)
 {
@@ -455,7 +448,6 @@ HWTEST_F(JsbundleTddTest, attrVali009, TestSize.Level0)
 /**
  * @tc.name: CreateElement_2ndAttribute_Validation_010
  * @tc.desc: Verify the _c function support handling legal parameter('text', []).
- * @tc.require: AR000DT0D4
  */
 HWTEST_F(JsbundleTddTest, attrVali010, TestSize.Level1)
 {
@@ -465,7 +457,6 @@ HWTEST_F(JsbundleTddTest, attrVali010, TestSize.Level1)
 /**
  * @tc.name: CreateElement_2ndAttribute_Validation_011
  * @tc.desc: Verify the _c function support handling legal parameter('div', [_c('text')]).
- * @tc.require: AR000DT0D4
  */
 HWTEST_F(JsbundleTddTest, attrVali011, TestSize.Level1)
 {
@@ -475,7 +466,6 @@ HWTEST_F(JsbundleTddTest, attrVali011, TestSize.Level1)
 /**
  * @tc.name: CreateElement_Children_Validation_012
  * @tc.desc: Verify the _c function support handling legal parameter('div', {}, []).
- * @tc.require: AR000DT0D4
  */
 HWTEST_F(JsbundleTddTest, ChildVali012, TestSize.Level1)
 {
@@ -485,7 +475,6 @@ HWTEST_F(JsbundleTddTest, ChildVali012, TestSize.Level1)
 /**
  * @tc.name: CreateElement_Children_Validation_013
  * @tc.desc: Verify the _c function support handling legal parameter('div', {}, [1]).
- * @tc.require: AR000DT0D4
  */
 HWTEST_F(JsbundleTddTest, ChildVali013, TestSize.Level1)
 {

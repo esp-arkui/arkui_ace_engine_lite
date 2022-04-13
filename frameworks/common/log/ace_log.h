@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,21 +18,21 @@
 
 #include "acelite_config.h"
 
-#if defined(FEATURE_ACELITE_HI_LOG_PRINTF) && defined(FEATURE_ACELITE_MC_LOG_PRINTF)
+#if ((FEATURE_ACELITE_HI_LOG_PRINTF == 1) && (FEATURE_ACELITE_MC_LOG_PRINTF == 1))
 #error Only one marco can be defined
-#elif defined(FEATURE_ACELITE_HI_LOG_PRINTF) && defined(TARGET_SIMULATOR)
+#elif ((FEATURE_ACELITE_HI_LOG_PRINTF == 1) && (TARGET_SIMULATOR == 1))
 #error Only one marco can be defined
-#elif defined(FEATURE_ACELITE_MC_LOG_PRINTF) && defined(TARGET_SIMULATOR)
+#elif ((FEATURE_ACELITE_MC_LOG_PRINTF == 1) && (TARGET_SIMULATOR == 1))
 #error Only one macro can be defined
 #endif
 
-#if defined(FEATURE_ACELITE_HI_LOG_PRINTF)
+#if (FEATURE_ACELITE_HI_LOG_PRINTF == 1)
 #undef LOG_DOMAIN
 #undef LOG_TAG
 #define LOG_DOMAIN 0xD003900
 #define LOG_TAG "ACE"
 #include "hilog/log.h"
-#elif defined(FEATURE_ACELITE_MC_LOG_PRINTF)
+#elif (FEATURE_ACELITE_MC_LOG_PRINTF == 1)
 #include "hilog/log.h"
 #ifndef HILOG_DEBUG
 #define HILOG_DEBUG(mod, format, ...)
@@ -52,7 +52,7 @@
 #ifndef HILOG_RACE
 #define HILOG_RACE(mod, format, ...)
 #endif
-#elif (defined(TARGET_SIMULATOR))
+#elif (TARGET_SIMULATOR == 1)
 namespace OHOS {
 namespace ACELite {
 typedef enum { HILOG_MODULE_ACE = 1 } HiLogModuleType;

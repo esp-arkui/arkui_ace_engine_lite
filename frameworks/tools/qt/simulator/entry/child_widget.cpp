@@ -110,12 +110,12 @@ void ChildWidget::RestartApp() const
 
 void ChildWidget::StartApp(const char *path)
 {
-    if (path == nullptr || ((path != nullptr) && (strlen(path) == 0))) {
+    if (path == nullptr || (strlen(path) == 0)) {
         return;
     }
     // start all necessary mock threads
     mockServices_.StartAll();
-    const unsigned long breakTime = 30;
+    const uint32_t breakTime = 30;
     QThread::msleep(breakTime);
     StartAbility(path, "com.app.example");
 }

@@ -24,19 +24,37 @@ FatalHandleFunc JsAsyncWork::isAppExiting_ = nullptr;
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
 PostUITaskFunc JsAsyncWork::postUITask_ = nullptr;
 #endif
+bool JsAsyncWork::isEnvInitialized_ = false;
 
 void JsAsyncWork::SetAppQueueHandler(const QueueHandler handler)
 {
     appQueuehandler_ = handler;
 }
 
+void JsAsyncWork::SetEnvStatus(bool envInitialized)
+{
+    isEnvInitialized_ = envInitialized;
+}
+
 bool JsAsyncWork::DispatchToLoop(AbilityMsgId msgId, void *data)
 {
-    if ((appQueuehandler_ == nullptr) || (msgId >= MSG_ID_MAX) ||
-        (isFatalErrorHitted_ != nullptr && isFatalErrorHitted_()) ||
-        (isAppExiting_ != nullptr && isAppExiting_())) {
-        // For the cases fatal error handling or the JS task is exiting, do not allow any async work dispatching,
-        // as the messages after DESTROY will never be handled.
+    if (appQueuehandler_ == nullptr || !isEnvInitialized_) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "JsAsyncWork:DispatchAsyncWork app not launched yet!");
+        return false;
+    }
+
+    if (msgId >= MSG_ID_MAX) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "JsAsyncWork:DispatchAsyncWork invalid msgId[%{public}d]!", msgId);
+        return false;
+    }
+
+    if (isFatalErrorHitted_ != nullptr && isFatalErrorHitted_()) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "JsAsyncWork:DispatchAsyncWork fatal error hitted, app will exit");
+        return false;
+    }
+
+    if (isAppExiting_ != nullptr && isAppExiting_()) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "JsAsyncWork:DispatchAsyncWork app is exiting");
         return false;
     }
 
@@ -59,12 +77,15 @@ bool JsAsyncWork::DispatchAsyncWork(AsyncHandler handler, void *data)
 
 bool JsAsyncWork::DispatchAsyncWorkInner(AsyncWorkHandler workHandler, AsyncHandler handler, void *data)
 {
-    if (((workHandler == nullptr) && (handler == nullptr)) ||
-        (isFatalErrorHitted_ != nullptr && isFatalErrorHitted_())) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "JsAsyncWork:DispatchAsyncWork parameters invalid or fatal error!");
+    if ((workHandler == nullptr) && (handler == nullptr)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "JsAsyncWork:DispatchAsyncWork parameters invalid");
         return false;
     }
 
+    if ((isFatalErrorHitted_ != nullptr) && (isFatalErrorHitted_())) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "JsAsyncWork:DispatchAsyncWork fatal processing, app will exit");
+        return false;
+    }
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
     if ((workHandler != nullptr) && (postUITask_ != nullptr)) {
         auto task1 = [workHandler, data]() {
@@ -91,7 +112,7 @@ bool JsAsyncWork::DispatchAsyncWorkInner(AsyncWorkHandler workHandler, AsyncHand
 
     bool ret = DispatchToLoop(ASYNCWORK, static_cast<void *>(asyncWork));
     if (!ret) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "JsAsyncWork:DispatchAsyncWork failed!, handler[%{private}p]",
+        HILOG_ERROR(HILOG_MODULE_ACE, "JsAsyncWork:DispatchAsyncWork failed!, handler[%{public}p]",
             asyncWork->workHandler);
         delete(asyncWork);
         asyncWork = nullptr;

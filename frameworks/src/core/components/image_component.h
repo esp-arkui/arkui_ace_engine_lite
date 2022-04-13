@@ -24,20 +24,34 @@
 
 namespace OHOS {
 namespace ACELite {
+struct ImageAttrMap {
+    ACE_DISALLOW_COPY_AND_MOVE(ImageAttrMap);
+    const char *attrName;
+    jerry_external_handler_t setterName;
+    jerry_external_handler_t getterName;
+};
+
 class ImageComponent final : public Component {
 public:
     ACE_DISALLOW_COPY_AND_MOVE(ImageComponent);
     ImageComponent() = delete;
     ImageComponent(jerry_value_t options, jerry_value_t children, AppStyleManager *styleManager);
     ~ImageComponent() override {}
+    const char *GetSrc();
 
 protected:
     bool CreateNativeViews() override;
     UIView *GetComponentRootView() const override;
     bool SetPrivateAttribute(uint16_t attrKeyId, jerry_value_t attrValue) override;
-
+    bool ApplyPrivateStyle(const AppStyleItem *style) override;
+    void UpdateResizeMode(uint16_t mode);
+    void UpdateWidgetFitMode();
 private:
     UIImageView imageView_;
+    UIImageView::ImageResizeMode resizeMode_ = UIImageView::ImageResizeMode::COVER;
+    bool fitOriginalSize_ : 1;
+    bool hasSetWidth_ : 1;
+    bool hasSetHeight_ : 1;
 };
 } // namespace ACELite
 } // namespace OHOS

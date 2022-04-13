@@ -30,7 +30,7 @@ ListComponent::ListComponent(JSValue options, JSValue children, AppStyleManager 
 {
     SetComponentName(K_LIST);
     RegisterNamedFunction(FUNC_SCROLLTO, ListScrollTo);
-#ifdef FEATURE_ROTATION_API
+#if (FEATURE_ROTATION_API == 1)
     RegisterNamedFunction(FUNC_ROTATION_NAME, HandleRotationRequest);
 #endif // FEATURE_ROTATION_API
 }
@@ -103,6 +103,12 @@ bool ListComponent::RegisterPrivateEventListener(uint16_t eventTypeId, JSValue f
         case K_SCROLLEND:
             listEventListener_.SetBindScrollEndFuncName(funcValue);
             break;
+        case K_SCROLLTOP:
+            listEventListener_.SetBindScrollTopFuncName(funcValue);
+            break;
+        case K_SCROLLBOTTOM:
+            listEventListener_.SetBindScrollBottomFuncName(funcValue);
+            break;
         default:
             return false;
     }
@@ -138,7 +144,10 @@ void ListComponent::OnViewAttached()
     adapter_.UpdateContentAlignParam(listParameter);
     adapter_.SetDirection(list_.GetDirection());
     // Step4. add children to list dynamically.
-    list_.SetAdapter(&adapter_);
+    if (!hasSetAdaptor_) {
+        list_.SetAdapter(&adapter_);
+        hasSetAdaptor_ = true;
+    }
 }
 
 bool ListComponent::UpdateForView()

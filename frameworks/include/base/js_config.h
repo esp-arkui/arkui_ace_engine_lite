@@ -23,8 +23,8 @@
  *     #if DISABLED(LOG_OUTPUT)
  *     #if ENABLED(LOG_OUTPUT)
  */
-#define ENABLED(CONFIGURATION) ((CONFIGURATION) == 1)
-#define DISABLED(CONFIGURATION) ((CONFIGURATION) != 1)
+#define IS_ENABLED(CONFIGURATION) ((CONFIGURATION) == 1)
+#define IS_DISABLED(CONFIGURATION) ((CONFIGURATION) != 1)
 
 /**
  * Enable/Disable JS framework runtime performance measurement.
@@ -36,7 +36,7 @@
  * Default: 1
  */
 #ifndef JS_PROFILER
-#define JS_PROFILER 1
+#define JS_PROFILER 0
 #endif
 
 /**
@@ -59,7 +59,7 @@
  *
  * Default: 0 on real device and 1 on PC simulator
  */
-#ifdef TARGET_SIMULATOR
+#if (TARGET_SIMULATOR == 1)
 #define ENGINE_DEBUGGER 1
 #else
 #define ENGINE_DEBUGGER 0

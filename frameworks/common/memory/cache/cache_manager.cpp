@@ -49,8 +49,9 @@ void CacheManager::ResetDistributedInfo()
 {
     wholeCacheMemInfo_.cacheStartAddr = 0;
     wholeCacheMemInfo_.cacheLength = 0;
-    if (EOK !=
-        memset_s(cacheUnitInfo_, sizeof(CacheMemInfo) * USER_MAX_COUNT, 0, sizeof(CacheMemInfo) * USER_MAX_COUNT)) {
+    auto ret = memset_s(cacheUnitInfo_, sizeof(CacheMemInfo) * USER_MAX_COUNT,
+        0, sizeof(CacheMemInfo) * USER_MAX_COUNT);
+    if (ret != EOK) {
         HILOG_ERROR(HILOG_MODULE_ACE, "reset cache info failed");
     }
 }
@@ -183,12 +184,12 @@ bool CacheManager::IsCacheOverflow(CacheUser user) const
     uint32_t tailMagicNumber = reinterpret_cast<uint32_t>(*(bufferTail));
     // if the head magic number was over write, it means someone else overflow this area
     if (headMagicNumber != CACHE_MEM_MAGIC_NUMBER) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "the cache buffer[%d] was overflown by someone else?", user);
+        HILOG_ERROR(HILOG_MODULE_ACE, "the cache buffer[%{public}d] was overflown by someone else?", user);
         return true;
     }
     // if the tail magic number was over write, it means the user itself overflow this area
     if (tailMagicNumber != CACHE_MEM_MAGIC_NUMBER) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "the cache buffer[%d] was overflown by self?", user);
+        HILOG_ERROR(HILOG_MODULE_ACE, "the cache buffer[%{public}d] was overflown by self?", user);
         return true;
     }
     return false;

@@ -32,6 +32,10 @@ limitations under the License.
   </list-item>
   <list-item class="separatorContainerStyle"> </list-item>
   <list-item class="buttonContainerStyle">
+    <input type="button" class="buttonStyle" value="list-item" onclick="changeListItem" />
+  </list-item>
+  <list-item class="separatorContainerStyle"> </list-item>
+  <list-item class="buttonContainerStyle">
     <input type="button" class="buttonStyle" value="stack" onclick="changeStack" />
   </list-item>
   <list-item class="separatorContainerStyle"> </list-item>

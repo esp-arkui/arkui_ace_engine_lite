@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -31,7 +31,7 @@
 #include "js_app_context.h"
 #include "js_app_environment.h"
 #include "js_profiler.h"
-#if ENABLED(CONSOLE_LOG_OUTPUT)
+#if IS_ENABLED(CONSOLE_LOG_OUTPUT)
 #include "presets/console_module.h"
 #endif
 #include "presets/console_log_impl.h"
@@ -39,7 +39,7 @@
 #include "securec.h"
 #include "task_manager.h"
 
-#if ((defined __LITEOS__) || (defined __linux__) || (defined SCREENSIZE_SPECIFIED))
+#if ((defined __LITEOS__) || (defined __linux__) || (SCREENSIZE_SPECIFIED == 1))
 #include <screen.h>
 #endif
 
@@ -167,7 +167,7 @@ char *MallocStringOf(jerry_value_t source, uint16_t *strLength)
 
         length = jerry_string_to_char_buffer(target, buffer, size);
         if ((length == 0) || (length >= UINT16_MAX) || (length > size)) {
-            HILOG_ERROR(HILOG_MODULE_ACE, "jerry string to char buffer failed, target size[%d]", size);
+            HILOG_ERROR(HILOG_MODULE_ACE, "jerry string to char buffer failed, target size[%{public}d]", size);
             break;
         }
         success = true;
@@ -256,7 +256,7 @@ void PrintErrorMessage(const jerry_value_t errorValue)
     DfxAssist dfxAssist;
     dfxAssist.DumpErrorCode(errorValue);
     dfxAssist.DumpErrorMessage(errorValue);
-#if ENABLED(ENGINE_DEBUGGER)
+#if IS_ENABLED(ENGINE_DEBUGGER)
     FlushOutput();
 #endif
 }
@@ -313,7 +313,7 @@ jerry_value_t CallJSWatcher(jerry_value_t arg1,
     return watcher;
 }
 
-#ifdef JS_TOUCH_EVENT_SUPPORT
+#ifdef JS_EXTRA_EVENT_SUPPORT
 bool CallBaseEvent(const jerry_value_t func, const Event &event, const uint16_t id)
 {
     if (!jerry_value_is_function(func)) {
@@ -416,7 +416,7 @@ static size_t AppendTwoPath(char * const first, uint8_t startIndex, const char *
             if (memcpy_s(first + startIndex, (destSize - startIndex), (sec + 1), (secLength - 1)) != 0) {
                 HILOG_ERROR(HILOG_MODULE_ACE, "append path error");
                 return 0;
-            };
+            }
 
             copiedLength = copiedLength + (secLength - 1);
             startIndex = startIndex + (secLength - 1);
@@ -439,8 +439,8 @@ char *RelocateFilePath(const char *appRootPath, const char *subPath, const char 
 {
     size_t appRootPathLength = 0;
     size_t fileNameLength = 0;
-    if ((appRootPath == nullptr) || ((appRootPathLength = strlen(appRootPath)) == 0) ||
-        (fileName == nullptr) || ((fileNameLength = strlen(fileName)) == 0)) {
+    if ((appRootPath == nullptr) || ((appRootPathLength = strlen(appRootPath)) == 0) || (fileName == nullptr) ||
+        ((fileNameLength = strlen(fileName)) == 0)) {
         HILOG_ERROR(HILOG_MODULE_ACE, "input path or fileName is invalid");
         return nullptr;
     }
@@ -456,7 +456,7 @@ char *RelocateFilePath(const char *appRootPath, const char *subPath, const char 
     size_t totalLength = appRootPathLength + subPathLength + fileNameLength + addedLength;
     char *fullPath = static_cast<char *>(ace_malloc(totalLength + 1));
     if (fullPath == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "malloc buffer for path failed, needed length[%u]", (totalLength + 1));
+        HILOG_ERROR(HILOG_MODULE_ACE, "malloc buffer for path failed, needed length[%{public}u]", (totalLength + 1));
         return nullptr;
     }
     fullPath[0] = '\0';
@@ -511,9 +511,9 @@ char *RelocateFilePathRelative(const char * const appRootPath, const char * cons
     dirPath[len] = '\0';
     // first splice resFileName with directory path
     char *filePath = RelocateFilePath(dirPath, SRC_SUB_FOLDER_NAME, resFileName);
-    if (dirPath != nullptr) {
+    if (filePath != nullptr) {
         ace_free(dirPath);
-        dirPath = nullptr;
+        filePath = nullptr;
     }
     // second splice root path with res file path
     char *realPath = nullptr;
@@ -577,7 +577,7 @@ int32_t GetFileSize(const char * const filePath)
     struct stat info = {0};
     int32_t ret = stat(filePath, &info);
     if (ret < 0) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "file doesn't exit or it's empty, [%s]", filePath);
+        HILOG_ERROR(HILOG_MODULE_ACE, "file doesn't exit or it's empty, [%{public}s]", filePath);
     }
     return info.st_size;
 }
@@ -585,7 +585,7 @@ int32_t GetFileSize(const char * const filePath)
 static int32_t OpenFileInternal(const char * const orgFullPath, bool binary = false)
 {
     const char *path = orgFullPath;
-#ifndef QT_SIMULATOR
+#if (QT_SIMULATOR != 1)
 #ifndef __LITEOS_M__ // no path canonicalization on M core
     char fullPath[PATH_MAX + 1] = {0};
 #if ((defined(__WIN32)) || (defined(__WIN64)))
@@ -594,7 +594,7 @@ static int32_t OpenFileInternal(const char * const orgFullPath, bool binary = fa
     }
 #else
     if (realpath(orgFullPath, fullPath) == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "realpath handle failed, [%s]", orgFullPath);
+        HILOG_ERROR(HILOG_MODULE_ACE, "realpath handle failed, [%{public}s]", orgFullPath);
         return -1;
     }
 #endif
@@ -636,7 +636,7 @@ static bool CheckFileLength(const char * const fullPath, int32_t &outFileSize)
     outFileSize = 0;
     int32_t fileSize = GetFileSize(fullPath);
     if (fileSize <= 0) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "open file[%s] failed for reading.", fullPath);
+        HILOG_ERROR(HILOG_MODULE_ACE, "open file[%{public}s] failed for reading.", fullPath);
         return false;
     }
     if (fileSize > FILE_CONTENT_LENGTH_MAX) {
@@ -668,13 +668,14 @@ char *ReadFile(const char * const fullPath, uint32_t &fileSize, const bool binar
         fileSize = 0;
         fd = OpenFileInternal(fullPath, O_RDONLY);
         if (fd < 0) {
-            HILOG_ERROR(HILOG_MODULE_ACE, "open file[fd: %d] failed for reading", fd);
-            HILOG_ERROR(HILOG_MODULE_ACE, "open file[path: %s] failed for reading", fullPath);
+            HILOG_ERROR(HILOG_MODULE_ACE, "open file[fd: %{public}d] failed for reading", fd);
+            HILOG_ERROR(HILOG_MODULE_ACE, "open file[path: %{public}s] failed for reading", fullPath);
             break;
         }
         scriptBuffer = static_cast<char *>(ace_malloc(scriptLength + 1));
         if (scriptBuffer == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_ACE, "malloc buffer for file content failed, file length[%d]", scriptLength);
+            HILOG_ERROR(HILOG_MODULE_ACE, "malloc buffer for file content failed, file length[%{public}d]",
+                        scriptLength);
             break;
         }
         if (EOK != memset_s(scriptBuffer, (scriptLength + 1), 0, (scriptLength + 1))) {
@@ -682,7 +683,8 @@ char *ReadFile(const char * const fullPath, uint32_t &fileSize, const bool binar
         }
         int32_t count = read(fd, scriptBuffer, scriptLength);
         if ((count <= 0) || (count > scriptLength)) {
-            HILOG_ERROR(HILOG_MODULE_ACE, "read fail, count(%d), length(%u), path(%s)", count, scriptLength, fullPath);
+            HILOG_ERROR(HILOG_MODULE_ACE, "read fail, count(%{public}d), length(%{public}u), path(%{public}s)", count,
+                        scriptLength, fullPath);
             break;
         }
         scriptBuffer[count] = '\0';
@@ -785,7 +787,8 @@ char *CreatePathStrFromUrl(const char * const url)
     }
     char *filePath = static_cast<char *>(ace_malloc(pathLength + 1));
     if (filePath == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "malloc buffer for file path calculating from url, file length[%d]", pathLength);
+        HILOG_ERROR(HILOG_MODULE_ACE, "malloc buffer for file path calculating from url, file length[%{public}d]",
+                    pathLength);
         return nullptr;
     }
     if (memcpy_s(filePath, pathLength, (url + start), pathLength) != 0) {
@@ -973,15 +976,13 @@ bool ParseHexColor(const char * const source, uint32_t &color, uint8_t &alpha)
     // Parse HEX color like #ABC
     if (length == LENGTH_RGB) {
         // #ABC equals to #AABBCC
-        char buffer[LENGTH_RRGGBB + 1] = {
-            source[IDX_RGB_RED],
-            source[IDX_RGB_RED],
-            source[IDX_RGB_GREEN],
-            source[IDX_RGB_GREEN],
-            source[IDX_RGB_BLUE],
-            source[IDX_RGB_BLUE],
-            0
-        };
+        char buffer[LENGTH_RRGGBB + 1] = {source[IDX_RGB_RED],
+                                          source[IDX_RGB_RED],
+                                          source[IDX_RGB_GREEN],
+                                          source[IDX_RGB_GREEN],
+                                          source[IDX_RGB_BLUE],
+                                          source[IDX_RGB_BLUE],
+                                          0};
         color = strtol(buffer, nullptr, HEX);
         alpha = ALPHA_MAX;
         return true;
@@ -1094,11 +1095,12 @@ struct JSPageSpecific jsPageSpecific;
 uint16_t GetHorizontalResolution()
 {
 // SCREENSIZE_SPECIFIED is temporarily set, when ui and graphic unifid, this can be removed
-#if ((defined __LITEOS__) || (defined __linux__) || (defined SCREENSIZE_SPECIFIED))
+#if ((defined __LITEOS__) || (defined __linux__) || (SCREENSIZE_SPECIFIED == 1))
     return Screen::GetInstance().GetWidth();
 #else
-    uint16_t horizontalResolution = 454;
-    uint16_t verticalResolution = 454;
+    constexpr uint16_t resConst = 454;
+    uint16_t horizontalResolution = resConst;
+    uint16_t verticalResolution = resConst;
     ProductAdapter::GetScreenSize(horizontalResolution, verticalResolution);
     return horizontalResolution;
 #endif // OHOS_ACELITE_PRODUCT_WATCH
@@ -1106,11 +1108,11 @@ uint16_t GetHorizontalResolution()
 
 uint16_t GetVerticalResolution()
 {
-#if ((defined __LITEOS__) || (defined __linux__) || (defined SCREENSIZE_SPECIFIED))
+#if ((defined __LITEOS__) || (defined __linux__) || (SCREENSIZE_SPECIFIED == 1))
     return Screen::GetInstance().GetHeight();
 #else
-    uint16_t horizontalResolution = 454;
-    uint16_t verticalResolution = 454;
+    uint16_t horizontalResolution = resConst;
+    uint16_t verticalResolution = resConst;
     ProductAdapter::GetScreenSize(horizontalResolution, verticalResolution);
     return verticalResolution;
 #endif // OHOS_ACELITE_PRODUCT_WATCH
@@ -1156,14 +1158,15 @@ void ExpandImagePathMem(char *&imagePath, const int16_t dotPos, const int16_t su
     }
     char *newImagePath = static_cast<char *>(ace_malloc(len));
     if (newImagePath == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "malloc buffer for path failed, needed length[%u]", (dotPos + 1 + suffixLen + 1));
+        HILOG_ERROR(HILOG_MODULE_ACE, "malloc buffer for path failed, needed length[%{public}u]",
+                    (dotPos + 1 + suffixLen + 1));
         ACE_FREE(imagePath);
         return;
     }
 
     errno_t err = strcpy_s(newImagePath, len, imagePath);
     if (err != 0) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "use strcpy_s secure function errro(%d)", err);
+        HILOG_ERROR(HILOG_MODULE_ACE, "use strcpy_s secure function [errro:%{public}d]", err);
         ace_free(newImagePath);
         newImagePath = nullptr;
         ACE_FREE(imagePath);
@@ -1174,7 +1177,7 @@ void ExpandImagePathMem(char *&imagePath, const int16_t dotPos, const int16_t su
     imagePath = newImagePath;
 }
 
-#ifdef OHOS_ACELITE_PRODUCT_WATCH
+#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
 void CureImagePath(char *&imagePath)
 {
     if (imagePath == nullptr) {
@@ -1209,10 +1212,10 @@ void CureImagePath(char *&imagePath)
     // else means the file name is wrong.
     if ((dotPos - lastPathPos) > 1) {
         // if suffix length < 3, need expand memory first.
-        if (imagePathLen < (suffixLen + dotPos + 1)) {
+        if (static_cast<int16_t>(imagePathLen) < (suffixLen + dotPos + 1)) {
             ExpandImagePathMem(imagePath, dotPos, suffixLen, imagePathLen);
             if (imagePath == nullptr) {
-                HILOG_ERROR(HILOG_MODULE_ACE, "malloc buffer for path failed, needed length[%u]",
+                HILOG_ERROR(HILOG_MODULE_ACE, "malloc buffer for path failed, needed length[%{public}d]",
                             (dotPos + 1 + suffixLen + 1));
                 return;
             }
@@ -1260,7 +1263,7 @@ const char *ParseImageSrc(jerry_value_t source)
     char *imageSrc = JsAppContext::GetInstance()->GetResourcePath(rawSrc);
     ace_free(rawSrc);
     rawSrc = nullptr;
-#ifdef OHOS_ACELITE_PRODUCT_WATCH
+#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
     CureImagePath(imageSrc);
 #endif // OHOS_ACELITE_PRODUCT_WATCH
     return imageSrc;

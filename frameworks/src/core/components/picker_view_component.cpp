@@ -20,10 +20,16 @@
 #include "keys.h"
 #include "product_adapter.h"
 #include "ui_font.h"
+#ifdef FEATURE_EXTRA_TEXT_X_SUPPORT
+#include "ui_picker_x.h"
+#define UIPickerTypeWrapper UIPickerX
+#else
+#define UIPickerTypeWrapper UIPicker
+#endif // FEATURE_EXTRA_TEXT_X_SUPPORT
 
 namespace OHOS {
 namespace ACELite {
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
 void DatePickerListener::OnDatePickerStoped(UIDatePicker &picker)
 {
     if (!jerry_value_is_function(dateCallback_)) {
@@ -88,7 +94,7 @@ PickerViewComponent::PickerViewComponent(jerry_value_t options, jerry_value_t ch
       pTextArray_(nullptr),
       textArraySize_(0),
       textPickerListener_(nullptr),
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
       dateSelected_(nullptr),
       dateStart_(nullptr),
       dateEnd_(nullptr),
@@ -99,7 +105,7 @@ PickerViewComponent::PickerViewComponent(jerry_value_t options, jerry_value_t ch
 {
     SetComponentName(K_PICKER_VIEW);
     fontSize_ = ProductAdapter::GetDefaultFontSize();
-#ifdef FEATURE_ROTATION_API
+#if (FEATURE_ROTATION_API == 1)
     RegisterNamedFunction(FUNC_ROTATION_NAME, HandleRotationRequest);
 #endif // FEATURE_ROTATION_API
 }
@@ -117,7 +123,7 @@ bool PickerViewComponent::CreateNativeViews()
             result = CreateTimePicker();
             break;
         }
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
         case PickerType::DATE: {
             result = CreateDatePicker();
             break;
@@ -144,7 +150,7 @@ bool PickerViewComponent::CreateNativeViews()
 
 bool PickerViewComponent::CreateTextPicker()
 {
-    UIPicker *uiPicker = new UIPicker();
+    UIPickerTypeWrapper *uiPicker = new UIPickerTypeWrapper();
     if (uiPicker == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "PickerViewComponent: create text picker failed!");
         return false;
@@ -184,7 +190,7 @@ bool PickerViewComponent::CreateTimePicker()
     return true;
 }
 
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
 bool PickerViewComponent::CreateDatePicker()
 {
     UIDatePicker *uiDatePicker = new UIDatePicker();
@@ -242,7 +248,7 @@ void PickerViewComponent::ReleaseNativeViews()
     ACE_FREE(fontFamily_);
     ACE_FREE(selectedFontFamily_);
 
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
     // free date picker resources
     if (datePickerListener_ != nullptr) {
         delete datePickerListener_;
@@ -279,7 +285,7 @@ void PickerViewComponent::PostUpdate(uint16_t attrKeyId)
 
     switch (attrKeyId) {
         case K_SELECTED:
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
         case K_START:
         case K_END:
 #endif // FEATURE_COMPONENT_DATE_PICKER
@@ -328,7 +334,7 @@ void PickerViewComponent::UpdatePickerStyles() const
             timePicker->SetTextColor(color_, selectedColor_);
             break;
         }
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
         case PickerType::DATE: {
             uint8_t fontId = font->GetFontId(fontFamily_, fontSize_);
             uint8_t selectedFontId = font->GetFontId(selectedFontFamily_, selectedFontSize_);
@@ -361,7 +367,7 @@ void PickerViewComponent::UpdatePickerAttrs() const
             }
             break;
         }
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
         case PickerType::DATE: {
             UIDatePicker *datePicker = reinterpret_cast<UIDatePicker *>(pickerView_);
             if (dateStart_ != nullptr) {
@@ -395,7 +401,7 @@ bool PickerViewComponent::SetPrivateAttribute(uint16_t attrKeyId, jerry_value_t 
             }
             break;
         }
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
         case K_START: {
             if (pickerType_ == PickerType::DATE) {
                 ACE_FREE(dateStart_);
@@ -508,7 +514,7 @@ PickerViewComponent::PickerType PickerViewComponent::GetPickerType() const
         case K_TIME:
             type = PickerType::TIME;
             break;
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
         case K_DATE:
             type = PickerType::DATE;
             break;
@@ -534,7 +540,7 @@ bool PickerViewComponent::SetPickerSelected(jerry_value_t selectedValue)
             timeSelected_ = MallocStringOf(selectedValue);
             break;
         }
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
         case PickerType::DATE: {
             ACE_FREE(dateSelected_);
             dateSelected_ = MallocStringOf(selectedValue);
@@ -566,7 +572,7 @@ void PickerViewComponent::SetPickerListener(jerry_value_t funcValue) const
             }
             break;
         }
-#ifdef FEATURE_COMPONENT_DATE_PICKER
+#if (FEATURE_COMPONENT_DATE_PICKER == 1)
         case PickerType::DATE: {
             if (datePickerListener_ != nullptr) {
                 UIDatePicker *datePicker = reinterpret_cast<UIDatePicker *>(pickerView_);

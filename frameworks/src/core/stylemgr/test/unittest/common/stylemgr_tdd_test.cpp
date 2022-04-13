@@ -350,7 +350,7 @@ void StyleMgrTddTest::ACELiteStyleManagerInlineStyle003()
      * @tc.steps: step2. prepare valid style sheet
      */
     constexpr char id[] = "idSelectors";
-    constexpr char *sample = "sample";
+    const char *sample = "sample";
     constexpr char heightKey[] = "height";
     constexpr int32_t heightValue = 50;
     JSValue styleSheetObj = PrepareStyleSheet(id, sample, heightKey, heightValue);
@@ -412,7 +412,7 @@ void StyleMgrTddTest::ACELiteStyleManagerInlineStyle004()
      * @tc.steps: step2. prepare valid style sheet with class selector
      */
     constexpr char classSelector[] = "classSelectors";
-    constexpr char *sample = "sampleClass";
+    const char *sample = "sampleClass";
     constexpr char widthKey[] = "width";
     constexpr int32_t widthValue = 200;
     JSValue styleSheetObj = PrepareStyleSheet(classSelector, sample, widthKey, widthValue);
@@ -937,7 +937,6 @@ void StyleMgrTddTest::RunTests()
 /**
  * @tc.name: ACELiteStyleManagerInlineStyle001
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000DSEEQ
  */
 HWTEST_F(StyleMgrTddTest, InlineStyle001, TestSize.Level1)
 {
@@ -947,7 +946,6 @@ HWTEST_F(StyleMgrTddTest, InlineStyle001, TestSize.Level1)
 /**
  * @tc.name: ACELiteStyleManagerInlineStyle002
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000DSEEQ
  */
 HWTEST_F(StyleMgrTddTest, InlineStyle002, TestSize.Level1)
 {
@@ -957,7 +955,6 @@ HWTEST_F(StyleMgrTddTest, InlineStyle002, TestSize.Level1)
 /**
  * @tc.name: ACELiteStyleManagerInlineStyle003
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000DSEEQ
  */
 HWTEST_F(StyleMgrTddTest, InlineStyle003, TestSize.Level1)
 {
@@ -967,7 +964,6 @@ HWTEST_F(StyleMgrTddTest, InlineStyle003, TestSize.Level1)
 /**
  * @tc.name: ACELiteStyleManagerInlineStyle004
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000DSEEQ
  */
 HWTEST_F(StyleMgrTddTest, InlineStyle004, TestSize.Level1)
 {
@@ -977,7 +973,6 @@ HWTEST_F(StyleMgrTddTest, InlineStyle004, TestSize.Level1)
 /**
  * @tc.name: ACELiteStyleManagerInlineStyle005
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000DSEEQ
  */
 HWTEST_F(StyleMgrTddTest, InlineStyle005, TestSize.Level0)
 {
@@ -987,7 +982,6 @@ HWTEST_F(StyleMgrTddTest, InlineStyle005, TestSize.Level0)
 /**
  * @tc.name: ACELiteStyleManagerIDSelector001
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000DSEER
  */
 HWTEST_F(StyleMgrTddTest, IDSelector001, TestSize.Level1)
 {
@@ -997,7 +991,6 @@ HWTEST_F(StyleMgrTddTest, IDSelector001, TestSize.Level1)
 /**
  * @tc.name: ACELiteStyleManagerIDSelector002
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000DSEER
  */
 HWTEST_F(StyleMgrTddTest, IDSelector002, TestSize.Level1)
 {
@@ -1007,7 +1000,6 @@ HWTEST_F(StyleMgrTddTest, IDSelector002, TestSize.Level1)
 /**
  * @tc.name: ACELiteStyleManagerIDSelector003
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000DSEER
  */
 HWTEST_F(StyleMgrTddTest, IDSelector003, TestSize.Level1)
 {
@@ -1017,7 +1009,6 @@ HWTEST_F(StyleMgrTddTest, IDSelector003, TestSize.Level1)
 /**
  * @tc.name: ACELiteStyleManagerIDSelector004
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000DSEER
  */
 HWTEST_F(StyleMgrTddTest, IDSelector004, TestSize.Level1)
 {
@@ -1027,7 +1018,6 @@ HWTEST_F(StyleMgrTddTest, IDSelector004, TestSize.Level1)
 /**
  * @tc.name: ACELiteStyleManagerIDSelector005
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000DSEER
  */
 HWTEST_F(StyleMgrTddTest, IDSelector005, TestSize.Level0)
 {
@@ -1037,7 +1027,6 @@ HWTEST_F(StyleMgrTddTest, IDSelector005, TestSize.Level0)
 /**
  * @tc.name: ACELiteStyleManagerClassSelector001
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000DSEES
  */
 HWTEST_F(StyleMgrTddTest, ClassSelector001, TestSize.Level1)
 {
@@ -1047,7 +1036,6 @@ HWTEST_F(StyleMgrTddTest, ClassSelector001, TestSize.Level1)
 /**
  * @tc.name: ACELiteStyleManagerClassSelector002
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000DSEES
  */
 HWTEST_F(StyleMgrTddTest, ClassSelector002, TestSize.Level1)
 {
@@ -1057,7 +1045,6 @@ HWTEST_F(StyleMgrTddTest, ClassSelector002, TestSize.Level1)
 /**
  * @tc.name: ACELiteStyleManagerClassSelector003
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000DSEES
  */
 HWTEST_F(StyleMgrTddTest, ClassSelector003, TestSize.Level1)
 {
@@ -1067,7 +1054,6 @@ HWTEST_F(StyleMgrTddTest, ClassSelector003, TestSize.Level1)
 /**
  * @tc.name: ACELiteStyleManagerCSSPesudo001
  * @tc.desc: Verify the style sheet initialization.
- * @tc.require: AR000E2TCI
  */
 HWTEST_F(StyleMgrTddTest, CSSPesudo001, TestSize.Level0)
 {
