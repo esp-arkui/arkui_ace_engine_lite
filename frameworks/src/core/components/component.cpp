@@ -1739,18 +1739,13 @@ void Component::RemoveChild(Component *childNode)
             // found it
             break;
         }
-        temp = const_cast<Component *>(temp->GetNextSibling());
     }
     if (temp == nullptr) {
         // not found
         return;
     }
 
-    // the head itself is the last one
-    if (temp == childHead_) {
-        childHead_ = nullptr;
-    }
-    temp->SetNextSibling(nullptr);
+    temp->SetNextSibling(childNode->GetNextSibling());
     childNode->SetNextSibling(nullptr);
     childNode->SetParent(nullptr);
     parentView->Remove(childNativeView);
