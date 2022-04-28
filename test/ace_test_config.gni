@@ -81,7 +81,6 @@ ace_test_deps = [
   "//base/powermgr/battery_lite/frameworks/js:ace_battery_kits",
   "//foundation/ace/ace_engine_lite/frameworks:ace_lite",
   "//foundation/ace/ace_engine_lite/frameworks/targets",
-  "//foundation/communication/ipc/interfaces/innerkits/c/ipc:ipc_single",
   "//foundation/distributedschedule/samgr_lite/communication/broadcast",
   "//foundation/distributedschedule/samgr_lite/samgr:samgr",
   "//foundation/distributedschedule/samgr_lite/samgr_client:client",
