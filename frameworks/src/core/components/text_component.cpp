@@ -293,6 +293,11 @@ void TextComponent::OnViewAttached()
     if (textValue_ != nullptr && fontFamily_ != nullptr) {
         uiLabel_.SetFont(fontFamily_, fontSize_);
         uiLabel_.SetText(textValue_);
+#ifdef FEATURE_EXTRA_TEXT_X_SUPPORT
+        UITextLanguageDirect direct;
+        direct = TextX::GetTextDirect(textValue_, TEXT_DIRECT_RTL);
+        uiLabel_.SetDirect(direct);
+#endif
         UpdateTextAlignToLabel(uiLabel_);
 #if FEATURE_COMPONENT_TEXT_SPANNABLE
         SetRichTextSpan();
@@ -311,6 +316,11 @@ void TextComponent::PostUpdate(uint16_t attrKeyId)
         case K_VALUE:
             if (textValue_ != nullptr) {
                 uiLabel_.SetText(textValue_);
+#ifdef FEATURE_EXTRA_TEXT_X_SUPPORT
+                UITextLanguageDirect direct;
+                direct = TextX::GetTextDirect(textValue_, TEXT_DIRECT_RTL);
+                uiLabel_.SetDirect(direct);
+#endif
                 UpdateTextAlignToLabel(uiLabel_);
 #if FEATURE_COMPONENT_TEXT_SPANNABLE
                 SetRichTextSpan();
