@@ -67,4 +67,4 @@ API介绍请参考[《OpenHarmony Device开发API参考》](https://device.harmo
 [ace\_engine\_lite](https://gitee.com/openharmony/ace_engine_lite/blob/master/README_zh.md)
 
 
-[arkui\_ace_\engine\_lite](https://gitee.com/openharmony/arkui_ace_engine_lite/blob/master/README_zh.md)
+[arkui\_ace\_engine\_lite](https://gitee.com/openharmony/arkui_ace_engine_lite/blob/master/README_zh.md)

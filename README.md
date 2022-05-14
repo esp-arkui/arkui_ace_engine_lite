@@ -67,4 +67,4 @@ For details, go to the  **readme**  repository:
 
 [ace\_engine\_lite](https://gitee.com/openharmony/ace_engine_lite/blob/master/README.md)
 
-[arkui\_ace_\engine\_lite](https://gitee.com/openharmony/arkui_ace_engine_lite/blob/master/README.md)
+[arkui\_ace\_engine\_lite](https://gitee.com/openharmony/arkui_ace_engine_lite/blob/master/README.md)
