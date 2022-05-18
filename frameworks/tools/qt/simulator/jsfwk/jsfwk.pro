@@ -15,6 +15,13 @@ DEFINES += SCREENSIZE_SPECIFIED
 DEFINES += JS_PROFILER=0
 DEFINES += QT_SIMULATOR
 
+# Following defines are copied from libui.pro, as jsfwk depends the ui defines, and there is no way to
+# share those macros. But graphic module might consider to setup them in one C header file, which can
+# pass them to jsfwk by including the header.
+DEFINES += "ENABLE_VECTOR_FONT=1" \
+    "ENABLE_BITMAP_FONT=0" \
+    "FEATURE_COMPONENT_TEXT_SPANNABLE=1" \
+
 eval(is_debug == release) {
     DEFINES += JS_PROFILER=1
 }
