@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -215,6 +215,19 @@ int16_t IntegerOf(jerry_value_t source)
     return static_cast<int16_t>(number);
 }
 
+float FloatOf(jerry_value_t source)
+{
+    float value = 0;
+    if (jerry_value_is_number(source)) {
+        value = static_cast<float>(jerry_get_number_value(source));
+    } else {
+        char* cstr = MallocStringOf(source);
+        value = static_cast<float>(atof(cstr));
+        ACE_FREE(cstr);
+    }
+    return value;
+}
+
 jerry_value_t WatcherCallbackFunc(const jerry_value_t func,
                                   const jerry_value_t context,
                                   const jerry_value_t *args,
@@ -416,7 +429,7 @@ static size_t AppendTwoPath(char * const first, uint8_t startIndex, const char *
             if (memcpy_s(first + startIndex, (destSize - startIndex), (sec + 1), (secLength - 1)) != 0) {
                 HILOG_ERROR(HILOG_MODULE_ACE, "append path error");
                 return 0;
-            };
+            }
 
             copiedLength = copiedLength + (secLength - 1);
             startIndex = startIndex + (secLength - 1);
@@ -511,9 +524,9 @@ char *RelocateFilePathRelative(const char * const appRootPath, const char * cons
     dirPath[len] = '\0';
     // first splice resFileName with directory path
     char *filePath = RelocateFilePath(dirPath, SRC_SUB_FOLDER_NAME, resFileName);
-    if (dirPath != nullptr) {
+    if (filePath != nullptr) {
         ace_free(dirPath);
-        dirPath = nullptr;
+        filePath = nullptr;
     }
     // second splice root path with res file path
     char *realPath = nullptr;
@@ -1098,8 +1111,9 @@ uint16_t GetHorizontalResolution()
 #if ((defined __LITEOS__) || (defined __linux__) || (SCREENSIZE_SPECIFIED == 1))
     return Screen::GetInstance().GetWidth();
 #else
-    uint16_t horizontalResolution = 454;
-    uint16_t verticalResolution = 454;
+    constexpr uint16_t resConst = 454;
+    uint16_t horizontalResolution = resConst;
+    uint16_t verticalResolution = resConst;
     ProductAdapter::GetScreenSize(horizontalResolution, verticalResolution);
     return horizontalResolution;
 #endif // OHOS_ACELITE_PRODUCT_WATCH
@@ -1110,8 +1124,8 @@ uint16_t GetVerticalResolution()
 #if ((defined __LITEOS__) || (defined __linux__) || (SCREENSIZE_SPECIFIED == 1))
     return Screen::GetInstance().GetHeight();
 #else
-    uint16_t horizontalResolution = 454;
-    uint16_t verticalResolution = 454;
+    uint16_t horizontalResolution = resConst;
+    uint16_t verticalResolution = resConst;
     ProductAdapter::GetScreenSize(horizontalResolution, verticalResolution);
     return verticalResolution;
 #endif // OHOS_ACELITE_PRODUCT_WATCH
@@ -1165,7 +1179,7 @@ void ExpandImagePathMem(char *&imagePath, const int16_t dotPos, const int16_t su
 
     errno_t err = strcpy_s(newImagePath, len, imagePath);
     if (err != 0) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "use strcpy_s secure function errro(%{public}d)", err);
+        HILOG_ERROR(HILOG_MODULE_ACE, "use strcpy_s secure function [errro:%{public}d]", err);
         ace_free(newImagePath);
         newImagePath = nullptr;
         ACE_FREE(imagePath);
@@ -1211,10 +1225,10 @@ void CureImagePath(char *&imagePath)
     // else means the file name is wrong.
     if ((dotPos - lastPathPos) > 1) {
         // if suffix length < 3, need expand memory first.
-        if (imagePathLen < (suffixLen + dotPos + 1)) {
+        if (static_cast<int16_t>(imagePathLen) < (suffixLen + dotPos + 1)) {
             ExpandImagePathMem(imagePath, dotPos, suffixLen, imagePathLen);
             if (imagePath == nullptr) {
-                HILOG_ERROR(HILOG_MODULE_ACE, "malloc buffer for path failed, needed length[%{public}u]",
+                HILOG_ERROR(HILOG_MODULE_ACE, "malloc buffer for path failed, needed length[%{public}d]",
                             (dotPos + 1 + suffixLen + 1));
                 return;
             }
@@ -1310,6 +1324,39 @@ uint16_t ParseKeyIdFromJSString(const jerry_value_t str)
         keyStr = nullptr;
     }
     return keyId;
+}
+int8_t ParseLineCap(const char *lineCap)
+{
+    if (lineCap == nullptr) {
+        return -1;
+    }
+    if (strcasecmp(lineCap, LINECAP_BUTT) == 0) {
+        return BUTT_VALUE;
+    }
+    if (strcasecmp(lineCap, LINECAP_SQUARE) == 0) {
+        return SQUARE_VALUE;
+    }
+    if (strcasecmp(lineCap, LINECAP_ROUND) == 0) {
+        return ROUND_VALUE;
+    }
+    return -1;
+}
+
+int8_t ParseLineJoin(const char *lineJoin)
+{
+    if (lineJoin == nullptr) {
+        return -1;
+    }
+    if (strcasecmp(lineJoin, LINEJOIN_MITER) == 0) {
+        return LINEJOIN_MITER_VALUE;
+    }
+    if (strcasecmp(lineJoin, LINEJOIN_ROUND) == 0) {
+        return LINEJOIN_ROUND_VALUE;
+    }
+    if (strcasecmp(lineJoin, LINEJOIN_BEVEL) == 0) {
+        return LINEJOIN_BEVEL_VALUE;
+    }
+    return -1;
 }
 } // namespace ACELite
 } // namespace OHOS

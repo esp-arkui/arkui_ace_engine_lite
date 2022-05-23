@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -31,6 +31,9 @@
 #include "presets/profiler_module.h"
 #include "presets/render_module.h"
 #include "presets/require_module.h"
+#if (FEATURE_SYSCAP_MODULE == 1)
+#include "presets/syscap_module.h"
+#endif
 #include "presets/timer_module.h"
 #include "presets/version_module.h"
 #include "product_adapter.h"
@@ -57,6 +60,9 @@ void JsAppEnvironment::LoadAceBuiltInModules() const
     FeaAbilityModule::Load();
     JsTestModule::Load();
     TimersModule::Load();
+#if (FEATURE_SYSCAP_MODULE == 1)
+    SyscapsModule::Load();
+#endif
     PerformaceProfilerModule::Load();
     AceVersionModule::Load();
     IntlControlModule::Load();

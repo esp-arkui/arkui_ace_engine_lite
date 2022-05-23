@@ -131,6 +131,7 @@ void JSAbility::Show()
 
     HILOG_INFO(HILOG_MODULE_ACE, "LIFECYCLE: JS Ability will be shown");
     ACE_EVENT_PRINT(MT_ACE_FWK_ACTIVING, 0);
+    FatalHandler::GetInstance().SetExitingFlag(false);
     JSAbilityImpl *jsAbilityImpl = CastAbilityImpl(jsAbilityImpl_);
     jsAbilityImpl->Show();
     AsyncTaskManager::GetInstance().SetFront(true);
@@ -245,7 +246,7 @@ void JSAbility::HandleRenderTick()
         ProductAdapter::NotifyRenderEnd();
         errorTickCount_++;
         if ((errorTickCount_ % ERR_TICK_COUNT_TRACE_CTRL) == 1) {
-            HILOG_WARN(HILOG_MODULE_ACE, "skip one render tick process since not actived, count[%{public}d]",
+            HILOG_WARN(HILOG_MODULE_ACE, "skip one render tick process since not activated, count[%{public}d]",
                        errorTickCount_);
         }
         if (errorTickCount_ == UINT32_MAX) {

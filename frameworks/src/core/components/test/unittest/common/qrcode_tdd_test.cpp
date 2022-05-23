@@ -13,16 +13,17 @@
  * limitations under the License.
  */
 
+#include "qrcode_tdd_test.h"
+
 #include "acelite_config.h"
 #include "component_factory.h"
 #include "js_app_environment.h"
-#include "qrcode_tdd_test.h"
 #include "root_view.h"
 #include "ui_qrcode.h"
 
 namespace OHOS {
 namespace ACELite {
-const char * const BUNDLE_ATTRIBUTE1 = 
+const char * const BUNDLE_ATTRIBUTE1 =
     "(function () {\n"
     "    return new ViewModel({\n"
     "        render: function render(vm) {\n"

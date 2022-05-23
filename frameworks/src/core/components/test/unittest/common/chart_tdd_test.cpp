@@ -13,8 +13,9 @@
  * limitations under the License.
  */
 
-#include "acelite_config.h"
 #include "chart_tdd_test.h"
+
+#include "acelite_config.h"
 #include "component_factory.h"
 #include "js_app_environment.h"
 #include "root_view.h"
@@ -22,7 +23,7 @@
 
 namespace OHOS {
 namespace ACELite {
-const char * const BUNDLE1 = 
+const char * const BUNDLE1 =
     "(function () {\n"
     "    return new ViewModel({\n"
     "        render: function render(vm) {\n"
@@ -118,7 +119,7 @@ const char * const BUNDLE2 =
     "    });\n"
     "})();\n";
 
-const char * const BUNDLE3 = 
+const char * const BUNDLE3 =
     "(function () {\n"
     "    return new ViewModel({\n"
     "        render: function render(vm) {\n"

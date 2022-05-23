@@ -24,6 +24,20 @@ DEFINES += "ENABLE_SHAPING=0" \
     "ENABLE_BITMAP_FONT=0" \
     "ENABLE_MULTI_FONT=0" \
     "ENABLE_STATIC_FONT=0" \
+    "FEATURE_COMPONENT_TEXT_SPANNABLE=1" \
+    "GRAPHIC_ENABLE_LINECAP_FLAG=1" \
+    "GRAPHIC_ENABLE_LINEJOIN_FLAG=1" \
+    "GRAPHIC_ENABLE_ELLIPSE_FLAG=1" \
+    "GRAPHIC_ENABLE_BEZIER_ARC_FLAG=1" \
+    "GRAPHIC_ENABLE_ARC_FLAG=1" \
+    "GRAPHIC_ENABLE_ROUNDEDRECT_FLAG=1" \
+    "GRAPHIC_ENABLE_DASH_GENERATE_FLAG=1" \
+    "GRAPHIC_ENABLE_BLUR_EFFECT_FLAG=1" \
+    "GRAPHIC_ENABLE_SHADOW_EFFECT_FLAG=1" \
+    "GRAPHIC_ENABLE_GRADIENT_FILL_FLAG=1" \
+    "GRAPHIC_ENABLE_PATTERN_FILL_FLAG=1" \
+    "GRAPHIC_ENABLE_DRAW_IMAGE_FLAG=1" \
+    "GRAPHIC_ENABLE_DRAW_TEXT_FLAG=1" \
     "DEFAULT_ANIMATION=1"
 
 eval(is_debug == release) {
@@ -123,11 +137,13 @@ SOURCES += \
         $${ACELITE_CORE_PATH}/modules/presets/intl_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/localization_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/number_format_module.cpp \
+        $${ACELITE_CORE_PATH}/modules/presets/image_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/preset_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/profiler_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/render_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/require_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/timer_module.cpp \
+        $${ACELITE_CORE_PATH}/modules/presets/syscap_module.cpp \
         $${ACELITE_CORE_PATH}/modules/presets/version_module.cpp \
         $${ACELITE_CORE_PATH}/modules/router_module.cpp \
         $${ACELITE_CORE_PATH}/modules/sample_module.cpp \
@@ -174,6 +190,7 @@ INCLUDEPATH += \
             $${ROOT_PATH}/foundation/graphic/ui/interfaces/kits/font \
             $${ROOT_PATH}/foundation/graphic/ui/interfaces/kits/layout \
             $${ROOT_PATH}/foundation/graphic/ui/interfaces/kits/themes \
+            $${ROOT_PATH}/foundation/graphic/ui/frameworks \
             $${ROOT_PATH}/foundation/graphic/utils/frameworks/windows \
             $${ROOT_PATH}/foundation/graphic/utils/interfaces/innerkits \
             $${ROOT_PATH}/foundation/graphic/utils/interfaces/kits \
@@ -185,9 +202,9 @@ INCLUDEPATH += \
             $${ROOT_PATH}/foundation/aafwk/aafwk_lite/interfaces/innerkits/abilitymgr_lite \
             $${ROOT_PATH}/foundation/communication/ipc_lite/liteipc/include \
             $${ROOT_PATH}/third_party/bounds_checking_function/include \
-            $${ROOT_PATH}/foundation/ace/ace_engine_lite/interfaces/innerkits/builtin/async \
-            $${ROOT_PATH}/foundation/ace/ace_engine_lite/interfaces/innerkits/builtin/base \
-            $${ROOT_PATH}/foundation/ace/ace_engine_lite/interfaces/innerkits/builtin/jsi \
+            $${ROOT_PATH}/foundation/arkui/ace_engine_lite/interfaces/inner_api/builtin/async \
+            $${ROOT_PATH}/foundation/arkui/ace_engine_lite/interfaces/inner_api/builtin/base \
+            $${ROOT_PATH}/foundation/arkui/ace_engine_lite/interfaces/inner_api/builtin/jsi \
             $${ACELITE_FRAMEWORK_PATH}/include/context \
             $${ACELITE_FRAMEWORK_PATH}/include/base \
             $${ACELITE_FRAMEWORK_PATH}/include/modules \
@@ -223,9 +240,10 @@ INCLUDEPATH += \
             $${ROOT_PATH}/third_party/jerryscript/jerry-ext/include/jerryscript-ext \
             $${ROOT_PATH}//third_party/jerryscript/jerry-port/default/include \
             $${ROOT_PATH}/third_party/cJSON \
+            $${ROOT_PATH}/third_party/giflib \
             $${ROOT_PATH}/utils/native/lite/timer_task/include/ \
             $${ROOT_PATH}/third_party/freetype/include \
-            $${ROOT_PATH}/base/global/resmgr_lite/interfaces/innerkits/include \
+            $${ROOT_PATH}/base/global/resource_management_lite/interfaces/inner_api/include \
             $${ROOT_PATH}/base/global/i18n_lite/interfaces/kits/i18n/include \
             $${ROOT_PATH}/foundation/graphic/ui/interfaces/kits/ui \
             $${ROOT_PATH}/foundation/graphic/ui/interfaces/kits/config \

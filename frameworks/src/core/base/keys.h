@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2020-2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -72,6 +72,8 @@ enum {
 #if (FEATURE_COMPONENT_CANVAS == 1)
     KEYWORD(CANVAS, canvas) // tag name
 #endif // FEATURE_COMPONENT_CANVAS
+    KEYWORD(CANVASGRADIENT, canvasGradient) // gradient fillstyle or strokestyle
+    KEYWORD(CANVASPATTERN, canvasPattern) // pattern fillstyle or strokestyle
     KEYWORD(CENTER, center) // text align type
     KEYWORD(CENTER_X, centerX) // circle progress x
     KEYWORD(CENTER_Y, centerY) // circle progress y
@@ -180,6 +182,7 @@ enum {
 #endif // FEATURE_COMPONENT_VIDEO
     KEYWORD(NAME, name) // the attribute name
     KEYWORD(NONE, none) // animation fill value
+    KEYWORD(NO_REPEAT, no-repeat) // no-repeat pattern type
 #if (FEATURE_DATE_FORMAT == 1)
     KEYWORD(NUMERIC, numeric)
 #endif
@@ -212,6 +215,9 @@ enum {
     KEYWORD(PAUSE, pause) // video component pause event tag
 #endif // FEATURE_COMPONENT_VIDEO
     KEYWORD(REVERSE, reverse) // image-animator attribute
+    KEYWORD(REPEAT, repeat) // repeat pattern type
+    KEYWORD(REPEAT_X, repeat-x) // repeat-x pattern type
+    KEYWORD(REPEAT_Y, repeat-y) // repeat-y pattern type
     KEYWORD(RIGHT, right) // text align type
     KEYWORD(ROTATE, rotate) // animation rotate
     KEYWORD(ROW, row) // layout style
@@ -246,6 +252,8 @@ enum {
     KEYWORD(SPACE_BETWEEN, space-between) // layout style
     KEYWORD(SPACE_EVENLY, space-evenly) // layout style
     KEYWORD(SRC, src) // common attributes, use for image view, video compnent
+    KEYWORD(IMAGE_WIDTH, width) // common attributes, use for image view, video compnent
+    KEYWORD(IMAGE_HEIGHT, height) // common attributes, use for image view, video compnent
     KEYWORD(STACK, stack) // tag name
     KEYWORD(STANDARD, standard) // text font size type
     KEYWORD(STOP, stop) // image-animator stop event, video component end event tag
@@ -301,6 +309,26 @@ enum {
     KEYWORD(MINIMUMFRACTIONDIGITS, minimumFractionDigits)
     KEYWORD(MAXIMUMFRACTIONDIGITS, maximumFractionDigits)
 #endif
+#if FEATURE_COMPONENT_TEXT_SPANNABLE
+    KEYWORD(BACKGROUNDCOLORSPANCOLOR, backgroundcolorspancolor)
+    KEYWORD(BACKGROUNDCOLORSPANSTART, backgroundcolorspanstart)
+    KEYWORD(BACKGROUNDCOLORSPANEND, backgroundcolorspanend)
+    KEYWORD(FOREGROUNDCOLORSPANCOLOR, foregroundcolorspancolor)
+    KEYWORD(FOREGROUNDCOLORSPANSTART, foregroundcolorspanstart)
+    KEYWORD(FOREGROUNDCOLORSPANEND, foregroundcolorspanend)
+    KEYWORD(LINEBACKGROUNDCOLORSPANCOLOR, linebackgroundcolorspancolor)
+    KEYWORD(LINEBACKGROUNDCOLORSPANSTART, linebackgroundcolorspanstart)
+    KEYWORD(LINEBACKGROUNDCOLORSPANEND, linebackgroundcolorspanend)
+    KEYWORD(ABSOLUTESIZESPANSTART, absolutesizespanstart)
+    KEYWORD(ABSOLUTESIZESPANEND, absolutesizespanend)
+    KEYWORD(ABSOLUTESIZESPANSIZE, absolutesizespansize)
+    KEYWORD(RELATIVESIZESPANSTART, relativesizespanstart)
+    KEYWORD(RELATIVESIZESPANEND, relativesizespanend)
+    KEYWORD(RELATIVESIZESPANSIZE, relativesizespansize)
+    KEYWORD(SPANNABLESTYLE, spannablestyle)
+    KEYWORD(SPANNABLESTART, spannablestart)
+    KEYWORD(SPANNABLEEND, spannableend)
+#endif // FEATURE_COMPONENT_TEXT_SPANNABLE
     // Reused by the struct end
 // clang-format on
 #ifdef KEYWORDS_ENUM_DEFINE
