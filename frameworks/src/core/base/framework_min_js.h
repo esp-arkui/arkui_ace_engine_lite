@@ -15,6 +15,9 @@
 
 // AUTO GENERATED, PLEASE DO NOT EDIT DIRECTLY
 
+#ifndef OHOS_ACELITE_FRAMEWORK_MIN_JS_H
+#define OHOS_ACELITE_FRAMEWORK_MIN_JS_H
+
 #ifndef ACELITE_FRAMEWORK_RAW_BUFFER
 #error THIS FILE CAN ONLY BE INCLUDED BY RAW BUFFER CPP
 #endif
@@ -57,3 +60,4 @@ const char * const g_frameworkJSBuffer =
     "et(i):'function'==typeof i&&(e[n]=i.bind(e))}))}return c.prototype.$watch=function(t,e,n){"
     "return new i(this,t,e,n)},c}));";
 #endif
+#endif // OHOS_ACELITE_FRAMEWORK_MIN_JS_H
