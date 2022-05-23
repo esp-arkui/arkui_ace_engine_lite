@@ -15,6 +15,9 @@
 
 // AUTO GENERATED, PLEASE DO NOT EDIT DIRECTLY
 
+#ifndef OHOS_ACELITE_FRAMEWORK_MIN_BC_H
+#define OHOS_ACELITE_FRAMEWORK_MIN_BC_H
+
 #include <stdint.h>
 
 #ifndef ACELITE_FRAMEWORK_RAW_BUFFER
@@ -238,3 +241,4 @@ const uint8_t g_frameworkBCBuffer[] =
     0x65, 0x6e, 0x74, 0x00, 0x04, 0x00, 0x5f, 0x6b, 0x65, 0x79
 };
 #endif
+#endif // OHOS_ACELITE_FRAMEWORK_MIN_BC_H
