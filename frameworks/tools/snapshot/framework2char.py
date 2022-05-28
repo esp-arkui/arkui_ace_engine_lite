@@ -68,9 +68,6 @@ def convert_bc():
         byte_code_buffer = input_file.read()
         with open(SNAPSHOT_OUTPUT_C_FILE_PATH, 'w') as output:
             output_copyright(output)
-            output.write("#ifndef OHOS_ACELITE_FRAMEWORK_MIN_BC_H\n")
-            output.write("#define OHOS_ACELITE_FRAMEWORK_MIN_BC_H\n")
-            output.write("\n")
             output_check_notes(output)
             output.write(
                 "#ifndef OHOS_ACELITE_FRAMEWORK_MIN_SNAPSHOT_BUFFER\n")
@@ -95,8 +92,7 @@ def convert_bc():
                     output.write(output_final_string)
                 index = index + 1
             output.write("};\n")
-            output.write("#endif\n")
-            output.write("#endif // OHOS_ACELITE_FRAMEWORK_MIN_BC_H")
+            output.write("#endif")
 
 
 def convert_js():
@@ -104,9 +100,6 @@ def convert_js():
         javascript_buffer = input_file.read()
         with open(JS_OUTPUT_C_FILE_PATH, 'w') as output:
             output_copyright(output)
-            output.write("#ifndef OHOS_ACELITE_FRAMEWORK_MIN_JS_H\n")
-            output.write("#define OHOS_ACELITE_FRAMEWORK_MIN_JS_H\n")
-            output.write("\n")
             output_check_notes(output)
             output.write(
                 "#ifndef OHOS_ACELITE_FRAMEWORK_MIN_JS_BUFFER\n")
@@ -133,8 +126,7 @@ def convert_js():
                     output.write(final_string)
                 index = index + 1
             output.write("\";\n")
-            output.write("#endif\n")
-            output.write("#endif // OHOS_ACELITE_FRAMEWORK_MIN_JS_H")
+            output.write("#endif")
 
 
 def usage():

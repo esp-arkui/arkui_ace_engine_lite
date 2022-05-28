@@ -13,8 +13,6 @@
  * limitations under the License.
  */
 
-#ifndef OHOS_ACELITE_QRCODE_COMPONENT_H
-#define OHOS_ACELITE_QRCODE_COMPONENT_H
 
 #include "acelite_config.h"
 
@@ -58,4 +56,3 @@ private:
 } // namespace ACELite
 } // namespace OHOS
 #endif // #ifdef FEATURE_COMPONENT_QRCODE
-#endif // OHOS_ACELITE_QRCODE_COMPONENT_H
