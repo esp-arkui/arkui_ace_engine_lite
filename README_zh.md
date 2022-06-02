@@ -32,7 +32,7 @@ JS-UI框架子系统包括JS数据绑定框架（JS Data binding）、JS运行�
 
 ## 目录<a name="section1464106163817"></a>
 
-JS-UI框架子系统源代码在/foundation/arkui/ace\_engine\_lite下，目录结构如下图所示：
+JS-UI框架子系统源代码在/foundation/arkui/arkui\_ace\_engine\_lite下，目录结构如下图所示：
 
 ```
 /foundation/arkui/arkui_ace_engine_lite

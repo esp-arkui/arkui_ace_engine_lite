@@ -33,7 +33,7 @@ The JS UI framework consists of the JavaScript data binding framework, JavaScrip
 
 ## Directory Structure<a name="section1464106163817"></a>
 
-The source code of the framework is stored in  **/foundation/arkui/ace\_engine\_lite**. The directory structure is as follows:
+The source code of the framework is stored in  **/foundation/arkui/arkui\_ace\_engine\_lite**. The directory structure is as follows:
 
 ```
 /foundation/arkui/arkui_ace_engine_lite
