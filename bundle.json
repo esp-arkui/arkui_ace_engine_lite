@@ -1,16 +1,16 @@
 {
-  "name": "@ohos/ace_engine_lite",
+  "name": "@ohos/arkui_ace_engine_lite",
   "description": "JS APP development frameworks.",
   "version": "3.1",
   "license": "Apache License 2.0",
   "pubiishAs": "code-segment",
   "segment": {
-    "destPath": "foundation/arkui/ace_engine_lite"
+    "destPath": "foundation/arkui/arkui_ace_engine_lite"
   },
   "dirs": {},
   "scripts": {},
   "component": {
-    "name": "ace_engine_lite",
+    "name": "arkui_ace_engine_lite",
     "subsystem": "arkui",
     "syscap": [ "SystemCapability.Ace.AceEngineLite" ],
     "feature": [],
@@ -45,8 +45,8 @@
     },
     "build": {
       "sub_component": [ 
-      "//foundation/arkui/ace_engine_lite/test:unittest",
-      "//foundation/arkui/ace_engine_lite/frameworks:jsfwk"
+      "//foundation/arkui/arkui_ace_engine_lite/test:unittest",
+      "//foundation/arkui/arkui_ace_engine_lite/frameworks:jsfwk"
       ],
       "inner_kits": [],
       "test": []
