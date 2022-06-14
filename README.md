@@ -55,7 +55,7 @@ The source code of the framework is stored in  **/foundation/ace/ace\_engine\_li
 
 ## Available APIs<a name="section1096322014288"></a>
 
-For details about the APIs, see the  [JS Application Development](https://docs.openharmony.cn/pages/v3.1/en/OpenHarmony-Overview.md).
+For details about the APIs, see the  [JS Application Development](https://docs.openharmony.cn/pages/v3.1/en/application-dev/ui/js-framework-file.md/).
 
 ## Usage<a name="section1529834174016"></a>
 
@@ -65,6 +65,6 @@ For details, go to the  **readme**  repository:
 
 ## Repositories Involved<a name="section11683135113011"></a>
 
-[ace\_engine\_lite](https://gitee.com/openharmony/ace_engine_lite/blob/master/README.md)
+[arkui\_ace\_engine](https://gitee.com/openharmony/arkui_ace_engine)
 
 **arkui\_ace\_engine\_lite**

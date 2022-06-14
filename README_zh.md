@@ -54,7 +54,7 @@ JS-UI框架子系统源代码在/foundation/ace/ace\_engine\_lite下，目录结
 
 ## 接口<a name="section1096322014288"></a>
 
-API介绍请参考[《OpenHarmony Device开发API参考》](https://docs.openharmony.cn/pages/v3.1/zh-cn/device-dev/device-dev-guide.md)
+API介绍请参考[《OpenHarmony Device开发API参考》](https://docs.openharmony.cn/pages/v3.2Beta/zh-cn/application-dev/ui/js-framework-file.md/)
 
 ## 使用<a name="section1529834174016"></a>
 
@@ -64,7 +64,7 @@ API介绍请参考[《OpenHarmony Device开发API参考》](https://docs.openhar
 
 ## 相关仓<a name="section11683135113011"></a>
 
-[ace\_engine\_lite](https://gitee.com/openharmony/ace_engine_lite/blob/master/README_zh.md)
+[arkui\_ace\_engine](https://gitee.com/openharmony/arkui_ace_engine)
 
 
 **arkui\_ace\_engine\_lite**
