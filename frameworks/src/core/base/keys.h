@@ -69,7 +69,7 @@ enum {
 #if (FEATURE_COMPONENT_CAMERA == 1)
     KEYWORD(CAMERA, camera) // camera component
 #endif // FEATURE_COMPONENT_CAMERA
-#if (FEATURE_COMPONENT_CANVAS == 1)
+#if (defined(FEATURE_COMPONENT_CANVAS) && FEATURE_COMPONENT_CANVAS == 1)
     KEYWORD(CANVAS, canvas) // tag name
 #endif // FEATURE_COMPONENT_CANVAS
     KEYWORD(CANVASGRADIENT, canvasGradient) // gradient fillstyle or strokestyle
@@ -134,7 +134,7 @@ enum {
     KEYWORD(FONT_FAMILY, fontFamily) // text style type
     KEYWORD(FORWARDS, forwards) // animation fill value
     KEYWORD(HEIGHT, height) // common attributes
-#if ((FEATURE_COMPONENT_ANALOG_CLOCK == 1) || (FEATURE_DATE_FORMAT == 1))
+#if (( FEATURE_COMPONENT_ANALOG_CLOCK == 1) || ( FEATURE_DATE_FORMAT == 1))
     KEYWORD(HOUR, hour) // analog-clock hour
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK FEATURE_DATE_FORMAT
 #if (FEATURE_DATE_FORMAT == 1)
@@ -303,7 +303,7 @@ enum {
     KEYWORD(WEEKDAY, weekday)
     KEYWORD(YEAR, year)
 #endif
-#if (FEATURE_NUMBER_FORMAT == 1)
+#if (defined(FEATURE_NUMBER_FORMAT) && FEATURE_NUMBER_FORMAT == 1)
     KEYWORD(STYLE, style)
     KEYWORD(USEGROUP, useGroup)
     KEYWORD(MINIMUMFRACTIONDIGITS, minimumFractionDigits)

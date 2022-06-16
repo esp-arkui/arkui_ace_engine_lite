@@ -15,7 +15,7 @@
 
 #include "number_format_module.h"
 #include "ace_log.h"
-#if (FEATURE_NUMBER_FORMAT == 1)
+#if (defined(FEATURE_NUMBER_FORMAT) && FEATURE_NUMBER_FORMAT == 1)
 #include "locale_util.h"
 #include "string.h"
 #include "key_parser.h"

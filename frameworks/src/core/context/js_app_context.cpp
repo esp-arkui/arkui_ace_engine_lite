@@ -19,7 +19,7 @@
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
 #include "ace_ability.h"
 #endif
-#if (FEATURE_API_VERSION == 1)
+#if (defined(FEATURE_API_VERSION) && FEATURE_API_VERSION == 1)
 #include "bundle_manager.h"
 #endif // FEATURE_API_VERSION
 #include "component_factory.h"
@@ -33,7 +33,7 @@
 #include "string_util.h"
 #include "task_manager.h"
 #include "ui_view_group.h"
-#if (OHOS_ACELITE_PRODUCT_WATCH != 1)
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH != 1)
 #include "ability_env.h"
 #endif
 
@@ -314,7 +314,7 @@ char *JsAppContext::GetResourcePath(const char *uri) const
             HILOG_ERROR(HILOG_MODULE_ACE, "fail to get resource path.");
             return nullptr;
         }
-#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH == 1)
         // no GetDataPath API provided on watch, contact the path by the product configuration insteadly
         char *relocatedPath = ProcessResourcePathByConfiguration(size, path);
 #else
@@ -362,7 +362,7 @@ char *JsAppContext::ProcessResourcePathByConfiguration(size_t origUriLength, con
 
 void JsAppContext::LoadApiVersion()
 {
-#if (FEATURE_API_VERSION == 1)
+#if (defined(FEATURE_API_VERSION) && FEATURE_API_VERSION == 1)
     BundleInfo bundle = {0};
     uint8_t retCode = GetBundleInfo(currentBundleName_, false, &bundle);
     if (retCode != 0) {

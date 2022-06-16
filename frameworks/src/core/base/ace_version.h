@@ -20,7 +20,7 @@
 
 #include "js_config.h"
 
-#if IS_ENABLED(ACE_LITE_VERSION_JS_API)
+#if defined(ACE_LITE_VERSION_JS_API) && IS_ENABLED(ACE_LITE_VERSION_JS_API)
 
 namespace OHOS {
 namespace ACELite {

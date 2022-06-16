@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 #include "profiler_module.h"
-#if IS_ENABLED(JS_PROFILER)
+#if defined(JS_PROFILER) && IS_ENABLED(JS_PROFILER)
 namespace OHOS {
 namespace ACELite {
 /**

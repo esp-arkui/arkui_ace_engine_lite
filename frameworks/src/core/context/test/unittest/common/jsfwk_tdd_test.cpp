@@ -166,7 +166,7 @@ void JSfwkTddTest::ACELiteFrameworkInitialization009()
      * @tc.steps: step1. init test environment
      */
     TDD_CASE_BEGIN();
-#if IS_ENABLED(ACE_LITE_VERSION_JS_API)
+#if defined(ACE_LITE_VERSION_JS_API) && IS_ENABLED(ACE_LITE_VERSION_JS_API)
     /**
      * @tc.steps: step2. check version code
      */

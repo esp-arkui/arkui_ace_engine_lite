@@ -16,7 +16,7 @@
 #include "message_queue_utils.h"
 #include "ace_log.h"
 #include "acelite_config.h"
-#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH == 1)
 #include "cmsis_os2.h"
 #endif
 

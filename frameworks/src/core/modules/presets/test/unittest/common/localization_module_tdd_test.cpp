@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#if (FEATURE_LOCALIZATION_MODULE == 1)
+#if (defined(FEATURE_LOCALIZATION_MODULE) && FEATURE_LOCALIZATION_MODULE == 1)
 #include "ace_log.h"
 #include "global.h"
 #include "js_app_context.h"

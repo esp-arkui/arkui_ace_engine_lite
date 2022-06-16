@@ -59,7 +59,7 @@
  *
  * Default: 0 on real device and 1 on PC simulator
  */
-#if (TARGET_SIMULATOR == 1)
+#if (defined(TARGET_SIMULATOR) && TARGET_SIMULATOR == 1)
 #define ENGINE_DEBUGGER 1
 #else
 #define ENGINE_DEBUGGER 0

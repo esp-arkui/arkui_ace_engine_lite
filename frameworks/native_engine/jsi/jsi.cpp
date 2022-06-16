@@ -16,7 +16,7 @@
 
 #include <cstdarg>
 #include <cstring>
-#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH == 1)
 #include "securec.h"
 #endif // OHOS_ACELITE_PRODUCT_WATCH
 #include "ace_log.h"
@@ -601,7 +601,7 @@ JSIValue JSI::CreateNull()
 #endif
 }
 
-#if (JS_FWK_SYMBOL == 1)
+#if (defined(JS_FWK_SYMBOL) && JS_FWK_SYMBOL == 1)
 JSIValue JSI::CreateSymbol(JSIValue description)
 {
 #if (ENABLE_JERRY == 1)
@@ -908,7 +908,7 @@ void JSI::SetNamedPointer(JSIValue object, const char * const name, JsiCallback 
 #endif
 }
 
-#if (JS_FWK_TYPEDARRAY == 1)
+#if (defined(JS_FWK_TYPEDARRAY) && JS_FWK_TYPEDARRAY == 1)
 #if (ENABLE_JERRY == 1)
 // Helper function for JSI TypedArray type convert
 TypedArrayType GetJsiArrayType(jerry_typedarray_type_t jerryType)

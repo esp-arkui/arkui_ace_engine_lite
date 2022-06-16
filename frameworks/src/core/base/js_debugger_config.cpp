@@ -29,7 +29,7 @@ Debugger &Debugger::GetInstance()
     return instance;
 }
 
-#if IS_ENABLED(ENGINE_DEBUGGER)
+#if defined(ENGINE_DEBUGGER) && IS_ENABLED(ENGINE_DEBUGGER)
 bool Debugger::IsDebuggerEnabled()
 {
     return debuggerConfig_.startDebuggerServer;

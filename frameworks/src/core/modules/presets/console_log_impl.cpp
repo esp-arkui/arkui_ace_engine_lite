@@ -14,7 +14,7 @@
  */
 
 #include "console_log_impl.h"
-#if IS_ENABLED(CONSOLE_LOG_OUTPUT)
+#if defined(CONSOLE_LOG_OUTPUT) && IS_ENABLED(CONSOLE_LOG_OUTPUT)
 #include "js_app_environment.h"
 #if (FEATURE_USER_MC_LOG_PRINTF == 1)
 #include "product_adapter.h"

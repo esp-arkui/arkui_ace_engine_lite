@@ -69,7 +69,7 @@ struct Watcher : public MemoryHeap {
 
 void ThrowError();
 
-#if IS_ENABLED(JS_PROFILER)
+#if defined(JS_PROFILER) && IS_ENABLED(JS_PROFILER)
 #ifndef LOG_PROFILER_TRACE
 #define LOG_PROFILER(format, ...) printf(format "\n", ##__VA_ARGS__)
 #define LOG_PROFILER_TRACE(format, ...) printf("[PERFORMANCE]:" format "\n", ##__VA_ARGS__)
@@ -104,13 +104,13 @@ constexpr uint32_t TEXT_BLUE_COLOR_MASK = 0x0000ff;
 constexpr int RED_COLOR_START_BIT = 16;
 constexpr int GREEN_COLOR_START_BIT = 8;
 constexpr char ATTR_SRC[] = "src"; // image-animator
-#if (FEATURE_COMPONENT_ANALOG_CLOCK == 1)
+#if (defined(FEATURE_COMPONENT_ANALOG_CLOCK) && FEATURE_COMPONENT_ANALOG_CLOCK == 1)
 constexpr char CLOCK_HAND_IS_IMAGE[] = "isImage";
 constexpr char COMMON_STYLE_OPACITY[] = "opacity";
 constexpr char COMMON_STYLE_COLOR[] = "color";
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
 constexpr uint8_t DEFAULT_FONT_SIZE = 30;
-#if (FEATURE_COMPONENT_CANVAS == 1)
+#if (defined(FEATURE_COMPONENT_CANVAS) && FEATURE_COMPONENT_CANVAS == 1)
 constexpr uint8_t DEFAULT_FONT_LETTERSPACE = 2;
 #endif // FEATURE_COMPONENT_CANVAS
 constexpr char DEFAULT_FONT_FAMILY[] = DEFAULT_VECTOR_FONT_FILENAME;
@@ -157,7 +157,7 @@ constexpr char TRANSITION_TRANSFORM_Y[] = "translateY";
 constexpr char CONSTRUCTOR_VIEW_MODEL[] = "ViewModel";
 constexpr char CONSTRUCTOR_ABILITY_SLICE[] = "AbilitySlice";
 
-#if (FEATURE_ROTATION_API == 1)
+#if (defined(FEATURE_ROTATION_API) && FEATURE_ROTATION_API == 1)
 constexpr char FUNC_ROTATION_NAME[] = "rotation";
 constexpr char ATTR_NAME_FOCUS[] = "focus";
 #endif // FEATURE_ROTATION_API
@@ -280,7 +280,7 @@ JSValue CallWithRootAbilitySlice(JSValue func);
 JSValue CreateWatcher(JSValue getter, JSHandler handler, JSValue options);
 
 void ExpandImagePathMem(char *&imagePath, const int16_t dotPos, const int16_t suffixLen, const int16_t imagePathLen);
-#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH == 1)
 void CureImagePath(char *&imagePath);
 #endif // OHOS_ACELITE_PRODUCT_WATCH
 const char *ParseImageSrc(jerry_value_t source);

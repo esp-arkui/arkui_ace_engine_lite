@@ -324,7 +324,7 @@ static void ForceGC(void *data)
 {
     static_cast<void>(data);
     jerry_gc(jerry_gc_mode_t::JERRY_GC_PRESSURE_HIGH);
-#if IS_ENABLED(JS_PROFILER)
+#if defined(JS_PROFILER) && IS_ENABLED(JS_PROFILER)
     if (JSProfiler::GetInstance()->IsEnabled()) {
         // dump the JS heap status
         JSHeapStatus heapStatus;

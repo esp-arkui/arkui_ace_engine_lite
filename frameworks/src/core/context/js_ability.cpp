@@ -20,7 +20,7 @@
 #include "ace_log.h"
 #include "acelite_config.h"
 #include "async_task_manager.h"
-#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH == 1)
 #include "dft_impl.h"
 #endif // OHOS_ACELITE_PRODUCT_WATCH
 #include "fatal_handler.h"
@@ -49,21 +49,21 @@ static JSAbilityImpl *CastAbilityImpl(void *abilityImpl)
 
 static void DumpNativeMemoryUsage()
 {
-#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH == 1)
     NativeMemInfo memInfo;
     ProductAdapter::GetNativeMemInfo(&memInfo);
     HILOG_DEBUG(HILOG_MODULE_ACE, "available free size: %{public}d", memInfo.freeSize);
 #endif // OHOS_ACELITE_PRODUCT_WATCH
 }
 
-#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH == 1)
 extern "C" void RestoreSystemWrapper(const char *crashMessage);
 #endif
 JSAbility::~JSAbility()
 {
     // check the status
     if (jsAbilityImpl_ != nullptr) {
-#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH == 1)
         // the JSAbility instance can only be destroied after transfering the app to DESTROY state
         RestoreSystemWrapper("AMS is deleting app task but without normal lifecycle transition!");
 #endif
@@ -93,7 +93,7 @@ void JSAbility::Launch(const char * const abilityPath, const char * const bundle
 
     HILOG_INFO(HILOG_MODULE_ACE, "LIFECYCLE: JS Ability is launching");
 
-#if (MOCK_JS_ASYNC_WORK != 1)
+#if (defined(MOCK_JS_ASYNC_WORK) && MOCK_JS_ASYNC_WORK != 1)
     JsAsyncWork::SetFatalHandleFunc(FatalHandler::IsErrorHittedWrapper, FatalHandler::IsAppExitingWrapper);
 #endif
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
@@ -110,7 +110,7 @@ void JSAbility::Launch(const char * const abilityPath, const char * const bundle
     // mark the flag in advance to make sure we can take over render tick as soon as possible
     ProductAdapter::UpdateRenderTickAcceptable(true);
     JSAbilityImpl *jsAbilityImpl = CastAbilityImpl(jsAbilityImpl_);
-#if (MOCK_JS_ASYNC_WORK != 1)
+#if (defined(MOCK_JS_ASYNC_WORK) && MOCK_JS_ASYNC_WORK != 1)
     // simulator uses the self-implementation for async work, this interface is not included
     JsAsyncWork::SetEnvStatus(true);
 #endif
@@ -161,7 +161,7 @@ void JSAbility::TransferToDestroy()
         return;
     }
 
-#if (MOCK_JS_ASYNC_WORK != 1)
+#if (defined(MOCK_JS_ASYNC_WORK) && MOCK_JS_ASYNC_WORK != 1)
     // simulator uses the self-implementation for async work, this interface is not included
     JsAsyncWork::SetEnvStatus(false);
 #endif
@@ -174,12 +174,12 @@ void JSAbility::TransferToDestroy()
     ProductAdapter::UpdateRenderTickAcceptable(false);
     FatalHandler::GetInstance().ResetRendering();
     FatalHandler::GetInstance().SetExitingFlag(false);
-#if (FEATURE_SCREEN_ON_VISIBLE == 1)
+#if (defined(FEATURE_SCREEN_ON_VISIBLE) && FEATURE_SCREEN_ON_VISIBLE == 1)
     if (ProductAdapter::SetScreenOnVisible(false) == false) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Fail to recover screen visible property");
     }
 #endif
-#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH == 1)
     JsAsyncWork::SetAppQueueHandler(nullptr);
     DftImpl::GetInstance()->RegisterPageReplaced(nullptr);
 #endif // OHOS_ACELITE_PRODUCT_WATCH

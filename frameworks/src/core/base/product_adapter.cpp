@@ -161,7 +161,8 @@ void ProductAdapter::RegTEHandlers(const TEHandlingHooks &teHandlingHooks)
 // read the global value directly here.
 TEDispatchingResult ProductAdapter::DispatchTEMessage()
 {
-#if (OHOS_ACELITE_PRODUCT_WATCH == 1) // only some specific products support TE dispatching
+// only some specific products support TE dispatching
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH == 1)
     if (!g_isRenderTickAcceptable) {
         return TEDispatchingResult::REFUSED;
     }
