@@ -73,14 +73,14 @@ void MainWidget::mouseMoveEvent(QMouseEvent* event)
 
 void MainWidget::mousePressEvent(QMouseEvent* event)
 {
-#if USE_MOUSE != 0
+#if defined(USE_MOUSE) && USE_MOUSE != 0
     MouseInput::GetInstance()->MouseHandler(event);
 #endif
 }
 
 void MainWidget::mouseReleaseEvent(QMouseEvent* event)
 {
-#if USE_MOUSE != 0
+#if defined(USE_MOUSE) && USE_MOUSE != 0
     MouseInput::GetInstance()->MouseHandler(event);
 #endif
 }
@@ -93,13 +93,13 @@ void MainWidget::wheelEvent(QWheelEvent* event)
 
 void MainWidget::keyPressEvent(QKeyEvent* event)
 {
-#if USE_KEY != 0
+#if defined(USE_KEY) && USE_KEY != 0
     KeyInput::GetInstance()->KeyHandler(event);
 #endif
 }
 void MainWidget::keyReleaseEvent(QKeyEvent* event)
 {
-#if USE_KEY != 0
+#if defined(USE_KEY) && USE_KEY != 0
     KeyInput::GetInstance()->KeyHandler(event);
 #endif
 }

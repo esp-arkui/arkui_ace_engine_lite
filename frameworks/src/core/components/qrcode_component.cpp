@@ -14,7 +14,7 @@
  */
 #include "acelite_config.h"
 
-#if (FEATURE_COMPONENT_QRCODE == 1)
+#if (defined(FEATURE_COMPONENT_QRCODE) && FEATURE_COMPONENT_QRCODE == 1)
 #include "qrcode_component.h"
 #include "ace_log.h"
 #include "ace_mem_base.h"

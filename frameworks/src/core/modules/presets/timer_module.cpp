@@ -14,7 +14,7 @@
  */
 
 #include "timer_module.h"
-#if (FEATURE_TIMER_MODULE == 1)
+#if (defined(FEATURE_TIMER_MODULE) && FEATURE_TIMER_MODULE == 1)
 #include <cstdint>
 #include <string.h>
 #include "ace_log.h"

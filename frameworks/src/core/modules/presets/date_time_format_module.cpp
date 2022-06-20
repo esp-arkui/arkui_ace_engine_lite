@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 #include "date_time_format_module.h"
-#if (FEATURE_DATE_FORMAT == 1)
+#if defined(FEATURE_DATE_FORMAT) && (FEATURE_DATE_FORMAT == 1)
 #include <cstring>
 #include "ace_log.h"
 #include "locale_util.h"

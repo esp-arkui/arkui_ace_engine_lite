@@ -29,7 +29,7 @@ SwiperComponent::SwiperComponent(jerry_value_t options, jerry_value_t children, 
 {
     SetComponentName(K_SWIPER);
     swiperView_.SetLoopState(true);
-#if (FEATURE_ROTATION_API == 1)
+#if (defined(FEATURE_ROTATION_API) && FEATURE_ROTATION_API == 1)
     RegisterNamedFunction(FUNC_ROTATION_NAME, HandleRotationRequest);
 #endif // FEATURE_ROTATION_API
 }

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 #include "acelite_config.h"
-#if (FEATURE_SYSCAP_MODULE == 1)
+#if (defined(FEATURE_SYSCAP_MODULE) && FEATURE_SYSCAP_MODULE == 1)
 #include <string.h>
 #include "syscap_module.h"
 #include "ace_mem_base.h"

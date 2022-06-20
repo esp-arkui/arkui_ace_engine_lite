@@ -14,7 +14,7 @@
  */
 
 #include "cjson_parser.h"
-#if (FEATURE_LOCALIZATION_MODULE == 1)
+#if (defined(FEATURE_LOCALIZATION_MODULE) && FEATURE_LOCALIZATION_MODULE == 1)
 #include "ace_log.h"
 #include "global.h"
 #include "js_fwk_common.h"

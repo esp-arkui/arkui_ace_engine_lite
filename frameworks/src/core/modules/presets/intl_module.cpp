@@ -14,7 +14,7 @@
  */
 
 #include "intl_module.h"
-#if (FEATURE_INTL_MODULE == 1)
+#if defined(FEATURE_INTL_MODULE) && (FEATURE_INTL_MODULE == 1)
 #include "ace_log.h"
 #include "date_time_format_module.h"
 #include "global.h"

@@ -26,20 +26,20 @@ namespace ACELite {
 #endif // KEYWORD
 
 // Replace the struct keys.h "KEYWORD" sector for init
-#if (ENABLE_KEY == 1)
+#if (defined(ENABLE_KEY) && ENABLE_KEY == 1)
 #define KEYWORD(enumkey, keystr) {#keystr, K_##enumkey, static_cast<uint8_t>(strlen(#enumkey))},
 #else // ENABLE_KEY
 #define KEYWORD(enumkey, keystr) {K_##enumkey, static_cast<uint8_t>(strlen(#enumkey))},
 #endif // ENABLE_KEY
 
 static const struct {
-#if (ENABLE_KEY == 1)
+#if (defined(ENABLE_KEY) && ENABLE_KEY == 1)
     const char * const key;
 #endif
     const uint16_t ID;
     const uint8_t LENGTH;
 } G_KEYWORD_INFO[KEYWORDS_MAX] = {
-#if (ENABLE_KEY == 1)
+#if (defined(ENABLE_KEY) && ENABLE_KEY == 1)
     {"UNKNOWN", K_UNKNOWN, static_cast<uint8_t>(strlen("UNKNOWN"))},
 #else  // ENABLE_KEY
     {K_UNKNOWN, static_cast<uint8_t>(strlen("UNKNOWN"))},
@@ -80,7 +80,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "lignItems")) {
                 return K_ALIGN_ITEMS;
             }
-#if (FEATURE_COMPONENT_ANALOG_CLOCK == 1)
+#if (defined(FEATURE_COMPONENT_ANALOG_CLOCK) && FEATURE_COMPONENT_ANALOG_CLOCK == 1)
             if (!strcmp(s, "nalog-clock")) {
                 return K_ANALOG_CLOCK;
             }
@@ -106,7 +106,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "rc")) {
                 return K_ARC;
             }
-#if (FEATURE_COMPONENT_VIDEO == 1)
+#if (defined(FEATURE_COMPONENT_VIDEO) && FEATURE_COMPONENT_VIDEO == 1)
             if (!strcmp(s, "utoplay")) {
                 return K_AUTOPLAY;
             }
@@ -171,12 +171,12 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             }
             break;
         case 'c':
-#if (FEATURE_COMPONENT_CAMERA == 1)
+#if (defined(FEATURE_COMPONENT_CAMERA) && FEATURE_COMPONENT_CAMERA == 1)
             if (!strcmp(s, "amera")) {
                 return K_CAMERA;
             }
 #endif // FEATURE_COMPONENT_CAMERA
-#if (FEATURE_COMPONENT_CANVAS == 1)
+#if (defined(FEATURE_COMPONENT_CANVAS) && FEATURE_COMPONENT_CANVAS == 1)
             if (!strcmp(s, "anvas")) {
                 return K_CANVAS;
             }
@@ -199,7 +199,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "olumn-reverse")) {
                 return K_COLUMN_REVERSE;
             }
-#if (FEATURE_COMPONENT_VIDEO == 1)
+#if (defined(FEATURE_COMPONENT_VIDEO) && FEATURE_COMPONENT_VIDEO == 1)
             if (!strcmp(s, "ontrols")) {
                 return K_CONTROLS;
             }
@@ -222,7 +222,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "lip")) {
                 return K_CLIP;
             }
-#if (FEATURE_COMPONENT_ANALOG_CLOCK == 1)
+#if (defined(FEATURE_COMPONENT_ANALOG_CLOCK) && FEATURE_COMPONENT_ANALOG_CLOCK == 1)
             if (!strcmp(s, "lock-hand")) {
                 return K_CLOCK_HAND;
             }
@@ -238,12 +238,12 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "atasets")) {
                 return K_DATASETS;
             }
-#if (FEATURE_DATE_FORMAT == 1)
+#if (defined(FEATURE_DATE_FORMAT) && FEATURE_DATE_FORMAT == 1)
             if (!strcmp(s, "ay")) {
                 return K_DAY;
             }
 #endif
-#if (FEATURE_COMPONENT_DATE_PICKER == 1)
+#if (defined(FEATURE_COMPONENT_DATE_PICKER) && FEATURE_COMPONENT_DATE_PICKER == 1)
             if (!strcmp(s, "ate")) {
                 return K_DATE;
             }
@@ -277,7 +277,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "llipsis")) {
                 return K_ELLIPSIS;
             }
-#if (FEATURE_COMPONENT_DATE_PICKER == 1)
+#if (defined(FEATURE_COMPONENT_DATE_PICKER) && FEATURE_COMPONENT_DATE_PICKER == 1)
             if (!strcmp(s, "nd")) {
                 return K_END;
             }
@@ -304,7 +304,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "ixedsize")) {
                 return K_FIXED_SIZE;
             }
-#if (FEATURE_COMPONENT_VIDEO == 1)
+#if (defined(FEATURE_COMPONENT_VIDEO) && FEATURE_COMPONENT_VIDEO == 1)
             if (!strcmp(s, "inish")) {
                 return K_FINISH;
             }
@@ -354,7 +354,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
                 return K_HOUR;
             }
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
-#if (FEATURE_DATE_FORMAT == 1)
+#if (defined(FEATURE_DATE_FORMAT) && FEATURE_DATE_FORMAT == 1)
             if (!strcmp(s, "our12")) {
                 return K_HOUR12;
             }
@@ -437,7 +437,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "oop")) {
                 return K_LOOP;
             }
-#if (FEATURE_DATE_FORMAT == 1)
+#if (defined(FEATURE_DATE_FORMAT) && FEATURE_DATE_FORMAT == 1)
             if (!strcmp(s, "ong")) {
                 return K_LONG;
             }
@@ -471,12 +471,12 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "ini")) {
                 return K_MINI;
             }
-#if (FEATURE_COMPONENT_VIDEO == 1)
+#if (defined(FEATURE_COMPONENT_VIDEO) && FEATURE_COMPONENT_VIDEO == 1)
             if (!strcmp(s, "uted")) {
                 return K_MUTED;
             }
 #endif // FEATURE_COMPONENT_VIDEO
-#if (FEATURE_NUMBER_FORMAT == 1)
+#if (defined(FEATURE_NUMBER_FORMAT) && FEATURE_NUMBER_FORMAT == 1)
             if (!strcmp(s, "inimumFractionDigits")) {
                 return K_MINIMUMFRACTIONDIGITS;
             }
@@ -484,7 +484,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
                 return K_MAXIMUMFRACTIONDIGITS;
             }
 #endif
-#if (FEATURE_DATE_FORMAT == 1)
+#if (defined(FEATURE_DATE_FORMAT) && FEATURE_DATE_FORMAT == 1)
             if (!strcmp(s, "inute")) {
                 return K_MINUTE;
             }
@@ -533,7 +533,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "addingTop")) {
                 return K_PADDING_TOP;
             }
-#if (FEATURE_COMPONENT_VIDEO == 1)
+#if (defined(FEATURE_COMPONENT_VIDEO) && FEATURE_COMPONENT_VIDEO == 1)
             if (!strcmp(s, "ause")) {
                 return K_PAUSE;
             }
@@ -544,7 +544,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "icker-view")) {
                 return K_PICKER_VIEW;
             }
-#if (FEATURE_COMPONENT_ANALOG_CLOCK == 1)
+#if (defined(FEATURE_COMPONENT_ANALOG_CLOCK) && FEATURE_COMPONENT_ANALOG_CLOCK == 1)
             if (!strcmp(s, "ivotX")) {
                 return K_PIVOT_X;
             }
@@ -552,7 +552,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
                 return K_PIVOT_Y;
             }
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
-#if (FEATURE_COMPONENT_VIDEO == 1)
+#if (defined(FEATURE_COMPONENT_VIDEO) && FEATURE_COMPONENT_VIDEO == 1)
             if (!strcmp(s, "repared")) {
                 return K_PREPARED;
             }
@@ -561,7 +561,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
                 return K_PROGRESS;
             }
             break;
-#if (FEATURE_COMPONENT_QRCODE == 1)
+#if (defined(FEATURE_COMPONENT_QRCODE) && FEATURE_COMPONENT_QRCODE == 1)
         case 'q':
             if (!strcmp(s, "rcode")) {
                 return K_QRCODE;
@@ -630,12 +630,12 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "crollbottom")) {
                 return K_SCROLLBOTTOM;
             }
-#if (FEATURE_COMPONENT_ANALOG_CLOCK == 1)
+#if (defined(FEATURE_COMPONENT_ANALOG_CLOCK) && FEATURE_COMPONENT_ANALOG_CLOCK == 1)
             if (!strcmp(s, "ec")) {
                 return K_SEC;
             }
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
-#if (FEATURE_COMPONENT_VIDEO == 1)
+#if (defined(FEATURE_COMPONENT_VIDEO) && FEATURE_COMPONENT_VIDEO == 1)
             if (!strcmp(s, "eeked")) {
                 return K_SEEKED;
             }
@@ -658,7 +658,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "how")) {
                 return K_SHOW;
             }
-#if (FEATURE_DATE_FORMAT == 1)
+#if (defined(FEATURE_DATE_FORMAT) && FEATURE_DATE_FORMAT == 1)
             if (!strcmp(s, "hort")) {
                 return K_SHORT;
             }
@@ -709,7 +709,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "trokeWidth")) {
                 return K_STROKE_WIDTH;
             }
-#if (FEATURE_NUMBER_FORMAT == 1)
+#if (defined(FEATURE_NUMBER_FORMAT) && FEATURE_NUMBER_FORMAT == 1)
             if (!strcmp(s, "tyle")) {
                 return K_STYLE;
             }
@@ -725,7 +725,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             }
             break;
         case 't':
-#if (FEATURE_COMPONENT_TABS == 1)
+#if (defined(FEATURE_COMPONENT_TABS) && FEATURE_COMPONENT_TABS == 1)
             if (!strcmp(s, "ab-bar")) {
                 return K_TAB_BAR;
             }
@@ -739,7 +739,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "ime")) {
                 return K_TIME;
             }
-#if (FEATURE_COMPONENT_VIDEO == 1)
+#if (defined(FEATURE_COMPONENT_VIDEO) && FEATURE_COMPONENT_VIDEO == 1)
             if (!strcmp(s, "imeupdate")) {
                 return K_TIME_UPDATE;
             }
@@ -782,14 +782,14 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "extOverflow")) {
                 return K_TEXT_OVERFLOW;
             }
-#if (FEATURE_COMPONENT_ANALOG_CLOCK == 1)
+#if (defined(FEATURE_COMPONENT_ANALOG_CLOCK) && FEATURE_COMPONENT_ANALOG_CLOCK == 1)
             if (!strcmp(s, "ype")) {
                 return K_TYPE;
             }
 #endif // FEATURE_COMPONENT_ANALOG_CLOCK
             break;
         case 'u':
-#if (FEATURE_NUMBER_FORMAT == 1)
+#if (defined(FEATURE_NUMBER_FORMAT) && FEATURE_NUMBER_FORMAT == 1)
             if (!strcmp(s, "seGrouping")) {
                 return K_USEGROUP;
             }
@@ -802,7 +802,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "ertical")) {
                 return K_VERTICAL;
             }
-#if (FEATURE_COMPONENT_VIDEO == 1)
+#if (defined(FEATURE_COMPONENT_VIDEO) && FEATURE_COMPONENT_VIDEO == 1)
             if (!strcmp(s, "ideo")) {
                 return K_VIDEO;
             }
@@ -817,7 +817,7 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             }
             break;
         case '2':
-#if (FEATURE_DATE_FORMAT == 1)
+#if (defined(FEATURE_DATE_FORMAT) && FEATURE_DATE_FORMAT == 1)
             if (!strcmp(s, "-digit")) {
                 return K_DIGIT2;
             }
@@ -853,7 +853,7 @@ const char *KeyParser::GetKeyById(uint16_t id)
     if (!IsKeyValid(id)) {
         return "UNKNOWN";
     }
-#if (ENABLE_KEY == 1)
+#if (defined(ENABLE_KEY) && ENABLE_KEY == 1)
     return G_KEYWORD_INFO[id].key;
 #else
     return "UNKNOWN";

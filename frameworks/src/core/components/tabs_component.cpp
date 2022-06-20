@@ -15,7 +15,7 @@
 
 #include "acelite_config.h"
 
-#if (FEATURE_COMPONENT_TABS == 1)
+#if (defined(FEATURE_COMPONENT_TABS) && FEATURE_COMPONENT_TABS == 1)
 
 #include "ace_log.h"
 #include "keys.h"

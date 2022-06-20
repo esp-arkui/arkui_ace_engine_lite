@@ -31,7 +31,7 @@
 #include "js_app_context.h"
 #include "js_app_environment.h"
 #include "js_profiler.h"
-#if IS_ENABLED(CONSOLE_LOG_OUTPUT)
+#if defined(CONSOLE_LOG_OUTPUT) && IS_ENABLED(CONSOLE_LOG_OUTPUT)
 #include "presets/console_module.h"
 #endif
 #include "presets/console_log_impl.h"
@@ -39,7 +39,7 @@
 #include "securec.h"
 #include "task_manager.h"
 
-#if ((defined __LITEOS__) || (defined __linux__) || (SCREENSIZE_SPECIFIED == 1))
+#if ((defined __LITEOS__) || (defined __linux__) || (defined(SCREENSIZE_SPECIFIED) && (SCREENSIZE_SPECIFIED == 1)))
 #include <screen.h>
 #endif
 
@@ -269,7 +269,7 @@ void PrintErrorMessage(const jerry_value_t errorValue)
     DfxAssist dfxAssist;
     dfxAssist.DumpErrorCode(errorValue);
     dfxAssist.DumpErrorMessage(errorValue);
-#if IS_ENABLED(ENGINE_DEBUGGER)
+#if defined(ENGINE_DEBUGGER) && IS_ENABLED(ENGINE_DEBUGGER)
     FlushOutput();
 #endif
 }
@@ -598,7 +598,7 @@ int32_t GetFileSize(const char * const filePath)
 static int32_t OpenFileInternal(const char * const orgFullPath, bool binary = false)
 {
     const char *path = orgFullPath;
-#if (QT_SIMULATOR != 1)
+#if (defined(QT_SIMULATOR) && QT_SIMULATOR != 1)
 #ifndef __LITEOS_M__ // no path canonicalization on M core
     char fullPath[PATH_MAX + 1] = {0};
 #if ((defined(__WIN32)) || (defined(__WIN64)))
@@ -1108,7 +1108,7 @@ struct JSPageSpecific jsPageSpecific;
 uint16_t GetHorizontalResolution()
 {
 // SCREENSIZE_SPECIFIED is temporarily set, when ui and graphic unifid, this can be removed
-#if ((defined __LITEOS__) || (defined __linux__) || (SCREENSIZE_SPECIFIED == 1))
+#if ((defined __LITEOS__) || (defined __linux__) || (defined(SCREENSIZE_SPECIFIED) && (SCREENSIZE_SPECIFIED == 1)))
     return Screen::GetInstance().GetWidth();
 #else
     constexpr uint16_t resConst = 454;
@@ -1121,7 +1121,7 @@ uint16_t GetHorizontalResolution()
 
 uint16_t GetVerticalResolution()
 {
-#if ((defined __LITEOS__) || (defined __linux__) || (SCREENSIZE_SPECIFIED == 1))
+#if ((defined __LITEOS__) || (defined __linux__) || (defined(SCREENSIZE_SPECIFIED) && (SCREENSIZE_SPECIFIED == 1)))
     return Screen::GetInstance().GetHeight();
 #else
     uint16_t horizontalResolution = resConst;
@@ -1190,7 +1190,7 @@ void ExpandImagePathMem(char *&imagePath, const int16_t dotPos, const int16_t su
     imagePath = newImagePath;
 }
 
-#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH == 1)
 void CureImagePath(char *&imagePath)
 {
     if (imagePath == nullptr) {
@@ -1276,7 +1276,7 @@ const char *ParseImageSrc(jerry_value_t source)
     char *imageSrc = JsAppContext::GetInstance()->GetResourcePath(rawSrc);
     ace_free(rawSrc);
     rawSrc = nullptr;
-#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH == 1)
     CureImagePath(imageSrc);
 #endif // OHOS_ACELITE_PRODUCT_WATCH
     return imageSrc;

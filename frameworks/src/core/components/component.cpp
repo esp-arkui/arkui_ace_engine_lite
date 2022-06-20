@@ -200,7 +200,7 @@ void Component::Release()
     // detach self from fatal handler monitoring
     FatalHandler::GetInstance().DetachComponentNode(this);
     RemoveAllChildren();
-#if (FEATURE_LAZY_LOADING_MODULE == 1)
+#if (defined(FEATURE_LAZY_LOADING_MODULE) && FEATURE_LAZY_LOADING_MODULE == 1)
     // detach from lazy pending list
     JsAppContext *context = JsAppContext::GetInstance();
     LazyLoadManager *lazyLoadManager = const_cast<LazyLoadManager *>(context->GetLazyLoadManager());
@@ -1096,7 +1096,7 @@ void Component::ParseAttrs()
             if (freeze_) {
                 newAttrValue = JSFunction::Call(attrValue, viewModel_, nullptr, 0);
             } else {
-#if (FEATURE_LAZY_LOADING_MODULE == 1)
+#if (defined(FEATURE_LAZY_LOADING_MODULE) && FEATURE_LAZY_LOADING_MODULE == 1)
                 newAttrValue = CallJSFunction(attrValue, viewModel_, nullptr, 0);
                 JsAppContext *context = JsAppContext::GetInstance();
                 LazyLoadManager *lazyLoadManager = const_cast<LazyLoadManager *>(context->GetLazyLoadManager());
@@ -1934,7 +1934,7 @@ bool Component::HandleBackgroundImg(const AppStyleItem &styleItem, char *&presse
                 filePath = nullptr;
                 return result;
             }
-#if (OHOS_ACELITE_PRODUCT_WATCH == 1)
+#if (defined(OHOS_ACELITE_PRODUCT_WATCH) && OHOS_ACELITE_PRODUCT_WATCH == 1)
             // convert .png/jpeg/bmp to .bin subfix
             CureImagePath(imagePath);
 #endif // OHOS_ACELITE_PRODUCT_WATCH
@@ -1956,7 +1956,7 @@ bool Component::HandleBackgroundImg(const AppStyleItem &styleItem, char *&presse
     return result;
 }
 
-#if (FEATURE_ROTATION_API == 1)
+#if (defined(FEATURE_ROTATION_API) && FEATURE_ROTATION_API == 1)
 jerry_value_t Component::HandleRotationRequest(const jerry_value_t func,
                                                const jerry_value_t dom,
                                                const jerry_value_t args[],

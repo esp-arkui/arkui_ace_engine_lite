@@ -31,7 +31,7 @@
 #include "presets/profiler_module.h"
 #include "presets/render_module.h"
 #include "presets/require_module.h"
-#if (FEATURE_SYSCAP_MODULE == 1)
+#if (defined(FEATURE_SYSCAP_MODULE) && FEATURE_SYSCAP_MODULE == 1)
 #include "presets/syscap_module.h"
 #endif
 #include "presets/timer_module.h"
@@ -54,7 +54,7 @@ void JsAppEnvironment::LoadAceBuiltInModules() const
     FeaAbilityModule::Load();
     JsTestModule::Load();
     TimersModule::Load();
-#if (FEATURE_SYSCAP_MODULE == 1)
+#if (defined(FEATURE_SYSCAP_MODULE) && FEATURE_SYSCAP_MODULE == 1)
     SyscapsModule::Load();
 #endif
     PerformaceProfilerModule::Load();
@@ -65,17 +65,17 @@ void JsAppEnvironment::LoadAceBuiltInModules() const
 void JsAppEnvironment::InitJsFramework() const
 {
     START_TRACING(ENGINE_INIT);
-#if (JS_ENGINE_STATIC_MULTI_CONTEXTS_ENABLED == 1)
+#if (defined(JS_ENGINE_STATIC_MULTI_CONTEXTS_ENABLED) && JS_ENGINE_STATIC_MULTI_CONTEXTS_ENABLED == 1)
     js_task_context_init();
 #endif
-#if (JERRY_PORTING_DEPENDENCY == 0)
+#if (defined(JERRY_PORTING_DEPENDENCY) && JERRY_PORTING_DEPENDENCY == 0)
     Srand((unsigned)jerry_port_get_current_time());
 #endif
     Debugger::GetInstance().SetupJSContext();
     jerry_init(JERRY_INIT_EMPTY);
     STOP_TRACING();
     START_TRACING(FWK_INIT);
-#if (JSFWK_TEST == 1)
+#if (defined(JSFWK_TEST) && JSFWK_TEST == 1)
     jerry_value_t globalThis = jerry_get_global_object();
     jerry_release_value(jerryx_set_property_str(globalThis, "globalThis", globalThis));
     jerry_release_value(globalThis);
@@ -127,7 +127,7 @@ void JsAppEnvironment::Cleanup()
     jerry_cleanup();
     // free the external JS context, only can be called after clean up engine
     Debugger::GetInstance().ReleaseJSContext();
-#if (JS_ENGINE_STATIC_MULTI_CONTEXTS_ENABLED == 1)
+#if (defined(JS_ENGINE_STATIC_MULTI_CONTEXTS_ENABLED) && JS_ENGINE_STATIC_MULTI_CONTEXTS_ENABLED == 1)
     jerry_port_default_remove_current_context_record();
 #endif
 }

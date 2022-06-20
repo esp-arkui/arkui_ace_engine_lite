@@ -14,7 +14,7 @@
  */
 
 #include "sample_module.h"
-#if (ENABLE_MODULE_REQUIRE_TEST == 1)
+#if (defined(ENABLE_MODULE_REQUIRE_TEST) && ENABLE_MODULE_REQUIRE_TEST == 1)
 #if (TARGET_SIMULATOR != 1)
 #include "js_async_work.h"
 #endif

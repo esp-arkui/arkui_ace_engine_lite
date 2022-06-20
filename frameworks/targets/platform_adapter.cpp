@@ -28,7 +28,7 @@ namespace OHOS {
 namespace ACELite {
 void PrintVersionTrace()
 {
-#if (TARGET_SIMULATOR == 1)
+#if (defined(TARGET_SIMULATOR) && TARGET_SIMULATOR == 1)
     // output version trace on simulator
     HILOG_DEBUG(HILOG_MODULE_ACE, "ACELite version: %{public}s", ACEVersion::GetStr());
     HILOG_DEBUG(HILOG_MODULE_ACE, "ACELite commit: %{public}s", ACEVersion::GetCommit());
@@ -38,7 +38,7 @@ void PrintVersionTrace()
 
 void SetEngineSnapshotMode(bool &mode)
 {
-#if (TARGET_SIMULATOR != 1)
+#if (defined(TARGET_SIMULATOR) && TARGET_SIMULATOR != 1)
     mode = true;
 #else
     mode = false;
@@ -50,17 +50,18 @@ void SetEngineSnapshotModeManually(bool &mode)
 #if (defined(__LINUX__) || defined(__LITEOS_A__))
     // if not starting debugger, on real device, give a chance to use JS mode manually
     mode = IsFileExisted(RUNTIME_MODE_FILE_PATH);
-#elif (TARGET_SIMULATOR != 1)
+#elif (defined(TARGET_SIMULATOR) && TARGET_SIMULATOR != 1)
     mode = !(IsFileExisted(RUNTIME_MODE_FILE_PATH));
 #endif
 }
 
 void Terminate(uint16_t token)
 {
-#if (TARGET_SIMULATOR != 1) // no AMS support on PC simulator
-#if (FEATURE_TERMINATE_ABILITY == 1)
+#if (defined(TARGET_SIMULATOR) && TARGET_SIMULATOR != 1) // no AMS support on PC simulator
+#if (defined(FEATURE_TERMINATE_ABILITY) && FEATURE_TERMINATE_ABILITY == 1)
     ProductAdapter::SendTerminatingRequest(token, false);
 #else
+    (void)(token);
     AceAbility::TerminateSelf();
 #endif
 #endif
@@ -68,8 +69,10 @@ void Terminate(uint16_t token)
 
 void Srand(unsigned seed)
 {
-#if (TARGET_SIMULATOR == 1)
+#if (defined(TARGET_SIMULATOR) && TARGET_SIMULATOR == 1)
     srand(seed);
+#else
+    (void)(seed);
 #endif // TARGET_SIMULATOR
 }
 } // namespace ACELite

@@ -16,7 +16,7 @@
 
 #include "ace_event_error_code.h"
 #include "product_adapter.h"
-#if (FEATURE_ACELITE_MC_EVENT_ERROR_CODE_PRINT == 1)
+#if (defined(FEATURE_ACELITE_MC_EVENT_ERROR_CODE_PRINT) && FEATURE_ACELITE_MC_EVENT_ERROR_CODE_PRINT == 1)
 namespace OHOS {
 namespace ACELite {
 EventErrorCodePrint *EventErrorCodePrint::GetInstance()
