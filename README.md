@@ -55,15 +55,16 @@ The source code of the framework is stored in  **/foundation/arkui/arkui\_ace\_e
 
 ## Available APIs<a name="section1096322014288"></a>
 
-For details about the APIs, see the  [JS Application Development](https://device.harmonyos.com/en/docs/apiref/js-framework-file-0000000000616658).
+For details about the APIs, see the  [JS Application Development](https://docs.openharmony.cn/pages/v3.1/en/application-dev/ui/js-framework-file.md/).
 
 ## Usage<a name="section1529834174016"></a>
 
 For details, go to the  **readme**  repository:
 
-[https://gitee.com/openharmony/docs/blob/master/en/readme/js-ui-framework.md](https://gitee.com/openharmony/docs/blob/master/en/readme/js-ui-framework.md)
+[js-ui-framework](https://gitee.com/openharmony/docs/blob/master/en/readme/js-ui-framework.md)
 
 ## Repositories Involved<a name="section11683135113011"></a>
 
-[arkui\_ace\_engine\_lite](https://gitee.com/openharmony/arkui_ace_engine_lite)
+[arkui\_ace\_engine](https://gitee.com/openharmony/arkui_ace_engine)
 
+**arkui\_ace\_engine\_lite**
