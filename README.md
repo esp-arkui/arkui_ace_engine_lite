@@ -2,7 +2,6 @@
 
 -   [Introduction](#section11660541593)
 -   [Directory Structure](#section1464106163817)
--   [Available APIs](#section1096322014288)
 -   [Usage](#section1529834174016)
 -   [Repositories Involved](#section11683135113011)
 
@@ -53,9 +52,6 @@ The source code of the framework is stored in  **/foundation/arkui/arkui\_ace\_e
 └── test               # Test cases
 ```
 
-## Available APIs<a name="section1096322014288"></a>
-
-For details about the APIs, see the  [JS Application Development](https://device.harmonyos.com/en/docs/apiref/js-framework-file-0000000000616658).
 
 ## Usage<a name="section1529834174016"></a>
 
