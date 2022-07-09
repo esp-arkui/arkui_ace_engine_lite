@@ -862,6 +862,7 @@ void InsertWatcherCommon(Watcher *&head, const jerry_value_t watcher)
 
 void ClearWatchersCommon(Watcher *&head)
 {
+    static int releasingWatchersCount = 0;
     Watcher *node = head;
     while (node) {
         head = node->next;
@@ -874,8 +875,11 @@ void ClearWatchersCommon(Watcher *&head)
         }
         delete node;
         node = head;
+        releasingWatchersCount++;
     }
     head = nullptr;
+    HILOG_DEBUG(HILOG_MODULE_ACE, "clear watchers count [%d]", releasingWatchersCount);
+    releasingWatchersCount = 0;
 }
 
 /**

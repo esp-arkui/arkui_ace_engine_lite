@@ -244,5 +244,23 @@ bool DescriptorUtils::IsDescriptor(const char * const type, JSValue descriptor)
     JSRelease(value);
     return result;
 }
+
+// NOTE: this can only process one layer if/for, there is leak for if/for nested by
+// another one situation, more comprehensive solution needed.
+void DescriptorUtils::ReleaseIfForDescriptorsRendered(JSValue descriptors)
+{
+    if (JSUndefined::Is(descriptors)) {
+        return;
+    }
+
+    uint16_t size = JSArray::Length(descriptors);
+    for (uint16_t idx = 0; idx < size; ++idx) {
+        JSValue descriptor = JSArray::Get(descriptors, idx);
+        if (!JSUndefined::Is(descriptor)) {
+            JSObject::Del(descriptor, DESCRIPTOR_ATTR_RENDERED);
+        }
+        JSRelease(descriptor);
+    }
+}
 } // namespace ACELite
 } // namespace OHOS

@@ -397,5 +397,43 @@ void JsAppContext::SetTargetApi(int32_t targetApi)
 {
     targetApi_ = targetApi;
 }
+
+void JsAppContext::AddWatchersForPendingRelease(Watcher *head)
+{
+    if (head == nullptr) {
+        return;
+    }
+
+    if (watcherListHead_ == nullptr) {
+        watcherListHead_ = head;
+        watcherListTail_ = watcherListHead_;
+        ConfirmPendingWatcherList();
+        return;
+    }
+
+    watcherListTail_->next = head;
+    ConfirmPendingWatcherList();
+}
+
+void JsAppContext::ConfirmPendingWatcherList()
+{
+    Watcher *node = watcherListTail_;
+    while (node) {
+        if (node->next == nullptr) {
+            watcherListTail_ = node;
+            break;
+        }
+        node = node->next;
+    }
+}
+
+void JsAppContext::ReleaseAllPendingWatchers()
+{
+    ClearWatchersCommon(watcherListHead_);
+    watcherListHead_ = nullptr;
+    watcherListTail_ = nullptr;
+    waitingNeeded_ = false;
+    watcherReleasingWaiting_ = false;
+}
 } // namespace ACELite
 } // namespace OHOS

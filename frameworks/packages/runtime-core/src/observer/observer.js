@@ -66,7 +66,8 @@ Observer.prototype.unsubscribe = function() {
   if (!detaches) {
     return void 0;
   }
-  while (detaches.length) {
-    detaches.pop()();
-  }
+  detaches.forEach( detach => {
+    detach();
+  });
+  this._detaches = [];
 };

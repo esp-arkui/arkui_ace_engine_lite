@@ -53,6 +53,7 @@ public:
     void DumpFatalTrace(int errorCode) const;
     uint16_t GetComponentCount() const;
     void NotifyVisibleStatusChange(bool isVisible) const;
+    void RecycleComponentsForcely();
     // define all fatal error below, please note the jerry fatal defines, avoid conflicts
     static const int ERR_INVALID = 0;
     static const int ERR_NATIVE_OUT_OF_MEMORY = 200;
@@ -74,6 +75,7 @@ private:
     ~FatalHandler() {}
     bool IsErrorSupported(int errorCode) const;
     void RecycleComponents();
+    void RecycleComponentForcelyInner(uint16_t targetType = K_UNKNOWN);
     JSAbility *jsAbility_;
     UIView *pageRootView_;
     List<Component *> componentNodes_;

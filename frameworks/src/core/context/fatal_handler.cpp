@@ -235,6 +235,37 @@ void FatalHandler::SetFatalError(int errorCode)
     }
 }
 
+void FatalHandler::RecycleComponentsForcely()
+{
+    isRecycling_ = true;
+    // as list components is handled specificly, must be released befor its all children nodes
+    RecycleComponentForcelyInner(K_LIST);
+    // release all other nodes
+    RecycleComponentForcelyInner();
+    isRecycling_ = false;
+}
+
+void FatalHandler::RecycleComponentForcelyInner(uint16_t targetType)
+{
+    ListNode<Component *> *node = componentNodes_.Begin();
+    while (node != componentNodes_.End()) {
+        ListNode<Component *> *nodeT = node;
+        node = node->next_;
+        if (nodeT == nullptr || nodeT->data_ == nullptr) {
+            continue;
+        }
+        Component *component = nodeT->data_;
+        if (targetType != K_UNKNOWN && component->GetComponentName() != targetType) {
+            continue; // skip specific component
+        }
+        component->Release();
+        delete component;
+        component = nullptr;
+        nodeT->data_ = nullptr;
+        node = componentNodes_.Remove(nodeT);
+    }
+}
+
 void FatalHandler::RecycleComponents()
 {
     isRecycling_ = true;

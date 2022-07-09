@@ -197,15 +197,18 @@ void Component::ReleaseViewExtraMsg()
 
 void Component::Release()
 {
-    // detach self from fatal handler monitoring
-    FatalHandler::GetInstance().DetachComponentNode(this);
-    RemoveAllChildren();
-#if (FEATURE_LAZY_LOADING_MODULE == 1)
-    // detach from lazy pending list
     JsAppContext *context = JsAppContext::GetInstance();
-    LazyLoadManager *lazyLoadManager = const_cast<LazyLoadManager *>(context->GetLazyLoadManager());
-    lazyLoadManager->RemoveLazyWatcher(nativeElement_);
+    // for page replace situation,
+    if (context != nullptr && !(context->IsPageReleasing())) {
+        // detach self from fatal handler monitoring
+        FatalHandler::GetInstance().DetachComponentNode(this);
+        RemoveAllChildren();
+#if (FEATURE_LAZY_LOADING_MODULE == 1)
+        // detach from lazy pending list
+        LazyLoadManager *lazyLoadManager = const_cast<LazyLoadManager *>(context->GetLazyLoadManager());
+        lazyLoadManager->RemoveLazyWatcher(nativeElement_);
 #endif // FEATURE_LAZY_LOADING_MODULE
+    }
     if (parent_ != nullptr) {
         parent_->RemoveChild(this);
     }
@@ -223,7 +226,16 @@ void Component::Release()
     // release the common event listeners if any
     ReleaseCommonEventListeners();
     // release children = jerry_create_array() in Init()
+#if 0
+    if (context != nullptr && !(context->IsPageReleasing())) {
+        ClearWatchersCommon(watchersHead_);
+    } else {
+        // if doing page routing, lazy releasing
+        JsAppContext::GetInstance()->AddWatchersForPendingRelease(watchersHead_);
+    }
+#else
     ClearWatchersCommon(watchersHead_);
+#endif
     // free viewId string if it's set
     ACE_FREE(viewId_);
     // release js object

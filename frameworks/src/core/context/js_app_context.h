@@ -21,6 +21,12 @@
 
 namespace OHOS {
 namespace ACELite {
+enum ComponentsReleaseStatus : uint8_t {
+    UNKOWN = 0,
+    PAGE_RELEASING,
+    FATAL_RECYCLING,
+};
+
 class JSAbilityImpl;
 /**
  * @brief Global App context.
@@ -146,6 +152,50 @@ public:
         return currentToken_;
     }
 
+    ComponentsReleaseStatus GetReleaseStatus() const
+    {
+        return componentReleasingStatus_;
+    }
+
+    void SetReleaseStatus(ComponentsReleaseStatus status)
+    {
+        componentReleasingStatus_ = status;
+    }
+
+    bool IsPageReleasing() const
+    {
+        return componentReleasingStatus_ == PAGE_RELEASING;
+    }
+
+    void AddWatchersForPendingRelease(Watcher *head);
+    void ReleaseAllPendingWatchers();
+    bool IsWatcherReleaseActionCanBeFired() const
+    {
+        if (watcherListHead_ == nullptr) {
+            return false;
+        }
+
+        if (waitingNeeded_) {
+            return (!watcherReleasingWaiting_);
+        }
+        return true;
+    }
+
+    bool SetWatcherReleaseWaitingNeeded()
+    {
+        waitingNeeded_ = true;
+    }
+
+    void MarkWatcherReleaseWaiting()
+    {
+        watcherReleasingWaiting_ = true;
+    }
+
+    void NotifyWatcherWaitingCanceled()
+    {
+        watcherReleasingWaiting_ = false;
+    }
+
 private:
     /**
      * @brief: release the ability info saved
@@ -166,6 +216,7 @@ private:
     char *EvaluateFile(bool &isSnapshotMode, uint32_t &outLength, char *fullPathPath, size_t fullPathLength) const;
     void CheckSnapshotVersion(const char *bcFileContent, uint32_t contentLength) const;
     char *ProcessResourcePathByConfiguration(size_t origUriLength, const char *filePath) const;
+    void ConfirmPendingWatcherList();
     char *currentBundleName_ = nullptr;
     char *currentAbilityPath_ = nullptr;
     char *currentJsPath_ = nullptr;
@@ -176,6 +227,11 @@ private:
     uint16_t currentToken_ = 0;
     int32_t compatibleApi_ = 0;
     int32_t targetApi_ = 0;
+    ComponentsReleaseStatus componentReleasingStatus_ = ComponentsReleaseStatus::UNKOWN;
+    Watcher *watcherListHead_ = nullptr;
+    Watcher *watcherListTail_ = nullptr;
+    bool waitingNeeded_ = false;
+    bool watcherReleasingWaiting_ = false;
 };
 } // namespace ACELite
 } // namespace OHOS

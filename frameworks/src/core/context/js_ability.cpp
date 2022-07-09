@@ -25,6 +25,7 @@
 #endif // OHOS_ACELITE_PRODUCT_WATCH
 #include "fatal_handler.h"
 #include "js_ability_impl.h"
+#include "js_app_context.h"
 #include "js_async_work.h"
 #include "js_profiler.h"
 #include "product_adapter.h"
@@ -167,6 +168,7 @@ void JSAbility::TransferToDestroy()
 #endif
     HILOG_INFO(HILOG_MODULE_ACE, "LIFECYCLE: JS Ability is exiting");
     ACE_EVENT_PRINT(MT_ACE_FWK_DESTROYING, 0);
+    JsAppContext::GetInstance()->ReleaseAllPendingWatchers();
     JSAbilityImpl *jsAbilityImpl = CastAbilityImpl(jsAbilityImpl_);
     jsAbilityImpl->CleanUp();
     // Reset render flag or low layer task mutex in case we are during the rendering process,
@@ -239,6 +241,12 @@ void JSAbility::LazyLoadHandleRenderTick(void *data)
     GetLazyLoadManager()->RenderLazyLoadWatcher();
 }
 
+static void ReleasePrePageWatchers(void *data)
+{
+    UNUSED(data);
+    JsAppContext::GetInstance()->ReleaseAllPendingWatchers();
+}
+
 void JSAbility::HandleRenderTick()
 {
     if (!isActived_) {
@@ -261,6 +269,9 @@ void JSAbility::HandleRenderTick()
     if ((ProductAdapter::IsTEHandlersRegisted()) && !(FatalHandler::GetInstance().IsAppExiting())) {
         FatalHandler::GetInstance().SetTEHandlingFlag(true);
         ProductAdapter::ProcessOneTE();
+        if (JsAppContext::GetInstance()->IsWatcherReleaseActionCanBeFired()) {
+            JsAsyncWork::DispatchAsyncWork(ReleasePrePageWatchers, nullptr);
+        }
         // check if state is ready
         if (GetLazyLoadManagerState() == LazyLoadState::READY) {
             JsAsyncWork::DispatchAsyncWork(LazyLoadHandleRenderTick, nullptr);

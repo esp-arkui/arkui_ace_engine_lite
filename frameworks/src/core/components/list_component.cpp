@@ -18,6 +18,7 @@
 #include "component_utils.h"
 #include "directive/descriptor_utils.h"
 #include "fatal_handler.h"
+#include "js_app_context.h"
 #include "key_parser.h"
 #include "keys.h"
 
@@ -33,6 +34,7 @@ ListComponent::ListComponent(JSValue options, JSValue children, AppStyleManager 
 #if (FEATURE_ROTATION_API == 1)
     RegisterNamedFunction(FUNC_ROTATION_NAME, HandleRotationRequest);
 #endif // FEATURE_ROTATION_API
+    JsAppContext::GetInstance()->SetWatcherReleaseWaitingNeeded();
 }
 
 // Create list
@@ -56,6 +58,13 @@ void ListComponent::ReleaseNativeViews()
         if (!IS_UNDEFINED(GetDescriptors())) {
             DescriptorUtils::ReleaseDescriptorOrElements(GetDescriptors());
         }
+        return;
+    }
+
+    // componets are recycling through fatal handler
+    if (false) {
+        // do specific handling: release all if/for rendered descriptor
+        DescriptorUtils::ReleaseIfForDescriptorsRendered(GetDescriptors());
     }
 }
 
@@ -173,6 +182,7 @@ bool ListComponent::UpdateForView()
 
     // refresh the list, load new child dynamically in list.
     list_.RefreshList();
+    JsAppContext::GetInstance()->NotifyWatcherWaitingCanceled();
     return true;
 }
 
