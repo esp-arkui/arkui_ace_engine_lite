@@ -26,9 +26,8 @@ npm run build
 rm -rf jerryscript
 git clone git@gitee.com:openharmony/third_party_jerryscript.git jerryscript
 
-# step 3: reset the commit to the 2.1.0 tag
+# step 3: reset the commit to the latest tag
 pushd ./jerryscript
-git reset --hard e8bc7a2b93a6edfa463458c8bb69fac2a36feb9e
 
 # step 4: compile jerry snapshot tool
 python tools/build.py --mem-heap=64 --snapshot-exec=ON --snapshot-save=ON \
