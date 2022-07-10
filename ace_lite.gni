@@ -11,7 +11,7 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-import("//build/lite/config/subsystem/aafwk/path.gni")
+import("//build/hb/config/subsystem/aafwk/path.gni")
 
 ACE_LITE_PATH = "//foundation/arkui/ace_engine_lite/frameworks"
 ACE_LITE_COMMON_PATH = "//foundation/arkui/ace_engine_lite/frameworks/common"

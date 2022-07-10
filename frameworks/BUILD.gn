@@ -11,8 +11,8 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-import("//build/lite/config/component/lite_component.gni")
-import("//build/lite/config/subsystem/aafwk/config.gni")
+import("//build/hb/config/component/lite_component.gni")
+import("//build/hb/config/subsystem/aafwk/config.gni")
 import("//foundation/arkui/ace_engine_lite/ace_lite.gni")
 
 defines = []
@@ -70,14 +70,14 @@ lite_library("ace_lite") {
 
   if (ohos_kernel_type == "liteos_m") {
     public_deps += [
-      "//build/lite/config/component/cJSON:cjson_static",
+      "//build/hb/config/component/cJSON:cjson_static",
       "//third_party/bounds_checking_function:libsec_static",
       "//third_party/jerryscript:jerry_engine",
     ]
   } else {
     public_deps += [
       "//base/startup/init_lite/interfaces/innerkits/syscap:syscap",
-      "//build/lite/config/component/cJSON:cjson_shared",
+      "//build/hb/config/component/cJSON:cjson_shared",
       "//foundation/graphic/surface:lite_surface",
       "//foundation/multimedia/camera_lite/frameworks:camera_lite",
       "//foundation/multimedia/media_lite/frameworks/player_lite:player_lite",
