@@ -1,22 +1,22 @@
 {
   "framework-dev.js": {
-    "bundled": 13123,
-    "minified": 3191,
-    "gzipped": 1264
+    "bundled": 13318,
+    "minified": 3162,
+    "gzipped": 1221
   },
   "framework.js": {
-    "bundled": 11561,
-    "minified": 3001,
-    "gzipped": 1195
+    "bundled": 11756,
+    "minified": 2972,
+    "gzipped": 1153
   },
   "framework-dev.min.js": {
-    "bundled": 3191,
-    "minified": 3191,
-    "gzipped": 1264
+    "bundled": 3162,
+    "minified": 3157,
+    "gzipped": 1217
   },
   "framework.min.js": {
-    "bundled": 3001,
-    "minified": 3001,
-    "gzipped": 1194
+    "bundled": 2972,
+    "minified": 2967,
+    "gzipped": 1148
   }
 }

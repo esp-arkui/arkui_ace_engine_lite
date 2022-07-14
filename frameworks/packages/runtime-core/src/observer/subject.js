@@ -19,7 +19,6 @@ import {
   defineProp
 } from './utils';
 
-
 /**
  * Subject constructor
  * @param {any} target the target object to be observed
@@ -67,11 +66,7 @@ Subject.prototype.attach = function(key, observer) {
 };
 
 Subject.prototype.notify = function(key) {
-  if (
-    typeof key === 'undefined' ||
-    !this._obsMap ||
-    !this._obsMap[key]
-  ) {
+  if (typeof key === 'undefined' || !this._obsMap || !this._obsMap[key]) {
     return void 0;
   }
   this._obsMap[key].forEach(observer => observer.update());
@@ -86,51 +81,59 @@ Subject.prototype.notifyParent = function() {
   this._parent && this._parent.notify(this._key);
 };
 
-const ObservedMethods = {
-  PUSH: 'push',
-  POP: 'pop',
-  UNSHIFT: 'unshift',
-  SHIFT: 'shift',
-  SORT: 'sort',
-  SPLICE: 'splice',
-  REVERSE: 'reverse'
-};
+const METHOD_PUSH = 'push';
+const METHOD_POP = 'pop';
+const METHOD_UNSHIFT = 'unshift';
+const METHOD_SHIFT = 'shift';
+const METHOD_SORT = 'sort';
+const METHOD_SPLICE = 'splice';
+const METHOD_REVERSE = 'reverse';
 
-const OBSERVED_METHODS = Object.keys(ObservedMethods).map(
-    key => ObservedMethods[key]
-);
+const OBSERVED_METHODS = [
+  METHOD_PUSH,
+  METHOD_POP,
+  METHOD_UNSHIFT,
+  METHOD_SHIFT,
+  METHOD_SORT,
+  METHOD_SPLICE,
+  METHOD_REVERSE
+];
+
+const HijackedArrayPrototype = Object.create(Array.prototype);
+
+OBSERVED_METHODS.forEach(key => {
+  const originalMethod = HijackedArrayPrototype[key];
+  defineProp(HijackedArrayPrototype, key, function() {
+    // eslint-disable-next-line
+    const args = Array.prototype.slice.call(arguments);
+    // eslint-disable-next-line
+    originalMethod.apply(this, args);
+
+    let inserted;
+    if (METHOD_PUSH === key || METHOD_UNSHIFT === key) {
+      inserted = args;
+    } else if (METHOD_SPLICE === key) {
+      inserted = args.slice(2);
+    }
+
+    if (inserted && inserted.length) {
+      inserted.forEach(Subject.of);
+    }
+
+    // eslint-disable-next-line
+    const subject = this[SYMBOL_OBSERVABLE];
+    if (subject) {
+      subject.notifyParent();
+    }
+  });
+});
 
 /**
  * observe the change of array
  * @param {Array} target a plain JavaScript array to be observed
  */
 function hijackArray(target) {
-  OBSERVED_METHODS.forEach(key => {
-    const originalMethod = target[key];
-
-    defineProp(target, key, function() {
-      // eslint-disable-next-line
-      const args = Array.prototype.slice.call(arguments);
-      // eslint-disable-next-line
-      originalMethod.apply(this, args);
-
-      let inserted;
-      if (ObservedMethods.PUSH === key || ObservedMethods.UNSHIFT === key) {
-        inserted = args;
-      } else if (ObservedMethods.SPLICE === key) {
-        inserted = args.slice(2);
-      }
-
-      if (inserted && inserted.length) {
-        inserted.forEach(Subject.of);
-      }
-
-      const subject = target[SYMBOL_OBSERVABLE];
-      if (subject) {
-        subject.notifyParent();
-      }
-    });
-  });
+  Object.setPrototypeOf(target, HijackedArrayPrototype);
 }
 
 /**
