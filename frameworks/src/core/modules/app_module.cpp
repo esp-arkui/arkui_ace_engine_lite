@@ -125,6 +125,7 @@ JSIValue AppModule::Terminate(const JSIValue thisVal, const JSIValue *args, uint
     UNUSED(args);
     UNUSED(argsNum);
     JsAppContext::GetInstance()->TerminateAbility();
+    HILOG_DEBUG(HILOG_MODULE_ACE, "app is calling terminate itself.");
     return JSI::CreateUndefined();
 }
 

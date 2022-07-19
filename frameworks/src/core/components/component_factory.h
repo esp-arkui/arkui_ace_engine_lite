@@ -77,6 +77,9 @@ public:
             return nullptr;
         }
         AppStyleManager* styleManager = const_cast<AppStyleManager *>(context->GetStyleManager());
+        if (styleManager == nullptr) {
+            return nullptr;
+        }
 
         Component* component;
         switch (componentNameId) {
