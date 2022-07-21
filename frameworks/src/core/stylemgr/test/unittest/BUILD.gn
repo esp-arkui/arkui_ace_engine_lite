@@ -11,7 +11,7 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-import("//build/lite/config/test.gni")
+import("//build/hb/config/test.gni")
 import("//foundation/arkui/ace_engine_lite/test/ace_test_config.gni")
 
 unittest("js_frameworks_test_stylemgr") {
