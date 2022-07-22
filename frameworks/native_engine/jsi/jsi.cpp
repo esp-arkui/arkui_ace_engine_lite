@@ -158,6 +158,78 @@ static jerry_value_t CreateJerryFuncHelper(const jerry_value_t func,
     jsiArgs = nullptr;
     return AS_JERRY_VALUE(res);
 }
+
+struct PairedFuncBindings : public MemoryHeap {
+    JSIFunctionHandlerEx handler;
+    void *extraParam;
+//    jerry_object_native_info_t *freeInfoD;    // need be freed after func released
+    JSINativeFreeCallbackEx userFreeCallback; // user free callback binding to the func
+
+    PairedFuncBindings(const PairedFuncBindings &) = delete;
+    PairedFuncBindings &operator=(const PairedFuncBindings &) = delete;
+    PairedFuncBindings(PairedFuncBindings &&) = delete;
+    PairedFuncBindings &operator=(PairedFuncBindings &&) = delete;
+    PairedFuncBindings() : handler(nullptr), extraParam(nullptr)/*, freeInfoD(nullptr)*/, userFreeCallback(nullptr) {}
+};
+
+static void FunctionFreeCallbackHelperEx(void *nativeP)
+{
+    if (nativeP == nullptr) {
+        return;
+    }
+
+    PairedFuncBindings *pairedBindings = reinterpret_cast<PairedFuncBindings *>(nativeP);
+    if (pairedBindings->userFreeCallback != nullptr) {
+        pairedBindings->userFreeCallback(nullptr, pairedBindings->extraParam);
+    }
+
+//    if (pairedBindings->freeInfoD != nullptr) {
+//        ace_free(pairedBindings->freeInfoD);
+//    }
+
+    ace_free(pairedBindings);
+    pairedBindings = nullptr;
+}
+
+static jerry_object_native_info_t FUNC_PROPERTY_GC_CALLBACK = {.free_cb = FunctionFreeCallbackHelperEx};
+
+/**
+ * @brief: CreateJerryFuncHelperEx is used to create jerry function
+ *         along with JSI::CreateFunctionEx, for internal use only.
+ */
+static jerry_value_t CreateJerryFuncHelperEx(const jerry_value_t func,
+                                             const jerry_value_t thisVal,
+                                             const jerry_value_t *args,
+                                             const jerry_length_t argsNum)
+{
+    void *nativePointer = nullptr;
+    bool exist = jerry_get_object_native_pointer(func, &nativePointer, &FUNC_PROPERTY_GC_CALLBACK);
+    if (!exist || (nativePointer == nullptr) || (argsNum >= UINT8_MAX)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "JSI:CreateJerryFuncHelperEx get function pointer failed!");
+        return jerry_create_undefined();
+    }
+
+    PairedFuncBindings *pairedBindings = reinterpret_cast<PairedFuncBindings *>(nativePointer);
+    JSIFunctionHandlerEx handler = pairedBindings->handler;
+    JSIValue jsiThis = AS_JSI_VALUE(thisVal);
+    uint8_t jsiArgsNum = (uint8_t)argsNum;
+    if ((args == nullptr) || (jsiArgsNum == 0)) {
+        return AS_JERRY_VALUE(handler(jsiThis, pairedBindings->extraParam, nullptr, 0));
+    }
+    JSIValue *jsiArgs = static_cast<JSIValue *>(ace_malloc(sizeof(JSIValue) * jsiArgsNum));
+    if (jsiArgs == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "JSI:CreateJerryFuncHelper allocate memory failed!");
+        return jerry_create_undefined();
+    }
+
+    for (uint8_t index = 0; index < jsiArgsNum; index++) {
+        jsiArgs[index] = AS_JSI_VALUE(args[index]);
+    }
+    JSIValue res = handler(jsiThis, pairedBindings->extraParam, jsiArgs, jsiArgsNum);
+    ace_free(jsiArgs);
+    jsiArgs = nullptr;
+    return AS_JERRY_VALUE(res);
+}
 #endif
 
 JSIValue JSI::CreateFunction(JSIFunctionHandler handler)
@@ -173,6 +245,44 @@ JSIValue JSI::CreateFunction(JSIFunctionHandler handler)
     return AS_JSI_VALUE(jFunc);
 #else
     HILOG_ERROR(HILOG_MODULE_ACE, "JSI:CreateFunction has not been implemented in this js engine!");
+    return CreateUndefined();
+#endif
+}
+
+JSIValue JSI::CreateFunctionEx(JSIFunctionHandlerEx handler, void *extraParam, JSINativeFreeCallbackEx userFreeCallback)
+{
+    if (handler == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "JSI:CreateFunctionEx failed!");
+        return CreateUndefined();
+    }
+#if (ENABLE_JERRY == 1)
+//    jerry_object_native_info_t *freeCallbackInfo = nullptr;
+//    if (userFreeCallback != nullptr) {
+//        freeCallbackInfo = static_cast<jerry_object_native_info_t *>(ace_malloc(sizeof(jerry_object_native_info_t)));
+//        if (freeCallbackInfo == nullptr) {
+//            return CreateUndefined();
+//        }
+//        freeCallbackInfo->free_cb = FunctionFreeCallbackHelperEx;
+//    }
+
+    PairedFuncBindings *pairedBindings = static_cast<PairedFuncBindings *>(ace_malloc(sizeof(PairedFuncBindings)));
+    if (pairedBindings == nullptr) {
+//        if (freeCallbackInfo) {
+//            ace_free(freeCallbackInfo);
+//            freeCallbackInfo = nullptr;
+//        }
+        return CreateUndefined();
+    }
+    pairedBindings->extraParam = extraParam;
+//    pairedBindings->freeInfoD = freeCallbackInfo;
+    pairedBindings->userFreeCallback = userFreeCallback;
+    pairedBindings->handler = handler;
+    jerry_value_t jFunc = jerry_create_external_function(CreateJerryFuncHelperEx);
+    void *nativePointer = reinterpret_cast<void *>(pairedBindings);
+    jerry_set_object_native_pointer(jFunc, nativePointer, &FUNC_PROPERTY_GC_CALLBACK);
+    return AS_JSI_VALUE(jFunc);
+#else
+    HILOG_ERROR(HILOG_MODULE_ACE, "JSI:CreateFunctionEx has not been implemented in this js engine!");
     return CreateUndefined();
 #endif
 }
@@ -1102,12 +1212,49 @@ bool JSI::DefineProperty(JSIValue object, JSIValue propName, JSPropertyDescripto
     jerryDesc.is_set_defined = false;
     if (descriptor.setter != nullptr) {
         jerryDesc.is_set_defined = true;
-        jerryDesc.setter = AS_JERRY_VALUE(CreateFunction(descriptor.setter));
+        jerryDesc.setter = AS_JERRY_VALUE(JSI::CreateFunction(descriptor.setter));
     }
     jerryDesc.is_get_defined = false;
     if (descriptor.getter != nullptr) {
         jerryDesc.is_get_defined = true;
-        jerryDesc.getter = AS_JERRY_VALUE(CreateFunction(descriptor.getter));
+        jerryDesc.getter = AS_JERRY_VALUE(JSI::CreateFunction(descriptor.getter));
+    }
+    jerry_value_t retValue = jerry_define_own_property(AS_JERRY_VALUE(object), AS_JERRY_VALUE(propName), &jerryDesc);
+    jerry_free_property_descriptor_fields(&jerryDesc);
+
+    bool res = true;
+    if (jerry_value_is_error(retValue)) {
+        res = false;
+    }
+    jerry_release_value(retValue);
+    return res;
+#else
+    HILOG_ERROR(HILOG_MODULE_ACE, "JSI:DefineProperty has not been implemented in this js engine!");
+    return false;
+#endif
+}
+
+bool JSI::DefinePropertyEx(JSIValue object, JSIValue propName, JSPropertyDescriptorEx &descriptor)
+{
+    if (!ValueIsObject(object)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "JSI:DefineProperty failed!");
+        return false;
+    }
+#if (ENABLE_JERRY == 1)
+    jerry_property_descriptor_t jerryDesc;
+    jerry_init_property_descriptor_fields(&jerryDesc);
+
+    jerryDesc.is_set_defined = false;
+    if (descriptor.setter != nullptr) {
+        jerryDesc.is_set_defined = true;
+        jerryDesc.setter = AS_JERRY_VALUE(
+            CreateFunctionEx(descriptor.setter, descriptor.extraSetterParam, descriptor.setterFreeCallback));
+    }
+    jerryDesc.is_get_defined = false;
+    if (descriptor.getter != nullptr) {
+        jerryDesc.is_get_defined = true;
+        jerryDesc.getter = AS_JERRY_VALUE(
+            CreateFunctionEx(descriptor.getter, descriptor.extraGetterParam, descriptor.getterFreeCallback));
     }
     jerry_value_t retValue = jerry_define_own_property(AS_JERRY_VALUE(object), AS_JERRY_VALUE(propName), &jerryDesc);
     jerry_free_property_descriptor_fields(&jerryDesc);
