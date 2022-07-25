@@ -103,6 +103,7 @@
    git clone https://gitee.com/openharmony/third_party_freetype.git                 -b   master  third_party/freetype
    git clone https://gitee.com/openharmony/third_party_bounds_checking_function.git -b   master  third_party/bounds_checking_function
    git clone https://gitee.com/openharmony/third_party_cJSON.git                    -b   master  third_party/cJSON
+   git clone https://gitee.com/openharmony/third_party_giflib.git                   -b   master  third_party/giflib
    ```
 
    1. 新建一个源码工程目录。
