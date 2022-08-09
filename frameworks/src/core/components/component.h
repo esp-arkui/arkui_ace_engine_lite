@@ -232,6 +232,7 @@ public:
     bool AdaptBoxSizing(uint16_t attrKeyId = K_UNKNOWN) const;
     void AlignDimensions(const ConstrainedParameter &param);
     void EnableTransmitSwipe();
+    void CreateDirectiveWatcher(jerry_value_t descriptor);
 
 protected:
     void SetComponentName(uint16_t name)
@@ -403,7 +404,6 @@ protected:
     void AppendIfDescriptor(Component *parent, const jerry_value_t descriptor);
     void AppendForDescriptor(Component *parent, const jerry_value_t descriptor);
     void AppendElement(Component *parent, const jerry_value_t element);
-    void CreateDirectiveWatcher(jerry_value_t descriptor);
     void UpdateDescriptor(Component *parent, const jerry_value_t descriptor);
     void ReappendDescriptorOrElement(Component *parent, const jerry_value_t descriptor);
     int32_t GetStyleNumValue(const AppStyleItem *style) const
@@ -592,6 +592,8 @@ private:
      * @brief RemoveAllChildren clean all children
      */
     void RemoveAllChildren();
+
+    void CreateOrPendDescriptorWatcher(Component *parent, JSValue descriptor);
 
     /**
      * @brief childHead_ the child list

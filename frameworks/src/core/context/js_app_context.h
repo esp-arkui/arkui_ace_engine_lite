@@ -146,6 +146,14 @@ public:
         return currentToken_;
     }
 
+    void RefLazyWatcherCount();
+    void DefLazyWatcherCount();
+
+    uint16_t GetRemainingLazyWatcherCount() const
+    {
+        return lazyWatcherCount_;
+    }
+
 private:
     /**
      * @brief: release the ability info saved
@@ -172,6 +180,7 @@ private:
     JSAbilityImpl *topJSAbilityImpl_ = nullptr;
     AppStyleManager *styleManage_ = nullptr;
     LazyLoadManager *lazyLoadManager_ = nullptr;
+    uint16_t lazyWatcherCount_ = 0;
     // record current running ability's uuid && ability path, will be release during app-cleanup
     uint16_t currentToken_ = 0;
     int32_t compatibleApi_ = 0;

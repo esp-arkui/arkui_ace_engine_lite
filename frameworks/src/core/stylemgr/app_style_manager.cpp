@@ -191,7 +191,7 @@ void AppStyleManager::HandleDynamicStyle(const jerry_value_t options, Component 
                 expressionValue = CallJSFunction(propValue, curr.GetNativeElement(), nullptr, 0);
                 JsAppContext *context = JsAppContext::GetInstance();
                 LazyLoadManager *lazyLoadManager = const_cast<LazyLoadManager *>(context->GetLazyLoadManager());
-                lazyLoadManager->AddLazyLoadWatcher(curr.GetNativeElement(), propKey, propValue);
+                lazyLoadManager->AddLazyLoadWatcher(&curr, propKey, propValue);
 #else
                 expressionValue = curr.AddWatcherItem(propKey, propValue);
 #endif

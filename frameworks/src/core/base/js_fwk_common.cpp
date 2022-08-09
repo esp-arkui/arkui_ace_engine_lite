@@ -245,7 +245,7 @@ jerry_value_t WatcherCallbackFunc(const jerry_value_t func,
     jerry_value_t attrKey = jerryx_get_property_str(options, ARG_WATCH_ATTR);
 
     Component *component = ComponentUtils::GetComponentFromBindingObject(nativeElement);
-    if (component != nullptr) {
+    if (component != nullptr && FatalHandler::GetInstance().IsComponentValid(component)) {
         uint16_t attrKeyStrLen = 0;
         char *attrKeyStr = MallocStringOf(attrKey, &attrKeyStrLen);
         if (attrKeyStr != nullptr) {
@@ -933,7 +933,7 @@ jerry_value_t ListForWatcherCallbackFunc(const jerry_value_t func,
     jerry_value_t options = args[argsNum];
     jerry_value_t nativeElement = jerryx_get_property_str(options, ARG_WATCH_EL);
     Component *component = ComponentUtils::GetComponentFromBindingObject(nativeElement);
-    if (component) {
+    if (component && FatalHandler::GetInstance().IsComponentValid(component)) {
         bool updateResult = component->UpdateForView();
         if (updateResult) {
             component->Invalidate();

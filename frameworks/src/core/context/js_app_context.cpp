@@ -397,5 +397,23 @@ void JsAppContext::SetTargetApi(int32_t targetApi)
 {
     targetApi_ = targetApi;
 }
+
+void JsAppContext::RefLazyWatcherCount()
+{
+    if (lazyWatcherCount_ >= UINT16_MAX) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "lazy watcher too much.");
+        return;
+    }
+    lazyWatcherCount_++;
+}
+
+void JsAppContext::DefLazyWatcherCount()
+{
+    if (lazyWatcherCount_ == 0) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "lazy watcher count is zero already.");
+        return;
+    }
+    lazyWatcherCount_--;
+}
 } // namespace ACELite
 } // namespace OHOS

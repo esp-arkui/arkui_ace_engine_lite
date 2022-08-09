@@ -14,23 +14,47 @@
  */
 
 #include "lazy_load_watcher.h"
+#include "descriptor_utils.h"
+#include "js_app_context.h"
+
 namespace OHOS {
 namespace ACELite {
-LazyLoadWatcher::LazyLoadWatcher(jerry_value_t nativeElement,
+LazyLoadWatcher::LazyLoadWatcher(Component *parent, Component *component, jerry_value_t descriptor)
+    : parentComponent_(parent), currentComponent_(component), descriptor_(jerry_acquire_value(descriptor))
+{
+    isDescriptor_ = true;
+    if (DescriptorUtils::IsIfDescriptor(descriptor)) {
+        ifDescriptorValue_ = DescriptorUtils::IsIfDescriptorShown(descriptor);
+    }
+    JsAppContext::GetInstance()->RefLazyWatcherCount();
+}
+
+LazyLoadWatcher::LazyLoadWatcher(Component *component,
                                  jerry_value_t attrName,
                                  jerry_value_t getter,
-                                 uint16_t keyId)
-    : nativeElement_(nativeElement),
+                                 uint16_t keyId,
+                                 bool isDescriptor)
+    : currentComponent_(component),
       attrName_(jerry_acquire_value(attrName)),
       getter_(jerry_acquire_value(getter)),
-      keyId_(keyId)
+      keyId_(keyId),
+      isDescriptor_(isDescriptor)
 {
+    JsAppContext::GetInstance()->RefLazyWatcherCount();
 }
 
 LazyLoadWatcher::~LazyLoadWatcher()
 {
-    jerry_release_value(attrName_);
-    jerry_release_value(getter_);
+    if (!IS_UNDEFINED(attrName_)) {
+        jerry_release_value(attrName_);
+    }
+    if (!IS_UNDEFINED(getter_)) {
+        jerry_release_value(getter_);
+    }
+    if (!IS_UNDEFINED(descriptor_)) {
+        jerry_release_value(descriptor_);
+    }
+    JsAppContext::GetInstance()->DefLazyWatcherCount();
 }
 } // namespace ACELite
 } // namespace OHOS
