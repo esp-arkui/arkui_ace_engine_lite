@@ -31,11 +31,11 @@ enum ConfigStatus {
 };
 
 typedef struct {
-    char name[SYSCAP_BUFFER_SIZE];
+    char *name;
     enum ConfigStatus type;
 } SysCapDef;
 
-static const SysCapDef g_syscap[] {
+static const SysCapDef g_syscap[] = {
     {"SystemCapability.ArkUI.ArkUI.Lite", ENABLE},
     {"SystemCapability.BundleManager.PackingTool", ENABLE},
     {"SystemCapability.Communication.SoftBus.Core", ENABLE},
