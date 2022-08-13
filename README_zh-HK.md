@@ -6,7 +6,7 @@
 - [使用](#section1529834174016)
 - [相關倉](#section11683135113011)
 
-##簡介<a name="section11660541593"></a>
+## 簡介<a name="section11660541593"></a>
 
 **JS-UI框架子系統**，是OpenHarmony為開發者提供的一套開發OpenHarmony應用的JS-UI框架。 其組成如下所示：
 
@@ -28,7 +28,7 @@ JS運行時用以支持JS程式碼的解析和執行。
 
 JS框架部分使用C++語言提供JS API和組件的框架機制。
 
-##目錄<a name="section1464106163817"></a>
+## 目錄<a name="section1464106163817"></a>
 
 JS-UI框架子系統原始程式碼在/foundation/arkui/arkui\_ ace\_ engine\_ lite下，目錄結構如下圖所示：
 
