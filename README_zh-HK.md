@@ -1,10 +1,10 @@
 # JS-UI框架子系統組件<a name="ZH-CN_TOPIC_0000001125689015"></a>
 
-- [簡介]（#section11660541593）
-- [目錄]（#section1464106163817）
-- [介面]（#section1096322014288）
-- [使用]（#section1529834174016）
-- [相關倉]（#section11683135113011）
+- [簡介](#section11660541593)
+- [目錄](#section1464106163817)
+- [介面](#section1096322014288)
+- [使用](#section1529834174016)
+- [相關倉](#section11683135113011)
 
 ##簡介<a name="section11660541593"></a>
 
@@ -12,9 +12,9 @@
 
 **圖1** JS-UI框架子系統<a name="fig11520531310"></a>
 
-！ []（figures/JS-UI框架子系統.png"JS-UI框架子系統"）
+！ [](figures/JS-UI框架子系統.png"JS-UI框架子系統")
 
-JS-UI框架子系統包括JS數據綁定框架（JS Data binding）、JS運行時（JS runtime）和JS框架（JS framework）。
+JS-UI框架子系統包括JS數據綁定框架(JS Data binding)、JS運行時(JS runtime)和JS框架(JS framework)。
 
 - **JS Data binding**
 
@@ -52,13 +52,13 @@ JS-UI框架子系統原始程式碼在/foundation/arkui/arkui\_ ace\_ engine\_ l
 
 ## 介面<a name="section1096322014288"></a>
 
-API介紹請參攷[《OpenHarmony Device開發API參考》]（ https://device.harmonyos.com/cn/docs/develop/apiref/js-framework-file-0000000000611396 ）
+API介紹請參攷[《OpenHarmony Device開發API參考》]( https://device.harmonyos.com/cn/docs/develop/apiref/js-framework-file-0000000000611396 )
 
 ## 使用<a name="section1529834174016"></a>
 
 詳見：
-[ https://gitee.com/openharmony/docs/blob/master/zh-cn/readme/JS-UI 框架子系統.md]（ https://gitee.com/openharmony/docs/blob/master/zh-cn/readme/JS-UI 框架子系統.md）
+[ https://gitee.com/openharmony/docs/blob/master/zh-cn/readme/JS-UI 框架子系統.md]( https://gitee.com/openharmony/docs/blob/master/zh-cn/readme/JS-UI 框架子系統.md)
 
 ## 相關倉<a name="section11683135113011"></a>
 
-[arkui\_ace\_engine\_lite]（ https://gitee.com/openharmony/arkui_ace_engine_lite ）
+[arkui\_ace\_engine\_lite]( https://gitee.com/openharmony/arkui_ace_engine_lite )
