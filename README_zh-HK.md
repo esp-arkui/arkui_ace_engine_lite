@@ -12,7 +12,7 @@
 
 **圖1** JS-UI框架子系統<a name="fig11520531310"></a>
 
-![](figures/JS-UI框架子系統.png"JS-UI框架子系統")
+![](figures/JS-UI框架子系统.png "JS-UI框架子系统")
 
 JS-UI框架子系統包括JS數據綁定框架(JS Data binding)、JS運行時(JS runtime)和JS框架(JS framework)。
 
