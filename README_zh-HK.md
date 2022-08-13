@@ -57,8 +57,8 @@ API介紹請參攷[《OpenHarmony Device開發API參考》]( https://device.harm
 ## 使用<a name="section1529834174016"></a>
 
 詳見：
-[ https://gitee.com/openharmony/docs/blob/master/zh-cn/readme/JS-UI 框架子系統.md]( https://gitee.com/openharmony/docs/blob/master/zh-cn/readme/JS-UI 框架子系統.md)
 
+[ https://gitee.com/openharmony/docs/blob/master/zh-cn/readme/JS-UI 框架子系統.md](https://gitee.com/openharmony/docs/blob/master/zh-cn/readme/JS-UI框架子系统.md)
 ## 相關倉<a name="section11683135113011"></a>
 
-[arkui\_ace\_engine\_lite]( https://gitee.com/openharmony/arkui_ace_engine_lite )
+[arkui\_ace\_engine\_lite](https://gitee.com/openharmony/arkui_ace_engine_lite)
