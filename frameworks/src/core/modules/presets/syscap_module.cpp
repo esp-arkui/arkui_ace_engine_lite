@@ -54,14 +54,14 @@ static const SysCapDef g_syscap[] = {
     {"SystemCapability.Startup.SystemInfo", ENABLE}
 };
 
-static int GetSyscapNum()
+static int GetSysCapNum()
 {
     return sizeof(g_syscap) / sizeof(SysCapDef);
 }
 
 static bool HasSystemCapability(const char *cap)
 {
-    int sysCapNum = GetSyscapNum();
+    int sysCapNum = GetSysCapNum();
     for (int i = 0; i < sysCapNum; i++) {
         if (strcmp(cap, g_syscap[i].name) == 0) {
             if (g_syscap[i].type == ENABLE) {
