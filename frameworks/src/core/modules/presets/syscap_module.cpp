@@ -17,11 +17,64 @@
 #include <string.h>
 #include "syscap_module.h"
 #include "ace_mem_base.h"
+#ifndef __LITEOS_M__
 #include "systemcapability.h"
+#endif  __LITEOS_M__
 
 namespace OHOS {
 namespace ACELite {
 const uint16_t SYSCAP_BUFFER_SIZE = 128;
+#ifdef __LITEOS_M__
+enum ConfigStatus {
+    ENABLE = 0,
+    DISABLE,
+};
+
+typedef struct {
+    char *name;
+    enum ConfigStatus type;
+} SysCapDef;
+
+static const SysCapDef g_syscap[] = {
+    {"SystemCapability.ArkUI.ArkUI.Lite", ENABLE},
+    {"SystemCapability.BundleManager.PackingTool", ENABLE},
+    {"SystemCapability.Communication.SoftBus.Core", ENABLE},
+    {"SystemCapability.Communication.Bluetooth.Lite", ENABLE},
+    {"SystemCapability.Communication.NFC.Core", ENABLE},
+    {"SystemCapability.Location.Location.Lite", ENABLE},
+    {"SystemCapability.PowerManager.PowerManager.Lite", ENABLE},
+    {"SystemCapability.PowerManager.BatteryManager.Lite", ENABLE},
+    {"SystemCapability.Customization.ConfigPolicy", ENABLE},
+    {"SystemCapability.HiviewDFX.HiLogLite", ENABLE},
+    {"SystemCapability.HiviewDFX.HiviewLite", ENABLE},
+    {"SystemCapability.HiviewDFX.HiEventLite", ENABLE},
+    {"SystemCapability.Update.UpdateService", ENABLE},
+    {"SystemCapability.FileManagement.File.FileIO", ENABLE},
+    {"SystemCapability.FileManagement.File.Environment", ENABLE},
+    {"SystemCapability.Startup.SystemInfo", ENABLE}
+};
+
+static int GetSysCapNum()
+{
+    return sizeof(g_syscap) / sizeof(SysCapDef);
+}
+
+static bool HasSystemCapability(const char *cap)
+{
+    int sysCapNum = GetSysCapNum();
+    for (int i = 0; i < sysCapNum; i++) {
+        if (strcmp(cap, g_syscap[i].name) == 0) {
+            if (g_syscap[i].type == ENABLE) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    return false;
+}
+#endif // __LITEOS_M__
+
 void SyscapModule::Init()
 {
     const char * const canIUse = "canIUse";
