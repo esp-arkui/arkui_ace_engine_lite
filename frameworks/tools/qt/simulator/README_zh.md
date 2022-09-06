@@ -85,4 +85,5 @@
 
 ### 场景二：C++ UI应用打开方式：
 
-参考链接：graphic_ui[源码获取](https://gitee.com/openharmony/graphic_ui/wikis/%E5%BF%AB%E9%80%9F%E5%8A%A0%E5%85%A5/2.%20PC%E7%AB%AFgraphic_ui%E6%BA%90%E7%A0%81%E8%8E%B7%E5%8F%96)
+参考链接：[graphic_ui源码获取与打开](https://gitee.com/openharmony/graphic_ui/wikis/%E5%BF%AB%E9%80%9F%E5%8A%A0%E5%85%A5/2.%20PC%E7%AB%AFgraphic_ui%E6%BA%90%E7%A0%81%E8%8E%B7%E5%8F%96)
+
