@@ -16,6 +16,7 @@
 #ifndef OHOS_ACELITE_LAZY_LOAD_MANAGER_H
 #define OHOS_ACELITE_LAZY_LOAD_MANAGER_H
 
+#include "component.h"
 #include "gfx_utils/list.h"
 #include "lazy_load_watcher.h"
 #include "non_copyable.h"
@@ -44,22 +45,29 @@ public:
     /**
      * @brief Cache watcher, need to calculate the name key by self
      */
-    void AddLazyLoadWatcher(jerry_value_t nativeElement, jerry_value_t attrName, jerry_value_t getter);
+    void AddLazyLoadWatcher(Component *parent, Component *currentComponent, jerry_value_t descroptor);
+
+    /**
+     * @brief Cache watcher, need to calculate the name key by self
+     */
+    void AddLazyLoadWatcher(Component *component, jerry_value_t attrName, jerry_value_t getter);
 
     /**
      * @brief Cache watcher
      */
-    void AddLazyLoadWatcher(jerry_value_t nativeElement, jerry_value_t attrName, jerry_value_t getter, uint16_t keyId);
+    void AddLazyLoadWatcher(Component *component, jerry_value_t attrName, jerry_value_t getter, uint16_t keyId);
 
     /**
      * @brief Remove one lazy watcher from pending list by native element value
      */
-    void RemoveLazyWatcher(jerry_value_t nativeElement);
+    void RemoveLazyWatcher(Component *component);
 
     /**
      * @brief Render watcher at next TE task
      */
     void RenderLazyLoadWatcher();
+
+    void RenderLazyDescriptor();
 
     void SetState(LazyLoadState state)
     {
@@ -72,6 +80,7 @@ public:
     }
 private:
     void RenderSingleLazyWatcher(const LazyLoadWatcher &watcher) const;
+    void RenderSingleLazyDescriptor(const LazyLoadWatcher &watcher) const;
     List<LazyLoadWatcher *> lazyWatchersList_;
     LazyLoadState state_;
 };

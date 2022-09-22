@@ -373,5 +373,20 @@ void FatalHandler::NotifyVisibleStatusChange(bool isVisible) const
         node = node->next_;
     }
 }
+
+bool FatalHandler::IsComponentValid(Component* component) const
+{
+    if (component == nullptr) {
+        return false;
+    }
+    ListNode<Component *> *node = componentNodes_.Begin();
+    while (node != componentNodes_.End()) {
+        if (node->data_ == component) {
+            return true;
+        }
+        node = node->next_;
+    }
+    return false;
+}
 } // namespace ACELite
 } // namespace OHOS

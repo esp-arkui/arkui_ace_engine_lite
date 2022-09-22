@@ -204,7 +204,7 @@ void Component::Release()
     // detach from lazy pending list
     JsAppContext *context = JsAppContext::GetInstance();
     LazyLoadManager *lazyLoadManager = const_cast<LazyLoadManager *>(context->GetLazyLoadManager());
-    lazyLoadManager->RemoveLazyWatcher(nativeElement_);
+    lazyLoadManager->RemoveLazyWatcher(this);
 #endif // FEATURE_LAZY_LOADING_MODULE
     if (parent_ != nullptr) {
         parent_->RemoveChild(this);
@@ -1100,7 +1100,7 @@ void Component::ParseAttrs()
                 newAttrValue = CallJSFunction(attrValue, viewModel_, nullptr, 0);
                 JsAppContext *context = JsAppContext::GetInstance();
                 LazyLoadManager *lazyLoadManager = const_cast<LazyLoadManager *>(context->GetLazyLoadManager());
-                lazyLoadManager->AddLazyLoadWatcher(nativeElement_, attrKey, attrValue, attrKeyId);
+                lazyLoadManager->AddLazyLoadWatcher(this, attrKey, attrValue, attrKeyId);
 #else
                 newAttrValue = AddWatcherItem(attrKey, attrValue);
 #endif
@@ -1597,6 +1597,23 @@ void Component::HandleListForDireactive()
     }
 }
 
+void Component::CreateOrPendDescriptorWatcher(Component *parent, JSValue descriptor)
+{
+#if (FEATURE_LAZY_LOADING_MODULE == 1)
+    if (DescriptorUtils::IsIfDescriptor(descriptor)) {
+        LazyLoadManager *lazyLoadManager =
+                const_cast<LazyLoadManager *>(JsAppContext::GetInstance()->GetLazyLoadManager());
+        if (lazyLoadManager != nullptr) {
+            lazyLoadManager->AddLazyLoadWatcher(parent, this, descriptor);
+        }
+    } else {
+        CreateDirectiveWatcher(descriptor);
+    }
+#else
+    CreateDirectiveWatcher(descriptor);
+#endif
+}
+
 void Component::AppendChildren(Component *parent)
 {
     if (JSUndefined::Is(descriptors_)) {
@@ -1610,7 +1627,7 @@ void Component::AppendChildren(Component *parent)
         if (!JSUndefined::Is(descriptorOrElement)) {
             bool isDescriptor = AppendDescriptorOrElement(parent, descriptorOrElement);
             if (isDescriptor) {
-                CreateDirectiveWatcher(descriptorOrElement);
+                CreateOrPendDescriptorWatcher(parent, descriptorOrElement);
             }
         }
         JSRelease(descriptorOrElement);
