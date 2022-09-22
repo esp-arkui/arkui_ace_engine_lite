@@ -453,9 +453,12 @@ void StateMachine::ReleaseHistoryPageResource()
     // if some fatal error happens and is hanled by FatalHandler, the resource is already
     // recycled by it, do not repeat the recycling
     if (!FatalHandler::GetInstance().IsFatalErrorHandleDone()) {
+        appContext_->SetReleaseStatus(ComponentsReleaseStatus::PAGE_RELEASING);
         // release all native views and their binding js objects
         ComponentUtils::ReleaseComponents(rootComponent_);
         rootComponent_ = nullptr;
+        FatalHandler::GetInstance().CleanUpFatalResource();
+        appContext_->SetReleaseStatus(ComponentsReleaseStatus::UNKOWN);
     }
 
     ReleaseRootObject();

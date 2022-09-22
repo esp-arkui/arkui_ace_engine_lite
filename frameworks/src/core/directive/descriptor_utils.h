@@ -139,6 +139,8 @@ public:
      */
     static void ReleaseElement(JSValue element);
 
+    static void ReleaseIfForDescriptorsRendered(JSValue descriptors);
+
     /**
      * @brief rendered property name
      */
