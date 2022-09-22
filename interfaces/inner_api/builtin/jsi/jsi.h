@@ -52,6 +52,31 @@ static const JSIValue ARGS_END = (JSIValue)(uintptr_t)-1;
 typedef JSIValue (*JSIFunctionHandler)(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum);
 
 /**
+ * @brief Function pointer type used to create function callback.
+ *
+ * @param [in] thisVal: the this value provided for the function call
+ * @param [in] extraParam: the extra parameter registered from function
+ * @param [in] args: the function arguments, array of JavaScript values
+ * @param [in] argsNum: the number of arguments
+ */
+typedef JSIValue (*JSIFunctionHandlerEx)(JSIValue thisVal, void *extraParam, const JSIValue *args, uint8_t argsNum);
+
+/**
+ * @brief Native free callback of an object.
+ *
+ * @param [in] nativeP: the native data passed through by jerry_set_object_native_pointer
+ */
+typedef void (*JSINativeFreeCallback)(void *nativeP);
+
+/**
+ * @brief Native free callback of an object.
+ *
+ * @param [in] nativeP: the native data passed through by jerry_set_object_native_pointer
+ * @param [in] extraParam: extra parameter passed through by jerry_set_object_native_pointer
+ */
+typedef void (*JSINativeFreeCallbackEx)(void *nativeP, void *extraParam);
+
+/**
  * @brief Description of JerryScript heap memory status.
  */
 struct JSHeapStatus : public MemoryHeap {
@@ -73,7 +98,30 @@ struct JSPropertyDescriptor : public MemoryHeap {
     JSIFunctionHandler setter; // access function for setting value
     JSIFunctionHandler getter; // access function for getting value
 
-    JSPropertyDescriptor() : setter(nullptr), getter(nullptr) {}
+    JSPropertyDescriptor()
+        : setter(nullptr),
+          getter(nullptr)
+    {
+    }
+};
+
+struct JSPropertyDescriptorEx : public MemoryHeap {
+    void *extraSetterParam;
+    JSIFunctionHandlerEx setter; // access function for setting value
+    JSINativeFreeCallbackEx setterFreeCallback;
+    void *extraGetterParam;
+    JSIFunctionHandlerEx getter; // access function for getting value
+    JSINativeFreeCallbackEx getterFreeCallback;
+
+    JSPropertyDescriptorEx()
+        : extraSetterParam(nullptr),
+          setter(nullptr),
+          setterFreeCallback(nullptr),
+          extraGetterParam(nullptr),
+          getter(nullptr),
+          getterFreeCallback(nullptr)
+    {
+    }
 };
 
 /**
@@ -161,6 +209,18 @@ public:
      * value returned should be released by caller with ReleaseValue when it won't be used any more
      */
     static JSIValue CreateFunction(JSIFunctionHandler handler);
+
+    /**
+     * @brief Create javascript function with given native function, with extra parameters and specific native free
+     *        callback function, extra parameters can be passed into the native function when it's invoked, and the
+     *        native free callback can be invoked when the created function is released by engine.
+     *
+     * @param [in] handler: native function pointer
+     * @return javascript function object
+     * value returned should be released by caller with ReleaseValue when it won't be used any more
+     */
+    static JSIValue
+        CreateFunctionEx(JSIFunctionHandlerEx handler, void *extraParam, JSINativeFreeCallbackEx freeCallback);
 
     /**
      * @brief Create javascript string object with character string.
@@ -701,6 +761,17 @@ public:
      *         false: otherwise
      */
     static bool DefineProperty(JSIValue object, JSIValue propName, JSPropertyDescriptor descriptor);
+
+    /**
+     * @brief Define a property on the specified object with the given name.
+     *
+     * @param [in] object: object to define property on
+     * @param [in] propName: property name
+     * @param [in] descriptor: property descriptor
+     * @return true: if success
+     *         false: otherwise
+     */
+    static bool DefinePropertyEx(JSIValue object, JSIValue propName, JSPropertyDescriptorEx &descriptor);
 
     /**
      * @brief Define a property on the specified object with the given character name.

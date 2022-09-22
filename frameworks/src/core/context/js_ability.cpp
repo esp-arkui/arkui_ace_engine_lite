@@ -33,6 +33,8 @@
 #endif
 #include "module_manager.h"
 
+#include "jsi.h"
+
 namespace OHOS {
 namespace ACELite {
 /**
@@ -68,6 +70,66 @@ JSAbility::~JSAbility()
         RestoreSystemWrapper("AMS is deleting app task but without normal lifecycle transition!");
 #endif
     }
+}
+
+static const char * helloExtraParameter = "helloworld";
+static int counter = 0;
+
+static JSIValue SetterX(JSIValue thisVal, void *extraParam, const JSIValue *args, uint8_t argsNum)
+{
+    double new_value = JSI::ValueToNumber(args[0]);
+    counter = (int) new_value;
+
+    printf("Setter called, setting: %d\n", counter);
+
+    return JSI::CreateUndefined();
+}
+
+static void SetterXFreeCallbackEx(void *nativeP, void *extraParam)
+{
+    HILOG_DEBUG(HILOG_MODULE_ACE, "SetterXFreeCallbackEx called");
+}
+
+static JSIValue GetterX(JSIValue thisVal, void *extraParam, const JSIValue *args, uint8_t argsNum)
+{
+    HILOG_DEBUG(HILOG_MODULE_ACE, "GetterX called");
+    HILOG_DEBUG(HILOG_MODULE_ACE, "SetterX called");
+    counter++;
+    printf("Getter called, returning: %d\n", counter);
+
+    return JSI::CreateNumber(counter);
+}
+
+static void GetterXFreeCallbackEx(void *nativeP, void *extraParam)
+{
+    HILOG_DEBUG(HILOG_MODULE_ACE, "GetterXFreeCallbackEx called");
+}
+
+extern "C" void ecma_gc_run();
+static void TestProperyExDefine()
+{
+    jerry_value_t global_obj_val = jerry_get_global_object ();
+    jerry_value_t prop_name = jerry_create_string ((const jerry_char_t *) "my_prop");
+    JSPropertyDescriptorEx descriptor;
+    descriptor.setter = SetterX;
+    descriptor.extraSetterParam = (void *)(helloExtraParameter);
+    descriptor.setterFreeCallback = SetterXFreeCallbackEx;
+    descriptor.getter = GetterX;
+    descriptor.extraGetterParam = (void *)(helloExtraParameter);
+    descriptor.getterFreeCallback = GetterXFreeCallbackEx;
+    bool return_value = JSI::DefinePropertyEx((JSIValue)(global_obj_val), (JSIValue)(prop_name), descriptor);
+
+    // 测试 getter, setter
+    const char *src_p = "console.log(my_prop); my_prop; my_prop = 4; console.log(my_prop)";
+    jerry_value_t eval_result = jerry_eval ((const jerry_char_t *) src_p, strlen (src_p), JERRY_PARSE_NO_OPTS);
+
+    // 测试对象 release
+    jerry_delete_property(global_obj_val, prop_name);
+
+    jerry_release_value (prop_name);
+    jerry_release_value (global_obj_val);
+
+    ecma_gc_run();
 }
 
 void JSAbility::Launch(const char * const abilityPath, const char * const bundleName, uint16_t token,
@@ -117,6 +179,7 @@ void JSAbility::Launch(const char * const abilityPath, const char * const bundle
     jsAbilityImpl->InitEnvironment(abilityPath, bundleName, token);
     ACE_EVENT_PRINT(MT_ACE_FWK_LAUNCHING, 0);
     FatalHandler::GetInstance().RegisterFatalHandler(this);
+    TestProperyExDefine();
     jsAbilityImpl->DeliverCreate(pageInfo);
     STOP_TRACING();
     OUTPUT_TRACE();
