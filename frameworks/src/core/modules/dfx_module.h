@@ -45,6 +45,7 @@ private:
     static bool PreCheck(uint8_t argsNum);
     static JSIValue InjectPointEvent(const JSIValue *args, EventDataType type);
     static bool IsEventInjectorRegistered(EventDataType type);
+    static bool PreCheckBundlePermission();
 };
 
 void InitDfxModule(JSIValue exports)

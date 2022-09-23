@@ -15,6 +15,10 @@
 
 #include "dfx_module.h"
 #include "ace_log.h"
+#if (defined(FEATURE_API_VERSION) && (FEATURE_API_VERSION == 1))
+#include "bundle_manager.h"
+#endif // FEATURE_API_VERSION
+#include "js_app_context.h"
 #include "ui_dump_dom_tree.h"
 #ifdef FEATURE_ACELITE_MC_DFX_MODULE
 #include "ui_snapshot.h"
@@ -80,6 +84,11 @@ bool DfxModule::IsEventInjectorRegistered(EventDataType type)
 #if (FEATURE_ACELITE_DFX_MODULE == 1)
 JSIValue DfxModule::Screenshot(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum)
 {
+#ifndef TDD_ASSERTIONS
+    if (!PreCheckBundlePermission()) {
+        return JSI::CreateBoolean(false);
+    }
+#endif
 #ifdef FEATURE_ACELITE_MC_DFX_MODULE
     JSIValue retVal = JSI::CreateBoolean(true);
     if (!UISnapShot::ScreenshotToFile()) {
@@ -115,6 +124,11 @@ JSIValue DfxModule::Screenshot(const JSIValue thisVal, const JSIValue *args, uin
 JSIValue DfxModule::DumpDomTree(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum)
 {
     JSIValue retVal = JSI::CreateBoolean(false);
+#ifndef TDD_ASSERTIONS
+    if (!PreCheckBundlePermission()) {
+        return retVal;
+    }
+#endif
     if (!PreCheck(argsNum)) {
         return retVal;
     }
@@ -149,6 +163,12 @@ JSIValue DfxModule::DumpDomTree(const JSIValue thisVal, const JSIValue *args, ui
 
 JSIValue DfxModule::DumpDomNode(const JSIValue thisVal, const JSIValue *args, uint8_t argsNum)
 {
+#ifndef TDD_ASSERTIONS
+    if (!PreCheckBundlePermission()) {
+        return JSI::CreateUndefined();
+    }
+#endif
+
     if (!PreCheck(argsNum) || (UIDumpDomTree::GetInstance() == nullptr)) {
         return JSI::CreateUndefined();
     }
@@ -241,6 +261,23 @@ JSIValue DfxModule::InjectEvent(const JSIValue thisVal, const JSIValue *args, ui
 
     JSI::ReleaseString(eventType);
     return JSI::CreateBoolean(false);
+}
+
+bool DfxModule::PreCheckBundlePermission()
+{
+#if (defined(FEATURE_API_VERSION) && (FEATURE_API_VERSION == 1))
+    BundleInfo bundle = {0};
+    const char * currentBundleName = JsAppContext::GetInstance()->GetCurrentBundleName();
+    uint8_t retCode = GetBundleInfo(currentBundleName, false, &bundle);
+    if (retCode != 0) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "fail to get bundle info.");
+        return false;
+    }
+
+    return bundle.isSystemApp;
+#else
+    return true; // for not bundle info cases, ignore the checking
+#endif
 }
 
 void DfxModule::OnDestroy()
