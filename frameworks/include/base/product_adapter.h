@@ -61,6 +61,11 @@ typedef PrivateModule *(*PrivateModulesGetter)(uint16_t &moduleCount);
 typedef void (*TerminateAbilityHandler)(uint32_t token, bool forceStop);
 
 /**
+ * The hook for set component views parameters.
+ */
+typedef void (*SetViewsParaHandler)(void *ComponentHandler);
+
+/**
  * As all the UI event handling is driven by the render tick, and to make sure the the event handling is
  * in JS task, the HAL layer will transfer the TE event into the loop of JS task, when JS application go foreground.
  */
@@ -122,6 +127,7 @@ public:
     static void RegSetScreenOnVisibleHandler(SetScreenOnVisibleHandler handler);
     static void RegExtraPresetModulesHook(ExtraPresetModulesHook hook);
     static void ConfigPrivateDataRootPath(const char *appDataRoot);
+    static void RegSetViewsParaHandler(SetViewsParaHandler handler);
 
     // wrapper functions, for ace internal calling
     static void PrintEventTrace(uint8_t info2, uint8_t info3, uint8_t info4);
@@ -141,6 +147,7 @@ public:
     static void LoadExtraPresetModules();
     static void UnloadExtraPresetModules();
     static const char *GetPrivateDataRootPath();
+    static void SetViewsParaWrapper(void *ComponentHandler);
 };
 } // namespace ACELite
 } // namespace OHOS
