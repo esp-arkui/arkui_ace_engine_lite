@@ -40,22 +40,6 @@ bool KeyBoardEventListener::OnKeyAct(UIView &view, const KeyEvent &event)
     ClearEventListener(args, 1);
     return true;
 }
-
-ViewOnTouchCancelListener::ViewOnTouchCancelListener(jerry_value_t fn, uint16_t id)
-{
-    fn_ = jerry_acquire_value(fn);
-    id_ = id;
-}
-
-ViewOnTouchCancelListener::~ViewOnTouchCancelListener()
-{
-    jerry_release_value(fn_);
-}
-
-bool ViewOnTouchCancelListener::OnCancel(UIView &view, const CancelEvent &event)
-{
-    return CallBaseEvent(fn_, event, id_);
-}
 #endif // JS_EXTRA_EVENT_SUPPORT
 
 void ViewOnTouchListener::SetBindTouchStartFuncName(jerry_value_t bindTouchStartFunc)
@@ -80,6 +64,13 @@ void ViewOnTouchListener::SetBindTouchEndFuncName(jerry_value_t bindTouchEndFunc
     }
 }
 
+void ViewOnTouchListener::SetBindTouchCancelFuncName(jerry_value_t bindTouchCancelFunc)
+{
+    if (!jerry_value_is_undefined(bindTouchCancelFunc)) {
+        bindTouchCancelFunc_ = jerry_acquire_value(bindTouchCancelFunc);
+    }
+}
+
 void ViewOnTouchListener::SetBindSwipeFuncName(jerry_value_t bindSwipeFunc)
 {
     if (!jerry_value_is_undefined(bindSwipeFunc)) {
@@ -92,13 +83,13 @@ void ViewOnTouchListener::SetStopPropagation(bool isStopPropogation)
     isStopPropagation_ = isStopPropogation;
 }
 
-bool ViewOnTouchListener::OnDragStart(UIView& view, const DragEvent &event)
+bool ViewOnTouchListener::OnPress(UIView& view, const PressEvent &event)
 {
     if (JSUndefined::Is(bindTouchStartFunc_)) {
         return isStopPropagation_;
     }
 
-    HILOG_DEBUG(HILOG_MODULE_ACE, "OnDragStart received");
+    HILOG_DEBUG(HILOG_MODULE_ACE, "OnPress received");
 
     JSValue arg = EventUtil::CreateTouchEvent(view, event);
     EventUtil::InvokeCallback(vm_, bindTouchStartFunc_, arg, this);
@@ -118,20 +109,40 @@ bool ViewOnTouchListener::OnDrag(UIView& view, const DragEvent& event)
     return isStopPropagation_;
 }
 
+bool ViewOnTouchListener::OnRelease(UIView& view, const ReleaseEvent &event)
+{
+    if (JSUndefined::Is(bindTouchEndFunc_)) {
+        return isStopPropagation_;
+    }
+
+    HILOG_DEBUG(HILOG_MODULE_ACE, "OnRelease received");
+    JSValue arg = EventUtil::CreateTouchEvent(view, event);
+    EventUtil::InvokeCallback(vm_, bindTouchEndFunc_, arg, this);
+    return isStopPropagation_;
+}
+
+bool ViewOnTouchListener::OnCancel(UIView& view, const CancelEvent& event)
+{
+    if (JSUndefined::Is(bindTouchCancelFunc_)) {
+        return isStopPropagation_;
+    }
+
+    HILOG_DEBUG(HILOG_MODULE_ACE, "OnCancel received");
+
+    JSValue arg = EventUtil::CreateTouchEvent(view, event);
+    EventUtil::InvokeCallback(vm_, bindTouchCancelFunc_, arg, this);
+    return isStopPropagation_;
+}
+
 bool ViewOnTouchListener::OnDragEnd(UIView& view, const DragEvent &event)
 {
-    if (!JSUndefined::Is(bindSwipeFunc_)) {
-        JSValue argSwipe = EventUtil::CreateSwipeEvent(view, event);
-        EventUtil::InvokeCallback(vm_, bindSwipeFunc_, argSwipe, this);
+    if (JSUndefined::Is(bindSwipeFunc_)) {
+        return isStopPropagation_;
     }
 
-    if (!JSUndefined::Is(bindTouchEndFunc_)) {
-        JSValue argDragEnd = EventUtil::CreateTouchEvent(view, event);
-        EventUtil::InvokeCallback(vm_, bindTouchEndFunc_, argDragEnd, this);
-    }
-
-    HILOG_DEBUG(HILOG_MODULE_ACE, "OnDragEnd received");
     HILOG_DEBUG(HILOG_MODULE_ACE, "Swipe received");
+    JSValue arg = EventUtil::CreateSwipeEvent(view, event);
+    EventUtil::InvokeCallback(vm_, bindSwipeFunc_, arg, this);
     return isStopPropagation_;
 }
 

@@ -296,9 +296,7 @@ enum {
     KEYWORD(TOUCHSTART, touchStart) // touch event listener
     KEYWORD(TOUCHMOVE, touchmove) // touchmove event listener
     KEYWORD(TOUCHEND, touchEnd) // touchend event listener
-#ifdef JS_EXTRA_EVENT_SUPPORT
     KEYWORD(TOUCHCANCEL, touchcancel) // ontouchcancel event
-#endif
     KEYWORD(TRANSLATE_X, translateX) // animation transform x
     KEYWORD(TRANSLATE_Y, translateY) // animation transform y
     KEYWORD(TRUE, true) // common attributes
