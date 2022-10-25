@@ -13,7 +13,11 @@
   },
   "deviceConfig": {},
   "module": {
-    "deviceType": ["smartVision"],
+    "deviceType": [
+       "default",
+       "tablet",       
+       "smartVision"
+    ],
     "distro": {
       "deliveryWithInstall": true,
       "moduleName": "entry",
