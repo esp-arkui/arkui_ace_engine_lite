@@ -17,6 +17,8 @@
   },
   "module": {
     "deviceType": [
+      "default",	    
+      "tablet",
       "smartVision"
     ],
     "abilities": [
