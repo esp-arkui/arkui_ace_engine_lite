@@ -17,6 +17,8 @@
     "module": {
         "description": "",
         "deviceType": [
+            "tablet",
+	    "default",
             "fitnessWatch",
             "smartVision"
         ],
