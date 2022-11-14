@@ -54,6 +54,7 @@ static TEHandlingHooks g_teHandlingHooks = {nullptr, nullptr};
 static TerminateAbilityHandler g_termiantingHandler = nullptr;
 static SetScreenOnVisibleHandler g_setScreenOnHandler = nullptr;
 static ExtraPresetModulesHook g_extraPresetModulesHooks = {nullptr, nullptr};
+static SetViewsParaHandler g_setViewsParaHandler = nullptr;
 static RestoreSystemHandler g_restoreSystemHandler = nullptr;
 static IsPNGSupportedHandler g_isPNGSupportedHandler = nullptr;
 static SetViewsParaHandler g_setViewsParaHandler = nullptr;
@@ -157,6 +158,11 @@ void ProductAdapter::RegTEHandlers(const TEHandlingHooks &teHandlingHooks)
 {
     g_teHandlingHooks.renderTEHandler = teHandlingHooks.renderTEHandler;
     g_teHandlingHooks.renderEndHandler = teHandlingHooks.renderEndHandler;
+}
+
+void ProductAdapter::RegSetViewsParaHandler(SetViewsParaHandler handler)
+{
+    g_setViewsParaHandler = handler;
 }
 
 void ProductAdapter::RegRestoreSystemHandler(RestoreSystemHandler handler)
@@ -310,6 +316,13 @@ void ProductAdapter::InitDeviceInfo(const char *deviceType)
 const char *ProductAdapter::GetDeviceType()
 {
     return g_deviceType;
+}
+
+void ProductAdapter::SetViewsParaWrapper(void *ComponentHandler)
+{
+    if (g_setViewsParaHandler != nullptr) {
+        g_setViewsParaHandler(ComponentHandler);
+    }
 }
 
 void ProductAdapter::RestoreSystemWrapper(const char *crashMessage)

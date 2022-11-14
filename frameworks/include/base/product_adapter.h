@@ -61,6 +61,11 @@ typedef PrivateModule *(*PrivateModulesGetter)(uint16_t &moduleCount);
 typedef void (*TerminateAbilityHandler)(uint32_t token, bool forceStop);
 
 /**
+ * The hook for set component views parameters.
+ */
+typedef void (*SetViewsParaHandler)(void *ComponentHandler);
+
+/**
  * The hook for restore fail dump message.
  */
 typedef void (*RestoreSystemHandler)(const char *crashMessage);
@@ -137,6 +142,7 @@ public:
     static void RegSetScreenOnVisibleHandler(SetScreenOnVisibleHandler handler);
     static void RegExtraPresetModulesHook(ExtraPresetModulesHook hook);
     static void ConfigPrivateDataRootPath(const char *appDataRoot);
+    static void RegSetViewsParaHandler(SetViewsParaHandler handler);
     static void RegRestoreSystemHandler(RestoreSystemHandler handler);
     static void RegIsPNGSupportedHandler(IsPNGSupportedHandler handler);
     static void RegSetViewsParaHandler(SetViewsParaHandler handler);
@@ -159,6 +165,7 @@ public:
     static void LoadExtraPresetModules();
     static void UnloadExtraPresetModules();
     static const char *GetPrivateDataRootPath();
+    static void SetViewsParaWrapper(void *ComponentHandler);
     static void RestoreSystemWrapper(const char *crashMessage);
     static bool IsPNGSupportedWrapper(const char *imagePath, const char *bundleName);
     static void SetViewsParaWrapper(void *ComponentHandler);
