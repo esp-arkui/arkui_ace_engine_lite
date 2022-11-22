@@ -16,6 +16,9 @@
 #ifndef OHOS_ACELITE_ACE_LOG_H
 #define OHOS_ACELITE_ACE_LOG_H
 
+#ifdef __ICCARM__
+#include "hilog_lite/hiview_log.h"
+#endif
 #include "acelite_config.h"
 
 #if ((FEATURE_ACELITE_HI_LOG_PRINTF == 1) && (FEATURE_ACELITE_MC_LOG_PRINTF == 1))
