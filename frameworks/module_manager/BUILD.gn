@@ -53,6 +53,8 @@ lite_library("ace_module_manager") {
   ]
 
   if (ohos_kernel_type == "liteos_m") {
+    include_dirs +=
+        [ "//base/hiviewdfx/hilog_lite/interfaces/native/kits/hilog_lite" ]
     public_deps += [
       "//foundation/graphic/ui:ui",
       "//third_party/bounds_checking_function:libsec_static",
