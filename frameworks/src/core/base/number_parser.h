@@ -22,7 +22,7 @@
 namespace OHOS {
 namespace ACELite {
 /**
- * Utils class for number formating operations.
+ * Utils class for number formatting operations.
  */
 class NumberParser final {
 public:
