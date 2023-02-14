@@ -767,11 +767,9 @@ uint16_t KeyParser::ParseKeyId(const char *s, const size_t len)
             if (!strcmp(s, "ouchstart")) {
                 return K_TOUCHSTART;
             }
-#ifdef JS_EXTRA_EVENT_SUPPORT
             if (!strcmp(s, "ouchcancel")) {
                 return K_TOUCHCANCEL;
             }
-#endif
             if (!strcmp(s, "ext")) {
                 return K_TEXT;
             }

@@ -186,7 +186,7 @@ private:
 };
 #endif
 
-class ViewOnTouchListener final : public UIView::OnDragListener {
+class ViewOnTouchListener final : public UIView::OnDragListener, public UIView::OnTouchListener {
 public:
     ACE_DISALLOW_COPY_AND_MOVE(ViewOnTouchListener);
     ViewOnTouchListener(jerry_value_t vm, bool isStopPropagation)
@@ -194,6 +194,7 @@ public:
           bindTouchStartFunc_(UNDEFINED),
           bindTouchMoveFunc_(UNDEFINED),
           bindTouchEndFunc_(UNDEFINED),
+          bindTouchCancelFunc_(UNDEFINED),
           bindSwipeFunc_(UNDEFINED),
           isStopPropagation_(isStopPropagation)
     {
@@ -206,16 +207,20 @@ public:
         jerry_release_value(bindTouchStartFunc_);
         jerry_release_value(bindTouchMoveFunc_);
         jerry_release_value(bindTouchEndFunc_);
+        jerry_release_value(bindTouchCancelFunc_);
         jerry_release_value(bindSwipeFunc_);
     }
 
     void SetStopPropagation(bool isStopPropogation);
-    bool OnDragStart(UIView& view, const DragEvent& event) override;
+    bool OnPress(UIView& view, const PressEvent& event) override;
     bool OnDrag(UIView& view, const DragEvent& event) override;
-    bool OnDragEnd(UIView& view, const DragEvent &event) override;
+    bool OnRelease(UIView& view, const ReleaseEvent& event) override;
+    bool OnCancel(UIView& view, const CancelEvent& event) override;
+    bool OnDragEnd(UIView& view, const DragEvent& event) override;
     void SetBindTouchStartFuncName(jerry_value_t bindTouchStartFunc);
     void SetBindTouchMoveFuncName(jerry_value_t bindTouchMoveFunc);
     void SetBindTouchEndFuncName(jerry_value_t bindTouchEndFunc);
+    void SetBindTouchCancelFuncName(jerry_value_t bindTouchCancelFunc);
     void SetBindSwipeFuncName(jerry_value_t bindSwipeFunc);
 
 private:
@@ -223,6 +228,7 @@ private:
     jerry_value_t bindTouchStartFunc_;
     jerry_value_t bindTouchMoveFunc_;
     jerry_value_t bindTouchEndFunc_;
+    jerry_value_t bindTouchCancelFunc_;
     jerry_value_t bindSwipeFunc_;
     bool isStopPropagation_;
 };

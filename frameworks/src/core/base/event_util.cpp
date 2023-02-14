@@ -84,7 +84,7 @@ JSValue EventUtil::CreateEvent(const char *type, UIView &view, const Event &even
 JSValue EventUtil::CreateSwipeEvent(UIView &view, const DragEvent &event)
 {
     // create a JAVASCRIPT plain object that is used as the input parameter of
-    // the event callback function.
+    // the event callback function for swipe event.
     JSValue arg = EventUtil::CreateEvent(EVENT_SWIPE, view, event);
     int32_t distance = 0;
     // set the 'direction' attribute for the input parameter of the swipe event callback function.
@@ -117,14 +117,16 @@ JSValue EventUtil::CreateSwipeEvent(UIView &view, const DragEvent &event)
     JSObject::SetNumber(arg, ATTR_DISTANCE, distance);
     return arg;
 }
-JSValue EventUtil::CreateTouchEvent(UIView &view, const DragEvent &event)
+
+JSValue EventUtil::CreateTouchEvent(UIView &view, const Event &event)
 {
     // create a JAVASCRIPT plain object that is used as the input parameter of
-    // the event callback function.
+    // the event callback function for touch event.
     JSValue arg = EventUtil::CreateEvent(EVENT_TOUCH, view, event);
 
     return arg;
 }
+
 void EventUtil::InvokeCallback(JSValue vm, JSValue callback, JSValue event, const void *context)
 {
     auto *params = new CallbackParams();

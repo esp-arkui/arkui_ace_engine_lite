@@ -1136,19 +1136,6 @@ void Component::SetClickEventListener(UIView &view, const jerry_value_t eventFun
 }
 
 #ifdef JS_EXTRA_EVENT_SUPPORT
-void Component::SetTouchCancelEventListener(UIView &view, jerry_value_t eventFunc, uint16_t eventTypeId)
-{
-    onTouchCancelListener_ = new ViewOnTouchCancelListener(eventFunc, eventTypeId);
-    if (onTouchCancelListener_ == nullptr) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "touch cancel event listener create failed");
-        return;
-    }
-
-    view.SetOnTouchListener(onTouchCancelListener_);
-    view.SetTouchable(true);
-    view.SetDraggable(true);
-}
-
 void Component::SetKeyBoardEventListener(jerry_value_t eventFunc, uint16_t eventTypeId)
 {
     RootView *rootView = RootView::GetInstance();
@@ -1204,7 +1191,7 @@ void Component::SetTouchStartEventListener(UIView &view, jerry_value_t eventFunc
         return;
     }
 
-    view.SetOnDragListener(onTouchListener_);
+    view.SetOnTouchListener(onTouchListener_);
 
     view.SetDraggable(true);
     view.SetTouchable(true);
@@ -1239,11 +1226,28 @@ void Component::SetTouchEndEventListener(UIView &view, jerry_value_t eventFunc, 
         return;
     }
 
-    view.SetOnDragListener(onTouchListener_);
+    view.SetOnTouchListener(onTouchListener_);
     view.SetDraggable(true);
     view.SetTouchable(true);
 
     onTouchListener_->SetBindTouchEndFuncName(eventFunc);
+}
+
+void Component::SetTouchCancelEventListener(UIView &view, jerry_value_t eventFunc, bool isStopPropagation)
+{
+    if (onTouchListener_ == nullptr) {
+        onTouchListener_ = new ViewOnTouchListener(viewModel_, isStopPropagation);
+    }
+    if (onTouchListener_ == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "touch cancel event listener create failed");
+        return;
+    }
+
+    view.SetOnTouchListener(onTouchListener_);
+    view.SetTouchable(true);
+    view.SetDraggable(true);
+
+    onTouchListener_->SetBindTouchCancelFuncName(eventFunc);
 }
 
 // default implementation
@@ -1298,14 +1302,13 @@ bool Component::RegisterCommonEventListener(UIView &view,
             SetTouchEndEventListener(view, funcValue, isStopPropagation);
             break;
         }
-
+        case K_TOUCHCANCEL: {
+            SetTouchCancelEventListener(view, funcValue, isStopPropagation);
+            break;
+        }
 #ifdef JS_EXTRA_EVENT_SUPPORT
         case K_KEY: {
             SetKeyBoardEventListener(funcValue, eventTypeId);
-            break;
-        }
-        case K_TOUCHCANCEL: {
-            SetTouchCancelEventListener(view, funcValue, eventTypeId);
             break;
         }
 #endif
