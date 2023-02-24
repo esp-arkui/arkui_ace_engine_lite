@@ -144,7 +144,7 @@ const Module OHOS_MODULES[] = {
     {"hilog", InitHilogModule},
 #endif
 #if (FEATURE_COMPONENT_DEVICE_ATTEST == 1)
-        {"deviceAttest", InitDeviceAttestModule},
+    {"deviceAttest", InitDeviceAttestModule},
 #endif
 };
 } // namespace ACELite
