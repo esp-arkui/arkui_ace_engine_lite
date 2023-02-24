@@ -186,7 +186,7 @@
 #endif
 
 /**
- * deviceattest component
+ * device attest component
  */
 #ifdef FEATURE_COMPONENT_DEVICE_ATTEST
 #error "must keep the global configuration unique"
