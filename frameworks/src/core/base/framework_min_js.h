@@ -53,11 +53,11 @@ const char * const g_frameworkJSBuffer =
     "sh',POP:'pop',UNSHIFT:'unshift',SHIFT:'shift',SORT:'sort',SPLICE:'splice',REVERSE:'reverse"
     "'},s=Object.keys(r).map((function(t){return r[t]}));function c(t){if(!(this instanceof c))"
     "return new c(t);var e=this._vm=this;'[object Object]'===Object.prototype.toString.call(t)&"
-    "&Object.keys(t).forEach((function(n){var i=t[n];'render'===n?e.$render=i:'data'===n?functi"
-    "on(t,e){'function'==typeof e&&(e=e.call(t,t));Object.keys(e).forEach((function(n){return f"
-    "unction(t,e,n){Object.defineProperty(t,n,{enumerable:!1,configurable:!0,get:function(){ret"
-    "urn e[n]},set:function(t){e[n]=t}})}(t,e,n)})),o.of(e)}(e,i):'styleSheet'===n?initStyleShe"
-    "et(i):'function'==typeof i&&(e[n]=i.bind(e))}))}return c.prototype.$watch=function(t,e,n){"
-    "return new i(this,t,e,n)},c}));";
+    "&Object.keys(t).forEach((function(n){var i=t[n];'render'===n?e.$render=i:'data'===n?(!func"
+    "tion(t,e){'function'==typeof e&&(e=e.call(t,t));Object.keys(e).forEach((function(n){return"
+    " function(t,e,n){Object.defineProperty(t,n,{enumerable:!1,configurable:!0,get:function(){r"
+    "eturn e[n]},set:function(t){e[n]=t}})}(t,e,n)})),o.of(e)}(e,i),e[n]=i):'styleSheet'===n?in"
+    "itStyleSheet(i):'function'==typeof i&&(e[n]=i.bind(e))}))}return c.prototype.$watch=functi"
+    "on(t,e,n){return new i(this,t,e,n)},c}));";
 #endif
 #endif // OHOS_ACELITE_FRAMEWORK_MIN_JS_H
