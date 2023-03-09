@@ -53,6 +53,14 @@ Component *BaseTest::GetRenderedComponent(uint16_t componentKeyId) const
     jerry_release_value(children);
     return component;
 }
+void BaseTest::ReleaseComponent(Component *&component) const
+{
+    if (component != nullptr) {
+        component->Release();
+        delete component;
+        component = nullptr;
+    }
+}
 
 void BaseTest::ReleaseComponent(Component *&component) const
 {
