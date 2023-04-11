@@ -29,8 +29,6 @@ public:
     void ComponentTextStyleSetLetterSpacingTest004();
     void ComponentTextStyleSetAlignTest005();
     void ComponentTextStyleSetSizeFamilyTest006();
-    void ComponentTextStyleSetLineHeightTest007();
-    void ComponentTextStyleSetLineHeightTest008();
     void RunTests();
 };
 } // namespace ACELite
