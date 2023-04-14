@@ -80,8 +80,7 @@ HWTEST_F(LocalizationModuleTddTest, TestNullValue009, TestSize.Level1)
     JSIValue undefined = JSI::CreateUndefined();
     JSValue result = CallJSFunction(localization_, viewModel_, args, 1);
     EXPECT_EQ(undefined, result);
-    JSIValue array = JSI::CreateArray(1);
-    JSI::ReleaseValueList(array, undefined);
+    JSI::ReleaseValue(undefined);
     jerry_release_value(args[0]);
     jerry_release_value(result);
     TDD_CASE_END();
