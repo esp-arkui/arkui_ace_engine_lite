@@ -28,9 +28,9 @@
 
 namespace OHOS {
 namespace ACELite {
-constexpr uint8_t MSG_LENGTH = 100;
-
+constexpr uint8_t MSG_LENGTH = 64;
 constexpr uint32_t UNIT = 1024;
+constexpr char markdata[MSG_LENGTH];
 
 AceMemProc *AceMemProc::GetInstance()
 {
@@ -53,7 +53,6 @@ void AceMemProc::ClearUp()
     }
     // it exists and not empty
     time_t seconds = time(NULL);
-    char markdata[MSG_LENGTH];
     if (sprintf_s(markdata, MSG_LENGTH, "%ti.txt", seconds) < 0) {
         close(state);
         return;
@@ -88,7 +87,6 @@ void AceMemProc::SysMemTracing()
     }
 
     // physical memory
-    char markdata[MSG_LENGTH];
     if (sprintf_s(markdata, MSG_LENGTH, "Phy:%d(KB)\n", uint32_t(pmc.WorkingSetSize / UNIT)) < 0) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Output file error.");
         fclose(fp);
@@ -132,7 +130,6 @@ void AceMemProc::JerryMemTracing()
     size_t current = stats.allocated_bytes;
     size_t peak = stats.peak_allocated_bytes;
     // jerry total memory
-    char markdata[MSG_LENGTH];
     if (sprintf_s(markdata, MSG_LENGTH, "jerry heap total:%d(KB)\n", uint32_t(total / UNIT)) < 0) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Output file error.");
         fclose(fp);
