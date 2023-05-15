@@ -30,7 +30,7 @@ namespace OHOS {
 namespace ACELite {
 constexpr uint8_t MSG_LENGTH = 64;
 constexpr uint32_t UNIT = 1024;
-constexpr char markdata[MSG_LENGTH];
+constexpr char MARKDATA[MSG_LENGTH];
 
 AceMemProc *AceMemProc::GetInstance()
 {
@@ -53,11 +53,11 @@ void AceMemProc::ClearUp()
     }
     // it exists and not empty
     time_t seconds = time(NULL);
-    if (sprintf_s(markdata, MSG_LENGTH, "%ti.txt", seconds) < 0) {
+    if (sprintf_s(MARKDATA, MSG_LENGTH, "%ti.txt", seconds) < 0) {
         close(state);
         return;
     }
-    char *fullPath = RelocateJSSourceFilePath(MEM_BACK_UP_LOG_FILE_PREFIX, markdata);
+    char *fullPath = RelocateJSSourceFilePath(MEM_BACK_UP_LOG_FILE_PREFIX, MARKDATA);
     if (fullPath == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Back up file error.");
     } else {
@@ -87,22 +87,22 @@ void AceMemProc::SysMemTracing()
     }
 
     // physical memory
-    if (sprintf_s(markdata, MSG_LENGTH, "Phy:%d(KB)\n", uint32_t(pmc.WorkingSetSize / UNIT)) < 0) {
+    if (sprintf_s(MARKDATA, MSG_LENGTH, "Phy:%d(KB)\n", uint32_t(pmc.WorkingSetSize / UNIT)) < 0) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Output file error.");
         fclose(fp);
         fp = nullptr;
         return;
     }
-    fputs(markdata, fp);
+    fputs(MARKDATA, fp);
 
     // virtual memory
-    if (sprintf_s(markdata, MSG_LENGTH, "Vir:%d(KB)\n", uint32_t(pmc.PagefileUsage / UNIT)) < 0) {
+    if (sprintf_s(MARKDATA, MSG_LENGTH, "Vir:%d(KB)\n", uint32_t(pmc.PagefileUsage / UNIT)) < 0) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Output file error.");
         fclose(fp);
         fp = nullptr;
         return;
     }
-    fputs(markdata, fp);
+    fputs(MARKDATA, fp);
 
     fflush(fp);
     fclose(fp);
@@ -130,31 +130,31 @@ void AceMemProc::JerryMemTracing()
     size_t current = stats.allocated_bytes;
     size_t peak = stats.peak_allocated_bytes;
     // jerry total memory
-    if (sprintf_s(markdata, MSG_LENGTH, "jerry heap total:%d(KB)\n", uint32_t(total / UNIT)) < 0) {
+    if (sprintf_s(MARKDATA, MSG_LENGTH, "jerry heap total:%d(KB)\n", uint32_t(total / UNIT)) < 0) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Output file error.");
         fclose(fp);
         fp = nullptr;
         return;
     }
-    fputs(markdata, fp);
+    fputs(MARKDATA, fp);
 
     // jerry current memory
-    if (sprintf_s(markdata, MSG_LENGTH, "jerry heap current:%d(KB)\n", uint32_t(current / UNIT)) < 0) {
+    if (sprintf_s(MARKDATA, MSG_LENGTH, "jerry heap current:%d(KB)\n", uint32_t(current / UNIT)) < 0) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Output file error.");
         fclose(fp);
         fp = nullptr;
         return;
     }
-    fputs(markdata, fp);
+    fputs(MARKDATA, fp);
 
     // jerry peak memory
-    if (sprintf_s(markdata, MSG_LENGTH, "jerry heap peak:%d(KB)\n", uint32_t(peak / UNIT)) < 0) {
+    if (sprintf_s(MARKDATA, MSG_LENGTH, "jerry heap peak:%d(KB)\n", uint32_t(peak / UNIT)) < 0) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Output file error.");
         fclose(fp);
         fp = nullptr;
         return;
     }
-    fputs(markdata, fp);
+    fputs(MARKDATA, fp);
 
     fflush(fp);
     fclose(fp);
