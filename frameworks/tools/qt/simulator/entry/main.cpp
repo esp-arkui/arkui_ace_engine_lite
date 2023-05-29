@@ -74,7 +74,6 @@ namespace  {
         childWidget->setGeometry(QRect(0, jsWindowHeight, jsWindowWidth, childPageHeight));
         SetJSDebuggerConfig(defaultHeapSize);
         childWidget->StartApp(jsBundlePath.toStdString().c_str());
-        delete childWidget;
     }
 }
 
