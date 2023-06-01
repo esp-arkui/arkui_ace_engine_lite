@@ -252,6 +252,13 @@
 #endif
 
 /**
+ * support key store module
+ */
+#ifndef FEATURE_ACELITE_HUKS
+#define FEATURE_ACELITE_HUKS 1
+#endif
+
+/**
  * support js profiler
  */
 #ifndef FEATURE_ACELITE_MC_JS_PROFILER
