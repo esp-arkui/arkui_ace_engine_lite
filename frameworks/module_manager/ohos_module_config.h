@@ -88,6 +88,8 @@ extern void InitHilogModule(JSIValue exports);
 extern void InitDeviceAttestModule(JSIValue exports);
 #endif
 
+extern void InitHuksModule(JSIValue exports);
+
 // Config information for built-in JS modules of OHOS platform
 const Module OHOS_MODULES[] = {
 #if (ENABLE_MODULE_REQUIRE_TEST == 1)
@@ -146,6 +148,9 @@ const Module OHOS_MODULES[] = {
 #if (FEATURE_COMPONENT_DEVICE_ATTEST == 1)
     {"deviceAttest", InitDeviceAttestModule},
 #endif
+
+    {"security.huks", InitHuksModule},
+
 };
 } // namespace ACELite
 } // namespace OHOS
