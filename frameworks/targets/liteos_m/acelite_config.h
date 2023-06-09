@@ -254,8 +254,10 @@
 /**
  * support key store module
  */
+#ifdef ENABLE_HUKS_ACE_LITE_FEATURE
 #ifndef FEATURE_ACELITE_HUKS
 #define FEATURE_ACELITE_HUKS 1
+#endif
 #endif
 
 /**
