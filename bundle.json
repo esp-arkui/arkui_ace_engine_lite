@@ -30,7 +30,6 @@
          "bundle_framework_lite",
          "huks",
          "ui_lite",
-         "surface_lite",
          "i18n_lite",
          "resource_management_lite",
          "hilog",
@@ -38,8 +37,6 @@
          "utils_lite",
          "ability_lite",
          "init",
-         "camera_lite",
-         "media_lite",
          "battery_lite",
          "netstack",
          "device_attest_lite"
