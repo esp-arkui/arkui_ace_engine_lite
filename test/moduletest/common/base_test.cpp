@@ -99,7 +99,7 @@ void BaseTest::UpdateCharAttributeOrStyleValue(Component *component,
                                                const bool isToSetAttribute) const
 {
     if (component == nullptr) {
-        HILOG_WARN(HILOG_MODULE_ACE, "UpdateCharAttributeOrStyleValue component is null\n");
+        HILOG_WARN(HILOG_MODULE_ACE, "UpdateCharAttributeOrStyleValue component is null asdfasdf\n");
         return;
     }
     jerry_value_t attrName = jerry_create_string(reinterpret_cast<const jerry_char_t *>(attributeName));
