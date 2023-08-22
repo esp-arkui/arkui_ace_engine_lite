@@ -19,7 +19,7 @@ unittest("js_frameworks_test_stylemgr") {
   output_dir = test_output_root
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
-    "$ace_lite_root/frameworks/src/core/components/test/unittest/common/root_component_mock.cpp",
+    "$ace_lite_root/frameworks/src/core/components/test/unittest/common/root_component_mock/root_component_mock.cpp",
     "$ace_lite_root/test/moduletest/common/base_test.cpp",
     "common/stylemgr_tdd_test.cpp",
   ]

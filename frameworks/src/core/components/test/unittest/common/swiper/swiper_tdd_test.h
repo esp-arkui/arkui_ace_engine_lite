@@ -12,60 +12,57 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#ifndef OHOS_ACELITE_STACK_TDD_TEST_H
-#define OHOS_ACELITE_STACK_TDD_TEST_H
+#ifndef ACELITE_SWIPER_TDD_TEST_H
+#define ACELITE_SWIPER_TDD_TEST_H
 
 #ifdef TDD_ASSERTIONS
 #include <climits>
 #include <gtest/gtest.h>
+#else
+#include <typeinfo.h>
 #endif
 
+#include "acelite_config.h"
 #include "component_factory.h"
-#include "root_component_mock.h"
+#include "root_component_mock/root_component_mock.h"
 #include "test_common.h"
-
-#define CASE_END_IF_NULLPTR(ptr) \
-    do {                         \
-        if ((ptr) == nullptr) {  \
-            TDD_CASE_END();      \
-            return;              \
-        }                        \
-    } while (0)
 
 namespace OHOS {
 namespace ACELite {
 #ifdef TDD_ASSERTIONS
 using namespace std;
 using namespace testing::ext;
-class StackTddTest : public testing::Test {
+class SwiperTddTest : public testing::Test {
 #else
-class StackTddTest {
+class SwiperTddTest {
 #endif
 public:
-    StackTddTest();
-    ~StackTddTest(){}
+    SwiperTddTest();
+    ~SwiperTddTest(){}
     void SetUp();
     void TearDown();
-    void ComponentStackTest001();
-    void ComponentStackTest002();
-    void ComponentStackTest003();
-    void ComponentStackTest004();
-    void ComponentStackTest005();
-    void ComponentStackTest006();
+    void ComponentSwiperAttributeSetTest001();
+    void ComponentSwiperAttributeSetTest002();
+    void ComponentSwiperAttributeSetTest003();
+    void ComponentSwiperAttributeSetTest004();
+    void ComponentSwiperAttributeSetTest005();
+    void ComponentSwiperAttributeSetTest013();
+    void ComponentSwiperAttributeSetTest014();
+    void ComponentSwiperAttributeSetTest019();
     void RunTests();
-
-private:
-    Component *GetRenderedComponent(uint16_t componentKeyId, jerry_value_t children) const;
-    Component *CreateChildComponent(jerry_value_t childOptions) const;
-    void ReleaseComponent(Component *&component) const;
     jerry_value_t optionsObj_;
     jerry_value_t attrsObj_;
     jerry_value_t styleObj_;
+    jerry_value_t eventObj_;
+    jerry_value_t childrenObj_;
+    Component* stack1_;
+    Component* stack2_;
+    Component* stack3_;
+    uint16_t componentKeyId_ = KeyParser::ParseKeyId("swiper");
+
+private:
     RootComponentMock rootComponentMock_;
-    uint16_t componentNameId_;
 };
 } // namespace ACELite
 } // namespace OHOS
-
-#endif // OHOS_ACELITE_STACK_TDD_TEST_H
+#endif // ACELITE_SWIPER_TDD_TEST_H

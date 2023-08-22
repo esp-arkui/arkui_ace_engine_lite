@@ -12,8 +12,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef ACELITE_SWIPER_TDD_TEST_H
-#define ACELITE_SWIPER_TDD_TEST_H
+
+#ifndef OHOS_ACELITE_TEST_HORIZON_H
+#define OHOS_ACELITE_TEST_HORIZON_H
+
+#include "component_factory.h"
+#include "root_component_mock/root_component_mock.h"
+#include "test_common.h"
 
 #ifdef TDD_ASSERTIONS
 #include <climits>
@@ -22,47 +27,44 @@
 #include <typeinfo.h>
 #endif
 
-#include "acelite_config.h"
-#include "component_factory.h"
-#include "root_component_mock.h"
-#include "test_common.h"
-
 namespace OHOS {
 namespace ACELite {
 #ifdef TDD_ASSERTIONS
 using namespace std;
 using namespace testing::ext;
-class SwiperTddTest : public testing::Test {
+class HorizonProgressTddTest : public testing::Test {
 #else
-class SwiperTddTest {
+class HorizonProgressTddTest {
 #endif
 public:
-    SwiperTddTest();
-    ~SwiperTddTest(){}
+    HorizonProgressTddTest();
+    ~HorizonProgressTddTest(){}
     void SetUp();
     void TearDown();
-    void ComponentSwiperAttributeSetTest001();
-    void ComponentSwiperAttributeSetTest002();
-    void ComponentSwiperAttributeSetTest003();
-    void ComponentSwiperAttributeSetTest004();
-    void ComponentSwiperAttributeSetTest005();
-    void ComponentSwiperAttributeSetTest013();
-    void ComponentSwiperAttributeSetTest014();
-    void ComponentSwiperAttributeSetTest019();
+    void HorizonProgressTest001();
+    void HorizonProgressTest002();
+    void HorizonProgressTest003();
+    void HorizonProgressTest004();
+    void HorizonProgressTest005();
+    void HorizonProgressTest006();
+    void HorizonProgressTest007();
+    void HorizonProgressTest008();
+    void HorizonProgressTest009();
+    void HorizonProgressTest013();
+    void HorizonProgressTest014();
+    void HorizonProgressTest015();
+    void HorizonProgressTest016();
+    void HorizonProgressTest017();
     void RunTests();
-    jerry_value_t optionsObj_;
-    jerry_value_t attrsObj_;
-    jerry_value_t styleObj_;
-    jerry_value_t eventObj_;
-    jerry_value_t childrenObj_;
-    Component* stack1_;
-    Component* stack2_;
-    Component* stack3_;
-    uint16_t componentKeyId_ = KeyParser::ParseKeyId("swiper");
+
+    jerry_value_t objGlob;
+    jerry_value_t objAttrs;
+    jerry_value_t objStaticStyle;
 
 private:
     RootComponentMock rootComponentMock_;
 };
 } // namespace ACELite
 } // namespace OHOS
-#endif // ACELITE_SWIPER_TDD_TEST_H
+
+#endif // OHOS_ACELITE_TEST_HORIZON_H

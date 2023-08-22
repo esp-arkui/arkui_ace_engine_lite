@@ -23,7 +23,7 @@
 
 #include "acelite_config.h"
 #include "component_factory.h"
-#include "root_component_mock.h"
+#include "root_component_mock/root_component_mock.h"
 #include "test_common.h"
 
 namespace OHOS {
