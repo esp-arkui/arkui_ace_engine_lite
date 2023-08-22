@@ -20,8 +20,8 @@ unittest("js_frameworks_test_arc") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/base_test.cpp",
-    "arc_tdd_test.cpp",
-    "root_component_mock.cpp",
+    "arc/arc_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
   ]
   deps = ace_test_deps
 }
@@ -32,7 +32,7 @@ unittest("js_frameworks_test_directive") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/basic_tdd_test.cpp",
-    "directive_tdd_test.cpp",
+    "directive/directive_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -43,7 +43,7 @@ unittest("js_frameworks_test_data_binding") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/basic_tdd_test.cpp",
-    "data_binding_tdd_test.cpp",
+    "data_binding/data_binding_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -54,8 +54,8 @@ unittest("js_frameworks_test_div") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/base_test.cpp",
-    "div_tdd_test.cpp",
-    "root_component_mock.cpp",
+    "div/div_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
   ]
   deps = ace_test_deps
 }
@@ -66,7 +66,7 @@ unittest("js_frameworks_test_event_bubble") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/basic_tdd_test.cpp",
-    "event_bubble_tdd_test.cpp",
+    "event_bubble/event_bubble_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -75,8 +75,8 @@ unittest("js_frameworks_test_horizonprogress") {
   output_dir = test_output_root
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
-    "horizonprogress_tdd_test.cpp",
-    "root_component_mock.cpp",
+    "horizonprogress/horizonprogress_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
   ]
   deps = ace_test_deps
 }
@@ -87,7 +87,7 @@ unittest("js_frameworks_test_image_animator") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/basic_tdd_test.cpp",
-    "image_animator_tdd_test.cpp",
+    "image_animator/image_animator_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -96,7 +96,7 @@ unittest("js_frameworks_test_image_path_support") {
   output_extension = "bin"
   output_dir = test_output_root
   configs = [ "$ace_lite_root/test:test_common_config" ]
-  sources = [ "image_src_path_tdd_test.cpp" ]
+  sources = [ "image_src_path/image_src_path_tdd_test.cpp" ]
   deps = ace_test_deps
 }
 
@@ -106,8 +106,8 @@ unittest("js_frameworks_test_input") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/base_test.cpp",
-    "input_tdd_test.cpp",
-    "root_component_mock.cpp",
+    "input/input_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
   ]
   deps = ace_test_deps
 }
@@ -116,7 +116,7 @@ unittest("js_frameworks_test_jsbundle") {
   output_extension = "bin"
   output_dir = test_output_root
   configs = [ "$ace_lite_root/test:test_common_config" ]
-  sources = [ "jsbundle_tdd_test.cpp" ]
+  sources = [ "jsbundle/jsbundle_tdd_test.cpp" ]
   deps = ace_test_deps
 }
 
@@ -125,8 +125,8 @@ unittest("js_frameworks_test_list") {
   output_dir = test_output_root
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
-    "list_tdd_test.cpp",
-    "root_component_mock.cpp",
+    "list/list_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
   ]
   deps = ace_test_deps
 }
@@ -137,8 +137,8 @@ unittest("js_frameworks_test_marquee") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/base_test.cpp",
-    "marquee_tdd_test.cpp",
-    "root_component_mock.cpp",
+    "marquee/marquee_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
   ]
   deps = ace_test_deps
 }
@@ -149,7 +149,7 @@ unittest("js_frameworks_test_marquee_event") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/basic_tdd_test.cpp",
-    "marquee_event_tdd_test.cpp",
+    "marquee_event/marquee_event_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -160,8 +160,8 @@ unittest("js_frameworks_test_opacity") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/base_test.cpp",
-    "opacity_tdd_test.cpp",
-    "root_component_mock.cpp",
+    "opacity/opacity_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
   ]
   deps = ace_test_deps
 }
@@ -170,7 +170,7 @@ unittest("js_frameworks_test_percent") {
   output_extension = "bin"
   output_dir = test_output_root
   configs = [ "$ace_lite_root/test:test_common_config" ]
-  sources = [ "percent_tdd_test.cpp" ]
+  sources = [ "percent/percent_tdd_test.cpp" ]
   deps = ace_test_deps
 }
 
@@ -179,8 +179,8 @@ unittest("js_frameworks_test_pickerview") {
   output_dir = test_output_root
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
-    "picker_view_tdd_test.cpp",
-    "root_component_mock.cpp",
+    "picker_view/picker_view_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
   ]
   deps = ace_test_deps
 }
@@ -191,8 +191,8 @@ unittest("js_frameworks_test_radio_switch_width") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/base_test.cpp",
-    "radio_switch_tdd_test.cpp",
-    "root_component_mock.cpp",
+    "radio_switch/radio_switch_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
   ]
   deps = ace_test_deps
 }
@@ -203,8 +203,8 @@ unittest("js_frameworks_test_slider") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/base_test.cpp",
-    "root_component_mock.cpp",
-    "slider_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
+    "slider/slider_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -215,8 +215,8 @@ unittest("js_frameworks_test_swiper") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/base_test.cpp",
-    "root_component_mock.cpp",
-    "swiper_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
+    "swiper/swiper_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -227,8 +227,8 @@ unittest("js_frameworks_test_switch") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/base_test.cpp",
-    "root_component_mock.cpp",
-    "switch_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
+    "switch/switch_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -239,8 +239,8 @@ unittest("js_frameworks_test_text") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/base_test.cpp",
-    "root_component_mock.cpp",
-    "text_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
+    "text/text_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -251,8 +251,8 @@ unittest("js_frameworks_test_text_exception") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/base_test.cpp",
-    "root_component_mock.cpp",
-    "text_tdd_exception_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
+    "text_exception/text_tdd_exception_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -263,7 +263,7 @@ unittest("js_frameworks_test_input_event") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/basic_tdd_test.cpp",
-    "input_event_tdd_test.cpp",
+    "input_event/input_event_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -273,8 +273,8 @@ unittest("js_frameworks_test_stack") {
   output_dir = test_output_root
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
-    "root_component_mock.cpp",
-    "stack_tdd_test.cpp",
+    "root_component_mock/root_component_mock.cpp",
+    "stack/stack_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -285,7 +285,7 @@ unittest("js_frameworks_test_qrcode") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/basic_tdd_test.cpp",
-    "qrcode_tdd_test.cpp",
+    "qrcode/qrcode_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -296,7 +296,7 @@ unittest("js_frameworks_test_chart") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/basic_tdd_test.cpp",
-    "chart_tdd_test.cpp",
+    "chart/chart_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }
@@ -307,7 +307,7 @@ unittest("js_frameworks_test_canvas") {
   configs = [ "$ace_lite_root/test:test_common_config" ]
   sources = [
     "$ace_lite_root/test/moduletest/common/basic_tdd_test.cpp",
-    "canvas_tdd_test.cpp",
+    "canvas/canvas_tdd_test.cpp",
   ]
   deps = ace_test_deps
 }

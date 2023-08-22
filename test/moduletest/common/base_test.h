@@ -25,7 +25,7 @@
 
 #include "component_factory.h"
 #include "js_app_environment.h"
-#include "root_component_mock.h"
+#include "root_component_mock/root_component_mock.h"
 #include "root_view.h"
 #include "stylemgr/app_style_item.h"
 #include "stylemgr/app_style_manager.h"
