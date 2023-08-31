@@ -119,7 +119,7 @@ private:
                                          const jerry_length_t argsNum);
 
     static jerry_value_t TextAlignGetter(const jerry_value_t func,
-                                         const jerry_value_t contex,
+                                         const jerry_value_t dom,
                                          const jerry_value_t args[],
                                          const jerry_length_t argsNum);
 #if GRAPHIC_ENABLE_LINECAP_FLAG
@@ -166,7 +166,7 @@ private:
                                               const jerry_length_t argsNum);
 #endif
     static jerry_value_t GlobalAlphaSetter(const jerry_value_t func,
-                                           const jerry_value_t dom,
+                                           const jerry_value_t context,
                                            const jerry_value_t args[],
                                            const jerry_length_t argsNum);
 
@@ -176,7 +176,7 @@ private:
                                            const jerry_length_t argsNum);
 
     static jerry_value_t GlobalCompositeOperationSetter(const jerry_value_t func,
-                                                        const jerry_value_t dom,
+                                                        const jerry_value_t context,
                                                         const jerry_value_t args[],
                                                         const jerry_length_t argsNum);
 
@@ -200,7 +200,7 @@ private:
                                              const jerry_value_t args[],
                                              const jerry_length_t argsNum);
     static jerry_value_t ShadowColorSetter(const jerry_value_t func,
-                                           const jerry_value_t dom,
+                                           const jerry_value_t context,
                                            const jerry_value_t args[],
                                            const jerry_length_t argsNum);
 
@@ -260,7 +260,7 @@ private:
                               const jerry_length_t argsNum);
 
     static jerry_value_t CleanRect(const jerry_value_t func,
-                                   const jerry_value_t dom,
+                                   const jerry_value_t context,
                                    const jerry_value_t args[],
                                    const jerry_length_t argsNum);
 
@@ -336,17 +336,17 @@ private:
                                       const jerry_length_t argsNum);
 #if GRAPHIC_ENABLE_GRADIENT_FILL_FLAG
     static jerry_value_t CreateLInearGradient(const jerry_value_t func,
-                                              const jerry_value_t dom,
+                                              const jerry_value_t context,
                                               const jerry_value_t args[],
                                               const jerry_length_t argsNum);
 
     static jerry_value_t CreateRadialGradient(const jerry_value_t func,
-                                              const jerry_value_t dom,
+                                              const jerry_value_t context,
                                               const jerry_value_t args[],
                                               const jerry_length_t argsNum);
 
     static jerry_value_t AddColorStop(const jerry_value_t func,
-                                      const jerry_value_t dom,
+                                      const jerry_value_t context,
                                       const jerry_value_t args[],
                                       const jerry_length_t argsNum);
 #endif
@@ -392,10 +392,6 @@ private:
     int16_t shadowBlurValue_;
     char *shadowColorValue_;
 #endif
-    int16_t lineWidthValue_;
-
-    char *lineCapValue_;
-    char *lineJoinValue_;
 #if GRAPHIC_ENABLE_LINEJOIN_FLAG
     float miterLimitValue_;
 #endif
@@ -409,6 +405,9 @@ private:
     char *patternPathValue_;
     char *patternRepeatTypeValue_;
 #endif
+    int16_t lineWidthValue_;
+    char *lineCapValue_;
+    char *lineJoinValue_;
     static const char * const DEFAULT_FILLSTYLE;
     static const char * const DEFAULT_STROKESTYLE;
     static const char * const DEFAULT_TEXTALIGN;
