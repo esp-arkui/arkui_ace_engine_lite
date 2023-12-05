@@ -49,6 +49,7 @@ lite_library("ace_module_manager") {
   public_deps = [
     "$ace_frameworks_root/common:ace_common_lite",
     "$ace_frameworks_root/native_engine:ace_native_engine_lite",
+    "//base/startup/init/interfaces/kits:kitsgroup",
     "//commonlibrary/utils_lite/js/builtin:ace_utils_kits",
   ]
 

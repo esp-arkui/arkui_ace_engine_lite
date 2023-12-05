@@ -124,6 +124,7 @@ const Module OHOS_MODULES[] = {
     {"device", InitDeviceModule},
     {"deviceInfo", InitDeviceInfoModule},
 #endif
+
 #if (FEATURE_MODULE_GEO == 1)
     {"geolocation", InitLocationModule},
 #endif
