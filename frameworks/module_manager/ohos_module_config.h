@@ -52,9 +52,9 @@ extern void InitDeviceModule(JSIValue exports);
 extern void InitDeviceInfoModule(JSIValue exports);
 #endif
 
-#if (FEATURE_MODULE_GEO == 1)
+//#if (FEATURE_MODULE_GEO == 1)
 extern void InitLocationModule(JSIValue exports);
-#endif
+//#endif
 
 #if (FEATURE_MODULE_SENSOR == 1)
 extern void InitVibratorModule(JSIValue exports);
