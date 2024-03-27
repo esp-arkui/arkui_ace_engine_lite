@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,12 +21,12 @@
 
 namespace OHOS {
 namespace ACELite {
-JSDialog::JSDialog()
-    : dialog_(nullptr),
-      dialogListener_(nullptr),
-      dismissListener_(nullptr),
-      title_(nullptr),
-      message_(nullptr) {}
+JSDialog::JSDialog() : dialog_(nullptr), dismissListener_(nullptr), title_(nullptr), message_(nullptr)
+{
+    for (uint8_t i = 0; i < maxButtonNum; i++) {
+        dialogListener_[i] = nullptr;
+    }
+}
 
 JSDialog::~JSDialog()
 {
@@ -39,7 +39,9 @@ void JSDialog::ReleaseResource()
     ACE_FREE(message_);
     ACE_DELETE(dialog_);
     ACE_DELETE(dismissListener_);
-    ACE_DELETE(dialogListener_);
+    for (uint8_t i = 0; i < maxButtonNum; i++) {
+        ACE_DELETE(dialogListener_[i]);
+    }
 }
 
 void JSDialog::SetTitle(char *title)
@@ -63,11 +65,8 @@ static void DialogRecycleExecutor(void *jsDialog)
     delete reinterpret_cast<JSDialog *>(jsDialog);
 }
 
-bool JSDialog::ShowDialog(JSIValue thisVal,
-                          JSIValue buttons,
-                          JSIValue successFunc,
-                          JSIValue cancelFunc,
-                          JSIValue completeFunc)
+bool JSDialog::ShowDialog(JSIValue thisVal, JSIValue buttons, JSIValue successFunc, JSIValue cancelFunc,
+    JSIValue completeFunc)
 {
     ACE_DELETE(dialog_);
     dialog_ = new UIDialog();
@@ -100,11 +99,8 @@ bool JSDialog::ShowDialog(JSIValue thisVal,
 }
 
 
-bool JSDialog::ParseButton(JSDialog *jsDialog,
-                           JSIValue buttonArrayObject,
-                           JSIValue successFuncObject,
-                           JSIValue completeFuncObject,
-                           JSIValue context)
+bool JSDialog::ParseButton(JSDialog *jsDialog, JSIValue buttonArrayObject, JSIValue successFuncObject,
+    JSIValue completeFuncObject, JSIValue context)
 {
     if (jsDialog == nullptr) {
         return false;
@@ -115,7 +111,7 @@ bool JSDialog::ParseButton(JSDialog *jsDialog,
     }
     /* parse dialog buttons */
     uint32_t len = JSI::GetArrayLength(buttonArrayObject);
-    const uint8_t maxButtonNum = 3;
+
     const char * const buttonTextKey = "text";
     const char * const buttonColorKey = "color";
     // support up to 3 buttons
@@ -133,14 +129,14 @@ bool JSDialog::ParseButton(JSDialog *jsDialog,
         ColorType color = ParseButtonColor(buttonColorText);
         dialog->SetButtonColor(static_cast<UIDialog::DialogButtonType>(index), color);
         // set button click listener
-        dialogListener_ = new DialogListener(jsDialog, index, successFuncObject, completeFuncObject, context);
-        if (dialogListener_ == nullptr) {
+        dialogListener_[index] = new DialogListener(jsDialog, index, successFuncObject, completeFuncObject, context);
+        if (dialogListener_[index] == nullptr) {
             JSI::ReleaseString(buttonText);
             JSI::ReleaseString(buttonColorText);
             JSI::ReleaseValue(buttonObject);
             return false;
         }
-        dialog->SetButton(static_cast<UIDialog::DialogButtonType>(index), buttonText, dialogListener_);
+        dialog->SetButton(static_cast<UIDialog::DialogButtonType>(index), buttonText, dialogListener_[index]);
         // release button JSI value
         JSI::ReleaseString(buttonText);
         JSI::ReleaseString(buttonColorText);
@@ -151,7 +147,7 @@ bool JSDialog::ParseButton(JSDialog *jsDialog,
 
 ColorType JSDialog::ParseButtonColor(const char * const buttonColorText)
 {
-    uint32_t color = 0;  // default color
+    uint32_t color = 0; // default color
     uint8_t alpha = 0;
     if (!ParseColor(buttonColorText, color, alpha)) {
         HILOG_ERROR(HILOG_MODULE_ACE, "input dialog button color error, please check. default color instead");
@@ -175,16 +171,14 @@ void JSDialog::DispatchReleaseRequest(const JSDialog *jsDialog)
     }
 }
 
-DialogListener::DialogListener(JSDialog *jsDialog,
-                               uint8_t index,
-                               JSIValue successFunc,
-                               JSIValue completeFunc,
-                               JSIValue context)
+DialogListener::DialogListener(JSDialog *jsDialog, uint8_t index, JSIValue successFunc, JSIValue completeFunc,
+    JSIValue context)
     : jsDialog_(jsDialog),
       buttonIndex_(index),
       jsSuccessFunc_(JSI::AcquireValue(successFunc)),
       jsCompleteFunc_(JSI::AcquireValue(completeFunc)),
-      jsContext_(JSI::AcquireValue(context)) {}
+      jsContext_(JSI::AcquireValue(context))
+{}
 
 DialogListener::~DialogListener() {}
 
@@ -212,9 +206,13 @@ DismissListener::DismissListener(JSDialog *jsDialog, JSIValue cancelFunc, JSIVal
     : jsDialog_(jsDialog),
       jsCancelFunc_(JSI::AcquireValue(cancelFunc)),
       jsCompleteFunc_(JSI::AcquireValue(completeFunc)),
-      jsContext_(JSI::AcquireValue(context)) {}
+      jsContext_(JSI::AcquireValue(context))
+{}
 
-DismissListener::~DismissListener() {}
+DismissListener::~DismissListener()
+{
+    JSI::ReleaseValueList(jsCancelFunc_, jsCompleteFunc_, jsContext_);
+}
 bool DismissListener::OnClick(UIView &view, const ClickEvent &event)
 {
     HILOG_INFO(HILOG_MODULE_ACE, "dialog dismiss button on click");
@@ -224,7 +222,7 @@ bool DismissListener::OnClick(UIView &view, const ClickEvent &event)
     if (JSI::ValueIsFunction(jsCompleteFunc_)) {
         JSI::CallFunction(jsCompleteFunc_, jsContext_, nullptr, 0);
     }
-    JSI::ReleaseValueList(jsCancelFunc_, jsCompleteFunc_, jsContext_);
+
     // the dialog is going to be dismissed, request to do the recycling
     JSDialog::DispatchReleaseRequest(jsDialog_);
     return true;
