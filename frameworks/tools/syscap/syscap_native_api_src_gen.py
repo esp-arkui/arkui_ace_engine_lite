@@ -111,10 +111,8 @@ def assemble_cpp_file():
          + function_define_string \
          + tail_string
     outpath = parse_args().output_file
-    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    flags = os.O_WRONLY | os.O_CREAT
     modes = stat.S_IWUSR | stat.S_IRUSR
-    if os.path.exists(outpath):
-        os.remove(outpath)
 
     with os.fdopen(os.open(outpath, flags, modes), 'w') as f:
         f.writelines(line)
