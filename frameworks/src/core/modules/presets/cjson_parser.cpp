@@ -653,7 +653,16 @@ jerry_value_t CJSONParser::GetValueFromFile(const char *key,
     ListNode *keys = nullptr;
     uint8_t keyCount = Split(key, '.', *&keys);
     char *content = ReadJSFile(filePath_, languageFile);
+    if (content == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "the content obtained from language file is empty");
+        return UNDEFINED;
+    }
     cJSON *fileJson = cJSON_Parse(content);
+    if (fileJson == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "the fileJson is empty");
+        ACE_FREE(content);
+        return UNDEFINED;
+    }
     ACE_FREE(content);
     cJSON *curJsonItem = fileJson;
     uint8_t curKeyIndex = 0;
