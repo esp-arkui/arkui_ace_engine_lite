@@ -15,6 +15,8 @@
 
 import json
 import argparse
+import os
+import stat
 
 license_string = """/*
  * Copyright (c) 2022 Huawei Device Co., Ltd.
@@ -87,20 +89,20 @@ def parse_args():
 
 def get_syscap_list():
     path = parse_args().syscap_file
-    syscap_file = open(path, 'rb')
-    syscap_json = json.load(syscap_file)['syscap']
-    syscap_file.close()
-    syscap_list = syscap_json['os']
-    if ('private' in syscap_json):
-        for i in syscap_json['private']:
-            syscap_list.append(i)
+    with open(path, 'rb') as syscap_file:
+        syscap_json = json.load(syscap_file)['syscap']
+        syscap_file.close()
+        syscap_list = syscap_json['os']
+        if ('private' in syscap_json):
+            for i in syscap_json['private']:
+                syscap_list.append(i)
     return syscap_list
 
 def assemble_syscap_array():
     string = "static const SysCapDef g_syscap[] = {\n"
     for i in get_syscap_list():
-        string =  string + '    {' + '"' + i + '", ENABLE},\n'
-    string = string.strip(',\n') + '\n};\n'
+        string = ''.join([string, '    {', '"', i, '", ENABLE},\n'])
+    string = ''.join([string.strip(',\n'), '\n};\n'])
     return string
 
 def assemble_cpp_file():
@@ -109,9 +111,11 @@ def assemble_cpp_file():
          + function_define_string \
          + tail_string
     outpath = parse_args().output_file
-    f = open(outpath, 'w')
-    f.writelines(line)
-    f.close()
+    flags = os.O_WRONLY | os.O_CREAT
+    modes = stat.S_IWUSR | stat.S_IRUSR
+    with os.fdopen(os.open(outpath, flags, modes), 'w') as f:
+        f.writelines(line)
+        f.close()
 
 if __name__ == '__main__':
     assemble_cpp_file()

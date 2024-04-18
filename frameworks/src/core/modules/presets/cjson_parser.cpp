@@ -660,6 +660,7 @@ jerry_value_t CJSONParser::GetValueFromFile(const char *key,
     cJSON *fileJson = cJSON_Parse(content);
     if (fileJson == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "the fileJson is empty");
+        ACE_FREE(content);
         return UNDEFINED;
     }
     ACE_FREE(content);
