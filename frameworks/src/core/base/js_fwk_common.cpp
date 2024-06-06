@@ -667,6 +667,11 @@ char *ReadFile(const char * const fullPath, uint32_t &fileSize, const bool binar
         if (!CheckFileLength(fullPath, scriptLength)) {
             break;
         }
+        
+        if (scriptLength > FILE_CONTENT_LENGTH_MAX) {
+            HILOG_ERROR(HILOG_MODULE_ACE, "file is too large, out of 48KB, script length: %{public}d", scriptLength);
+            break;
+        }
 
         fileSize = 0;
         fd = OpenFileInternal(fullPath, O_RDONLY);
