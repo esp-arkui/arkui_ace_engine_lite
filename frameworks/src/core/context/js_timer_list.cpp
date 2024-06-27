@@ -51,6 +51,22 @@ TimerList::TimerNode* TimerList::GetTimer(uint8_t id)
     return current;
 }
 
+uint8_t TimerList::GetIndex()
+{
+    if (index_ < 0xFF) {
+        return ++index_;
+    } else {
+        for (int i = 0; i < 0xFF; i++) {
+            if (GetTimer(i) == nullptr) {
+                index_ = i;
+                break;
+            }
+        }
+    }
+
+    return index_;
+}
+
 void TimerList::DeleteTimer(uint8_t timer)
 {
     if (timerListHead_ == nullptr) {
