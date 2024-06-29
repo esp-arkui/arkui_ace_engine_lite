@@ -71,10 +71,7 @@ public:
 
     void ReleaseArguments(Arguments *&argument);
 
-    uint8_t GetIndex()
-    {
-        return ++index_;
-    }
+    uint8_t GetIndex();
 
 private:
     void ReleaseTimer(TimerNode *&current);

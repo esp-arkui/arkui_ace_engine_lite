@@ -82,7 +82,6 @@ ace_test_deps = [
   "//foundation/arkui/ui_lite:ui_lite",
   "//foundation/distributeddatamgr/kv_store/interfaces/inner_api/kv_store:utils_kv_store",
   "//foundation/graphic/graphic_utils_lite:utils_lite",
-  "//foundation/graphic/surface_lite",
   "//foundation/systemabilitymgr/samgr_lite/communication/broadcast",
   "//foundation/systemabilitymgr/samgr_lite/samgr:samgr",
   "//foundation/systemabilitymgr/samgr_lite/samgr_client:client",
