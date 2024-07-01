@@ -87,7 +87,9 @@
  * support battery API for JS
  */
 #ifndef FEATURE_MODULE_BATTERY
+#ifdef POWERMGR_BATTERY_LITE_EXISTS
 #define FEATURE_MODULE_BATTERY 1
+#endif
 #endif
 
 /**
@@ -145,7 +147,9 @@
 #endif
 
 #ifndef FEATURE_COMPONENT_CAMERA
+#ifdef MULTIMEDIA_CAMERA_LITE_EXISTS
 #define FEATURE_COMPONENT_CAMERA 1
+#endif
 #endif
 
 /**
@@ -160,7 +164,9 @@
 #endif
 
 #ifndef FEATURE_COMPONENT_VIDEO
+#ifdef MULTIMEDIA_MEDIA_LITE_EXISTS
 #define FEATURE_COMPONENT_VIDEO 1
+#endif
 #endif
 
 #ifndef FEATURE_MODULE_DIALOG

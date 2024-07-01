@@ -21,6 +21,56 @@ MODULE_MANAGER_PATH =
     "//foundation/arkui/ace_engine_lite/frameworks/module_manager"
 GRAPHIC_LITE_PATH = "//foundation/arkui/ui_lite"
 
+ace_lite_common_defines = []
+
+if (!defined(global_parts_info) ||
+    defined(global_parts_info.graphic_surface_lite)) {
+  graphic_surface_lite_exists = true
+  ace_lite_common_defines += [ "GRAPHIC_SURFACE_LITE_EXISTS" ]
+} else {
+  graphic_surface_lite_exists = false
+}
+
+if (!defined(global_parts_info) ||
+    defined(global_parts_info.communication_netstack)) {
+  communication_netstack_exists = true
+  ace_lite_common_defines += [ "COMMUNICATION_NETSTACK_EXISTS" ]
+} else {
+  communication_netstack_exists = false
+}
+
+if (!defined(global_parts_info) ||
+    defined(global_parts_info.powermgr_battery_lite)) {
+  powermgr_battery_lite_exists = true
+  ace_lite_common_defines += [ "POWERMGR_BATTERY_LITE_EXISTS" ]
+} else {
+  powermgr_battery_lite_exists = false
+}
+
+if (!defined(global_parts_info) ||
+    defined(global_parts_info.distributeddatamgr_kv_store)) {
+  distributeddatamgr_kv_store_exists = true
+  ace_lite_common_defines += [ "DISTRIBUTEDDATAMGR_KV_STORE_EXISTS" ]
+} else {
+  distributeddatamgr_kv_store_exists = false
+}
+
+if (!defined(global_parts_info) ||
+    defined(global_parts_info.multimedia_media_lite)) {
+  multimedia_media_lite_exists = true
+  ace_lite_common_defines += [ "MULTIMEDIA_MEDIA_LITE_EXISTS" ]
+} else {
+  multimedia_media_lite_exists = false
+}
+
+if (!defined(global_parts_info) ||
+    defined(global_parts_info.multimedia_camera_lite)) {
+  multimedia_camera_lite_exists = true
+  ace_lite_common_defines += [ "MULTIMEDIA_CAMERA_LITE_EXISTS" ]
+} else {
+  multimedia_camera_lite_exists = false
+}
+
 ace_lite_include_dirs = [
   "$GRAPHIC_LITE_PATH/interfaces/kits/config",
   "$GRAPHIC_LITE_PATH/interfaces/kits/animator",
