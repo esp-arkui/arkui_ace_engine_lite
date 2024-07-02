@@ -119,7 +119,7 @@
 
 #ifdef FEATURE_COMPONENT_CAMERA
 #error "must keep the global configuration unique"
-#else
+#else #ifdef MULTIMEDIA_CAMERA_LITE_EXISTS
 #define FEATURE_COMPONENT_CAMERA 1
 #endif
 
@@ -131,7 +131,7 @@
 
 #ifdef FEATURE_COMPONENT_VIDEO
 #error "must keep the global configuration unique"
-#else
+#else #ifdef MULTIMEDIA_MEDIA_LITE_EXISTS
 #define FEATURE_COMPONENT_VIDEO 1
 #endif
 
