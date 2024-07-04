@@ -7,6 +7,7 @@
   "segment": {
     "destPath": "foundation/arkui/ace_engine_lite"
   },
+  
   "dirs": {},
   "scripts": {},
   "component": {
