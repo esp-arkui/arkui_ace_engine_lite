@@ -100,6 +100,19 @@ void LazyLoadManager::AddLazyLoadWatcher(jerry_value_t nativeElement,
         return;
     }
 
+    ListNode<LazyLoadWatcher *> *node = lazyWatchersList_.Begin();
+    while (node != lazyWatchersList_.End()) {
+        if (node->data_ == nullptr) {
+            node = node->next_;
+            continue;
+        }
+        if (node->data_->GetNativeElement() == nativeElement) {
+            HILOG_ERROR(HILOG_MODULE_ACE, "Repeated addition");
+            return;
+        }
+        node = node->next_;
+    }
+
     LazyLoadWatcher *watcher = new LazyLoadWatcher(nativeElement, attrName, getter, keyId);
     if (watcher == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "create watcher errpr");
