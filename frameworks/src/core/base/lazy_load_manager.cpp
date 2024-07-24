@@ -33,12 +33,16 @@ LazyLoadManager::~LazyLoadManager()
 void LazyLoadManager::ResetWatchers()
 {
     ListNode<LazyLoadWatcher *> *node = lazyWatchersList_.Begin();
+    ListNode<LazyLoadWatcher *> * temp = nullptr;
     while (node != lazyWatchersList_.End()) {
+        temp = node;
         if (node->data_ != nullptr) {
             delete node->data_;
             node->data_ = nullptr;
         }
+
         node = node->next_;
+        delete temp;
     }
     lazyWatchersList_.Clear();
     state_ = LazyLoadState::INIT;
@@ -47,14 +51,18 @@ void LazyLoadManager::ResetWatchers()
 void LazyLoadManager::RenderLazyLoadWatcher()
 {
     ListNode<LazyLoadWatcher *> *node = lazyWatchersList_.Begin();
+    ListNode<LazyLoadWatcher *> * temp = nullptr;
     while (node != lazyWatchersList_.End()) {
+        temp = node;
         if (node->data_ != nullptr) {
             // handle it
             RenderSingleLazyWatcher(*(node->data_));
             delete node->data_;
             node->data_ = nullptr;
         }
+
         node = node->next_;
+        delete temp;
     }
     lazyWatchersList_.Clear();
     state_ = LazyLoadState::DONE;
