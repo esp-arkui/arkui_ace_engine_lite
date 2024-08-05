@@ -609,7 +609,7 @@ private:
     AppStyleManager *styleManager_;
     jerry_value_t nativeElement_;
     jerry_value_t viewModel_;
-    jerry_value_t options_;
+    jerry_value_t options_; //do not release
     jerry_value_t children_;
     ViewOnClickListener *onClickListener_;
     ViewOnLongPressListener *onLongPressListener_;

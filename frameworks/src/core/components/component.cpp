@@ -232,7 +232,6 @@ void Component::Release()
     jerry_release_value(descriptors_);
     jerry_release_value(children_);
     jerry_release_value(viewModel_);
-    jerry_release_value(options_);
 }
 
 bool Component::UpdateView(uint16_t attrKeyId, jerry_value_t attrValue)
