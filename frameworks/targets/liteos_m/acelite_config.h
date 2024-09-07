@@ -262,6 +262,10 @@
 #endif
 #endif
 
+#ifndef FEATURE_CRYPTO_FRAMEWORK
+#define FEATURE_CRYPTO_FRAMEWORK 1
+#endif
+
 /**
  * support js profiler
  */
