@@ -94,7 +94,7 @@ extern void InitHuksModule(JSIValue exports);
 #endif
 
 #if (FEATURE_CRYPTO_FRAMEWORK == 1)
-__weak InitCryptoFrameworkModule(JSIValue exports);
+__weak InitCryptoFrameworkModule(JSIValue exports) {}
 extern void InitCryptoFrameworkModule(JSIValue exports);
 #endif
 
