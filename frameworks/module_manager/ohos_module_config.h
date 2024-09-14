@@ -93,6 +93,11 @@ extern void InitDeviceAttestModule(JSIValue exports);
 extern void InitHuksModule(JSIValue exports);
 #endif
 
+#if (FEATURE_CRYPTO_FRAMEWORK == 1)
+__weak void InitCryptoFrameworkModule(JSIValue exports) {}
+extern void InitCryptoFrameworkModule(JSIValue exports);
+#endif
+
 // Config information for built-in JS modules of OHOS platform
 const Module OHOS_MODULES[] = {
 #if (ENABLE_MODULE_REQUIRE_TEST == 1)
@@ -154,6 +159,9 @@ const Module OHOS_MODULES[] = {
 #endif
 #if (FEATURE_ACELITE_HUKS == 1)
     {"security.huks", InitHuksModule},
+#endif
+#if (FEATURE_CRYPTO_FRAMEWORK == 1)
+    {"security.crytoFramework", InitCryptoFrameworkModule},
 #endif
 };
 } // namespace ACELite
