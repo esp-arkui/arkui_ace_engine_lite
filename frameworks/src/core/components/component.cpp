@@ -1678,6 +1678,7 @@ void Component::AppendIfDescriptor(Component *parent, const jerry_value_t descri
         DescriptorUtils::DelIfDescriptorRendered(descriptor);
     }
 }
+
 void Component::AppendForDescriptor(Component *parent, const jerry_value_t descriptor)
 {
     JSValue descriptorOrelements = DescriptorUtils::GetDescriptorRendered(descriptor);
@@ -1691,6 +1692,7 @@ void Component::AppendForDescriptor(Component *parent, const jerry_value_t descr
         AppendDescriptorOrElements(parent, descriptorOrelements);
     }
 }
+
 void Component::AppendElement(Component *parent, const jerry_value_t element)
 {
     if (parent == nullptr) {
