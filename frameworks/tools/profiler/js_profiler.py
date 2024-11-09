@@ -16,6 +16,8 @@
 
 import sys
 import argparse
+import os
+import stat
 
 from js_profiler_config import key_word
 from js_profiler_config import label_name
@@ -44,7 +46,9 @@ def add_description_info(description_id):
 def parser(opt):
     source_file = opt.source
     try:
-        with open(source_file, 'r') as source:
+        flags = os.O_WRONLY | os.O_CREAT
+        modes = stat.S_IWUSR | stat.S_IRUSR
+        with os.fdopen(os.open(source_file, flags, modes), 'w') as source:
             for line in source.readlines():
                 strlist = line.split(' ')
                 if len(strlist) == 5:
@@ -62,7 +66,9 @@ def parser(opt):
 
 def output(msg, dest):
     try:
-        with open(dest, 'a+') as destination:
+        flags = os.O_WRONLY | os.O_CREAT | os.O_APPEND
+        modes = stat.S_IWUSR | stat.S_IRUSR
+        with os.fdopen(os.open(dest, flags, modes), 'a+') as destination:
             destination.write(msg + '\n')
     except Exception:
         print('open destination file error')

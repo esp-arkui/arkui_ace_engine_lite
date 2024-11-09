@@ -426,7 +426,7 @@ bool CJSONParser::IsFileExistFullMatch(const char *fileName)
         return false;
     }
     bool canBeFullMatched = false;
-    for (uint8_t i = 0; i <= count; i++) {
+    for (int i = 0; i <= count; i++) {
         if (!strcmp(fileName, GetNode(fileList, i))) {
             canBeFullMatched = true;
             break;
@@ -653,13 +653,20 @@ jerry_value_t CJSONParser::GetValueFromFile(const char *key,
     ListNode *keys = nullptr;
     uint8_t keyCount = Split(key, '.', *&keys);
     char *content = ReadJSFile(filePath_, languageFile);
+    if (content == nullptr) {
+        ClearNode(keys);
+        return UNDEFINED;
+    }
     cJSON *fileJson = cJSON_Parse(content);
     ACE_FREE(content);
+    if (fileJson == nullptr) {
+        ClearNode(keys);
+        return UNDEFINED;
+    }
     cJSON *curJsonItem = fileJson;
     uint8_t curKeyIndex = 0;
     do {
-        // get the current splited key
-        char *message = CJSONParser::GetNode(keys, keyCount - curKeyIndex);
+        char *message = CJSONParser::GetNode(keys, keyCount - curKeyIndex); // get the current splited key
         curJsonItem = cJSON_GetObjectItemCaseSensitive(curJsonItem, message);
         curKeyIndex++;
     } while (!(curKeyIndex == keyCount || (curJsonItem == nullptr)));
@@ -675,18 +682,14 @@ jerry_value_t CJSONParser::GetValueFromFile(const char *key,
         }
         char *value = FillPlaceholder(curJsonItem->valuestring, args, argsNum);
         if (value == nullptr) {
-            HILOG_ERROR(HILOG_MODULE_ACE, "get nullptr value after place holder filling, keyLen[%{public}d]",
-                        strlen(key));
             nullValueFlag = true;
             break;
         }
         if (strlen(value) == 0) {
-            HILOG_ERROR(HILOG_MODULE_ACE, "warning: get 0 length str after place holder filling, keyLen[%{public}d]",
-                        strlen(key));
+            HILOG_ERROR(HILOG_MODULE_ACE, "get 0 length str after place holder filling");
         }
         result = jerry_create_string(reinterpret_cast<jerry_char_t *>(value));
-        ace_free(value);
-        value = nullptr;
+        ACE_FREE(value);
     } while (0);
     cJSON_Delete(fileJson);
     fileJson = nullptr;

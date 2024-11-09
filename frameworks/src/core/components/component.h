@@ -202,7 +202,7 @@ public:
         TransitionImpl *transitionImpl;
         AnimationsNode *next;
 
-        AnimationsNode() : transitionImpl(nullptr), next(nullptr){}
+        AnimationsNode() : transitionImpl(nullptr), next(nullptr) {}
     };
 
     static void HandlerAnimations();
@@ -592,6 +592,16 @@ private:
      * @brief RemoveAllChildren clean all children
      */
     void RemoveAllChildren();
+
+    void SetAnimationDuration(const AppStyleItem *styleItem, const char *strValue);
+
+    void SetAnimationTimingFunction(const char *strValue, size_t strLen);
+
+    void SetAnimationFillMode(const char *strValue, size_t strLen);
+
+    void SetAnimationDelay(const AppStyleItem *styleItem, const char *strValue);
+
+    void SetAnimationIterationCount(const AppStyleItem *styleItem, const char *strValue);
 
     /**
      * @brief childHead_ the child list

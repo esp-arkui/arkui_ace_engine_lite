@@ -14,6 +14,7 @@
  */
 #include "js_fwk_common.h"
 #include <climits>
+#include <cerrno>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -131,6 +132,7 @@ char *MallocStringOf(jerry_value_t source)
 char *MallocStringOf(jerry_value_t source, uint16_t *strLength)
 {
     if ((IS_UNDEFINED(source)) || (strLength == nullptr)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "Invalid input: source is undefined or strLength is nullptr");
         return nullptr;
     }
 
@@ -152,6 +154,7 @@ char *MallocStringOf(jerry_value_t source, uint16_t *strLength)
 
         jerry_size_t size = jerry_get_string_size(target);
         if (size >= UINT16_MAX) {
+            HILOG_ERROR(HILOG_MODULE_ACE, "String size exceeds UINT16_MAX, cannot process");
             break;
         }
         buffer = static_cast<jerry_char_t *>(ace_malloc(sizeof(jerry_char_t) * (size + 1)));
@@ -578,10 +581,17 @@ int32_t GetFileSize(const char * const filePath)
         return 0;
     }
     struct stat info = {0};
-    int32_t ret = stat(filePath, &info);
-    if (ret < 0) {
-        HILOG_ERROR(HILOG_MODULE_ACE, "file doesn't exit or it's empty, [%{public}s]", filePath);
+    const int retryCount = 5;
+    for (int i = 0; i < retryCount; i++) {
+        int32_t ret = stat(filePath, &info);
+        if (ret < 0) {
+            HILOG_ERROR(HILOG_MODULE_ACE, "file doesn't exit or it's empty, [%{public}s],\
+                errno: %{public}d, desc = %{public}s", filePath, errno, strerror(errno) );
+        } else {
+            break;
+        }
     }
+
     return info.st_size;
 }
 
@@ -622,7 +632,7 @@ static void OutputFileMaxLimitationTrace(const char * const fullPath, size_t lim
     char traceData[traceDataLen] = {0};
     const size_t oneKB = 1024;
     size_t currentLimitation = limitation / oneKB;
-    if (sprintf_s(traceData, traceDataLen, "%s is bigger than %d KB.\n", (ptr + 1), currentLimitation) < 0) {
+    if (sprintf_s(traceData, traceDataLen, "%s is bigger than %zu KB.\n", (ptr + 1), currentLimitation) < 0) {
         HILOG_ERROR(HILOG_MODULE_ACE, "splice trace data failed.");
         return;
     }
@@ -728,6 +738,9 @@ char *ReadJSFile(const char * const appPath, const char * const jsFileName, uint
     }
 
     char *fileBuffer = ReadFile(fullPath, fileSize, JsAppEnvironment::GetInstance()->IsSnapshotMode());
+    if (fileBuffer == nullptr) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "Failed to read JS file from path: %{public}s", fullPath);
+    }
     ace_free(fullPath);
     fullPath = nullptr;
     return fileBuffer;
