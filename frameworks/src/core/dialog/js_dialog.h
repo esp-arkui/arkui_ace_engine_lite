@@ -56,7 +56,8 @@ public:
 
 private:
     UIDialog *dialog_;
-    DialogListener *dialogListener_;
+    static const uint8_t maxButtonNum = 3;
+    DialogListener *dialogListener_[maxButtonNum];
     DismissListener *dismissListener_;
     char *title_;
     char *message_;
