@@ -349,7 +349,7 @@ describe('ViewModel', () => {
       },
       increaseB() {
         ++this.b;
-      },
+      }
     });
     const watcher = vm.$watch(
         () => vm.a + vm.b,
