@@ -60,6 +60,7 @@ namespace  {
             if (file->exists() == false) {
                 jsBundlePath = "";
             }
+            delete file;
         }
         int16_t defaultHeapSize = DEFAULT_JSHEAP_SIZE; // KB
         QString jsHeapSize = SimulatorConfig::GetInstance().GetConfigValue(CONFIG_KEY_JSHEAP_SIZE);
