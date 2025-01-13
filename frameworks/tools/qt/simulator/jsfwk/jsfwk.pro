@@ -56,6 +56,8 @@ ACELITE_COMMON_PATH = $${ACELITE_FRAMEWORK_PATH}/common
 ACELITE_NATIVE_ENGINE_PATH = $${ACELITE_FRAMEWORK_PATH}/native_engine
 ACELITE_MODULE_MANAGER_PATH = $${ACELITE_FRAMEWORK_PATH}/module_manager
 
+ACELITE_FRAMEWORK_NG_PATH = ../../../../../frameworks_ng
+
 SOURCES += \
         $${ACELITE_CORE_PATH}/animation/transition_impl.cpp \
         $${ACELITE_NATIVE_ENGINE_PATH}/async/js_async_work.cpp \
@@ -179,9 +181,57 @@ SOURCES += \
         targets/simulator/mock/global_impl_mock.cpp \
         targets/simulator/mock/ability_lite/slite/ability_saved_data.cpp \
         $${ACELITE_FRAMEWORK_PATH}/src/core/modules/presets/test/unittest/common/app_data_module_tdd_test.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/engine/common/js_engine.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/engine/jsi/util/js_bind_util.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/engine/jsi/jsi_declarative_engine.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/engine/jsi/jsi_engine_instance.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/engine/jsi/jsi_view_register.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/jsview/js_column.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/jsview/js_container_base.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/jsview/js_flex.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/jsview/js_text.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/jsview/js_view_abstract.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/base/view_abstract_model_ng.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/base/view_abstract.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/base/view_stack_processor.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/event/state_style_manager.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/pattern/flex/flex_node.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/pattern/linear_layout/column_model_ng.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/pattern/linear_layout/linear_layout_pattern.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/pattern/text/text_model_ng.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/pattern/text/text_pattern.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/pattern/pattern.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/ui_node.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/frame_node.cpp \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/pipline/element_register.cpp \
 
 HEADERS += \
-        $${ROOT_PATH}/foundation/arkui/ui_lite/interfaces/kits/components/ui_view.h
+        $${ROOT_PATH}/foundation/arkui/ui_lite/interfaces/kits/components/ui_view.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/base/utils/utils.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/engine/common/js_engine.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/engine/jsi/util/js_bind_util.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/engine/jsi/jsi_declarative_engine.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/engine/jsi/jsi_engine_instance.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/engine/jsi/jsi_view_register.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/jsview/js_column.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/jsview/js_container_base.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/jsview/js_text.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/bridge/jsview/js_view_abstract.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/base/view_abstract_model.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/base/view_abstract_model_ng.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/base/view_abstract.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/base/view_stack_processor.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/event/state_style_manager.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/pattern/flex/flex_node.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/pattern/linear_layout/column_model_ng.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/pattern/linear_layout/linear_layout_pattern.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/pattern/text/text_model.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/pattern/text/text_model_ng.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/pattern/text/text_pattern.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/pattern/pattern.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/ui_node.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/components_ng/frame_node.h \
+        $${ACELITE_FRAMEWORK_NG_PATH}/core/pipline/element_register.h \
 
 INCLUDEPATH += \
             $${ROOT_PATH}/foundation/arkui/ui_lite/interfaces/innerkits \
@@ -265,6 +315,19 @@ INCLUDEPATH += \
             $${ROOT_PATH}/foundation/ability/ability_lite/frameworks/abilitymgr_lite/include \
             $${ACELITE_FRAMEWORK_PATH}/../test/moduletest/common \
             $${ACELITE_FRAMEWORK_PATH}/src/core/modules/presets/test/unittest/common \
+            $$ACELITE_FRAMEWORK_NG_PATH/base/utils \
+            $$ACELITE_FRAMEWORK_NG_PATH/bridge/engine/common \
+            $$ACELITE_FRAMEWORK_NG_PATH/bridge/engine/jsi \
+            $$ACELITE_FRAMEWORK_NG_PATH/bridge/engine/jsi/util \
+            $$ACELITE_FRAMEWORK_NG_PATH/bridge/jsview \
+            $$ACELITE_FRAMEWORK_NG_PATH/core/components_ng \
+            $$ACELITE_FRAMEWORK_NG_PATH/core/components_ng/base \
+            $$ACELITE_FRAMEWORK_NG_PATH/core/components_ng/pattern \
+            $$ACELITE_FRAMEWORK_NG_PATH/core/components_ng/pattern/flex \
+            $$ACELITE_FRAMEWORK_NG_PATH/core/components_ng/pattern/linear_layout \
+            $$ACELITE_FRAMEWORK_NG_PATH/core/components_ng/pattern/text \
+            $$ACELITE_FRAMEWORK_NG_PATH/core/components_ng/layout \
+            $$ACELITE_FRAMEWORK_NG_PATH/pipline \
 
 LIBS += $$DESTDIR/jerryScript.dll
 LIBS += $$OUT_PWD/../../../../../../../arkui/ui_lite/tools/qt/simulator/libs/libui.dll

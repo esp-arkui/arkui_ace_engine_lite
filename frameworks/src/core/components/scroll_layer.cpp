@@ -19,6 +19,8 @@
 #include "component_utils.h"
 #include "fatal_handler.h"
 #include "root_view.h"
+#include "flex_layout.h"
+#include "../../../../frameworks_ng/core/components_ng/pattern/linear_layout/column_model_ng.h"
 
 namespace OHOS {
 namespace ACELite {
@@ -37,6 +39,9 @@ ScrollLayer::~ScrollLayer()
 
 UIScrollView *ScrollLayer::AddScrollLayer(UIView &view) const
 {
+    FlexLayout* nativeView = new FlexLayout();
+    nativeView->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
+    view.SetStyle(STYLE_BACKGROUND_COLOR, Color::Yellow().full);
     UIScrollView *scroll = new UIScrollView();
     if (scroll == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "Scroll Layer: Create scroll view failed.");
@@ -49,6 +54,7 @@ UIScrollView *ScrollLayer::AddScrollLayer(UIView &view) const
     scroll->SetYScrollBarVisible(false);
     scroll->SetThrowDrag(true);
     scroll->Add(&view);
+    //scroll->Add((UIView*)nativeView);
     scroll->SetReboundSize(0);
     return scroll;
 }
@@ -74,6 +80,9 @@ void ScrollLayer::AppendScrollLayer(Component *rootComponent)
     }
 
     scroll_ = AddScrollLayer(*view);
+
+   // ColumnModel::GetInstance()->scroll_ = scroll_;
+    //scroll_ = AddScrollLayer((UIView&)nativeView);
     pageRootView_ = (scroll_ == nullptr) ? view : scroll_;
     FatalHandler::GetInstance().SetCurrentPageRootView(pageRootView_);
 }
@@ -103,6 +112,12 @@ void ScrollLayer::DetachFromRootView() const
 
 void ScrollLayer::Show() const
 {
+    FlexLayout* nativeView = new FlexLayout();
+    nativeView->SetWidth(500);
+    nativeView->SetHeight(500);
+    nativeView->SetStyle(STYLE_BACKGROUND_COLOR, Color::Red().full);
+    pageRootView_->SetStyle(STYLE_BACKGROUND_COLOR, Color::Blue().full);
+    pageRootView_->SetStyle(STYLE_BACKGROUND_OPA, 0);
     RootView *rootView = RootView::GetInstance();
     if (rootView == nullptr) {
         HILOG_ERROR(HILOG_MODULE_ACE, "get rootView is nullptr");
@@ -112,7 +127,9 @@ void ScrollLayer::Show() const
     rootView->SetWidth(GetHorizontalResolution());
     rootView->SetHeight(GetVerticalResolution());
     rootView->Add(pageRootView_);
+    //rootView->Add((UIView*)nativeView);
     rootView->Invalidate();
+    printf("ScrollLayer::Show()-----rootVIew=[%p]\n", rootView);
 }
 } // namespace ACELite
 } // namespace OHOS

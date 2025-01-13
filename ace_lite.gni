@@ -14,6 +14,7 @@
 import("//build/lite/config/subsystem/aafwk/path.gni")
 
 ACE_LITE_PATH = "//foundation/arkui/ace_engine_lite/frameworks"
+ACE_LITE_PATH_NG = "//foundation/arkui/ace_engine_lite/frameworks_ng"
 ACE_LITE_COMMON_PATH = "//foundation/arkui/ace_engine_lite/frameworks/common"
 NATIVE_ENGINE_PATH =
     "//foundation/arkui/ace_engine_lite/frameworks/native_engine"
@@ -113,6 +114,22 @@ ace_lite_include_dirs += [
   "$ACE_LITE_PATH/src/core/stylemgr",
   "$ACE_LITE_PATH/src/core/wrapper",
   "$ACE_LITE_PATH/targets",
+
+  "$ACE_LITE_PATH_NG/base/getmetry",
+  "$ACE_LITE_PATH_NG/bridge/engine/common",
+  "$ACE_LITE_PATH_NG/bridge/engine/jsi",
+  "$ACE_LITE_PATH_NG/bridge/engine/jsi/util",
+  "$ACE_LITE_PATH_NG/bridge/jsview/jsi/util",
+  "$ACE_LITE_PATH_NG/core/components_ng",
+  "$ACE_LITE_PATH_NG/core/components_ng/base",
+  "$ACE_LITE_PATH_NG/core/components_ng/pattern",
+  "$ACE_LITE_PATH_NG/core/components_ng/pattern/flex",
+  "$ACE_LITE_PATH_NG/core/components_ng/pattern/linear_layout",
+  "$ACE_LITE_PATH_NG/core/components_ng/pattern/text",
+  "$ACE_LITE_PATH_NG/core/components_ng/property",
+  "$ACE_LITE_PATH_NG/core/components_ng/layout",
+  "$ACE_LITE_PATH_NG/pipline",
+
   "$ACE_LITE_COMMON_PATH/log",
   "$ACE_LITE_COMMON_PATH/memory",
   "$ACE_LITE_COMMON_PATH/memory/cache",

@@ -43,6 +43,8 @@
 #include "generate-bytecode.h"
 #endif
 
+#include "../../../../../frameworks_ng/bridge/engine/jsi/jsi_view_register.h"
+
 namespace OHOS {
 namespace ACELite {
 JsAppEnvironment::JsAppEnvironment()
@@ -69,6 +71,9 @@ void JsAppEnvironment::LoadAceBuiltInModules() const
 
 void JsAppEnvironment::InitJsFramework() const
 {
+    fflush(stdout);
+    printf("youbing----InitJsFramework------\n");
+    HILOG_ERROR(HILOG_MODULE_ACE, "youbing---InitJsFramework--------");
     START_TRACING(ENGINE_INIT);
 #if (JS_ENGINE_STATIC_MULTI_CONTEXTS_ENABLED == 1)
     js_task_context_init();
@@ -87,6 +92,7 @@ void JsAppEnvironment::InitJsFramework() const
 #endif // JSFWK_TEST
     AsyncTaskManager::GetInstance().Init();
     LoadAceBuiltInModules();
+    JsRegisterViews();
     ProductAdapter::LoadExtraPresetModules();
     LoadFramework();
     LocalModule::Load();
