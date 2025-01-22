@@ -29,7 +29,7 @@ Debugger &Debugger::GetInstance()
     return instance;
 }
 
-#if IS_ENABLED(ENGINE_DEBUGGER)
+#if IS_ENABLED(1)
 bool Debugger::IsDebuggerEnabled()
 {
     return debuggerConfig_.startDebuggerServer;
@@ -54,9 +54,9 @@ void Debugger::StartDebugger()
     jerry_port_default_set_log_level(JERRY_LOG_LEVEL_DEBUG);
     // currently, only support tcp::websocket
     HILOG_INFO(HILOG_MODULE_ACE, "please connect to debugger server with localhost:%{public}d", debuggerConfig_.port);
-    bool protocol = jerryx_debugger_tcp_create(debuggerConfig_.port);
-    bool connected = jerryx_debugger_ws_create();
-    jerryx_debugger_after_connect(protocol && connected);
+    // bool protocol = jerryx_debugger_tcp_create(debuggerConfig_.port);
+    // bool connected = jerryx_debugger_ws_create();
+    // jerryx_debugger_after_connect(protocol && connected);
     debuggerStarted_ = true;
 }
 
@@ -99,7 +99,7 @@ void Debugger::SetupJSContext()
     uint32_t heapSize = debuggerConfig_.heapSize;
     if (heapSize == 0) {
         // default is 48KB
-        const uint32_t DEFAULT_HEAP_SIZE = 48 * 1024;
+        const uint32_t DEFAULT_HEAP_SIZE = 100 * 1024;
         heapSize = DEFAULT_HEAP_SIZE;
     }
     engineContext_ = jerry_create_context(heapSize, AllocEngineContext, nullptr);

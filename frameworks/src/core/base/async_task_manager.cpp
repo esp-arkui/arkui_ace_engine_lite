@@ -27,6 +27,15 @@
     {                                 \
         pthread_mutex_unlock(&lock_); \
     }
+#elif defined(ESP_PLATFORM)
+#define TRY_LOCK()      \
+    {                   \
+        vTaskSuspendAll(); \
+    }
+#define TRY_UNLOCK()      \
+    {                     \
+        xTaskResumeAll(); \
+    }
 #elif defined(__LITEOS_M__)
 #define TRY_LOCK()      \
     {                   \

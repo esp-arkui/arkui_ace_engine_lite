@@ -29,6 +29,7 @@ REGISTER_AA(AceAbility)
 
 void AceAbility::OnStart(const Want &want)
 {
+    printf("STUB %s:%d\n", __FILE__, __LINE__);
     HILOG_DEBUG(HILOG_MODULE_ACE, "AceAbility OnStart");
     eventHandler_ = AbilityEventHandler::GetCurrentHandler();
 

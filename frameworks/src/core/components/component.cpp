@@ -571,13 +571,17 @@ bool Component::ApplyStyle(const AppStyleItem *style)
  */
 bool Component::ApplyCommonStyle(UIView &view, const AppStyleItem *style)
 {
+
     uint16_t styleNameId = GetStylePropNameId(style);
+    // printf("STUB %s:%d - %s > %d\n", __FILE__, __LINE__, __func__, styleNameId);
     if (!KeyParser::IsKeyValid(styleNameId)) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "component apply style failed, styleNameId(%d) is invalid", styleNameId);
         return false;
     }
 
     // we do not support pseudo class for all styles, child must handle itself
     if (style->IsPseudoClassItem()) {
+        HILOG_ERROR(HILOG_MODULE_ACE, "component apply style failed, style is pseudo class");
         return false;
     }
 
@@ -735,6 +739,8 @@ void Component::ParseOptions()
 
 void Component::SetAnimationKeyFrames(const UIView &view, const AppStyleItem *styleItem)
 {
+    printf("STUB %s:%d - %s \n", __FILE__, __LINE__, __func__);
+
     if (trans_ == nullptr) {
         trans_ = new TransitionParams();
         if (trans_ == nullptr) {
@@ -951,6 +957,8 @@ void Component::SetAnimationIterationCount(const AppStyleItem *styleItem, const 
 
 void Component::SetAnimationStyle(const UIView &view, const AppStyleItem *styleItem, const int16_t keyId)
 {
+    printf("STUB %s:%d - %s \n", __FILE__, __LINE__, __func__);
+
     // special for "animation-iteration-count" which value could be a number or string "infinite"
     if ((styleItem == nullptr) || (!const_cast<AppStyleItem *>(styleItem)->UpdateNumValToStr())) {
         HILOG_ERROR(HILOG_MODULE_ACE, "SetAnimationStyle fail");
@@ -1038,6 +1046,8 @@ void Component::RecordAnimation()
 
 void Component::StartAnimation()
 {
+    // printf("STUB %s:%d - %s \n", __FILE__, __LINE__, __func__);
+
     if (trans_ == nullptr) {
         return;
     }
@@ -1064,6 +1074,8 @@ void Component::StartAnimation()
 
 void Component::ReleaseTransitionParam()
 {
+    // printf("STUB %s:%d - %s \n", __FILE__, __LINE__, __func__);
+
     if (trans_) {
         delete trans_;
         trans_ = nullptr;

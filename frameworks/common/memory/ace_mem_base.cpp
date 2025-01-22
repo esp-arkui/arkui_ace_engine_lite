@@ -15,7 +15,7 @@
 #include "ace_mem_base.h"
 
 #include <cstdlib>
-#include "cache_manager.h"
+#include "./cache/cache_manager.h"
 
 namespace OHOS {
 namespace ACELite {

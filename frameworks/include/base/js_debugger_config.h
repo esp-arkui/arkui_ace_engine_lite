@@ -133,13 +133,13 @@ public:
     void ReleaseJSContext();
 
 private:
-#if IS_ENABLED(ENGINE_DEBUGGER)
+// #if IS_ENABLED(ENGINE_DEBUGGER)
 #if (JS_ENGINE_EXTERNAL_CONTEXT == 1)
     void *engineContext_ = nullptr;
 #endif // JS_ENGINE_EXTERNAL_CONTEXT
     bool debuggerStarted_ = false;
     DebuggerConfig debuggerConfig_ = {TCP, WEBSOCKET, 0, DEFAULT_PORT, false, false};
-#endif // ENABLED(ENGINE_DEBUGGER)
+// #endif // ENABLED(ENGINE_DEBUGGER)
 };
 } // namespace ACELite
 } // namespace OHOS

@@ -24,6 +24,10 @@
 #include "js_fwk_common.h"
 #include "product_adapter.h"
 
+#ifndef TARGET_SIMULATOR
+#define TARGET_SIMULATOR 1
+#endif
+
 namespace OHOS {
 namespace ACELite {
 void PrintVersionTrace()

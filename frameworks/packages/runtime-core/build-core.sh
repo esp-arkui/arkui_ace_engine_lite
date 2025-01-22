@@ -19,18 +19,18 @@ echo "== prerequires: node.js and python3 installed   =="
 echo "=================================================="
 
 # step 1: npm install and build
-npm install
-npm run build
+pnpm install
+pnpm run build
 
-# step 2: clone jerryscript repo
-rm -rf jerryscript
-{
-  timeout 120 git clone git@gitee.com:openharmony/third_party_jerryscript.git jerryscript
-} || {
-  rm -rf jerryscript
-  echo "git clone from gitee failed, try copy from current workspace"
-  cp -rf ../../../../../../third_party/jerryscript ./
-}
+# # step 2: clone jerryscript repo
+# rm -rf jerryscript
+# {
+#   timeout 120 git clone git@gitee.com:openharmony/third_party_jerryscript.git -b OpenHarmony-4.0-Release jerryscript
+# } || {
+#   rm -rf jerryscript
+#   echo "git clone from gitee failed, try copy from current workspace"
+#   cp -rf ../../../../../../third_party/jerryscript ./
+# }
 
 # step 3: assign es6 profile path
 cp ./es6.profile ./jerryscript/jerry-core/profiles/es6.profile
@@ -39,7 +39,7 @@ cp ./es6.profile ./jerryscript/jerry-core/profiles/es6.profile
 pushd ./jerryscript
 python tools/build.py --mem-heap=512 --snapshot-exec=ON --snapshot-save=ON \
  --profile=es6 --error-messages=ON --logging=ON --mem-stats=ON \
- --jerry-cmdline-snapshot=ON --compile-flag="-Wno-unused"
+ --jerry-cmdline-snapshot=ON --compile-flag="-Wno-unused -Wno-strict-prototypes -Wno-old-style-definition -Wno-sign-conversion -Wno-missing-declarations -Wno-conversion"
 
 # step 5: convert framework.min.js to byte code file
 popd

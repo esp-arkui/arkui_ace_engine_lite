@@ -198,6 +198,9 @@ CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, 
       shadowBlurValue_(0),
       shadowColorValue_(nullptr),
 #endif
+      lineWidthValue_(1),
+      lineCapValue_(nullptr),
+      lineJoinValue_(nullptr),
 #if GRAPHIC_ENABLE_LINEJOIN_FLAG
       miterLimitValue_(DEFAULT_MITERLIMIT),
 #endif
@@ -209,11 +212,8 @@ CanvasComponent::CanvasComponent(jerry_value_t options, jerry_value_t children, 
 #endif
 #if GRAPHIC_ENABLE_PATTERN_FILL_FLAG
       patternPathValue_(nullptr),
-      patternRepeatTypeValue_(nullptr),
+      patternRepeatTypeValue_(nullptr)
 #endif
-      lineWidthValue_(1),
-      lineCapValue_(nullptr),
-      lineJoinValue_(nullptr)
 {
     SetComponentName(K_CANVAS);
     // set default paint pattern

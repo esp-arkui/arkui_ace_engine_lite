@@ -75,6 +75,9 @@ void HILOG_WARN(HiLogModuleType mod, const char *msg, ...);
 void HILOG_DEBUG(HiLogModuleType mod, const char *msg, ...);
 } // namespace ACELite
 } // namespace OHOS
+#elif defined(ESP_PLATFORM)
+#include "log.h"
+
 #else
 #error One macro must be defined
 #endif

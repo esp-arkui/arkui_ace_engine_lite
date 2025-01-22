@@ -32,11 +32,17 @@ struct AttrMap {
     const char *attrName;
     jerry_external_handler_t setterName;
     jerry_external_handler_t getterName;
+
+    AttrMap(const char *name, jerry_external_handler_t setter, jerry_external_handler_t getter)
+        : attrName(name), setterName(setter), getterName(getter) {}
 };
 struct MethodMap {
     ACE_DISALLOW_COPY_AND_MOVE(MethodMap);
     const char *methodName;
     jerry_external_handler_t callbackName;
+
+    MethodMap(const char *name, jerry_external_handler_t cbName)
+        : methodName(name), callbackName(cbName){}
 };
 
 class CanvasComponent final : public Component {
